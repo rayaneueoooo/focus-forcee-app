@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Focus & Force - Pomodoro</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      background-color: #1e1e2e;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      display: flex;
+
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      direction: rtl;
+    }
+    .card {
+      background: #2b2b3d;
+      padding: 25px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      width: 85%;
+      max-width: 320px;
+    }
+    .timer {
+      font-size: 3rem;
+      font-weight: bold;
+      margin: 20px 0;
+      color: #0088cc;
+    }
+    .btn-group button {
+      background: #0088cc;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      margin: 4px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #pause { background: #ff9800; }
+    #reset { background: #f44336; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h3>⏱️ مؤقت التركيز (Pomodoro)</h3>
+  <div class="timer" id="timerDisplay">25:00</div>
+  <div class="btn-group">
+    <button onclick="startTimer()">إبدأ</button>
+    <button id="pause" onclick="pauseTimer()">إيقاف</button>
+    <button id="reset" onclick="resetTimer()">إعادة</button>
+  </div>
+</div>
+
+<script>
+  let timeLeft = 25 * 60;
+  let timerId = null;
+
+  function updateDisplay() {
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    document.getElementById('timerDisplay').textContent = 
+      `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+
+  function startTimer() {
+    if (timerId !== null) return;
+    timerId = setInterval(() => {
+      if (timeLeft > 0) {
+        timeLeft--;
+        updateDisplay();
+      } else {
+        clearInterval(timerId);
+        timerId = null;
+        alert("وفا وقت التركيز! أدي راحة 5 دقائق.");
+      }
+    }, 1000);
+  }
+
+  function pauseTimer() {
+    clearInterval(timerId);
+    timerId = null;
+  }
+
+  function resetTimer() {
+    pauseTimer();
+    timeLeft = 25 * 60;
+    updateDisplay();
+  }
+</script>
+
+</body>
+</html>
