@@ -3,25 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Focus & Force 🎯</title>
+  <title>Focus And Force 🎯</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- استدعاء خط SF Pro الخاص بأجهزة آيفون -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/robingennaro/SF-Pro-Display-CDN/SFProDisplay.css">
   <style>
     :root {
-      --bg-main: #F9F6F0;       /* خلفية بيضاء كريمية دافئة */
-      --card-bg: #FFFFFF;       /* كروت بيضاء */
-      --card-inner: #F1ECE4;    /* عناصر داخلية بلون أوف وايت */
-      --primary-red: #B80000;   /* أحمر داكن مثل اللوجو */
-      --accent-red: #D32F2F;    /* أحمر فاتح للتفاعلات */
-      --text-main: #2C2C2C;     /* نص ناعم قريب من الأسود */
-      --text-muted: #666666;    /* رمادي للتفاصيل */
-      --gold-color: #D4AF37;    /* ذهبي دافئ للتصنيف */
+      --bg-main: #F9F6F0;
+      --card-bg: #FFFFFF;
+      --card-inner: #F1ECE4;
+      --primary-red: #B80000;
+      --accent-red: #D32F2F;
+      --text-main: #2C2C2C;
+      --text-muted: #666666;
+      --gold-color: #D4AF37;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      /* استخدام خط آيفون SF Pro Display */
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
 
     body {
@@ -39,12 +43,12 @@
     }
 
     .header h1 {
-      font-size: 1.6rem;
+      font-size: 1.7rem;
       color: var(--primary-red);
       font-weight: 800;
+      letter-spacing: -0.5px;
     }
 
-    /* Navbar Tabs */
     .nav-tabs {
       display: flex;
       background: var(--card-bg);
@@ -62,7 +66,7 @@
       color: var(--text-muted);
       padding: 10px 0;
       font-size: 0.85rem;
-      font-weight: bold;
+      font-weight: 600;
       border-radius: 10px;
       cursor: pointer;
       transition: all 0.2s;
@@ -71,12 +75,12 @@
     .tab-btn.active {
       background: var(--primary-red);
       color: #FFFFFF;
+      font-weight: 700;
     }
 
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Main Card */
     .card {
       background: var(--card-bg);
       border-radius: 20px;
@@ -87,11 +91,12 @@
     }
 
     .timer-display {
-      font-size: 3.8rem;
+      font-size: 4rem;
       font-weight: 800;
       color: var(--primary-red);
       margin: 15px 0;
-      font-family: monospace;
+      font-family: 'SF Pro Display', -apple-system, monospace;
+      letter-spacing: 1px;
     }
 
     .controls {
@@ -103,7 +108,7 @@
     .btn {
       padding: 12px 24px;
       font-size: 0.95rem;
-      font-weight: bold;
+      font-weight: 700;
       border: none;
       border-radius: 12px;
       cursor: pointer;
@@ -116,7 +121,6 @@
     .btn-pause { background-color: #E65100; }
     .btn-reset { background-color: var(--text-muted); }
 
-    /* Leaderboard & Items */
     .list-item {
       background: var(--card-inner);
       padding: 12px 16px;
@@ -128,16 +132,27 @@
       border-right: 4px solid var(--primary-red);
     }
 
+    .user-info {
+      text-align: right;
+    }
+
+    .user-id {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
     .badge {
       background: rgba(184, 0, 0, 0.1);
       color: var(--primary-red);
       padding: 4px 8px;
       border-radius: 6px;
       font-size: 0.8rem;
-      font-weight: bold;
+      font-weight: 700;
     }
 
-    .meet-btn {
+    .action-btn {
       display: block;
       width: 100%;
       background: var(--primary-red);
@@ -145,7 +160,7 @@
       text-decoration: none;
       padding: 12px;
       border-radius: 12px;
-      font-weight: bold;
+      font-weight: 700;
       margin-top: 15px;
       text-align: center;
     }
@@ -161,20 +176,20 @@
     <button class="tab-btn active" onclick="switchTab('timer')">⏱️ المؤقت</button>
     <button class="tab-btn" onclick="switchTab('leaderboard')">🏆 التصنيف</button>
     <button class="tab-btn" onclick="switchTab('meet')">🎥 الجلسات</button>
-    <button class="tab-btn" onclick="switchTab('files')">📁 الملفات</button>
+    <button class="tab-btn" onclick="switchTab('files')">📚 الملخصات</button>
   </div>
 
   <!-- TAB 1: TIMER -->
   <div id="tab-timer" class="tab-content active">
     <div class="card">
-      <p style="color: var(--text-muted); font-size: 0.9rem;">جلسة تركيز دراسية</p>
+      <p style="color: var(--text-muted); font-size: 0.9rem; font-weight: 500;">جلسة تركيز دراسية</p>
       <div class="timer-display" id="time-display">25:00</div>
       <div class="controls">
         <button class="btn btn-start" id="start-btn" onclick="toggleTimer()">إبدأ</button>
         <button class="btn btn-reset" onclick="resetTimer()">إعادة</button>
       </div>
-      <div style="margin-top: 20px; font-size: 0.9rem; color: var(--primary-red); font-weight: bold;">
-        ⭐ النقاط المكتسبة اليوم: <span id="user-points">0</span> نقطة
+      <div style="margin-top: 20px; font-size: 0.9rem; color: var(--primary-red); font-weight: 700;">
+        ⭐ نقاطك اليوم: <span id="user-points">0</span> نقطة
       </div>
     </div>
   </div>
@@ -183,20 +198,11 @@
   <div id="tab-leaderboard" class="tab-content">
     <div class="card">
       <h3 style="margin-bottom: 15px; color: var(--primary-red);">🏆 أبطال الأسبوع</h3>
-      <div class="list-item">
-        <span>🥇 1. أسامة (علوم)</span>
-        <span class="badge">42 ساعة</span>
+      <div id="leaderboard-list">
+        <!-- القائمة الحقيقية -->
       </div>
-      <div class="list-item">
-        <span>🥈 2. مريم (رياضيات)</span>
-        <span class="badge">38 ساعة</span>
-      </div>
-      <div class="list-item">
-        <span>🥉 3. أيوب (تقني)</span>
-        <span class="badge">31 ساعة</span>
-      </div>
-      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px;">
-        🎁 صاحب المركز الأول يتحصل على حزمة ستيكرات مميزة ووسام أسطورة الباك!
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px; font-weight: 500;">
+        🎁 الفائز بالمركز الأول يتحصل على حزمة ستيكرات مميزة ووسام أسطورة الباك!
       </p>
     </div>
   </div>
@@ -204,29 +210,36 @@
   <!-- TAB 3: MEET SESSIONS -->
   <div id="tab-meet" class="tab-content">
     <div class="card">
-      <h3 style="color: var(--primary-red);">🎥 جلسات المذاكرة المباشرة</h3>
-      <p style="color: var(--text-muted); font-size: 0.85rem; margin: 10px 0;">
-        انضم لجلسة Google Meet الجماعية لمراجعة الدروس والتنافس مع زملائك.
+      <h3 style="color: var(--primary-red);">🎥 جلسة المذاكرة المباشرة</h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin: 10px 0; font-weight: 500;">
+        انضم للجلسة المباشرة لمراجعة الدروس جماعياً مع زملائك عبر Google Meet.
       </p>
-      <a href="https://meet.google.com/" target="_blank" class="meet-btn">
+      <a href="https://meet.google.com/krd-aesq-sgt" target="_blank" class="action-btn">
         الانضمام لجلسة Meet الآن 🚀
       </a>
     </div>
   </div>
 
-  <!-- TAB 4: FILES -->
+  <!-- TAB 4: SUMMARIES -->
   <div id="tab-files" class="tab-content">
     <div class="card">
-      <h3 style="color: var(--primary-red);">📁 مشاركة الملخصات</h3>
-      <p style="color: var(--text-muted); font-size: 0.85rem; margin: 10px 0;">
-        لإرسال ملخصاتك أو سلاسل التمارين لزملائك، قم بإرسال الملف مباشرة للبوت في شات التيليغرام وسيتم مراجعته وإضافته.
+      <h3 style="color: var(--primary-red);">📚 مكتبة الملخصات والشُعب</h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin: 10px 0; font-weight: 500;">
+        تصفح جميع ملخصات ومواضيع البكالوريا (هندسة، علوم، رياضيات...) عبر الموقع الخارجي.
       </p>
+      <a href="https://google.com" target="_blank" class="action-btn">
+        الانتقال لموقع الملخصات 🔗
+      </a>
     </div>
   </div>
 
   <script>
     const tg = window.Telegram ? window.Telegram.WebApp : null;
     if (tg) tg.expand();
+
+    const tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
+    const userName = tgUser ? tgUser.first_name : "طالب الباك";
+    const userId = tgUser ? (tgUser.username ? `@${tgUser.username}` : `ID: ${tgUser.id}`) : "ID: 58921034";
 
     function switchTab(tabName) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -238,7 +251,42 @@
     let timerInterval = null;
     let totalSeconds = 25 * 60;
     let isRunning = false;
-    let points = 0;
+    let points = parseInt(localStorage.getItem('user_points') || '0');
+
+    function updatePointsDisplay() {
+      document.getElementById('user-points').textContent = points;
+      renderLeaderboard();
+    }
+
+    function renderLeaderboard() {
+      const listContainer = document.getElementById('leaderboard-list');
+      
+      let students = [
+        { name: userName, handle: userId, branch: "هندسة", points: points, isUser: true },
+        { name: "أسامة", handle: "@Oussama_Bac", branch: "هندسة", points: 175, isUser: false },
+        { name: "أيمن", handle: "ID: 61948201", branch: "علوم تجريبية", points: 125, isUser: false },
+        { name: "سارة", handle: "@Sara_Eng", branch: "هندسة", points: 100, isUser: false }
+      ];
+
+      students.sort((a, b) => b.points - a.points);
+
+      listContainer.innerHTML = '';
+      students.forEach((std, index) => {
+        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '👤';
+        const item = document.createElement('div');
+        item.className = 'list-item';
+        if(std.isUser) item.style.borderRightColor = 'var(--gold-color)';
+        
+        item.innerHTML = `
+          <div class="user-info">
+            <strong>${medal} ${index + 1}. ${std.name} (${std.branch})</strong>
+            <span class="user-id">${std.handle}</span>
+          </div>
+          <span class="badge">${std.points} نقطة</span>
+        `;
+        listContainer.appendChild(item);
+      });
+    }
 
     function updateDisplay() {
       const minutes = Math.floor(totalSeconds / 60);
@@ -263,8 +311,9 @@
             startBtn.textContent = 'إبدأ';
             startBtn.className = 'btn btn-start';
             points += 25;
-            document.getElementById('user-points').textContent = points;
-            alert('🎉 أحسنت! أنهيت جلسة 25 دقيقة واكتسبت 25 نقطة جديدة.');
+            localStorage.setItem('user_points', points);
+            updatePointsDisplay();
+            alert('🎉 ممتاز! أنهيت الجلسة واكتسبت 25 نقطة ارتفعت بها في الترتيب.');
           }
         }, 1000);
       } else {
@@ -283,6 +332,8 @@
       document.getElementById('start-btn').className = 'btn btn-start';
       updateDisplay();
     }
+
+    updatePointsDisplay();
   </script>
 </body>
 </html>
