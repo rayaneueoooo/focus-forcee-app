@@ -1,100 +1,288 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Focus & Force - Pomodoro</title>
+  <title>Focus & Force 🎯</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body {
-      background-color: #1e1e2e;
-      color: #ffffff;
-      font-family: Arial, sans-serif;
-      display: flex;
+    :root {
+      --bg-main: #F9F6F0;       /* خلفية بيضاء كريمية دافئة */
+      --card-bg: #FFFFFF;       /* كروت بيضاء */
+      --card-inner: #F1ECE4;    /* عناصر داخلية بلون أوف وايت */
+      --primary-red: #B80000;   /* أحمر داكن مثل اللوجو */
+      --accent-red: #D32F2F;    /* أحمر فاتح للتفاعلات */
+      --text-main: #2C2C2C;     /* نص ناعم قريب من الأسود */
+      --text-muted: #666666;    /* رمادي للتفاصيل */
+      --gold-color: #D4AF37;    /* ذهبي دافئ للتصنيف */
+    }
 
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+    * {
+      box-sizing: border-box;
       margin: 0;
-      direction: rtl;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
-    .card {
-      background: #2b2b3d;
-      padding: 25px;
-      border-radius: 16px;
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
       text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      width: 85%;
-      max-width: 320px;
+      margin-bottom: 16px;
     }
-    .timer {
-      font-size: 3rem;
-      font-weight: bold;
-      margin: 20px 0;
-      color: #0088cc;
+
+    .header h1 {
+      font-size: 1.6rem;
+      color: var(--primary-red);
+      font-weight: 800;
     }
-    .btn-group button {
-      background: #0088cc;
-      color: white;
+
+    /* Navbar Tabs */
+    .nav-tabs {
+      display: flex;
+      background: var(--card-bg);
+      padding: 6px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(184, 0, 0, 0.08);
+      border: 1px solid #EBE5DC;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
       border: none;
-      padding: 10px 15px;
-      margin: 4px;
-      border-radius: 8px;
+      color: var(--text-muted);
+      padding: 10px 0;
+      font-size: 0.85rem;
       font-weight: bold;
+      border-radius: 10px;
       cursor: pointer;
+      transition: all 0.2s;
     }
-    #pause { background: #ff9800; }
-    #reset { background: #f44336; }
+
+    .tab-btn.active {
+      background: var(--primary-red);
+      color: #FFFFFF;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Main Card */
+    .card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid #EBE5DC;
+    }
+
+    .timer-display {
+      font-size: 3.8rem;
+      font-weight: 800;
+      color: var(--primary-red);
+      margin: 15px 0;
+      font-family: monospace;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      color: #fff;
+      transition: opacity 0.2s;
+    }
+
+    .btn:active { opacity: 0.8; }
+    .btn-start { background-color: var(--primary-red); }
+    .btn-pause { background-color: #E65100; }
+    .btn-reset { background-color: var(--text-muted); }
+
+    /* Leaderboard & Items */
+    .list-item {
+      background: var(--card-inner);
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-right: 4px solid var(--primary-red);
+    }
+
+    .badge {
+      background: rgba(184, 0, 0, 0.1);
+      color: var(--primary-red);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .meet-btn {
+      display: block;
+      width: 100%;
+      background: var(--primary-red);
+      color: white;
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: bold;
+      margin-top: 15px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
 
-<div class="card">
-  <h3>⏱️ مؤقت التركيز (Pomodoro)</h3>
-  <div class="timer" id="timerDisplay">25:00</div>
-  <div class="btn-group">
-    <button onclick="startTimer()">إبدأ</button>
-    <button id="pause" onclick="pauseTimer()">إيقاف</button>
-    <button id="reset" onclick="resetTimer()">إعادة</button>
+  <div class="header">
+    <h1>Focus And Force 🎯</h1>
   </div>
-</div>
 
-<script>
-  let timeLeft = 25 * 60;
-  let timerId = null;
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="switchTab('timer')">⏱️ المؤقت</button>
+    <button class="tab-btn" onclick="switchTab('leaderboard')">🏆 التصنيف</button>
+    <button class="tab-btn" onclick="switchTab('meet')">🎥 الجلسات</button>
+    <button class="tab-btn" onclick="switchTab('files')">📁 الملفات</button>
+  </div>
 
-  function updateDisplay() {
-    const minutes = Math.floor(timeLeft / 60);
-    const seconds = timeLeft % 60;
-    document.getElementById('timerDisplay').textContent = 
-      `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  }
+  <!-- TAB 1: TIMER -->
+  <div id="tab-timer" class="tab-content active">
+    <div class="card">
+      <p style="color: var(--text-muted); font-size: 0.9rem;">جلسة تركيز دراسية</p>
+      <div class="timer-display" id="time-display">25:00</div>
+      <div class="controls">
+        <button class="btn btn-start" id="start-btn" onclick="toggleTimer()">إبدأ</button>
+        <button class="btn btn-reset" onclick="resetTimer()">إعادة</button>
+      </div>
+      <div style="margin-top: 20px; font-size: 0.9rem; color: var(--primary-red); font-weight: bold;">
+        ⭐ النقاط المكتسبة اليوم: <span id="user-points">0</span> نقطة
+      </div>
+    </div>
+  </div>
 
-  function startTimer() {
-    if (timerId !== null) return;
-    timerId = setInterval(() => {
-      if (timeLeft > 0) {
-        timeLeft--;
-        updateDisplay();
+  <!-- TAB 2: LEADERBOARD -->
+  <div id="tab-leaderboard" class="tab-content">
+    <div class="card">
+      <h3 style="margin-bottom: 15px; color: var(--primary-red);">🏆 أبطال الأسبوع</h3>
+      <div class="list-item">
+        <span>🥇 1. أسامة (علوم)</span>
+        <span class="badge">42 ساعة</span>
+      </div>
+      <div class="list-item">
+        <span>🥈 2. مريم (رياضيات)</span>
+        <span class="badge">38 ساعة</span>
+      </div>
+      <div class="list-item">
+        <span>🥉 3. أيوب (تقني)</span>
+        <span class="badge">31 ساعة</span>
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px;">
+        🎁 صاحب المركز الأول يتحصل على حزمة ستيكرات مميزة ووسام أسطورة الباك!
+      </p>
+    </div>
+  </div>
+
+  <!-- TAB 3: MEET SESSIONS -->
+  <div id="tab-meet" class="tab-content">
+    <div class="card">
+      <h3 style="color: var(--primary-red);">🎥 جلسات المذاكرة المباشرة</h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin: 10px 0;">
+        انضم لجلسة Google Meet الجماعية لمراجعة الدروس والتنافس مع زملائك.
+      </p>
+      <a href="https://meet.google.com/" target="_blank" class="meet-btn">
+        الانضمام لجلسة Meet الآن 🚀
+      </a>
+    </div>
+  </div>
+
+  <!-- TAB 4: FILES -->
+  <div id="tab-files" class="tab-content">
+    <div class="card">
+      <h3 style="color: var(--primary-red);">📁 مشاركة الملخصات</h3>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin: 10px 0;">
+        لإرسال ملخصاتك أو سلاسل التمارين لزملائك، قم بإرسال الملف مباشرة للبوت في شات التيليغرام وسيتم مراجعته وإضافته.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram ? window.Telegram.WebApp : null;
+    if (tg) tg.expand();
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('tab-' + tabName).classList.add('active');
+    }
+
+    let timerInterval = null;
+    let totalSeconds = 25 * 60;
+    let isRunning = false;
+    let points = 0;
+
+    function updateDisplay() {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      document.getElementById('time-display').textContent = 
+        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function toggleTimer() {
+      const startBtn = document.getElementById('start-btn');
+      if (!isRunning) {
+        isRunning = true;
+        startBtn.textContent = 'إيقاف';
+        startBtn.className = 'btn btn-pause';
+        timerInterval = setInterval(() => {
+          if (totalSeconds > 0) {
+            totalSeconds--;
+            updateDisplay();
+          } else {
+            clearInterval(timerInterval);
+            isRunning = false;
+            startBtn.textContent = 'إبدأ';
+            startBtn.className = 'btn btn-start';
+            points += 25;
+            document.getElementById('user-points').textContent = points;
+            alert('🎉 أحسنت! أنهيت جلسة 25 دقيقة واكتسبت 25 نقطة جديدة.');
+          }
+        }, 1000);
       } else {
-        clearInterval(timerId);
-        timerId = null;
-        alert("وفا وقت التركيز! أدي راحة 5 دقائق.");
+        clearInterval(timerInterval);
+        isRunning = false;
+        startBtn.textContent = 'إبدأ';
+        startBtn.className = 'btn btn-start';
       }
-    }, 1000);
-  }
+    }
 
-  function pauseTimer() {
-    clearInterval(timerId);
-    timerId = null;
-  }
-
-  function resetTimer() {
-    pauseTimer();
-    timeLeft = 25 * 60;
-    updateDisplay();
-  }
-</script>
-
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isRunning = false;
+      totalSeconds = 25 * 60;
+      document.getElementById('start-btn').textContent = 'إبدأ';
+      document.getElementById('start-btn').className = 'btn btn-start';
+      updateDisplay();
+    }
+  </script>
 </body>
 </html>
