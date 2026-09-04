@@ -254,6 +254,17 @@
       background: var(--brand-gold-glow);
     }
 
+    .quiz-explanation {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid var(--brand-gold);
+      font-size: 0.85rem;
+      color: var(--text-gold);
+      display: none;
+    }
+
     /* Meet Direct Session Card */
     .meet-banner {
       background: linear-gradient(135deg, rgba(13, 92, 58, 0.3), var(--card-glass));
@@ -270,7 +281,7 @@
   <!-- شاشة الإعداد الأولية Onboarding Screen -->
   <div id="onboarding" class="onboarding-screen">
     <div class="onboard-card">
-      <div class="brand-badge">🎯 FOCUS & FORCE MINIAL</div>
+      <div class="brand-badge">🎯 FOCUS & FORCE MINI APP</div>
       <h2 style="font-size: 1.5rem; font-weight: 800;">تجهيز مساحتك الخاصة</h2>
       <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 6px;">خطوات بسيطة لتخصيص التجربة لك</p>
 
@@ -375,13 +386,8 @@
 
     <!-- TAB 2: الكويزات (Quiz Module) -->
     <div id="tab-quiz" class="tab-content">
-      <div class="quiz-card">
-        <span class="brand-badge" style="background: rgba(212,175,55,0.1); color: var(--brand-gold); border-color: var(--brand-gold);">🧩 كويز اليوم التفاعلي</span>
-        <h3 style="margin-top: 10px; font-size: 1.1rem;">ما هي الوحدة البنائية للبروتينات في العضوية؟</h3>
-
-        <div class="quiz-option" onclick="submitQuiz(false)">أ) الأحماض الدهنية والغرانيت</div>
-        <div class="quiz-option" onclick="submitQuiz(true)">ب) الأحماض الأمينية (Amino Acids)</div>
-        <div class="quiz-option" onclick="submitQuiz(false)">ج) النيوكليوتيدات</div>
+      <div class="quiz-card" id="quiz-container">
+        <!-- يتم تحميل أسئلة الكويز ديناميكياً بواسطة JavaScript -->
       </div>
     </div>
 
@@ -389,7 +395,7 @@
     <div id="tab-meet" class="tab-content">
       <div class="meet-banner">
         <h3 style="font-size: 1.3rem; margin-bottom: 8px;">🎥 غرف المذاكرة المباشرة</h3>
-        <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">ادخل واقرا مع أصحابك فـ Google Meet واكسب النقاط للتنصيف.</p>
+        <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">ادخل واقرا مع أصحابك فـ Google Meet واكسب النقاط للتصنيف.</p>
         <a href="https://meet.google.com/krd-aesq-sgt" target="_blank" onclick="recordMeet()" class="btn-action" style="text-decoration: none; display: block;">
           الانضمام للجلسة الحالية 🚀
         </a>
@@ -429,6 +435,66 @@
   <script>
     let userData = JSON.parse(localStorage.getItem('ff_user_data')) || null;
 
+    // مصفوفة أسئلة الكويزات المستخرجة من الملخصات
+    const quizData = [
+      {
+        question: "ما هي العبارة الصحيحة لحساب تركيز شوارد الهيدرونيوم [H₃O⁺] بدلالة الـ pH؟",
+        options: ["أ) [H₃O⁺] = -log(pH)", "ب) [H₃O⁺] = 10⁻ᵖᴴ", "ج) [H₃O⁺] = 10ᵖᴴ", "د) [H₃O⁺] = ln(pH)"],
+        correct: 1,
+        explanation: "العلاقة الرياضية بين pH وتركيز شوارد الهيدرونيوم هي [H₃O⁺] = 10⁻ᵖᴴ."
+      },
+      {
+        question: "محلول مائي عند درجة حرارة 25°C له pH = 10.5. تركيز شوارد الهيدروكسيد [OH⁻] يساوي:",
+        options: ["أ) 10⁻¹⁰ˑ⁵ mol/L", "ب) 10⁻³ˑ⁵ mol/L", "ج) 10⁻¹⁴ mol/L", "د) 10³ˑ⁵ mol/L"],
+        correct: 1,
+        explanation: "[OH⁻] = 10^(pH - 14) = 10^(10.5 - 14) = 10⁻³ˑ⁵ mol/L."
+      },
+      {
+        question: "العبارة الصحيحة لحساب التركيز المولي C لمحلول تجاري (درجة النقاوة P% والكثافة d):",
+        options: ["أ) C = (10 · P · d) / M", "ب) C = (P · d) / (10 · M)", "ج) C = (100 · P · d) / M", "د) C = (P · M) / (10 · d)"],
+        correct: 0,
+        explanation: "قانون حساب تركيز المحاليل التجارية هو C = (10 · P · d) / M."
+      },
+      {
+        question: "يكون الحمض قوياً أو التفاعل تاماً إذا كانت قيمة نسبة التقدم النهائي (τf):",
+        options: ["أ) τf = 0", "ب) τf < 1", "ج) τf = 1", "د) τf > 1"],
+        correct: 2,
+        explanation: "إذا كانت τf = 1 فإن التقدم النهائي يساوي التقدم الأعظمي (xf = xmax)."
+      },
+      {
+        question: "عند تفكك حمض ضعيف AH تركيزه C في الماء، تعطى عبارة τf بـ:",
+        options: ["أ) τf = C / 10⁻ᵖᴴ", "ب) τf = 10⁻ᵖᴴ / C", "ج) τf = 10ᵖᴴ / C", "د) τf = C · 10⁻ᵖᴴ"],
+        correct: 1,
+        explanation: "τf = xf / xmax = 10⁻ᵖᴴ / C."
+      },
+      {
+        question: "ما هو تأثير تمديد محلول لحمض ضعيف بالماء المقطر على نسبة التقدم النهائي τf؟",
+        options: ["أ) تنقص قيمة τf", "ب) تزداد قيمة τf", "ج) تبقى ثابته", "د) تنعدم"],
+        correct: 1,
+        explanation: "التمديد يزيح التوازن في الاتجاه المباشر لتفكك الحمض، فتزداد τf."
+      },
+      {
+        question: "إذا كانت قيمة pH محلول حمضي أكبر من قيمة pKa للثنائية (pH > pKa)، فإن الصفة السائدة هي:",
+        options: ["أ) الصفة الحمضية [AH] > [A⁻]", "ب) الصفة الأساسية [A⁻] > [AH]", "ج) التراكيز متساوية", "د) لا توجد صفة سائدة"],
+        correct: 1,
+        explanation: "عندما يكون pH > pKa تكون الصفة الأساسية هي السائدة [A⁻] > [AH]."
+      },
+      {
+        question: "تتميز 'نقطة نصف التكافؤ' في معايرة حمض ضعيف بأساس قوي بـ:",
+        options: ["أ) pH = 7", "ب) pH = pKa", "ج) τf = 0", "د) [AH] = 0"],
+        correct: 1,
+        explanation: "عند نصف التكافؤ يكون [AH] = [A⁻] وبالتالي pH = pKa."
+      },
+      {
+        question: "عند معايرة حمض ضعيف بواسطة أساس قوي، تكون قيمة الـ pH عند نقطة التكافؤ (pHE):",
+        options: ["أ) pHE = 7", "ب) pHE < 7", "ج) pHE > 7", "د) pHE = 0"],
+        correct: 2,
+        explanation: "بسبب وجود شوارد الأساس الضعيف الناتجة يكون الوسط أساسياً (pHE > 7)."
+      }
+    ];
+
+    let currentQuizIndex = 0;
+
     window.onload = function() {
       if(!userData) {
         document.getElementById('onboarding').style.display = 'flex';
@@ -436,6 +502,7 @@
         document.getElementById('onboarding').style.display = 'none';
         updateUI();
       }
+      renderQuiz();
     }
 
     function goToStep(step) {
@@ -520,16 +587,61 @@
       }
     }
 
-    /* Quiz Submission */
-    function submitQuiz(isCorrect) {
-      if(isCorrect) {
+    /* Quiz System Engine */
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      if (currentQuizIndex >= quizData.length) {
+        container.innerHTML = `
+          <div style="text-align: center;">
+            <span class="brand-badge" style="background: rgba(212,175,55,0.1); color: var(--brand-gold); border-color: var(--brand-gold);">🎉 أكملت جميع الكويزات!</span>
+            <h3 style="margin-top: 15px;">أحسنت العمل! لقد أنهيت جميع أسئلة هذه الوحدة.</h3>
+            <button class="btn-action" onclick="resetQuizzes()">إعادة الكويزات من جديد 🔄</button>
+          </div>
+        `;
+        return;
+      }
+
+      const q = quizData[currentQuizIndex];
+      let optionsHTML = '';
+      q.options.forEach((opt, idx) => {
+        optionsHTML += `<div class="quiz-option" onclick="handleAnswer(${idx})">${opt}</div>`;
+      });
+
+      container.innerHTML = `
+        <span class="brand-badge" style="background: rgba(212,175,55,0.1); color: var(--brand-gold); border-color: var(--brand-gold);">🧩 كويز (${currentQuizIndex + 1}/${quizData.length})</span>
+        <h3 style="margin-top: 10px; font-size: 1.1rem;">${q.question}</h3>
+        <div id="options-list">${optionsHTML}</div>
+        <div class="quiz-explanation" id="quiz-exp">${q.explanation}</div>
+      `;
+    }
+
+    function handleAnswer(selectedIndex) {
+      const q = quizData[currentQuizIndex];
+      const expEl = document.getElementById('quiz-exp');
+      expEl.style.display = 'block';
+
+      if (selectedIndex === q.correct) {
         userData.points += 15;
         localStorage.setItem('ff_user_data', JSON.stringify(userData));
         updateUI();
-        alert("إجابة صحيحة! 👏 تم إضافة +15 نقطة لرصيدك.");
+        expEl.style.borderColor = "#00FF7F";
+        expEl.style.color = "#00FF7F";
+        expEl.innerHTML = "إجابة صحيحة! 👏 (+15 نقطة)<br>" + q.explanation;
       } else {
-        alert("إجابة خاطئة، حاول مرة أخرى!");
+        expEl.style.borderColor = "var(--brand-red-light)";
+        expEl.style.color = "var(--brand-red-light)";
+        expEl.innerHTML = "إجابة خاطئة! ❌<br>" + q.explanation;
       }
+
+      setTimeout(() => {
+        currentQuizIndex++;
+        renderQuiz();
+      }, 2500);
+    }
+
+    function resetQuizzes() {
+      currentQuizIndex = 0;
+      renderQuiz();
     }
 
     /* Meet Tracking */
