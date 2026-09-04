@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Focus & Force | المنصة التعليمية</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/robingennaro/SF-Pro-Display-CDN/SFProDisplay.css">
   <style>
     :root {
@@ -203,39 +204,6 @@
 
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-
-    .quiz-card {
-      background: var(--card-glass);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 24px;
-    }
-
-    .quiz-option {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      padding: 16px;
-      border-radius: 16px;
-      margin-top: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .quiz-option:hover {
-      border-color: var(--brand-gold);
-      background: var(--brand-gold-glow);
-    }
-
-    .quiz-explanation {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 12px;
-      background: rgba(212, 175, 55, 0.1);
-      border: 1px solid var(--brand-gold);
-      font-size: 0.85rem;
-      color: var(--text-gold);
-      display: none;
-    }
   </style>
 </head>
 <body>
@@ -245,15 +213,15 @@
     <div class="onboard-card">
       <div class="brand-badge">🎯 FOCUS & FORCE LOGIN</div>
       <h2 style="font-size: 1.4rem; font-weight: 800;">تسجيل الدخول للمنصة</h2>
-      <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 6px;">ربط حسابك لحساب ساعات المذاكرة والنقاط تلقائياً</p>
+      <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 6px;">ادخل بريدك الإلكتروني لتفعيل الحساب</p>
 
       <div style="margin-top: 20px;">
-        <button class="btn-action btn-telegram" onclick="loginWithTelegram()">✈️ الدخول بحساب Telegram</button>
+        <button class="btn-action btn-telegram" onclick="loginWithTelegram()">✈️ مزامنة حساب Telegram</button>
         
-        <input type="email" id="reg-email" class="input-custom" placeholder="البريد الإلكتروني (Email)">
+        <input type="email" id="reg-email" class="input-custom" placeholder="البريد الإلكتروني (مطلوب * )">
         <input type="text" id="reg-name" class="input-custom" placeholder="الاسم الكامل">
         <select id="reg-branch" class="select-custom">
-          <option value="" disabled selected>الشعبة الدراسية</option>
+          <option value="" disabled selected>الشعبة الدراسية (اختياري)</option>
           <option value="علوم تجريبية">علوم تجريبية</option>
           <option value="تقني رياضي">تقني رياضي</option>
           <option value="رياضيات">رياضيات</option>
@@ -270,7 +238,7 @@
     <!-- Header -->
     <div class="user-header-card">
       <div class="user-info">
-        <h3 id="dash-name">طالب Focus & Force</h3>
+        <h3 id="dash-name">Rayane</h3>
         <p id="dash-email">email@domain.com</p>
       </div>
       <div class="gold-badge">
@@ -280,7 +248,6 @@
 
     <!-- TAB 1: Dashboard -->
     <div id="tab-dashboard" class="tab-content active">
-      
       <div class="grid-cards">
         <div class="feature-card hero">
           <div>
@@ -308,21 +275,9 @@
           <button class="btn-action" onclick="addStudyHours()" style="margin-top:0; width: 40%;">إضافة ➕</button>
         </div>
       </div>
-
-      <div style="background: var(--card-glass); border-radius: 24px; padding: 24px; border: 1px solid var(--card-border); text-align: center;">
-        <span class="card-label">⏱️ مؤقت التركيز (Pomodoro)</span>
-        <div style="font-size: 3.5rem; font-weight: 800; color: var(--brand-red-light); margin: 10px 0;" id="pomo-timer">25:00</div>
-        <button class="btn-action" onclick="togglePomodoro()" id="pomo-btn">بدء المذاكرة (+25 نقطة)</button>
-      </div>
-
     </div>
 
-    <!-- TAB 2: Quizzes -->
-    <div id="tab-quiz" class="tab-content">
-      <div class="quiz-card" id="quiz-container"></div>
-    </div>
-
-    <!-- TAB 3: Meet -->
+    <!-- TAB 2: Meet -->
     <div id="tab-meet" class="tab-content">
       <div style="background: linear-gradient(135deg, rgba(13, 92, 58, 0.3), var(--card-glass)); border: 1px solid rgba(13, 92, 58, 0.5); border-radius: 24px; padding: 24px; text-align: center;">
         <h3 style="font-size: 1.3rem; margin-bottom: 8px;">🎥 غرف المذاكرة المباشرة</h3>
@@ -341,10 +296,6 @@
       <span class="icon">🏠</span>
       <span>الرئيسية</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('quiz', this)">
-      <span class="icon">🧩</span>
-      <span>الكويزات</span>
-    </button>
     <button class="nav-btn" onclick="switchTab('meet', this)">
       <span class="icon">🎥</span>
       <span>Meet</span>
@@ -352,58 +303,86 @@
   </div>
 
   <script>
+    // إعداد مكتبة Supabase
+    const SUPABASE_URL = "https://ocdbasxvdcqnemclblmh.supabase.co";
+    // انظر للسطر 2 في الصورة وانسخ النص الموجود بعد =NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY وضعه هنا مكان النص أسفله:
+    const SUPABASE_KEY = "ضع_المفتاح_الخاص_بيك_هنا";
+    
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     let tg = window.Telegram ? window.Telegram.WebApp : null;
     if (tg) tg.expand();
 
-    let userData = JSON.parse(localStorage.getItem('ff_user_data_v2')) || null;
-
-    // المصفوفة فارغة تماماً وفي انتظار الدروس التي سترسلها
-    const quizData = [];
+    let userData = JSON.parse(localStorage.getItem('ff_user_data_v5')) || null;
 
     window.onload = function() {
-      if(!userData) {
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        const tgUser = tg.initDataUnsafe.user;
+        const fullName = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim();
+        if (fullName) document.getElementById('reg-name').value = fullName;
+      }
+
+      if (!userData) {
         document.getElementById('onboarding').style.display = 'flex';
-        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-          const tgUser = tg.initDataUnsafe.user;
-          document.getElementById('reg-name').value = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim();
-        }
       } else {
         document.getElementById('onboarding').style.display = 'none';
         updateUI();
       }
-      renderQuiz();
+    }
+
+    async function syncToSupabase(data) {
+      try {
+        await db.from('users').upsert({
+          telegram_id: data.telegram_id,
+          name: data.name,
+          email: data.email,
+          branch: data.branch,
+          study_hours: data.studyHours,
+          points: data.points,
+          last_meet_joined: data.last_meet || null
+        }, { onConflict: 'email' });
+      } catch (err) {
+        console.error("Supabase Sync Error:", err);
+      }
     }
 
     function loginWithTelegram() {
       if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
         const tgUser = tg.initDataUnsafe.user;
-        document.getElementById('reg-name').value = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim();
-        alert(`تم التعرف على حساب تيليجرام: @${tgUser.username || tgUser.first_name}`);
-      } else {
-        alert("يرجى فتح التطبيق من داخل تيليجرام لتسجيل الدخول التلقائي أو إدخال بياناتك يدويًا.");
+        const fullName = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim();
+        document.getElementById('reg-name').value = fullName || "Rayane";
+        alert(`تم ربط حساب تيليجرام: ${fullName}`);
       }
     }
 
-    function finishLogin() {
-      const email = document.getElementById('reg-email').value;
-      const name = document.getElementById('reg-name').value || "طالب Focus & Force";
+    async function finishLogin() {
+      const email = document.getElementById('reg-email').value.trim();
+      const name = document.getElementById('reg-name').value || "Rayane";
       const branch = document.getElementById('reg-branch').value || "عام";
 
-      if (!email || !email.includes('@')) {
-        alert("يرجى إدخال بريد إلكتروني صحيح لتصلك تقارير الساعات والنقاط.");
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        alert("⚠️ يرجى كتابة بريد إلكتروني صحيح للتمكن من الدخول!");
         return;
       }
 
+      let tgId = "guest";
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        tgId = tg.initDataUnsafe.user.id.toString();
+      }
+
       userData = {
-        name,
-        email,
-        branch,
+        telegram_id: tgId,
+        name: name,
+        email: email,
+        branch: branch,
         points: 0,
         studyHours: 0,
         quizzesSolved: 0
       };
 
-      localStorage.setItem('ff_user_data_v2', JSON.stringify(userData));
+      localStorage.setItem('ff_user_data_v5', JSON.stringify(userData));
+      await syncToSupabase(userData);
+
       document.getElementById('onboarding').style.display = 'none';
       updateUI();
     }
@@ -411,133 +390,38 @@
     function updateUI() {
       if(!userData) return;
       document.getElementById('dash-name').textContent = userData.name;
-      document.getElementById('dash-email').textContent = `${userData.email} | ${userData.branch}`;
+      document.getElementById('dash-email').textContent = `${userData.email} (${userData.branch})`;
       document.getElementById('dash-pts').textContent = userData.points;
       document.getElementById('dash-hours').textContent = `${userData.studyHours} ساعة`;
-      document.getElementById('dash-quizzes').textContent = userData.quizzesSolved;
     }
 
-    function addStudyHours() {
+    async function addStudyHours() {
       const input = document.getElementById('study-hours-input');
       const hrs = parseFloat(input.value);
       if (hrs && hrs > 0) {
         userData.studyHours += hrs;
         userData.points += (hrs * 50);
-        localStorage.setItem('ff_user_data_v2', JSON.stringify(userData));
+        localStorage.setItem('ff_user_data_v5', JSON.stringify(userData));
         updateUI();
+        await syncToSupabase(userData);
         input.value = '';
-        alert(`تمت إضافة ${hrs} ساعة دراسة وحساب +${hrs * 50} نقطة بنجاح!`);
+        alert(`تمت إضافة ${hrs} ساعة دراسة والحفظ في قاعدة البيانات!`);
       }
+    }
+
+    async function recordMeet() {
+      userData.points += 30;
+      userData.last_meet = new Date().toLocaleString('ar-DZ');
+      localStorage.setItem('ff_user_data_v5', JSON.stringify(userData));
+      updateUI();
+      await syncToSupabase(userData);
     }
 
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-
       document.getElementById(`tab-${tabId}`).classList.add('active');
       btn.classList.add('active');
-    }
-
-    /* Pomodoro Timer */
-    let pTimer = null;
-    let pSecs = 25 * 60;
-    let pActive = false;
-
-    function togglePomodoro() {
-      const btn = document.getElementById('pomo-btn');
-      if(!pActive) {
-        pActive = true;
-        btn.textContent = "إيقاف مؤقت";
-        pTimer = setInterval(() => {
-          if(pSecs > 0) {
-            pSecs--;
-            let m = Math.floor(pSecs / 60);
-            let s = pSecs % 60;
-            document.getElementById('pomo-timer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-          } else {
-            clearInterval(pTimer);
-            pActive = false;
-            userData.points += 25;
-            localStorage.setItem('ff_user_data_v2', JSON.stringify(userData));
-            updateUI();
-            alert("🎉 ممتاز! أنهيت 25 دقيقة مذاكرة وكسبت 25 نقطة.");
-          }
-        }, 1000);
-      } else {
-        clearInterval(pTimer);
-        pActive = false;
-        btn.textContent = "استئناف المذاكرة";
-      }
-    }
-
-    /* Quiz System Engine */
-    let currentQuizIndex = 0;
-
-    function renderQuiz() {
-      const container = document.getElementById('quiz-container');
-      if (quizData.length === 0) {
-        container.innerHTML = `
-          <div style="text-align: center; padding: 20px;">
-            <span class="brand-badge">📥 في انتظار إضافة الدروس</span>
-            <h3 style="margin-top: 15px; font-size: 1.1rem;">أرسل الدروس والملخصات لتوليد الكويزات فوراً!</h3>
-          </div>
-        `;
-        return;
-      }
-
-      if (currentQuizIndex >= quizData.length) {
-        container.innerHTML = `
-          <div style="text-align: center;">
-            <span class="brand-badge" style="background: rgba(212,175,55,0.1); color: var(--brand-gold); border-color: var(--brand-gold);">🎉 أتممت جميع الكويزات!</span>
-            <h3 style="margin-top: 15px;">رائع جداً! أنهيت جميع الأسئلة المتاحة.</h3>
-          </div>
-        `;
-        return;
-      }
-
-      const q = quizData[currentQuizIndex];
-      let optionsHTML = '';
-      q.options.forEach((opt, idx) => {
-        optionsHTML += `<div class="quiz-option" onclick="handleAnswer(${idx})">${opt}</div>`;
-      });
-
-      container.innerHTML = `
-        <span class="brand-badge" style="background: rgba(212,175,55,0.1); color: var(--brand-gold); border-color: var(--brand-gold);">🧩 سؤال (${currentQuizIndex + 1}/${quizData.length})</span>
-        <h3 style="margin-top: 10px; font-size: 1.1rem;">${q.question}</h3>
-        <div id="options-list">${optionsHTML}</div>
-        <div class="quiz-explanation" id="quiz-exp">${q.explanation}</div>
-      `;
-    }
-
-    function handleAnswer(selectedIndex) {
-      const q = quizData[currentQuizIndex];
-      const expEl = document.getElementById('quiz-exp');
-      expEl.style.display = 'block';
-
-      if (selectedIndex === q.correct) {
-        userData.points += 15;
-        userData.quizzesSolved += 1;
-        localStorage.setItem('ff_user_data_v2', JSON.stringify(userData));
-        updateUI();
-        expEl.style.borderColor = "#00FF7F";
-        expEl.style.color = "#00FF7F";
-        expEl.innerHTML = "إجابة صحيحة! 👏 (+15 نقطة)<br>" + q.explanation;
-      } else {
-        expEl.style.borderColor = "var(--brand-red-light)";
-        expEl.style.color = "var(--brand-red-light)";
-        expEl.innerHTML = "إجابة خاطئة! ❌<br>" + q.explanation;
-      }
-
-      setTimeout(() => {
-        currentQuizIndex++;
-        renderQuiz();
-      }, 2500);
-    }
-
-    function recordMeet() {
-      userData.points += 30;
-      localStorage.setItem('ff_user_data_v2', JSON.stringify(userData));
-      updateUI();
     }
   </script>
 </body>
