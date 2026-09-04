@@ -3,524 +3,562 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Focus And Force 🎯</title>
+  <title>Focus & Force | المنصة التعليمية الفائقة</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- خط SF Pro الخاص بأجهزة آيفون -->
+  <!-- Apple SF Pro Display Font -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/robingennaro/SF-Pro-Display-CDN/SFProDisplay.css">
   <style>
     :root {
-      --bg-dark: #0B0E14;
-      --card-bg: #161B22;
-      --card-border: rgba(255, 255, 255, 0.08);
-      --primary-red: #B80000;
-      --accent-gold: #D4AF37;
-      --accent-purple: #4A154B;
-      --accent-green: #0D5C3A;
-      --accent-blue: #1E3A8A;
+      --bg-dark: #080A0F;
+      --card-glass: rgba(18, 22, 32, 0.75);
+      --card-border: rgba(255, 255, 255, 0.07);
+      --card-glow: rgba(184, 0, 0, 0.15);
+      
+      --brand-red: #B80000;
+      --brand-red-light: #FF2E2E;
+      --brand-gold: #D4AF37;
+      --brand-gold-glow: rgba(212, 175, 55, 0.25);
+      
       --text-main: #FFFFFF;
-      --text-muted: #9CA3AF;
+      --text-sub: #A0AEC0;
+      --text-gold: #F3C649;
     }
 
     * {
       box-sizing: border-box;
       margin: 0; padding: 0;
-      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
 
     body {
       background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(184, 0, 0, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 40%);
+      background-attachment: fixed;
       color: var(--text-main);
       min-height: 100vh;
-      padding-bottom: 90px;
+      padding-bottom: 100px;
+      overflow-x: hidden;
     }
 
-    /* Modal / Onboarding Screen (شاشة الإعداد المبينة في الصور) */
-    .onboarding-overlay {
+    /* Onboarding Overlay / شاشة الإعداد المتطورة */
+    .onboarding-screen {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: var(--bg-dark);
+      background: rgba(8, 10, 15, 0.95);
+      backdrop-filter: blur(20px);
       z-index: 2000;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
       padding: 20px;
-      overflow-y: auto;
     }
 
-    .step-card {
-      background: var(--card-bg);
+    .onboard-card {
+      background: var(--card-glass);
       border: 1px solid var(--card-border);
-      border-radius: 24px;
-      width: 100%;
-      max-width: 480px;
-      padding: 24px;
+      border-radius: 28px;
+      width: 100%; max-width: 440px;
+      padding: 32px 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px var(--card-glow);
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
-    .profile-avatar {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      border: 3px solid var(--primary-red);
-      margin: 0 auto 12px;
-      background: #222;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2rem;
+    .brand-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(184, 0, 0, 0.15);
+      border: 1px solid rgba(184, 0, 0, 0.4);
+      color: var(--brand-red-light);
+      padding: 6px 16px; border-radius: 30px;
+      font-size: 0.8rem; font-weight: 600;
+      margin-bottom: 16px;
     }
 
-    .progress-steps {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 12px;
-      margin: 20px 0;
+    .step-indicator {
+      display: flex; justify-content: center; gap: 8px;
+      margin: 24px 0;
     }
 
-    .step-dot {
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      background: #2D3748;
-      color: var(--text-muted);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.8rem; font-weight: bold;
+    .step-bar {
+      height: 4px; width: 35px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      transition: all 0.3s ease;
     }
 
-    .step-dot.active {
-      background: var(--primary-red);
-      color: #FFF;
-      box-shadow: 0 0 10px rgba(184, 0, 0, 0.5);
+    .step-bar.active {
+      background: linear-gradient(90deg, var(--brand-red), var(--brand-gold));
+      width: 50px;
     }
 
-    .input-box, .select-box {
+    .input-custom, .select-custom {
       width: 100%;
-      padding: 14px;
-      margin: 8px 0;
-      background: #0D1117;
+      padding: 16px;
+      margin-top: 12px;
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
+      border-radius: 16px;
       color: #FFF;
       font-size: 0.95rem;
       outline: none;
+      transition: all 0.3s;
     }
 
-    .btn-main {
+    .input-custom:focus, .select-custom:focus {
+      border-color: var(--brand-gold);
+      box-shadow: 0 0 15px var(--brand-gold-glow);
+    }
+
+    .btn-action {
       width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, var(--primary-red), #800000);
+      padding: 16px;
+      margin-top: 20px;
+      background: linear-gradient(135deg, var(--brand-red), #660000);
       border: none;
-      border-radius: 14px;
+      border-radius: 16px;
       color: #FFF;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
-      margin-top: 12px;
-      box-shadow: 0 4px 15px rgba(184, 0, 0, 0.3);
+      box-shadow: 0 8px 25px rgba(184, 0, 0, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    /* Bottom Navigation Bar (شريط التنقل السفي Z-Index) */
-    .bottom-nav {
+    .btn-action:active { transform: scale(0.98); }
+
+    /* Bottom Navigation Floating Bar */
+    .nav-floating {
       position: fixed;
-      bottom: 12px; left: 50%;
+      bottom: 20px; left: 50%;
       transform: translateX(-50%);
-      width: 92%; max-width: 480px;
-      background: rgba(22, 27, 34, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
+      width: 90%; max-width: 420px;
+      background: rgba(18, 22, 32, 0.85);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 25px;
+      display: flex; justify-content: space-around;
+      padding: 12px 8px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
       z-index: 1000;
     }
 
-    .nav-item {
+    .nav-btn {
       background: none; border: none;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      color: var(--text-sub);
+      font-size: 0.75rem; font-weight: 600;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 4px;
       cursor: pointer; flex: 1;
+      transition: all 0.3s;
     }
 
-    .nav-item.active {
-      color: var(--accent-gold);
-      font-weight: bold;
+    .nav-btn.active {
+      color: var(--brand-gold);
+      transform: translateY(-2px);
     }
 
-    .nav-item .icon { font-size: 1.3rem; }
+    .nav-btn .icon { font-size: 1.3rem; }
 
-    /* Dashboard Grid & Cards (البطاقات الملونة المستوحاة من التصاميم) */
+    /* Dashboard Main Container */
     .container {
-      padding: 16px;
-      max-width: 600px;
+      padding: 20px 16px;
+      max-width: 500px;
       margin: 0 auto;
     }
 
-    .header-user {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* Top User Header Card */
+    .user-header-card {
+      background: var(--card-glass);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 20px;
+      display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 20px;
     }
 
-    .grid-2 {
+    .user-info h3 { font-size: 1.2rem; font-weight: 800; }
+    .user-info p { font-size: 0.8rem; color: var(--text-sub); margin-top: 2px; }
+
+    .gold-badge {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
+      border: 1px solid var(--brand-gold);
+      color: var(--text-gold);
+      padding: 8px 14px;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    /* Advanced Grid & Cards Layout */
+    .grid-cards {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 12px;
+      gap: 14px;
+      margin-bottom: 20px;
     }
 
-    .color-card {
-      border-radius: 18px;
-      padding: 16px;
+    .feature-card {
+      background: var(--card-glass);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 20px;
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 110px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      min-height: 130px;
+      transition: border-color 0.3s, transform 0.2s;
     }
 
-    .card-purple { background: linear-gradient(135deg, #3A1C5A, #1E0F33); }
-    .card-gold { background: linear-gradient(135deg, #664D03, #2B1D00); border-color: var(--accent-gold); }
-    .card-red { background: linear-gradient(135deg, #5C0000, #2A0000); }
-    .card-green { background: linear-gradient(135deg, #0A4328, #031A0F); }
+    .feature-card:hover {
+      border-color: rgba(255,255,255,0.2);
+      transform: translateY(-3px);
+    }
 
-    .card-title { font-size: 0.8rem; color: var(--text-muted); }
-    .card-value { font-size: 1.8rem; font-weight: 800; margin-top: 6px; }
+    .feature-card.hero {
+      grid-column: span 2;
+      background: linear-gradient(135deg, rgba(184, 0, 0, 0.3), rgba(18, 22, 32, 0.8));
+      border: 1px solid rgba(184, 0, 0, 0.4);
+    }
 
-    .tab-section { display: none; }
-    .tab-section.active { display: block; }
+    .card-label { font-size: 0.8rem; color: var(--text-sub); font-weight: 600; }
+    .card-value-big { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; margin-top: 8px; }
 
-    /* Quiz Component */
-    .quiz-option {
-      background: #0D1117;
+    /* Interactive Sections */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Quiz Module UI */
+    .quiz-card {
+      background: var(--card-glass);
       border: 1px solid var(--card-border);
-      padding: 14px;
-      border-radius: 12px;
-      margin: 8px 0;
-      text-align: right;
+      border-radius: 24px;
+      padding: 24px;
+    }
+
+    .quiz-option {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      padding: 16px;
+      border-radius: 16px;
+      margin-top: 10px;
       cursor: pointer;
       transition: all 0.2s;
+      font-weight: 500;
     }
-    .quiz-option:hover { border-color: var(--accent-gold); background: rgba(212, 175, 55, 0.05); }
+
+    .quiz-option:hover {
+      border-color: var(--brand-gold);
+      background: var(--brand-gold-glow);
+    }
+
+    /* Meet Direct Session Card */
+    .meet-banner {
+      background: linear-gradient(135deg, rgba(13, 92, 58, 0.3), var(--card-glass));
+      border: 1px solid rgba(13, 92, 58, 0.5);
+      border-radius: 24px;
+      padding: 24px;
+      text-align: center;
+    }
 
   </style>
 </head>
 <body>
 
-  <!-- شاشة الإعداد والتسجيل (مستوحاة من الصورة الأولى والثانية) -->
-  <div id="onboarding" class="onboarding-overlay">
-    <div class="step-card">
-      <div class="profile-avatar">🎯</div>
-      <h2 style="font-size: 1.4rem; margin-bottom: 6px;">Focus And Force</h2>
-      <p style="font-size: 0.85rem; color: var(--text-muted);">إعداد حسابك وتخصيص التجربة</p>
+  <!-- شاشة الإعداد الأولية Onboarding Screen -->
+  <div id="onboarding" class="onboarding-screen">
+    <div class="onboard-card">
+      <div class="brand-badge">🎯 FOCUS & FORCE MINIAL</div>
+      <h2 style="font-size: 1.5rem; font-weight: 800;">تجهيز مساحتك الخاصة</h2>
+      <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 6px;">خطوات بسيطة لتخصيص التجربة لك</p>
 
-      <div class="progress-steps">
-        <div class="step-dot active" id="dot-1">1</div>
-        <div class="step-dot" id="dot-2">2</div>
-        <div class="step-dot" id="dot-3">3</div>
+      <div class="step-indicator">
+        <div class="step-bar active" id="bar-1"></div>
+        <div class="step-bar" id="bar-2"></div>
+        <div class="step-bar" id="bar-3"></div>
       </div>
 
-      <!-- Step 1: Google Login & Basic Info -->
+      <!-- Step 1 -->
       <div id="step-1">
-        <input type="text" id="reg-name" class="input-box" placeholder="الاسم واللقب">
-        <select id="reg-gender" class="select-box">
-          <option value="" disabled selected>اختر الجنس</option>
+        <input type="text" id="reg-name" class="input-custom" placeholder="الاسم الكامل">
+        <select id="reg-gender" class="select-custom">
+          <option value="" disabled selected>الجنس</option>
           <option value="ذكر">ذكر 👨‍🎓</option>
           <option value="أنثى">أنثى 👩‍🎓</option>
         </select>
-        <button class="btn-main" onclick="goToStep(2)">المتابعة والتالي ➔</button>
+        <button class="btn-action" onclick="goToStep(2)">التالي ➔</button>
       </div>
 
-      <!-- Step 2: Academic Info -->
+      <!-- Step 2 -->
       <div id="step-2" style="display: none;">
-        <select id="reg-branch" class="select-box">
-          <option value="" disabled selected>اختر الشعبة الدراسية</option>
-          <option value="تقني رياضي - هندسة">تقني رياضي (هندسة)</option>
+        <select id="reg-branch" class="select-custom">
+          <option value="" disabled selected>الشعبة الدراسية</option>
+          <option value="تقني رياضي">تقني رياضي</option>
           <option value="علوم تجريبية">علوم تجريبية</option>
           <option value="رياضيات">رياضيات</option>
           <option value="تسيير واقتصاد">تسيير واقتصاد</option>
-          <option value="لغات أجنبية / أدب">لغات أجنبية / أدب وفلسفة</option>
+          <option value="لغات أجنبية / أدب">لغات أجنبية / أدب</option>
         </select>
-
-        <select id="reg-first-bac" class="select-box">
-          <option value="" disabled selected>هل هذه أول مرة تجتاز البكالوريا؟</option>
-          <option value="yes">نعم، أول تجربة 🌟</option>
-          <option value="no">لا، معيد للشهادة 🔄</option>
+        <select id="reg-bac-type" class="select-custom">
+          <option value="" disabled selected>نوع التسجيل</option>
+          <option value="نظامي">طالب نظامي (أول مرة)</option>
+          <option value="حرة">طالب حر (إعادة)</option>
         </select>
-
-        <button class="btn-main" onclick="goToStep(3)">المتابعة والتالي ➔</button>
+        <button class="btn-action" onclick="goToStep(3)">التالي ➔</button>
       </div>
 
-      <!-- Step 3: Target & Motivation -->
+      <!-- Step 3 -->
       <div id="step-3" style="display: none;">
-        <input type="text" id="reg-career" class="input-box" placeholder="التخصص الجامعي المرغوب (مثلاً: طب، هندسة)">
-        <select id="reg-grade" class="select-box">
-          <option value="" disabled selected>المعدل المستهدف</option>
-          <option value="12 - 14">12 - 14 (مقبول)</option>
-          <option value="15 - 16">15 - 16 (جيد جداً)</option>
-          <option value="+17">+17 (أسطوري)</option>
+        <input type="text" id="reg-career" class="input-custom" placeholder="التخصص المستهدف (مثلاً: طيران، طب، ذكاء اصطناعي)">
+        <select id="reg-target" class="select-custom">
+          <option value="" disabled selected>المعدل المستهدف فالباك</option>
+          <option value="13 - 14">13 - 14</option>
+          <option value="15 - 16">15 - 16</option>
+          <option value="+17">أكثر من 17 ⭐</option>
         </select>
-
-        <button class="btn-main" onclick="finishOnboarding()">دخول المنصة وتجهيز الحساب 🚀</button>
+        <button class="btn-action" onclick="finishOnboarding()">الانطلاق إلى المنصة 🚀</button>
       </div>
 
     </div>
   </div>
 
-  <!-- التطبيق الرئيسي Dashboard -->
+  <!-- الواجهة الرئيسية Dashboard Container -->
   <div class="container">
-    
-    <!-- User Top Banner -->
-    <div class="header-user">
-      <div>
-        <h3 id="dash-user-name">Rayane</h3>
-        <span id="dash-user-title" style="font-size: 0.8rem; color: var(--accent-gold);">طبيب المستقبل 🩺</span>
+
+    <!-- Top User Card -->
+    <div class="user-header-card">
+      <div class="user-info">
+        <h3 id="dash-name">Rayane</h3>
+        <p id="dash-sub">طبيب المستقبل | علوم تجريبية</p>
       </div>
-      <div style="background: var(--card-bg); padding: 8px 14px; border-radius: 12px; border: 1px solid var(--card-border);">
-        🏆 <span id="dash-points">0</span> نقطة
+      <div class="gold-badge">
+        ✨ <span id="dash-pts">0</span> PTS
       </div>
     </div>
 
-    <!-- TAB 1: الرئيسية Dashboard (المستوحاة من التصاوير) -->
-    <div id="tab-dashboard" class="tab-section active">
+    <!-- TAB 1: الرئيسية -->
+    <div id="tab-dashboard" class="tab-content active">
       
-      <!-- Time Countdown Banner -->
-      <div class="color-card card-purple" style="margin-bottom: 12px;">
-        <span class="card-title">⏳ المتبقي على امتحان البكالوريا</span>
-        <div class="card-value" id="bac-timer">274 يوم</div>
-      </div>
+      <div class="grid-cards">
+        <!-- Hero Countdown Card -->
+        <div class="feature-card hero">
+          <div>
+            <span class="card-label">⏳ العد التنازلي للبكالوريا</span>
+            <div class="card-value-big" id="bac-days">274 يوم</div>
+          </div>
+          <p style="font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 10px;">الاستمرارية هي سر النجاح!</p>
+        </div>
 
-      <div class="grid-2">
-        <div class="color-card card-gold">
-          <span class="card-title">⭐ مجموع النقاط</span>
-          <div class="card-value" id="card-points">0</div>
+        <!-- Target Grade -->
+        <div class="feature-card">
+          <span class="card-label">🎯 الهدف المستهدف</span>
+          <div class="card-value-big" style="color: var(--brand-gold);" id="dash-target">+17</div>
         </div>
-        <div class="color-card card-red">
-          <span class="card-title">🎯 المعدل المستهدف</span>
-          <div class="card-value" id="card-target">+17</div>
-        </div>
-      </div>
 
-      <div class="grid-2">
-        <div class="color-card card-green">
-          <span class="card-title">⏱️ دقائق البومودورو</span>
-          <div class="card-value" id="card-pomodoro">0 د</div>
-        </div>
-        <div class="color-card card-purple">
-          <span class="card-title">🎥 جلسات Meet</span>
-          <div class="card-value" id="card-meet">0 جلسة</div>
+        <!-- Meet Counter -->
+        <div class="feature-card">
+          <span class="card-label">🎥 جلسات Meet</span>
+          <div class="card-value-big" id="dash-meet-count">0</div>
         </div>
       </div>
 
-      <!-- Pomodoro Section Inside Dashboard -->
-      <div style="background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid var(--card-border); text-align: center; margin-top: 15px;">
-        <h4>⏱️ مؤقت التركيز (البومودورو)</h4>
-        <div style="font-size: 3.5rem; font-weight: 800; color: var(--primary-red); margin: 10px 0;" id="pomo-display">25:00</div>
-        <button class="btn-main" onclick="togglePomodoro()" id="pomo-btn">إبدأ الجلسة (+25 نقطة)</button>
+      <!-- Focus Timer Component (Pomodoro) -->
+      <div style="background: var(--card-glass); border-radius: 24px; padding: 24px; border: 1px solid var(--card-border); text-align: center;">
+        <span class="card-label">⏱️ جلسة التركيز العميق (Pomodoro)</span>
+        <div style="font-size: 3.8rem; font-weight: 800; color: var(--brand-red-light); margin: 12px 0;" id="pomo-timer">25:00</div>
+        <button class="btn-action" onclick="togglePomodoro()" id="pomo-btn">بدء الجلسة (+25 نقطة)</button>
       </div>
 
     </div>
 
-    <!-- TAB 2: الكويزات والاختبارات (خاصية سبيسيال) -->
-    <div id="tab-quiz" class="tab-section">
-      <div style="background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid var(--card-border);">
-        <h3 style="color: var(--accent-gold); margin-bottom: 10px;">🧩 كويز اليوم السريع</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">اختبر معلوماتك واكسب نقاط إضافية في الترتيب!</p>
+    <!-- TAB 2: الكويزات (Quiz Module) -->
+    <div id="tab-quiz" class="tab-content">
+      <div class="quiz-card">
+        <span class="brand-badge" style="background: rgba(212,175,55,0.1); color: var(--brand-gold); border-color: var(--brand-gold);">🧩 كويز اليوم التفاعلي</span>
+        <h3 style="margin-top: 10px; font-size: 1.1rem;">ما هي الوحدة البنائية للبروتينات في العضوية؟</h3>
 
-        <div id="quiz-container">
-          <p style="font-weight: bold; margin-bottom: 12px;">سؤال: ما هي الوحدة الأساسية لبناء البروتين في الجسم؟</p>
-          <div class="quiz-option" onclick="answerQuiz(false)">أ) الأحماض الدهنية</div>
-          <div class="quiz-option" onclick="answerQuiz(true)">ب) الأحماض الأمينية</div>
-          <div class="quiz-option" onclick="answerQuiz(false)">ج) السكريات البسيطة</div>
-        </div>
+        <div class="quiz-option" onclick="submitQuiz(false)">أ) الأحماض الدهنية والغرانيت</div>
+        <div class="quiz-option" onclick="submitQuiz(true)">ب) الأحماض الأمينية (Amino Acids)</div>
+        <div class="quiz-option" onclick="submitQuiz(false)">ج) النيوكليوتيدات</div>
       </div>
     </div>
 
-    <!-- TAB 3: جلسات Google Meet Mebachera -->
-    <div id="tab-meet" class="tab-section">
-      <div style="background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid var(--card-border); text-align: center;">
-        <h3 style="color: var(--primary-red); margin-bottom: 10px;">🎥 جلسات المذاكرة المباشرة</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
-          انضم عبر Google Meet لمراجعة الدروس وحل البكالوريات السابقة مع زملائك.
-        </p>
-        <a href="https://meet.google.com/krd-aesq-sgt" target="_blank" onclick="joinMeet()" class="btn-main" style="text-decoration: none; display: block;">
-          تسجيل الحضور والانضمام لـ Meet 🚀
+    <!-- TAB 3: جلسات Google Meet المباشرة -->
+    <div id="tab-meet" class="tab-content">
+      <div class="meet-banner">
+        <h3 style="font-size: 1.3rem; margin-bottom: 8px;">🎥 غرف المذاكرة المباشرة</h3>
+        <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">ادخل واقرا مع أصحابك فـ Google Meet واكسب النقاط للتنصيف.</p>
+        <a href="https://meet.google.com/krd-aesq-sgt" target="_blank" onclick="recordMeet()" class="btn-action" style="text-decoration: none; display: block;">
+          الانضمام للجلسة الحالية 🚀
         </a>
       </div>
     </div>
 
-    <!-- TAB 4: التصنيف والترتيب -->
-    <div id="tab-leaderboard" class="tab-section">
-      <div style="background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid var(--card-border);">
-        <h3 style="color: var(--accent-gold); margin-bottom: 15px;">🏆 ترتيب أبطال المنصة</h3>
-        <div id="leaderboard-container">
-          <!-- القائمة الديناميكية -->
-        </div>
+    <!-- TAB 4: الترتيب والتصنيف -->
+    <div id="tab-leaderboard" class="tab-content">
+      <div class="quiz-card">
+        <h3 style="color: var(--brand-gold); margin-bottom: 16px;">🏆 لوحة الصدارة والأبطال</h3>
+        <div id="leaderboard-list"></div>
       </div>
     </div>
 
   </div>
 
-  <!-- شريط التنقل السفي Glassmorphism (نفس ديزاين الصور) -->
-  <div class="bottom-nav">
-    <button class="nav-item active" onclick="switchTab('dashboard', this)">
+  <!-- Bottom Floating Navbar -->
+  <div class="nav-floating">
+    <button class="nav-btn active" onclick="switchTab('dashboard', this)">
       <span class="icon">🏠</span>
       <span>الرئيسية</span>
     </button>
-    <button class="nav-item" onclick="switchTab('quiz', this)">
+    <button class="nav-btn" onclick="switchTab('quiz', this)">
       <span class="icon">🧩</span>
-      <span>الكويزات</span>
+      <span>كويزات</span>
     </button>
-    <button class="nav-item" onclick="switchTab('meet', this)">
+    <button class="nav-btn" onclick="switchTab('meet', this)">
       <span class="icon">🎥</span>
       <span>Meet</span>
     </button>
-    <button class="nav-item" onclick="switchTab('leaderboard', this)">
+    <button class="nav-btn" onclick="switchTab('leaderboard', this)">
       <span class="icon">🏆</span>
-      <span>التصنيف</span>
+      <span>الترتيب</span>
     </button>
   </div>
 
   <script>
-    let appUser = JSON.parse(localStorage.getItem('ff_app_user')) || null;
+    let userData = JSON.parse(localStorage.getItem('ff_user_data')) || null;
 
     window.onload = function() {
-      if (!appUser) {
+      if(!userData) {
         document.getElementById('onboarding').style.display = 'flex';
       } else {
         document.getElementById('onboarding').style.display = 'none';
-        renderDashboard();
+        updateUI();
       }
-    };
+    }
 
     function goToStep(step) {
       document.getElementById('step-1').style.display = 'none';
       document.getElementById('step-2').style.display = 'none';
       document.getElementById('step-3').style.display = 'none';
-      
       document.getElementById(`step-${step}`).style.display = 'block';
 
-      document.querySelectorAll('.step-dot').forEach((dot, idx) => {
-        if(idx < step) dot.classList.add('active');
-        else dot.classList.remove('active');
+      document.querySelectorAll('.step-bar').forEach((bar, idx) => {
+        if(idx < step) bar.classList.add('active');
+        else bar.classList.remove('active');
       });
     }
 
     function finishOnboarding() {
       const name = document.getElementById('reg-name').value || "Rayane";
       const gender = document.getElementById('reg-gender').value || "ذكر";
-      const branch = document.getElementById('reg-branch').value || "تقني رياضي";
+      const branch = document.getElementById('reg-branch').value || "علوم تجريبية";
       const career = document.getElementById('reg-career').value || "طبيب المستقبل";
-      const targetGrade = document.getElementById('reg-grade').value || "+17";
+      const target = document.getElementById('reg-target').value || "+17";
 
-      let title = gender === 'ذكر' ? `مستقبل ${career}` : `مستقبلية ${career}`;
-
-      appUser = {
-        name, gender, branch, career, title, targetGrade,
-        points: 0, pomoMinutes: 0, meetSessions: 0
+      userData = {
+        name,
+        subTitle: `${career} | ${branch}`,
+        target,
+        points: 0,
+        meetCount: 0
       };
 
-      localStorage.setItem('ff_app_user', JSON.stringify(appUser));
+      localStorage.setItem('ff_user_data', JSON.stringify(userData));
       document.getElementById('onboarding').style.display = 'none';
-      renderDashboard();
+      updateUI();
     }
 
-    function renderDashboard() {
-      if(!appUser) return;
-      document.getElementById('dash-user-name').textContent = appUser.name;
-      document.getElementById('dash-user-title').textContent = `${appUser.title} (${appUser.branch})`;
-      document.getElementById('dash-points').textContent = appUser.points;
-      document.getElementById('card-points').textContent = appUser.points;
-      document.getElementById('card-target').textContent = appUser.targetGrade;
-      document.getElementById('card-pomodoro').textContent = `${appUser.pomoMinutes} د`;
-      document.getElementById('card-meet').textContent = appUser.meetSessions;
+    function updateUI() {
+      if(!userData) return;
+      document.getElementById('dash-name').textContent = userData.name;
+      document.getElementById('dash-sub').textContent = userData.subTitle;
+      document.getElementById('dash-pts').textContent = userData.points;
+      document.getElementById('dash-target').textContent = userData.target;
+      document.getElementById('dash-meet-count').textContent = userData.meetCount;
       renderLeaderboard();
     }
 
     function switchTab(tabId, btn) {
-      document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-      
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+
       document.getElementById(`tab-${tabId}`).classList.add('active');
       btn.classList.add('active');
     }
 
-    /* Pomodoro Logic */
-    let timer = null;
-    let seconds = 25 * 60;
-    let isRunning = false;
+    /* Pomodoro Timer */
+    let pTimer = null;
+    let pSecs = 25 * 60;
+    let pActive = false;
 
     function togglePomodoro() {
       const btn = document.getElementById('pomo-btn');
-      if(!isRunning) {
-        isRunning = true;
+      if(!pActive) {
+        pActive = true;
         btn.textContent = "إيقاف مؤقت";
-        timer = setInterval(() => {
-          if(seconds > 0) {
-            seconds--;
-            let m = Math.floor(seconds / 60);
-            let s = seconds % 60;
-            document.getElementById('pomo-display').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        pTimer = setInterval(() => {
+          if(pSecs > 0) {
+            pSecs--;
+            let m = Math.floor(pSecs / 60);
+            let s = pSecs % 60;
+            document.getElementById('pomo-timer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
           } else {
-            clearInterval(timer);
-            isRunning = false;
-            appUser.points += 25;
-            appUser.pomoMinutes += 25;
-            localStorage.setItem('ff_app_user', JSON.stringify(appUser));
-            renderDashboard();
-            alert("🎉 ممتاز! تم إنهاء الجلسة وإضافة 25 نقطة.");
+            clearInterval(pTimer);
+            pActive = false;
+            userData.points += 25;
+            localStorage.setItem('ff_user_data', JSON.stringify(userData));
+            updateUI();
+            alert("🎉 أحسنت! أكملت الجلسة وكسبت 25 نقطة.");
           }
         }, 1000);
       } else {
-        clearInterval(timer);
-        isRunning = false;
-        btn.textContent = "إبدأ الجلسة (+25 نقطة)";
+        clearInterval(pTimer);
+        pActive = false;
+        btn.textContent = "استئناف الجلسة";
       }
     }
 
-    /* Quiz Feature */
-    function answerQuiz(isCorrect) {
+    /* Quiz Submission */
+    function submitQuiz(isCorrect) {
       if(isCorrect) {
-        appUser.points += 15;
-        localStorage.setItem('ff_app_user', JSON.stringify(appUser));
-        renderDashboard();
-        alert("إجابة صحيحة! 🎉 حصلت على 15 نقطة إضافية.");
+        userData.points += 15;
+        localStorage.setItem('ff_user_data', JSON.stringify(userData));
+        updateUI();
+        alert("إجابة صحيحة! 👏 تم إضافة +15 نقطة لرصيدك.");
       } else {
-        alert("إجابة خاطئة! حاول مرة أخرى في الكويز القادم.");
+        alert("إجابة خاطئة، حاول مرة أخرى!");
       }
     }
 
-    /* Meet Feature */
-    function joinMeet() {
-      appUser.points += 30;
-      appUser.meetSessions += 1;
-      localStorage.setItem('ff_app_user', JSON.stringify(appUser));
-      renderDashboard();
+    /* Meet Tracking */
+    function recordMeet() {
+      userData.points += 30;
+      userData.meetCount += 1;
+      localStorage.setItem('ff_user_data', JSON.stringify(userData));
+      updateUI();
     }
 
-    /* Leaderboard */
+    /* Leaderboard Dynamic Render */
     function renderLeaderboard() {
-      const container = document.getElementById('leaderboard-container');
-      let students = [
-        { name: appUser ? appUser.name : "Rayane", points: appUser ? appUser.points : 0, title: appUser ? appUser.title : "" },
-        { name: "أسامة", points: 150, title: "مهندس المستقبل" },
-        { name: "إيمان", points: 120, title: "طبيبة المستقبل" }
+      const list = document.getElementById('leaderboard-list');
+      let data = [
+        { name: userData ? userData.name : "Rayane", pts: userData ? userData.points : 0 },
+        { name: "أسامة", pts: 120 },
+        { name: "مريم", pts: 95 }
       ];
 
-      students.sort((a,b) => b.points - a.points);
+      data.sort((a,b) => b.pts - a.pts);
 
-      container.innerHTML = '';
-      students.forEach((s, idx) => {
-        container.innerHTML += `
-          <div style="display:flex; justify-content:space-between; align-items:center; background:#0D1117; padding:12px; border-radius:12px; margin-bottom:8px;">
+      list.innerHTML = '';
+      data.forEach((item, index) => {
+        list.innerHTML += `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); border:1px solid var(--card-border); padding:14px; border-radius:14px; margin-top:8px;">
             <div>
-              <strong>#${idx+1} ${s.name}</strong>
-              <div style="font-size:0.75rem; color:var(--text-muted);">${s.title}</div>
+              <strong>#${index + 1} ${item.name}</strong>
             </div>
-            <span style="color:var(--accent-gold); font-weight:bold;">${s.points} نقطة</span>
+            <span style="color:var(--brand-gold); font-weight:700;">${item.pts} PTS</span>
           </div>
         `;
       });
