@@ -5,17 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Focus And Force 🎯</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- خط SF Pro الخاص بأجهزة آيفون -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/robingennaro/SF-Pro-Display-CDN/SFProDisplay.css">
   <style>
     :root {
-      --bg-main: #F9F6F0;
-      --card-bg: #FFFFFF;
-      --card-inner: #F1ECE4;
+      --bg-dark: #0B0E14;
+      --card-bg: #161B22;
+      --card-border: rgba(255, 255, 255, 0.08);
       --primary-red: #B80000;
-      --accent-red: #D32F2F;
-      --text-main: #2C2C2C;
-      --text-muted: #666666;
-      --gold-color: #D4AF37;
+      --accent-gold: #D4AF37;
+      --accent-purple: #4A154B;
+      --accent-green: #0D5C3A;
+      --accent-blue: #1E3A8A;
+      --text-main: #FFFFFF;
+      --text-muted: #9CA3AF;
     }
 
     * {
@@ -26,511 +29,501 @@
     }
 
     body {
-      background-color: var(--bg-main);
+      background-color: var(--bg-dark);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
+      padding-bottom: 90px;
     }
 
-    .header { text-align: center; margin-bottom: 16px; }
-    .header h1 { font-size: 1.7rem; color: var(--primary-red); font-weight: 800; }
-
-    /* Modal / Onboarding Styles */
-    .modal-overlay {
+    /* Modal / Onboarding Screen (شاشة الإعداد المبينة في الصور) */
+    .onboarding-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      display: flex; justify-content: center; align-items: center;
-      z-index: 1000;
-    }
-
-    .modal-card {
-      background: #FFF;
-      width: 90%;
-      max-width: 420px;
-      border-radius: 24px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      text-align: center;
-    }
-
-    .google-btn {
-      width: 100%;
-      background: #FFFFFF;
-      border: 1px solid #DADCE0;
-      color: #3C4043;
-      padding: 12px;
-      border-radius: 12px;
-      font-weight: 600;
+      background: var(--bg-dark);
+      z-index: 2000;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-      margin-top: 15px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      align-items: center;
+      padding: 20px;
+      overflow-y: auto;
     }
 
-    .google-btn img { width: 20px; height: 20px; }
-
-    .form-step { display: none; }
-    .form-step.active { display: block; }
-
-    .input-field, .select-field {
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1.5px solid #E2E8F0;
-      border-radius: 12px;
+      max-width: 480px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .profile-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      border: 3px solid var(--primary-red);
+      margin: 0 auto 12px;
+      background: #222;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+    }
+
+    .progress-steps {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .step-dot {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: #2D3748;
+      color: var(--text-muted);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; font-weight: bold;
+    }
+
+    .step-dot.active {
+      background: var(--primary-red);
+      color: #FFF;
+      box-shadow: 0 0 10px rgba(184, 0, 0, 0.5);
+    }
+
+    .input-box, .select-box {
+      width: 100%;
+      padding: 14px;
+      margin: 8px 0;
+      background: #0D1117;
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      color: #FFF;
       font-size: 0.95rem;
       outline: none;
     }
 
-    .quote-box {
-      background: #FFF8E1;
-      border-right: 4px solid #FFC107;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      color: #856404;
-      margin: 12px 0;
-      text-align: right;
-    }
-
-    .nav-tabs {
-      display: flex;
-      background: var(--card-bg);
-      padding: 6px;
-      border-radius: 14px;
-      margin-bottom: 16px;
-      border: 1px solid #EBE5DC;
-    }
-
-    .tab-btn {
-      flex: 1;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      padding: 10px 0;
-      font-size: 0.85rem;
-      font-weight: 600;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .tab-btn.active {
-      background: var(--primary-red);
-      color: #FFFFFF;
-      font-weight: 700;
-    }
-
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-      border: 1px solid #EBE5DC;
-    }
-
-    .timer-display {
-      font-size: 4rem;
-      font-weight: 800;
-      color: var(--primary-red);
-      margin: 15px 0;
-      font-family: monospace;
-    }
-
-    .btn {
-      padding: 12px 24px;
-      font-size: 0.95rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      color: #fff;
-    }
-
-    .btn-start { background-color: var(--primary-red); width: 100%; }
-    .btn-reset { background-color: var(--text-muted); }
-
-    .list-item {
-      background: var(--card-inner);
-      padding: 12px 16px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-right: 4px solid var(--primary-red);
-    }
-
-    .user-info { text-align: right; }
-    .user-detail { display: block; font-size: 0.75rem; color: var(--text-muted); }
-
-    .badge {
-      background: rgba(184, 0, 0, 0.1);
-      color: var(--primary-red);
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-
-    .action-btn {
-      display: block;
+    .btn-main {
       width: 100%;
-      background: var(--primary-red);
-      color: white;
-      text-decoration: none;
-      padding: 12px;
-      border-radius: 12px;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary-red), #800000);
+      border: none;
+      border-radius: 14px;
+      color: #FFF;
       font-weight: 700;
-      margin-top: 10px;
-      text-align: center;
+      cursor: pointer;
+      margin-top: 12px;
+      box-shadow: 0 4px 15px rgba(184, 0, 0, 0.3);
     }
 
-    .dz-item {
-      background: #F8F9FA;
-      border: 1px solid #E9ECEF;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 10px;
-      text-align: right;
+    /* Bottom Navigation Bar (شريط التنقل السفي Z-Index) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 12px; left: 50%;
+      transform: translateX(-50%);
+      width: 92%; max-width: 480px;
+      background: rgba(22, 27, 34, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      z-index: 1000;
     }
+
+    .nav-item {
+      background: none; border: none;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      cursor: pointer; flex: 1;
+    }
+
+    .nav-item.active {
+      color: var(--accent-gold);
+      font-weight: bold;
+    }
+
+    .nav-item .icon { font-size: 1.3rem; }
+
+    /* Dashboard Grid & Cards (البطاقات الملونة المستوحاة من التصاميم) */
+    .container {
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .header-user {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .color-card {
+      border-radius: 18px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 110px;
+    }
+
+    .card-purple { background: linear-gradient(135deg, #3A1C5A, #1E0F33); }
+    .card-gold { background: linear-gradient(135deg, #664D03, #2B1D00); border-color: var(--accent-gold); }
+    .card-red { background: linear-gradient(135deg, #5C0000, #2A0000); }
+    .card-green { background: linear-gradient(135deg, #0A4328, #031A0F); }
+
+    .card-title { font-size: 0.8rem; color: var(--text-muted); }
+    .card-value { font-size: 1.8rem; font-weight: 800; margin-top: 6px; }
+
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
+
+    /* Quiz Component */
+    .quiz-option {
+      background: #0D1117;
+      border: 1px solid var(--card-border);
+      padding: 14px;
+      border-radius: 12px;
+      margin: 8px 0;
+      text-align: right;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .quiz-option:hover { border-color: var(--accent-gold); background: rgba(212, 175, 55, 0.05); }
+
   </style>
 </head>
 <body>
 
-  <!-- Modal onboarding for Google Sign In and Survey -->
-  <div id="auth-modal" class="modal-overlay">
-    <div class="modal-card">
-      
-      <!-- Step 1: Google Login Simulated -->
-      <div id="step-google" class="form-step active">
-        <h3 style="color: var(--primary-red); margin-bottom: 8px;">مرحباً بك في Focus & Force 🎯</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted);">قم بمتابعة التسجيل بحساب Google للانضمام لأبطال البكالوريا:</p>
-        
-        <button class="google-btn" onclick="continueWithGoogle()">
-          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
-          المتابعة باستخدام حساب Google
-        </button>
+  <!-- شاشة الإعداد والتسجيل (مستوحاة من الصورة الأولى والثانية) -->
+  <div id="onboarding" class="onboarding-overlay">
+    <div class="step-card">
+      <div class="profile-avatar">🎯</div>
+      <h2 style="font-size: 1.4rem; margin-bottom: 6px;">Focus And Force</h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted);">إعداد حسابك وتخصيص التجربة</p>
+
+      <div class="progress-steps">
+        <div class="step-dot active" id="dot-1">1</div>
+        <div class="step-dot" id="dot-2">2</div>
+        <div class="step-dot" id="dot-3">3</div>
       </div>
 
-      <!-- Step 2: User Survey Form -->
-      <div id="step-survey" class="form-step">
-        <h3 style="color: var(--primary-red); margin-bottom: 10px;">استبيان الطالب 📝</h3>
-        
-        <input type="text" id="user-name" class="input-field" placeholder="الاسم واللقب كاملين" required>
-        
-        <select id="user-gender" class="select-field">
-          <option value="" disabled selected>الجنس</option>
+      <!-- Step 1: Google Login & Basic Info -->
+      <div id="step-1">
+        <input type="text" id="reg-name" class="input-box" placeholder="الاسم واللقب">
+        <select id="reg-gender" class="select-box">
+          <option value="" disabled selected>اختر الجنس</option>
           <option value="ذكر">ذكر 👨‍🎓</option>
           <option value="أنثى">أنثى 👩‍🎓</option>
         </select>
+        <button class="btn-main" onclick="goToStep(2)">المتابعة والتالي ➔</button>
+      </div>
 
-        <select id="user-branch" class="select-field">
-          <option value="" disabled selected>اختر شعبتك الدراسية</option>
-          <option value="هندسة">شعبة هندسة (تقني رياضي)</option>
+      <!-- Step 2: Academic Info -->
+      <div id="step-2" style="display: none;">
+        <select id="reg-branch" class="select-box">
+          <option value="" disabled selected>اختر الشعبة الدراسية</option>
+          <option value="تقني رياضي - هندسة">تقني رياضي (هندسة)</option>
           <option value="علوم تجريبية">علوم تجريبية</option>
           <option value="رياضيات">رياضيات</option>
           <option value="تسيير واقتصاد">تسيير واقتصاد</option>
-          <option value="لغات أجنبية">لغات أجنبية</option>
-          <option value="آداب وفلسفة">آداب وفلسفة</option>
+          <option value="لغات أجنبية / أدب">لغات أجنبية / أدب وفلسفة</option>
         </select>
 
-        <select id="is-first-bac" class="select-field" onchange="checkBacAttempt(this.value)">
+        <select id="reg-first-bac" class="select-box">
           <option value="" disabled selected>هل هذه أول مرة تجتاز البكالوريا؟</option>
-          <option value="yes">نعم، أول مرة 🌟</option>
-          <option value="no">لا، قمت بإعادتها 🔄</option>
+          <option value="yes">نعم، أول تجربة 🌟</option>
+          <option value="no">لا، معيد للشهادة 🔄</option>
         </select>
 
-        <!-- Dynamic Motivation Box -->
-        <div id="motivation-box" class="quote-box" style="display: none;">
-          <strong>💡 رسالة لك من القلب:</strong><br>
-          "السقوط ليس نهاية المطاف بل هو بداية الحكاية الحقيقية للنجاح. الأعظم هم من سقطوا وأعادوا الكرة بعزيمة أشد! الباك هذه السنة لك بإذن الله."
-        </div>
+        <button class="btn-main" onclick="goToStep(3)">المتابعة والتالي ➔</button>
+      </div>
 
-        <input type="text" id="target-career" class="input-field" placeholder="ما الذي تريد دراسته في الجامعة؟ (مثلاً: طب، هندسة، إعلام آلي...)" required>
-
-        <select id="target-grade" class="select-field">
-          <option value="" disabled selected>المعدل المستهدف بالتقريب</option>
-          <option value="10 - 12">10 - 12 (مقبول)</option>
-          <option value="13 - 15">13 - 15 (جيد)</option>
-          <option value="16 - 17">16 - 17 (ممتاز)</option>
+      <!-- Step 3: Target & Motivation -->
+      <div id="step-3" style="display: none;">
+        <input type="text" id="reg-career" class="input-box" placeholder="التخصص الجامعي المرغوب (مثلاً: طب، هندسة)">
+        <select id="reg-grade" class="select-box">
+          <option value="" disabled selected>المعدل المستهدف</option>
+          <option value="12 - 14">12 - 14 (مقبول)</option>
+          <option value="15 - 16">15 - 16 (جيد جداً)</option>
           <option value="+17">+17 (أسطوري)</option>
         </select>
 
-        <button class="btn btn-start" style="margin-top: 12px;" onclick="saveRegistration()">إنهاء التسجيل والبدء 🚀</button>
+        <button class="btn-main" onclick="finishOnboarding()">دخول المنصة وتجهيز الحساب 🚀</button>
       </div>
 
     </div>
   </div>
 
-  <div class="header">
-    <h1>Focus And Force 🎯</h1>
-    <p id="welcome-tag" style="font-size: 0.85rem; color: var(--primary-red); font-weight: bold; margin-top: 4px;"></p>
-  </div>
-
-  <div class="nav-tabs">
-    <button class="tab-btn active" onclick="switchTab('timer')">⏱️ المؤقت</button>
-    <button class="tab-btn" onclick="switchTab('leaderboard')">🏆 التصنيف</button>
-    <button class="tab-btn" onclick="switchTab('meet')">🎥 الجلسات</button>
-    <button class="tab-btn" onclick="switchTab('files')">📚 DzExams</button>
-  </div>
-
-  <!-- TAB 1: TIMER -->
-  <div id="tab-timer" class="tab-content active">
-    <div class="card">
-      <p style="color: var(--text-muted); font-size: 0.9rem;">جلسة تركيز دراسية (بومودورو)</p>
-      <div class="timer-display" id="time-display">25:00</div>
-      <div class="controls" style="display: flex; gap: 10px;">
-        <button class="btn btn-start" id="start-btn" onclick="toggleTimer()">إبدأ الجلسة</button>
-        <button class="btn btn-reset" onclick="resetTimer()">إعادة</button>
+  <!-- التطبيق الرئيسي Dashboard -->
+  <div class="container">
+    
+    <!-- User Top Banner -->
+    <div class="header-user">
+      <div>
+        <h3 id="dash-user-name">Rayane</h3>
+        <span id="dash-user-title" style="font-size: 0.8rem; color: var(--accent-gold);">طبيب المستقبل 🩺</span>
       </div>
-      <div style="margin-top: 20px; font-size: 0.9rem; color: var(--primary-red); font-weight: 700;">
-        ⭐ مجموع نقاطك: <span id="user-points">0</span> نقطة
+      <div style="background: var(--card-bg); padding: 8px 14px; border-radius: 12px; border: 1px solid var(--card-border);">
+        🏆 <span id="dash-points">0</span> نقطة
       </div>
     </div>
-  </div>
 
-  <!-- TAB 2: LEADERBOARD -->
-  <div id="tab-leaderboard" class="tab-content">
-    <div class="card">
-      <h3 style="margin-bottom: 15px; color: var(--primary-red);">🏆 قائمة الأبطال والمسجلين</h3>
-      <div id="leaderboard-list">
-        <!-- التصنيف يتحدث حقيقياً بناء على تسجيل المستخدمين -->
-      </div>
-    </div>
-  </div>
-
-  <!-- TAB 3: MEET SESSIONS -->
-  <div id="tab-meet" class="tab-content">
-    <div class="card">
-      <h3 style="color: var(--primary-red);">🎥 جلسة Google Meet المباشرة</h3>
-      <p style="color: var(--text-muted); font-size: 0.85rem; margin: 10px 0;">
-        راجع دروسك جماعياً وسجل حضورك المباشر مع زملائك من خلال الرابط الرسمي.
-      </p>
-      <a href="https://meet.google.com/krd-aesq-sgt" target="_blank" onclick="trackMeetAttendance()" class="action-btn">
-        الانضمام المباشر وسير الحضور 🚀
-      </a>
-    </div>
-  </div>
-
-  <!-- TAB 4: DZEXAMS SUMMARIES -->
-  <div id="tab-files" class="tab-content">
-    <div class="card">
-      <h3 style="color: var(--primary-red); margin-bottom: 12px;">📚 ملخصات ومواضيع DzExams</h3>
-      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">
-        تم تجميع أفضل ملخصات البكالوريا مباشرة من موقع DzExams حسب الشعبة:
-      </p>
-
-      <div class="dz-item">
-        <strong>⚙️ شعبة الهندسة (تقني رياضي)</strong>
-        <p style="font-size: 0.8rem; color: var(--text-muted);">ملخصات مادة التكنولوجيا، الهندسة المدنية، الميكانيكية، والكهربائية.</p>
-        <a href="https://www.dzexams.com/ar/3as/tm" target="_blank" class="action-btn" style="padding: 8px; font-size: 0.85rem;">تصفح ملخصات الهندسة 🔗</a>
+    <!-- TAB 1: الرئيسية Dashboard (المستوحاة من التصاوير) -->
+    <div id="tab-dashboard" class="tab-section active">
+      
+      <!-- Time Countdown Banner -->
+      <div class="color-card card-purple" style="margin-bottom: 12px;">
+        <span class="card-title">⏳ المتبقي على امتحان البكالوريا</span>
+        <div class="card-value" id="bac-timer">274 يوم</div>
       </div>
 
-      <div class="dz-item">
-        <strong>🧪 شعبة علوم تجريبية</strong>
-        <p style="font-size: 0.8rem; color: var(--text-muted);">ملخصات العلوم الطبيعية، الفيزياء، والرياضيات مع حلول النموذجية.</p>
-        <a href="https://www.dzexams.com/ar/3as/se" target="_blank" class="action-btn" style="padding: 8px; font-size: 0.85rem;">تصفح ملخصات العلوم 🔗</a>
+      <div class="grid-2">
+        <div class="color-card card-gold">
+          <span class="card-title">⭐ مجموع النقاط</span>
+          <div class="card-value" id="card-points">0</div>
+        </div>
+        <div class="color-card card-red">
+          <span class="card-title">🎯 المعدل المستهدف</span>
+          <div class="card-value" id="card-target">+17</div>
+        </div>
       </div>
 
-      <div class="dz-item">
-        <strong>📐 شعبة رياضيات</strong>
-        <p style="font-size: 0.8rem; color: var(--text-muted);">تمارين وحلول بكالوريا وشروحات تعمق الرياضيات والفيزياء.</p>
-        <a href="https://www.dzexams.com/ar/3as/m" target="_blank" class="action-btn" style="padding: 8px; font-size: 0.85rem;">تصفح ملخصات الرياضيات 🔗</a>
+      <div class="grid-2">
+        <div class="color-card card-green">
+          <span class="card-title">⏱️ دقائق البومودورو</span>
+          <div class="card-value" id="card-pomodoro">0 د</div>
+        </div>
+        <div class="color-card card-purple">
+          <span class="card-title">🎥 جلسات Meet</span>
+          <div class="card-value" id="card-meet">0 جلسة</div>
+        </div>
       </div>
 
-      <div class="dz-item">
-        <strong>💼 شعب باقي الشعب (تسيير، لغات، أدب)</strong>
-        <p style="font-size: 0.8rem; color: var(--text-muted);">كافة مواضيع وبنك ملخصات DzExams لكل الشعب الأخرى.</p>
-        <a href="https://www.dzexams.com/ar/3as" target="_blank" class="action-btn" style="padding: 8px; font-size: 0.85rem;">تصفح جميع مواضيع DzExams 🔗</a>
+      <!-- Pomodoro Section Inside Dashboard -->
+      <div style="background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid var(--card-border); text-align: center; margin-top: 15px;">
+        <h4>⏱️ مؤقت التركيز (البومودورو)</h4>
+        <div style="font-size: 3.5rem; font-weight: 800; color: var(--primary-red); margin: 10px 0;" id="pomo-display">25:00</div>
+        <button class="btn-main" onclick="togglePomodoro()" id="pomo-btn">إبدأ الجلسة (+25 نقطة)</button>
       </div>
 
     </div>
+
+    <!-- TAB 2: الكويزات والاختبارات (خاصية سبيسيال) -->
+    <div id="tab-quiz" class="tab-section">
+      <div style="background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid var(--card-border);">
+        <h3 style="color: var(--accent-gold); margin-bottom: 10px;">🧩 كويز اليوم السريع</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">اختبر معلوماتك واكسب نقاط إضافية في الترتيب!</p>
+
+        <div id="quiz-container">
+          <p style="font-weight: bold; margin-bottom: 12px;">سؤال: ما هي الوحدة الأساسية لبناء البروتين في الجسم؟</p>
+          <div class="quiz-option" onclick="answerQuiz(false)">أ) الأحماض الدهنية</div>
+          <div class="quiz-option" onclick="answerQuiz(true)">ب) الأحماض الأمينية</div>
+          <div class="quiz-option" onclick="answerQuiz(false)">ج) السكريات البسيطة</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: جلسات Google Meet Mebachera -->
+    <div id="tab-meet" class="tab-section">
+      <div style="background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid var(--card-border); text-align: center;">
+        <h3 style="color: var(--primary-red); margin-bottom: 10px;">🎥 جلسات المذاكرة المباشرة</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+          انضم عبر Google Meet لمراجعة الدروس وحل البكالوريات السابقة مع زملائك.
+        </p>
+        <a href="https://meet.google.com/krd-aesq-sgt" target="_blank" onclick="joinMeet()" class="btn-main" style="text-decoration: none; display: block;">
+          تسجيل الحضور والانضمام لـ Meet 🚀
+        </a>
+      </div>
+    </div>
+
+    <!-- TAB 4: التصنيف والترتيب -->
+    <div id="tab-leaderboard" class="tab-section">
+      <div style="background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid var(--card-border);">
+        <h3 style="color: var(--accent-gold); margin-bottom: 15px;">🏆 ترتيب أبطال المنصة</h3>
+        <div id="leaderboard-container">
+          <!-- القائمة الديناميكية -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- شريط التنقل السفي Glassmorphism (نفس ديزاين الصور) -->
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('dashboard', this)">
+      <span class="icon">🏠</span>
+      <span>الرئيسية</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('quiz', this)">
+      <span class="icon">🧩</span>
+      <span>الكويزات</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('meet', this)">
+      <span class="icon">🎥</span>
+      <span>Meet</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('leaderboard', this)">
+      <span class="icon">🏆</span>
+      <span>التصنيف</span>
+    </button>
   </div>
 
   <script>
-    let userData = JSON.parse(localStorage.getItem('ff_full_user')) || null;
+    let appUser = JSON.parse(localStorage.getItem('ff_app_user')) || null;
 
     window.onload = function() {
-      if (!userData) {
-        document.getElementById('auth-modal').style.display = 'flex';
+      if (!appUser) {
+        document.getElementById('onboarding').style.display = 'flex';
       } else {
-        document.getElementById('auth-modal').style.display = 'none';
-        initApp();
+        document.getElementById('onboarding').style.display = 'none';
+        renderDashboard();
       }
     };
 
-    function continueWithGoogle() {
-      // محاكاة سحب إيميل Google
-      const mockGoogleEmail = "student.bac2026@gmail.com";
-      localStorage.setItem('temp_email', mockGoogleEmail);
+    function goToStep(step) {
+      document.getElementById('step-1').style.display = 'none';
+      document.getElementById('step-2').style.display = 'none';
+      document.getElementById('step-3').style.display = 'none';
       
-      document.getElementById('step-google').classList.remove('active');
-      document.getElementById('step-survey').classList.add('active');
-    }
+      document.getElementById(`step-${step}`).style.display = 'block';
 
-    function checkBacAttempt(val) {
-      const box = document.getElementById('motivation-box');
-      if (val === 'no') {
-        box.style.display = 'block';
-      } else {
-        box.style.display = 'none';
-      }
-    }
-
-    function saveRegistration() {
-      const name = document.getElementById('user-name').value.trim();
-      const gender = document.getElementById('user-gender').value;
-      const branch = document.getElementById('user-branch').value;
-      const isFirst = document.getElementById('is-first-bac').value;
-      const career = document.getElementById('target-career').value.trim();
-      const grade = document.getElementById('target-grade').value;
-      const email = localStorage.getItem('temp_email') || "user@gmail.com";
-
-      if (!name || !gender || !branch || !isFirst || !career || !grade) {
-        alert('يرجى ملء جميع الحقول للاستمرار!');
-        return;
-      }
-
-      // تحديد الألقاب المستقبلية حسب الجنس والتخصص
-      let title = gender === 'ذكر' ? 'طبيب المستقبل' : 'طبيبة المستقبل';
-      if (!career.includes('طب') && !career.includes('ميدسين')) {
-        title = gender === 'ذكر' ? `بطل المستقبل في ${career}` : `بطلة المستقبل في ${career}`;
-      }
-
-      userData = {
-        name, gender, branch, isFirst, career, grade, email, title, points: 0
-      };
-
-      localStorage.setItem('ff_full_user', JSON.stringify(userData));
-      saveToGlobalLeaderboard(userData);
-
-      document.getElementById('auth-modal').style.display = 'none';
-      initApp();
-    }
-
-    function saveToGlobalLeaderboard(user) {
-      let globalList = JSON.parse(localStorage.getItem('ff_global_leaderboard')) || [
-        { name: "أسامة العربي", branch: "هندسة", title: "مهندس المستقبل", points: 150, email: "o.arabi@gmail.com" },
-        { name: "مريم بلقاسم", branch: "علوم تجريبية", title: "طبيبة المستقبل", points: 120, email: "m.belkacem@gmail.com" }
-      ];
-
-      const idx = globalList.findIndex(u => u.email === user.email);
-      if (idx !== -1) {
-        globalList[idx] = user;
-      } else {
-        globalList.push(user);
-      }
-
-      localStorage.setItem('ff_global_leaderboard', JSON.stringify(globalList));
-    }
-
-    function initApp() {
-      if (!userData) return;
-      document.getElementById('welcome-tag').textContent = `أهلاً بك يا ${userData.title} (${userData.name})`;
-      updatePointsDisplay();
-    }
-
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      event.target.classList.add('active');
-      document.getElementById('tab-' + tabName).classList.add('active');
-    }
-
-    let timerInterval = null;
-    let totalSeconds = 25 * 60;
-    let isRunning = false;
-
-    function updatePointsDisplay() {
-      document.getElementById('user-points').textContent = userData.points;
-      renderLeaderboard();
-    }
-
-    function renderLeaderboard() {
-      const listContainer = document.getElementById('leaderboard-list');
-      let globalList = JSON.parse(localStorage.getItem('ff_global_leaderboard')) || [];
-
-      globalList.sort((a, b) => b.points - a.points);
-
-      listContainer.innerHTML = '';
-      globalList.forEach((std, index) => {
-        const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '👤';
-        const isSelf = std.email === userData.email;
-        const item = document.createElement('div');
-        item.className = 'list-item';
-        if(isSelf) item.style.borderRightColor = 'var(--gold-color)';
-        
-        item.innerHTML = `
-          <div class="user-info">
-            <strong>${medal} ${index + 1}. ${std.name} (${std.branch})</strong>
-            <span class="user-detail">${std.title} | إيميل: ${std.email}</span>
-            <span class="user-detail" style="color:var(--primary-red)">هدف المعدل: ${std.grade || 'غير محدد'}</span>
-          </div>
-          <span class="badge">${std.points} نقطة</span>
-        `;
-        listContainer.appendChild(item);
+      document.querySelectorAll('.step-dot').forEach((dot, idx) => {
+        if(idx < step) dot.classList.add('active');
+        else dot.classList.remove('active');
       });
     }
 
-    function toggleTimer() {
-      const startBtn = document.getElementById('start-btn');
-      if (!isRunning) {
+    function finishOnboarding() {
+      const name = document.getElementById('reg-name').value || "Rayane";
+      const gender = document.getElementById('reg-gender').value || "ذكر";
+      const branch = document.getElementById('reg-branch').value || "تقني رياضي";
+      const career = document.getElementById('reg-career').value || "طبيب المستقبل";
+      const targetGrade = document.getElementById('reg-grade').value || "+17";
+
+      let title = gender === 'ذكر' ? `مستقبل ${career}` : `مستقبلية ${career}`;
+
+      appUser = {
+        name, gender, branch, career, title, targetGrade,
+        points: 0, pomoMinutes: 0, meetSessions: 0
+      };
+
+      localStorage.setItem('ff_app_user', JSON.stringify(appUser));
+      document.getElementById('onboarding').style.display = 'none';
+      renderDashboard();
+    }
+
+    function renderDashboard() {
+      if(!appUser) return;
+      document.getElementById('dash-user-name').textContent = appUser.name;
+      document.getElementById('dash-user-title').textContent = `${appUser.title} (${appUser.branch})`;
+      document.getElementById('dash-points').textContent = appUser.points;
+      document.getElementById('card-points').textContent = appUser.points;
+      document.getElementById('card-target').textContent = appUser.targetGrade;
+      document.getElementById('card-pomodoro').textContent = `${appUser.pomoMinutes} د`;
+      document.getElementById('card-meet').textContent = appUser.meetSessions;
+      renderLeaderboard();
+    }
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    /* Pomodoro Logic */
+    let timer = null;
+    let seconds = 25 * 60;
+    let isRunning = false;
+
+    function togglePomodoro() {
+      const btn = document.getElementById('pomo-btn');
+      if(!isRunning) {
         isRunning = true;
-        startBtn.textContent = 'إيقاف مؤقت';
-        timerInterval = setInterval(() => {
-          if (totalSeconds > 0) {
-            totalSeconds--;
-            updateDisplay();
+        btn.textContent = "إيقاف مؤقت";
+        timer = setInterval(() => {
+          if(seconds > 0) {
+            seconds--;
+            let m = Math.floor(seconds / 60);
+            let s = seconds % 60;
+            document.getElementById('pomo-display').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
           } else {
-            clearInterval(timerInterval);
+            clearInterval(timer);
             isRunning = false;
-            startBtn.textContent = 'إبدأ الجلسة';
-            userData.points += 25;
-            localStorage.setItem('ff_full_user', JSON.stringify(userData));
-            saveToGlobalLeaderboard(userData);
-            updatePointsDisplay();
-            alert(`🎉 أحسنت يا ${userData.title}! أنهيت الجلسة واكتسبت 25 نقطة جديدة.`);
+            appUser.points += 25;
+            appUser.pomoMinutes += 25;
+            localStorage.setItem('ff_app_user', JSON.stringify(appUser));
+            renderDashboard();
+            alert("🎉 ممتاز! تم إنهاء الجلسة وإضافة 25 نقطة.");
           }
         }, 1000);
       } else {
-        clearInterval(timerInterval);
+        clearInterval(timer);
         isRunning = false;
-        startBtn.textContent = 'إبدأ الجلسة';
+        btn.textContent = "إبدأ الجلسة (+25 نقطة)";
       }
     }
 
-    function updateDisplay() {
-      const minutes = Math.floor(totalSeconds / 60);
-      const seconds = totalSeconds % 60;
-      document.getElementById('time-display').textContent = 
-        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
-
-    function resetTimer() {
-      clearInterval(timerInterval);
-      isRunning = false;
-      totalSeconds = 25 * 60;
-      document.getElementById('start-btn').textContent = 'إبدأ الجلسة';
-      updateDisplay();
-    }
-
-    function trackMeetAttendance() {
-      if (userData) {
-        userData.points += 50;
-        localStorage.setItem('ff_full_user', JSON.stringify(userData));
-        saveToGlobalLeaderboard(userData);
-        updatePointsDisplay();
+    /* Quiz Feature */
+    function answerQuiz(isCorrect) {
+      if(isCorrect) {
+        appUser.points += 15;
+        localStorage.setItem('ff_app_user', JSON.stringify(appUser));
+        renderDashboard();
+        alert("إجابة صحيحة! 🎉 حصلت على 15 نقطة إضافية.");
+      } else {
+        alert("إجابة خاطئة! حاول مرة أخرى في الكويز القادم.");
       }
+    }
+
+    /* Meet Feature */
+    function joinMeet() {
+      appUser.points += 30;
+      appUser.meetSessions += 1;
+      localStorage.setItem('ff_app_user', JSON.stringify(appUser));
+      renderDashboard();
+    }
+
+    /* Leaderboard */
+    function renderLeaderboard() {
+      const container = document.getElementById('leaderboard-container');
+      let students = [
+        { name: appUser ? appUser.name : "Rayane", points: appUser ? appUser.points : 0, title: appUser ? appUser.title : "" },
+        { name: "أسامة", points: 150, title: "مهندس المستقبل" },
+        { name: "إيمان", points: 120, title: "طبيبة المستقبل" }
+      ];
+
+      students.sort((a,b) => b.points - a.points);
+
+      container.innerHTML = '';
+      students.forEach((s, idx) => {
+        container.innerHTML += `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#0D1117; padding:12px; border-radius:12px; margin-bottom:8px;">
+            <div>
+              <strong>#${idx+1} ${s.name}</strong>
+              <div style="font-size:0.75rem; color:var(--text-muted);">${s.title}</div>
+            </div>
+            <span style="color:var(--accent-gold); font-weight:bold;">${s.points} نقطة</span>
+          </div>
+        `;
+      });
     }
   </script>
 </body>
