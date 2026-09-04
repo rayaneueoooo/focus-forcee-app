@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Focus & Force | المنصة التعليمية الفائقة</title>
+  <title>Focus & Force | المنصة التعليمية</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Apple SF Pro Display Font -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/robingennaro/SF-Pro-Display-CDN/SFProDisplay.css">
   <style>
     :root {
@@ -43,7 +42,6 @@
       overflow-x: hidden;
     }
 
-    /* Onboarding Overlay / شاشة الإعداد المتطورة */
     .onboarding-screen {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -73,23 +71,6 @@
       padding: 6px 16px; border-radius: 30px;
       font-size: 0.8rem; font-weight: 600;
       margin-bottom: 16px;
-    }
-
-    .step-indicator {
-      display: flex; justify-content: center; gap: 8px;
-      margin: 24px 0;
-    }
-
-    .step-bar {
-      height: 4px; width: 35px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 4px;
-      transition: all 0.3s ease;
-    }
-
-    .step-bar.active {
-      background: linear-gradient(90deg, var(--brand-red), var(--brand-gold));
-      width: 50px;
     }
 
     .input-custom, .select-custom {
@@ -127,7 +108,12 @@
 
     .btn-action:active { transform: scale(0.98); }
 
-    /* Bottom Navigation Floating Bar */
+    .btn-telegram {
+      background: #0088cc;
+      box-shadow: 0 8px 25px rgba(0, 136, 204, 0.3);
+      margin-bottom: 10px;
+    }
+
     .nav-floating {
       position: fixed;
       bottom: 20px; left: 50%;
@@ -160,14 +146,12 @@
 
     .nav-btn .icon { font-size: 1.3rem; }
 
-    /* Dashboard Main Container */
     .container {
       padding: 20px 16px;
       max-width: 500px;
       margin: 0 auto;
     }
 
-    /* Top User Header Card */
     .user-header-card {
       background: var(--card-glass);
       backdrop-filter: blur(15px);
@@ -192,7 +176,6 @@
       display: flex; align-items: center; gap: 6px;
     }
 
-    /* Advanced Grid & Cards Layout */
     .grid-cards {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -205,16 +188,8 @@
       border: 1px solid var(--card-border);
       border-radius: 22px;
       padding: 20px;
-      position: relative;
-      overflow: hidden;
       display: flex; flex-direction: column; justify-content: space-between;
-      min-height: 130px;
-      transition: border-color 0.3s, transform 0.2s;
-    }
-
-    .feature-card:hover {
-      border-color: rgba(255,255,255,0.2);
-      transform: translateY(-3px);
+      min-height: 120px;
     }
 
     .feature-card.hero {
@@ -224,13 +199,11 @@
     }
 
     .card-label { font-size: 0.8rem; color: var(--text-sub); font-weight: 600; }
-    .card-value-big { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; margin-top: 8px; }
+    .card-value-big { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-top: 6px; }
 
-    /* Interactive Sections */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
 
-    /* Quiz Module UI */
     .quiz-card {
       background: var(--card-glass);
       border: 1px solid var(--card-border);
@@ -246,7 +219,6 @@
       margin-top: 10px;
       cursor: pointer;
       transition: all 0.2s;
-      font-weight: 500;
     }
 
     .quiz-option:hover {
@@ -264,155 +236,106 @@
       color: var(--text-gold);
       display: none;
     }
-
-    /* Meet Direct Session Card */
-    .meet-banner {
-      background: linear-gradient(135deg, rgba(13, 92, 58, 0.3), var(--card-glass));
-      border: 1px solid rgba(13, 92, 58, 0.5);
-      border-radius: 24px;
-      padding: 24px;
-      text-align: center;
-    }
-
   </style>
 </head>
 <body>
 
-  <!-- شاشة الإعداد الأولية Onboarding Screen -->
+  <!-- Onboarding / Login -->
   <div id="onboarding" class="onboarding-screen">
     <div class="onboard-card">
-      <div class="brand-badge">🎯 FOCUS & FORCE MINI APP</div>
-      <h2 style="font-size: 1.5rem; font-weight: 800;">تجهيز مساحتك الخاصة</h2>
-      <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 6px;">خطوات بسيطة لتخصيص التجربة لك</p>
+      <div class="brand-badge">🎯 FOCUS & FORCE LOGIN</div>
+      <h2 style="font-size: 1.4rem; font-weight: 800;">تسجيل الدخول للمنصة</h2>
+      <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 6px;">ربط حسابك لحساب ساعات المذاكرة والنقاط تلقائياً</p>
 
-      <div class="step-indicator">
-        <div class="step-bar active" id="bar-1"></div>
-        <div class="step-bar" id="bar-2"></div>
-        <div class="step-bar" id="bar-3"></div>
-      </div>
-
-      <!-- Step 1 -->
-      <div id="step-1">
+      <div style="margin-top: 20px;">
+        <button class="btn-action btn-telegram" onclick="loginWithTelegram()">✈️ الدخول بحساب Telegram</button>
+        
+        <input type="email" id="reg-email" class="input-custom" placeholder="البريد الإلكتروني (Email)">
         <input type="text" id="reg-name" class="input-custom" placeholder="الاسم الكامل">
-        <select id="reg-gender" class="select-custom">
-          <option value="" disabled selected>الجنس</option>
-          <option value="ذكر">ذكر 👨‍🎓</option>
-          <option value="أنثى">أنثى 👩‍🎓</option>
-        </select>
-        <button class="btn-action" onclick="goToStep(2)">التالي ➔</button>
-      </div>
-
-      <!-- Step 2 -->
-      <div id="step-2" style="display: none;">
         <select id="reg-branch" class="select-custom">
           <option value="" disabled selected>الشعبة الدراسية</option>
-          <option value="تقني رياضي">تقني رياضي</option>
           <option value="علوم تجريبية">علوم تجريبية</option>
+          <option value="تقني رياضي">تقني رياضي</option>
           <option value="رياضيات">رياضيات</option>
           <option value="تسيير واقتصاد">تسيير واقتصاد</option>
           <option value="لغات أجنبية / أدب">لغات أجنبية / أدب</option>
         </select>
-        <select id="reg-bac-type" class="select-custom">
-          <option value="" disabled selected>نوع التسجيل</option>
-          <option value="نظامي">طالب نظامي (أول مرة)</option>
-          <option value="حرة">طالب حر (إعادة)</option>
-        </select>
-        <button class="btn-action" onclick="goToStep(3)">التالي ➔</button>
+        <button class="btn-action" onclick="finishLogin()">تأكيد وتفعيل الحساب 🚀</button>
       </div>
-
-      <!-- Step 3 -->
-      <div id="step-3" style="display: none;">
-        <input type="text" id="reg-career" class="input-custom" placeholder="التخصص المستهدف (مثلاً: طيران، طب، ذكاء اصطناعي)">
-        <select id="reg-target" class="select-custom">
-          <option value="" disabled selected>المعدل المستهدف فالباك</option>
-          <option value="13 - 14">13 - 14</option>
-          <option value="15 - 16">15 - 16</option>
-          <option value="+17">أكثر من 17 ⭐</option>
-        </select>
-        <button class="btn-action" onclick="finishOnboarding()">الانطلاق إلى المنصة 🚀</button>
-      </div>
-
     </div>
   </div>
 
-  <!-- الواجهة الرئيسية Dashboard Container -->
   <div class="container">
 
-    <!-- Top User Card -->
+    <!-- Header -->
     <div class="user-header-card">
       <div class="user-info">
-        <h3 id="dash-name">Rayane</h3>
-        <p id="dash-sub">طبيب المستقبل | علوم تجريبية</p>
+        <h3 id="dash-name">طالب Focus & Force</h3>
+        <p id="dash-email">email@domain.com</p>
       </div>
       <div class="gold-badge">
         ✨ <span id="dash-pts">0</span> PTS
       </div>
     </div>
 
-    <!-- TAB 1: الرئيسية -->
+    <!-- TAB 1: Dashboard -->
     <div id="tab-dashboard" class="tab-content active">
       
       <div class="grid-cards">
-        <!-- Hero Countdown Card -->
         <div class="feature-card hero">
           <div>
-            <span class="card-label">⏳ العد التنازلي للبكالوريا</span>
-            <div class="card-value-big" id="bac-days">274 يوم</div>
+            <span class="card-label">⏱️ إجمالي ساعات المذاكرة المسجلة</span>
+            <div class="card-value-big" id="dash-hours">0 ساعة</div>
           </div>
-          <p style="font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 10px;">الاستمرارية هي سر النجاح!</p>
+          <p style="font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 10px;">كل 1 ساعة مذاكرة = 50 نقطة إضافية 🎉</p>
         </div>
 
-        <!-- Target Grade -->
         <div class="feature-card">
-          <span class="card-label">🎯 الهدف المستهدف</span>
-          <div class="card-value-big" style="color: var(--brand-gold);" id="dash-target">+17</div>
+          <span class="card-label">📚 الدروس المكتملة</span>
+          <div class="card-value-big" style="color: var(--brand-gold);" id="dash-lessons">0</div>
         </div>
 
-        <!-- Meet Counter -->
         <div class="feature-card">
-          <span class="card-label">🎥 جلسات Meet</span>
-          <div class="card-value-big" id="dash-meet-count">0</div>
+          <span class="card-label">🧩 كويزات محلولة</span>
+          <div class="card-value-big" id="dash-quizzes">0</div>
         </div>
       </div>
 
-      <!-- Focus Timer Component (Pomodoro) -->
+      <div style="background: var(--card-glass); border-radius: 24px; padding: 20px; border: 1px solid var(--card-border); margin-bottom: 20px;">
+        <span class="card-label">📝 إضافة ساعات دراسة اليوم</span>
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <input type="number" id="study-hours-input" class="input-custom" placeholder="عدد الساعات (مثال: 3)" style="margin-top:0;">
+          <button class="btn-action" onclick="addStudyHours()" style="margin-top:0; width: 40%;">إضافة ➕</button>
+        </div>
+      </div>
+
       <div style="background: var(--card-glass); border-radius: 24px; padding: 24px; border: 1px solid var(--card-border); text-align: center;">
-        <span class="card-label">⏱️ جلسة التركيز العميق (Pomodoro)</span>
-        <div style="font-size: 3.8rem; font-weight: 800; color: var(--brand-red-light); margin: 12px 0;" id="pomo-timer">25:00</div>
-        <button class="btn-action" onclick="togglePomodoro()" id="pomo-btn">بدء الجلسة (+25 نقطة)</button>
+        <span class="card-label">⏱️ مؤقت التركيز (Pomodoro)</span>
+        <div style="font-size: 3.5rem; font-weight: 800; color: var(--brand-red-light); margin: 10px 0;" id="pomo-timer">25:00</div>
+        <button class="btn-action" onclick="togglePomodoro()" id="pomo-btn">بدء المذاكرة (+25 نقطة)</button>
       </div>
 
     </div>
 
-    <!-- TAB 2: الكويزات (Quiz Module) -->
+    <!-- TAB 2: Quizzes -->
     <div id="tab-quiz" class="tab-content">
-      <div class="quiz-card" id="quiz-container">
-        <!-- يتم تحميل أسئلة الكويز ديناميكياً بواسطة JavaScript -->
-      </div>
+      <div class="quiz-card" id="quiz-container"></div>
     </div>
 
-    <!-- TAB 3: جلسات Google Meet المباشرة -->
+    <!-- TAB 3: Meet -->
     <div id="tab-meet" class="tab-content">
-      <div class="meet-banner">
+      <div style="background: linear-gradient(135deg, rgba(13, 92, 58, 0.3), var(--card-glass)); border: 1px solid rgba(13, 92, 58, 0.5); border-radius: 24px; padding: 24px; text-align: center;">
         <h3 style="font-size: 1.3rem; margin-bottom: 8px;">🎥 غرف المذاكرة المباشرة</h3>
-        <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">ادخل واقرا مع أصحابك فـ Google Meet واكسب النقاط للتصنيف.</p>
+        <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">ادخل واقرا مع أصحابك في Google Meet واكسب نقاط المذاكرة الجماعية.</p>
         <a href="https://meet.google.com/krd-aesq-sgt" target="_blank" onclick="recordMeet()" class="btn-action" style="text-decoration: none; display: block;">
-          الانضمام للجلسة الحالية 🚀
+          الانضمام للجلسة المباشرة 🚀
         </a>
-      </div>
-    </div>
-
-    <!-- TAB 4: الترتيب والتصنيف -->
-    <div id="tab-leaderboard" class="tab-content">
-      <div class="quiz-card">
-        <h3 style="color: var(--brand-gold); margin-bottom: 16px;">🏆 لوحة الصدارة والأبطال</h3>
-        <div id="leaderboard-list"></div>
       </div>
     </div>
 
   </div>
 
-  <!-- Bottom Floating Navbar -->
+  <!-- Navbar -->
   <div class="nav-floating">
     <button class="nav-btn active" onclick="switchTab('dashboard', this)">
       <span class="icon">🏠</span>
@@ -420,84 +343,30 @@
     </button>
     <button class="nav-btn" onclick="switchTab('quiz', this)">
       <span class="icon">🧩</span>
-      <span>كويزات</span>
+      <span>الكويزات</span>
     </button>
     <button class="nav-btn" onclick="switchTab('meet', this)">
       <span class="icon">🎥</span>
       <span>Meet</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('leaderboard', this)">
-      <span class="icon">🏆</span>
-      <span>الترتيب</span>
-    </button>
   </div>
 
   <script>
-    let userData = JSON.parse(localStorage.getItem('ff_user_data')) || null;
+    let tg = window.Telegram ? window.Telegram.WebApp : null;
+    if (tg) tg.expand();
 
-    // مصفوفة أسئلة الكويزات المستخرجة من الملخصات
-    const quizData = [
-      {
-        question: "ما هي العبارة الصحيحة لحساب تركيز شوارد الهيدرونيوم [H₃O⁺] بدلالة الـ pH؟",
-        options: ["أ) [H₃O⁺] = -log(pH)", "ب) [H₃O⁺] = 10⁻ᵖᴴ", "ج) [H₃O⁺] = 10ᵖᴴ", "د) [H₃O⁺] = ln(pH)"],
-        correct: 1,
-        explanation: "العلاقة الرياضية بين pH وتركيز شوارد الهيدرونيوم هي [H₃O⁺] = 10⁻ᵖᴴ."
-      },
-      {
-        question: "محلول مائي عند درجة حرارة 25°C له pH = 10.5. تركيز شوارد الهيدروكسيد [OH⁻] يساوي:",
-        options: ["أ) 10⁻¹⁰ˑ⁵ mol/L", "ب) 10⁻³ˑ⁵ mol/L", "ج) 10⁻¹⁴ mol/L", "د) 10³ˑ⁵ mol/L"],
-        correct: 1,
-        explanation: "[OH⁻] = 10^(pH - 14) = 10^(10.5 - 14) = 10⁻³ˑ⁵ mol/L."
-      },
-      {
-        question: "العبارة الصحيحة لحساب التركيز المولي C لمحلول تجاري (درجة النقاوة P% والكثافة d):",
-        options: ["أ) C = (10 · P · d) / M", "ب) C = (P · d) / (10 · M)", "ج) C = (100 · P · d) / M", "د) C = (P · M) / (10 · d)"],
-        correct: 0,
-        explanation: "قانون حساب تركيز المحاليل التجارية هو C = (10 · P · d) / M."
-      },
-      {
-        question: "يكون الحمض قوياً أو التفاعل تاماً إذا كانت قيمة نسبة التقدم النهائي (τf):",
-        options: ["أ) τf = 0", "ب) τf < 1", "ج) τf = 1", "د) τf > 1"],
-        correct: 2,
-        explanation: "إذا كانت τf = 1 فإن التقدم النهائي يساوي التقدم الأعظمي (xf = xmax)."
-      },
-      {
-        question: "عند تفكك حمض ضعيف AH تركيزه C في الماء، تعطى عبارة τf بـ:",
-        options: ["أ) τf = C / 10⁻ᵖᴴ", "ب) τf = 10⁻ᵖᴴ / C", "ج) τf = 10ᵖᴴ / C", "د) τf = C · 10⁻ᵖᴴ"],
-        correct: 1,
-        explanation: "τf = xf / xmax = 10⁻ᵖᴴ / C."
-      },
-      {
-        question: "ما هو تأثير تمديد محلول لحمض ضعيف بالماء المقطر على نسبة التقدم النهائي τf؟",
-        options: ["أ) تنقص قيمة τf", "ب) تزداد قيمة τf", "ج) تبقى ثابته", "د) تنعدم"],
-        correct: 1,
-        explanation: "التمديد يزيح التوازن في الاتجاه المباشر لتفكك الحمض، فتزداد τf."
-      },
-      {
-        question: "إذا كانت قيمة pH محلول حمضي أكبر من قيمة pKa للثنائية (pH > pKa)، فإن الصفة السائدة هي:",
-        options: ["أ) الصفة الحمضية [AH] > [A⁻]", "ب) الصفة الأساسية [A⁻] > [AH]", "ج) التراكيز متساوية", "د) لا توجد صفة سائدة"],
-        correct: 1,
-        explanation: "عندما يكون pH > pKa تكون الصفة الأساسية هي السائدة [A⁻] > [AH]."
-      },
-      {
-        question: "تتميز 'نقطة نصف التكافؤ' في معايرة حمض ضعيف بأساس قوي بـ:",
-        options: ["أ) pH = 7", "ب) pH = pKa", "ج) τf = 0", "د) [AH] = 0"],
-        correct: 1,
-        explanation: "عند نصف التكافؤ يكون [AH] = [A⁻] وبالتالي pH = pKa."
-      },
-      {
-        question: "عند معايرة حمض ضعيف بواسطة أساس قوي، تكون قيمة الـ pH عند نقطة التكافؤ (pHE):",
-        options: ["أ) pHE = 7", "ب) pHE < 7", "ج) pHE > 7", "د) pHE = 0"],
-        correct: 2,
-        explanation: "بسبب وجود شوارد الأساس الضعيف الناتجة يكون الوسط أساسياً (pHE > 7)."
-      }
-    ];
+    let userData = JSON.parse(localStorage.getItem('ff_user_data_v2')) || null;
 
-    let currentQuizIndex = 0;
+    // المصفوفة فارغة تماماً وفي انتظار الدروس التي سترسلها
+    const quizData = [];
 
     window.onload = function() {
       if(!userData) {
         document.getElementById('onboarding').style.display = 'flex';
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+          const tgUser = tg.initDataUnsafe.user;
+          document.getElementById('reg-name').value = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim();
+        }
       } else {
         document.getElementById('onboarding').style.display = 'none';
         updateUI();
@@ -505,34 +374,36 @@
       renderQuiz();
     }
 
-    function goToStep(step) {
-      document.getElementById('step-1').style.display = 'none';
-      document.getElementById('step-2').style.display = 'none';
-      document.getElementById('step-3').style.display = 'none';
-      document.getElementById(`step-${step}`).style.display = 'block';
-
-      document.querySelectorAll('.step-bar').forEach((bar, idx) => {
-        if(idx < step) bar.classList.add('active');
-        else bar.classList.remove('active');
-      });
+    function loginWithTelegram() {
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        const tgUser = tg.initDataUnsafe.user;
+        document.getElementById('reg-name').value = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim();
+        alert(`تم التعرف على حساب تيليجرام: @${tgUser.username || tgUser.first_name}`);
+      } else {
+        alert("يرجى فتح التطبيق من داخل تيليجرام لتسجيل الدخول التلقائي أو إدخال بياناتك يدويًا.");
+      }
     }
 
-    function finishOnboarding() {
-      const name = document.getElementById('reg-name').value || "Rayane";
-      const gender = document.getElementById('reg-gender').value || "ذكر";
-      const branch = document.getElementById('reg-branch').value || "علوم تجريبية";
-      const career = document.getElementById('reg-career').value || "طبيب المستقبل";
-      const target = document.getElementById('reg-target').value || "+17";
+    function finishLogin() {
+      const email = document.getElementById('reg-email').value;
+      const name = document.getElementById('reg-name').value || "طالب Focus & Force";
+      const branch = document.getElementById('reg-branch').value || "عام";
+
+      if (!email || !email.includes('@')) {
+        alert("يرجى إدخال بريد إلكتروني صحيح لتصلك تقارير الساعات والنقاط.");
+        return;
+      }
 
       userData = {
         name,
-        subTitle: `${career} | ${branch}`,
-        target,
+        email,
+        branch,
         points: 0,
-        meetCount: 0
+        studyHours: 0,
+        quizzesSolved: 0
       };
 
-      localStorage.setItem('ff_user_data', JSON.stringify(userData));
+      localStorage.setItem('ff_user_data_v2', JSON.stringify(userData));
       document.getElementById('onboarding').style.display = 'none';
       updateUI();
     }
@@ -540,11 +411,23 @@
     function updateUI() {
       if(!userData) return;
       document.getElementById('dash-name').textContent = userData.name;
-      document.getElementById('dash-sub').textContent = userData.subTitle;
+      document.getElementById('dash-email').textContent = `${userData.email} | ${userData.branch}`;
       document.getElementById('dash-pts').textContent = userData.points;
-      document.getElementById('dash-target').textContent = userData.target;
-      document.getElementById('dash-meet-count').textContent = userData.meetCount;
-      renderLeaderboard();
+      document.getElementById('dash-hours').textContent = `${userData.studyHours} ساعة`;
+      document.getElementById('dash-quizzes').textContent = userData.quizzesSolved;
+    }
+
+    function addStudyHours() {
+      const input = document.getElementById('study-hours-input');
+      const hrs = parseFloat(input.value);
+      if (hrs && hrs > 0) {
+        userData.studyHours += hrs;
+        userData.points += (hrs * 50);
+        localStorage.setItem('ff_user_data_v2', JSON.stringify(userData));
+        updateUI();
+        input.value = '';
+        alert(`تمت إضافة ${hrs} ساعة دراسة وحساب +${hrs * 50} نقطة بنجاح!`);
+      }
     }
 
     function switchTab(tabId, btn) {
@@ -575,27 +458,38 @@
             clearInterval(pTimer);
             pActive = false;
             userData.points += 25;
-            localStorage.setItem('ff_user_data', JSON.stringify(userData));
+            localStorage.setItem('ff_user_data_v2', JSON.stringify(userData));
             updateUI();
-            alert("🎉 أحسنت! أكملت الجلسة وكسبت 25 نقطة.");
+            alert("🎉 ممتاز! أنهيت 25 دقيقة مذاكرة وكسبت 25 نقطة.");
           }
         }, 1000);
       } else {
         clearInterval(pTimer);
         pActive = false;
-        btn.textContent = "استئناف الجلسة";
+        btn.textContent = "استئناف المذاكرة";
       }
     }
 
     /* Quiz System Engine */
+    let currentQuizIndex = 0;
+
     function renderQuiz() {
       const container = document.getElementById('quiz-container');
+      if (quizData.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 20px;">
+            <span class="brand-badge">📥 في انتظار إضافة الدروس</span>
+            <h3 style="margin-top: 15px; font-size: 1.1rem;">أرسل الدروس والملخصات لتوليد الكويزات فوراً!</h3>
+          </div>
+        `;
+        return;
+      }
+
       if (currentQuizIndex >= quizData.length) {
         container.innerHTML = `
           <div style="text-align: center;">
-            <span class="brand-badge" style="background: rgba(212,175,55,0.1); color: var(--brand-gold); border-color: var(--brand-gold);">🎉 أكملت جميع الكويزات!</span>
-            <h3 style="margin-top: 15px;">أحسنت العمل! لقد أنهيت جميع أسئلة هذه الوحدة.</h3>
-            <button class="btn-action" onclick="resetQuizzes()">إعادة الكويزات من جديد 🔄</button>
+            <span class="brand-badge" style="background: rgba(212,175,55,0.1); color: var(--brand-gold); border-color: var(--brand-gold);">🎉 أتممت جميع الكويزات!</span>
+            <h3 style="margin-top: 15px;">رائع جداً! أنهيت جميع الأسئلة المتاحة.</h3>
           </div>
         `;
         return;
@@ -608,7 +502,7 @@
       });
 
       container.innerHTML = `
-        <span class="brand-badge" style="background: rgba(212,175,55,0.1); color: var(--brand-gold); border-color: var(--brand-gold);">🧩 كويز (${currentQuizIndex + 1}/${quizData.length})</span>
+        <span class="brand-badge" style="background: rgba(212,175,55,0.1); color: var(--brand-gold); border-color: var(--brand-gold);">🧩 سؤال (${currentQuizIndex + 1}/${quizData.length})</span>
         <h3 style="margin-top: 10px; font-size: 1.1rem;">${q.question}</h3>
         <div id="options-list">${optionsHTML}</div>
         <div class="quiz-explanation" id="quiz-exp">${q.explanation}</div>
@@ -622,7 +516,8 @@
 
       if (selectedIndex === q.correct) {
         userData.points += 15;
-        localStorage.setItem('ff_user_data', JSON.stringify(userData));
+        userData.quizzesSolved += 1;
+        localStorage.setItem('ff_user_data_v2', JSON.stringify(userData));
         updateUI();
         expEl.style.borderColor = "#00FF7F";
         expEl.style.color = "#00FF7F";
@@ -639,41 +534,10 @@
       }, 2500);
     }
 
-    function resetQuizzes() {
-      currentQuizIndex = 0;
-      renderQuiz();
-    }
-
-    /* Meet Tracking */
     function recordMeet() {
       userData.points += 30;
-      userData.meetCount += 1;
-      localStorage.setItem('ff_user_data', JSON.stringify(userData));
+      localStorage.setItem('ff_user_data_v2', JSON.stringify(userData));
       updateUI();
-    }
-
-    /* Leaderboard Dynamic Render */
-    function renderLeaderboard() {
-      const list = document.getElementById('leaderboard-list');
-      let data = [
-        { name: userData ? userData.name : "Rayane", pts: userData ? userData.points : 0 },
-        { name: "أسامة", pts: 120 },
-        { name: "مريم", pts: 95 }
-      ];
-
-      data.sort((a,b) => b.pts - a.pts);
-
-      list.innerHTML = '';
-      data.forEach((item, index) => {
-        list.innerHTML += `
-          <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); border:1px solid var(--card-border); padding:14px; border-radius:14px; margin-top:8px;">
-            <div>
-              <strong>#${index + 1} ${item.name}</strong>
-            </div>
-            <span style="color:var(--brand-gold); font-weight:700;">${item.pts} PTS</span>
-          </div>
-        `;
-      });
     }
   </script>
 </body>
