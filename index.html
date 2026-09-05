@@ -3,425 +3,455 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Focus & Force | المنصة التعليمية</title>
+  <title>Focus & Force</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/robingennaro/SF-Pro-Display-CDN/SFProDisplay.css">
   <style>
     :root {
-      --bg-dark: #080A0F;
-      --card-glass: rgba(18, 22, 32, 0.75);
-      --card-border: rgba(255, 255, 255, 0.07);
-      --card-glow: rgba(184, 0, 0, 0.15);
-      
-      --brand-red: #B80000;
-      --brand-red-light: #FF2E2E;
-      --brand-gold: #D4AF37;
-      --brand-gold-glow: rgba(212, 175, 55, 0.25);
-      
-      --text-main: #FFFFFF;
-      --text-sub: #A0AEC0;
-      --text-gold: #F3C649;
+      --bg-color: #0F0F12;
+      --text-color: #FFFFFF;
+      --card-bg: rgba(30, 20, 25, 0.75);
+      --accent-burgundy: #8B0000;
+      --accent-gold: #D4AF37;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0; padding: 0;
-      font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
-      -webkit-font-smoothing: antialiased;
+    body.light-mode {
+      --bg-color: #F5F2EB;
+      --text-color: #2C2A29;
+      --card-bg: rgba(255, 255, 255, 0.85);
     }
 
     body {
-      background-color: var(--bg-dark);
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(184, 0, 0, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 90% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 40%);
-      background-attachment: fixed;
-      color: var(--text-main);
-      min-height: 100vh;
-      padding-bottom: 100px;
-      overflow-x: hidden;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      padding-bottom: 90px;
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    .onboarding-screen {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(8, 10, 15, 0.95);
-      backdrop-filter: blur(20px);
-      z-index: 2000;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
+    /* Header */
+    .header {
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .logo {
+      font-weight: bold;
+      font-size: 18px;
+      color: var(--accent-burgundy);
+    }
+
+    .theme-toggle {
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--accent-gold);
+      background: rgba(139, 0, 0, 0.1);
+      color: var(--text-color);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    /* Tab Containers */
+    .tab-content {
+      display: none;
       padding: 20px;
     }
+    .tab-content.active {
+      display: block;
+    }
 
-    .onboard-card {
-      background: var(--card-glass);
-      border: 1px solid var(--card-border);
-      border-radius: 28px;
-      width: 100%; max-width: 440px;
-      padding: 32px 24px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px var(--card-glow);
+    /* Glass Cards */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-hero {
+      background: linear-gradient(135deg, #4A0000 0%, #1A0000 100%);
+      color: #FFF;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    /* Timer Themes */
+    .timer-display {
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+    .timer-display.flip-pink { background-color: #FAD02C; color: #222; }
+    .timer-display.minimal-dark { background-color: #000; color: #FFF; border: 1px solid #333; }
+    .timer-display.sage-green { background-color: #83A385; color: #FFF; }
+
+    .timer-text {
+      font-size: 52px;
+      font-weight: bold;
+      font-family: monospace;
+      margin: 10px 0;
+    }
+
+    /* Buttons & Inputs */
+    button {
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-main {
+      background-color: var(--accent-burgundy);
+      color: #FFF;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .btn-theme {
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 1px solid #555;
+      background: rgba(255,255,255,0.1);
+      color: inherit;
+      font-size: 11px;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #444;
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--text-color);
       text-align: center;
     }
 
-    .brand-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(184, 0, 0, 0.15);
-      border: 1px solid rgba(184, 0, 0, 0.4);
-      color: var(--brand-red-light);
-      padding: 6px 16px; border-radius: 30px;
-      font-size: 0.8rem; font-weight: 600;
-      margin-bottom: 16px;
-    }
-
-    .input-custom, .select-custom {
-      width: 100%;
-      padding: 16px;
-      margin-top: 12px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      color: #FFF;
-      font-size: 0.95rem;
-      outline: none;
-      transition: all 0.3s;
-    }
-
-    .input-custom:focus, .select-custom:focus {
-      border-color: var(--brand-gold);
-      box-shadow: 0 0 15px var(--brand-gold-glow);
-    }
-
-    .btn-action {
-      width: 100%;
-      padding: 16px;
-      margin-top: 20px;
-      background: linear-gradient(135deg, var(--brand-red), #660000);
-      border: none;
-      border-radius: 16px;
-      color: #FFF;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 8px 25px rgba(184, 0, 0, 0.4);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .btn-action:active { transform: scale(0.98); }
-
-    .btn-telegram {
-      background: #0088cc;
-      box-shadow: 0 8px 25px rgba(0, 136, 204, 0.3);
-      margin-bottom: 10px;
-    }
-
-    .nav-floating {
+    /* Bottom Nav (Liquid Glass) */
+    .bottom-nav {
       position: fixed;
-      bottom: 20px; left: 50%;
-      transform: translateX(-50%);
-      width: 90%; max-width: 420px;
-      background: rgba(18, 22, 32, 0.85);
-      backdrop-filter: blur(25px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 25px;
-      display: flex; justify-content: space-around;
-      padding: 12px 8px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-      z-index: 1000;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      border-top: 1px solid rgba(212, 175, 55, 0.3);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
     }
 
     .nav-btn {
-      background: none; border: none;
-      color: var(--text-sub);
-      font-size: 0.75rem; font-weight: 600;
-      display: flex; flex-direction: column;
-      align-items: center; gap: 4px;
-      cursor: pointer; flex: 1;
-      transition: all 0.3s;
+      background: none;
+      border: none;
+      color: #888;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 18px;
     }
 
     .nav-btn.active {
-      color: var(--brand-gold);
-      transform: translateY(-2px);
+      color: var(--accent-gold);
+      font-weight: bold;
     }
 
-    .nav-btn .icon { font-size: 1.3rem; }
-
-    .container {
-      padding: 20px 16px;
-      max-width: 500px;
-      margin: 0 auto;
+    .nav-btn span {
+      font-size: 10px;
+      margin-top: 2px;
     }
 
-    .user-header-card {
-      background: var(--card-glass);
-      backdrop-filter: blur(15px);
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 20px;
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 20px;
+    /* Playlist Style */
+    .track-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 5px;
+      cursor: pointer;
+      background: rgba(0,0,0,0.1);
     }
-
-    .user-info h3 { font-size: 1.2rem; font-weight: 800; }
-    .user-info p { font-size: 0.8rem; color: var(--text-sub); margin-top: 2px; }
-
-    .gold-badge {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
-      border: 1px solid var(--brand-gold);
-      color: var(--text-gold);
-      padding: 8px 14px;
-      border-radius: 14px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      display: flex; align-items: center; gap: 6px;
+    .track-item.active {
+      background: var(--accent-burgundy);
+      color: #FFF;
     }
-
-    .grid-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-
-    .feature-card {
-      background: var(--card-glass);
-      border: 1px solid var(--card-border);
-      border-radius: 22px;
-      padding: 20px;
-      display: flex; flex-direction: column; justify-content: space-between;
-      min-height: 120px;
-    }
-
-    .feature-card.hero {
-      grid-column: span 2;
-      background: linear-gradient(135deg, rgba(184, 0, 0, 0.3), rgba(18, 22, 32, 0.8));
-      border: 1px solid rgba(184, 0, 0, 0.4);
-    }
-
-    .card-label { font-size: 0.8rem; color: var(--text-sub); font-weight: 600; }
-    .card-value-big { font-size: 2rem; font-weight: 800; letter-spacing: -1px; margin-top: 6px; }
-
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
   </style>
 </head>
 <body>
 
-  <!-- Onboarding / Login -->
-  <div id="onboarding" class="onboarding-screen">
-    <div class="onboard-card">
-      <div class="brand-badge">🎯 FOCUS & FORCE LOGIN</div>
-      <h2 style="font-size: 1.4rem; font-weight: 800;">تسجيل الدخول للمنصة</h2>
-      <p style="font-size: 0.85rem; color: var(--text-sub); margin-top: 6px;">ادخل بريدك الإلكتروني لتفعيل الحساب</p>
+  <!-- Audio Elements -->
+  <audio id="rainAudio" loop src="https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3"></audio>
+  <audio id="localAudio"></audio>
 
-      <div style="margin-top: 20px;">
-        <button class="btn-action btn-telegram" onclick="loginWithTelegram()">✈️ مزامنة حساب Telegram</button>
-        
-        <input type="email" id="reg-email" class="input-custom" placeholder="البريد الإلكتروني (مطلوب * )">
-        <input type="text" id="reg-name" class="input-custom" placeholder="الاسم الكامل">
-        <select id="reg-branch" class="select-custom">
-          <option value="" disabled selected>الشعبة الدراسية (اختياري)</option>
-          <option value="علوم تجريبية">علوم تجريبية</option>
-          <option value="تقني رياضي">تقني رياضي</option>
-          <option value="رياضيات">رياضيات</option>
-          <option value="تسيير واقتصاد">تسيير واقتصاد</option>
-          <option value="لغات أجنبية / أدب">لغات أجنبية / أدب</option>
-        </select>
-        <button class="btn-action" onclick="finishLogin()">تأكيد وتفعيل الحساب 🚀</button>
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">FOCUS & FORCE</div>
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 الوضع الداكن</button>
+  </div>
+
+  <!-- 1️⃣ TAB: HOME -->
+  <div id="tab-home" class="tab-content active">
+    <div class="card card-hero">
+      <div style="font-size: 14px; opacity: 0.9;">⏰ إجمالي ساعات المذاكرة المسجلة</div>
+      <div style="font-size: 36px; font-weight: bold; margin: 10px 0; color: #FFD700;">0 ساعة</div>
+      <div style="font-size: 12px; color: #E0C080;">🎉 كل 1 ساعة مذاكرة = 50 نقطة إضافية</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div style="font-size: 13px;">📚 الدروس المكتملة</div>
+        <div style="font-size: 24px; font-weight: bold; margin-top: 8px; color: #D4AF37;">0</div>
+      </div>
+      <div class="card">
+        <div style="font-size: 13px;">🧩 كويزات محلولة</div>
+        <div style="font-size: 24px; font-weight: bold; margin-top: 8px; color: #D4AF37;">0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-size: 14px; margin-bottom: 10px;">📝 إضافة ساعات دراسة اليوم</div>
+      <div style="display: flex; gap: 10px;">
+        <input type="number" placeholder="عدد الساعات (مثال: 3)" style="flex: 1;">
+        <button class="btn-main">إضافة +</button>
       </div>
     </div>
   </div>
 
-  <div class="container">
-
-    <!-- Header -->
-    <div class="user-header-card">
-      <div class="user-info">
-        <h3 id="dash-name">Rayane</h3>
-        <p id="dash-email">email@domain.com</p>
-      </div>
-      <div class="gold-badge">
-        ✨ <span id="dash-pts">0</span> PTS
-      </div>
-    </div>
-
-    <!-- TAB 1: Dashboard -->
-    <div id="tab-dashboard" class="tab-content active">
-      <div class="grid-cards">
-        <div class="feature-card hero">
-          <div>
-            <span class="card-label">⏱️ إجمالي ساعات المذاكرة المسجلة</span>
-            <div class="card-value-big" id="dash-hours">0 ساعة</div>
-          </div>
-          <p style="font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 10px;">كل 1 ساعة مذاكرة = 50 نقطة إضافية 🎉</p>
-        </div>
-
-        <div class="feature-card">
-          <span class="card-label">📚 الدروس المكتملة</span>
-          <div class="card-value-big" style="color: var(--brand-gold);" id="dash-lessons">0</div>
-        </div>
-
-        <div class="feature-card">
-          <span class="card-label">🧩 كويزات محلولة</span>
-          <div class="card-value-big" id="dash-quizzes">0</div>
-        </div>
-      </div>
-
-      <div style="background: var(--card-glass); border-radius: 24px; padding: 20px; border: 1px solid var(--card-border); margin-bottom: 20px;">
-        <span class="card-label">📝 إضافة ساعات دراسة اليوم</span>
-        <div style="display: flex; gap: 10px; margin-top: 10px;">
-          <input type="number" id="study-hours-input" class="input-custom" placeholder="عدد الساعات (مثال: 3)" style="margin-top:0;">
-          <button class="btn-action" onclick="addStudyHours()" style="margin-top:0; width: 40%;">إضافة ➕</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 2: Meet -->
-    <div id="tab-meet" class="tab-content">
-      <div style="background: linear-gradient(135deg, rgba(13, 92, 58, 0.3), var(--card-glass)); border: 1px solid rgba(13, 92, 58, 0.5); border-radius: 24px; padding: 24px; text-align: center;">
-        <h3 style="font-size: 1.3rem; margin-bottom: 8px;">🎥 غرف المذاكرة المباشرة</h3>
-        <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">ادخل واقرا مع أصحابك في Google Meet واكسب نقاط المذاكرة الجماعية.</p>
-        <a href="https://meet.google.com/krd-aesq-sgt" target="_blank" onclick="recordMeet()" class="btn-action" style="text-decoration: none; display: block;">
-          الانضمام للجلسة المباشرة 🚀
-        </a>
-      </div>
-    </div>
-
+  <!-- 2️⃣ TAB: MEET -->
+  <div id="tab-meet" class="tab-content" style="text-align: center; padding-top: 40px;">
+    <h2 style="color: var(--accent-gold);">📹 غرف المذاكرة الجماعية</h2>
+    <p style="font-size: 14px; opacity: 0.8;">انضم للزملاء على Google Meet للمذاكرة المباشرة</p>
+    <button class="btn-main" style="border-radius: 25px; margin-top: 20px;">دخول الغرفة الصوتية 🚀</button>
   </div>
 
-  <!-- Navbar -->
-  <div class="nav-floating">
-    <button class="nav-btn active" onclick="switchTab('dashboard', this)">
-      <span class="icon">🏠</span>
-      <span>الرئيسية</span>
+  <!-- 3️⃣ TAB: POMODORO -->
+  <div id="tab-pomodoro" class="tab-content">
+    <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 15px;">
+      <button class="btn-theme" onclick="setClockTheme('flip-pink')">🎀 Flip Pink</button>
+      <button class="btn-theme" onclick="setClockTheme('minimal-dark')">🖤 Dark</button>
+      <button class="btn-theme" onclick="setClockTheme('sage-green')">🌿 Sage Green</button>
+    </div>
+
+    <div id="timerDisplay" class="timer-display flip-pink">
+      <div style="font-size: 12px; letter-spacing: 2px;">TIMER</div>
+      <div id="timeText" class="timer-text">25:00</div>
+      <div>
+        <button id="startBtn" class="btn-main" style="background-color: #5CB85C;" onclick="toggleTimer()">بدء</button>
+        <button class="btn-theme" style="padding: 10px 15px;" onclick="resetTimer()">إعادة ضبط</button>
+      </div>
+    </div>
+
+    <div class="card" style="text-align: center;">
+      <div style="font-size: 14px; margin-bottom: 10px;">اختر مدة الجلسة:</div>
+      <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
+        <button class="btn-theme" style="border-color: var(--accent-gold);" onclick="setTimerMinutes(25)">25 دقيقة</button>
+        <button class="btn-theme" style="border-color: var(--accent-gold);" onclick="setTimerMinutes(45)">45 دقيقة</button>
+      </div>
+      <div style="display: flex; gap: 10px; justify-content: center;">
+        <input type="number" id="customMins" placeholder="دقائق مخصصة" style="width: 120px;">
+        <button class="btn-main" onclick="applyCustomTime()">تحديد</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <button id="rainBtn" onclick="toggleRain()" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--accent-gold); background: transparent; color: var(--text-color); font-weight: bold;">
+        ⛈️ تشغيل صوت المطر والبرق (HQ)
+      </button>
+    </div>
+  </div>
+
+  <!-- 4️⃣ TAB: MUSIC -->
+  <div id="tab-music" class="tab-content">
+    <div class="card">
+      <h3 style="color: var(--accent-gold); margin-top: 0;">🎵 مشغل صوتيات المذاكرة</h3>
+      
+      <label style="display: block; text-align: center; padding: 15px; border-radius: 12px; border: 2px dashed var(--accent-gold); cursor: pointer; background: rgba(212, 175, 55, 0.1); margin-bottom: 20px; font-weight: bold;">
+        📂 استيراد مقاطع صوتية من الهاتف / البيسي
+        <input type="file" id="audioInput" accept="audio/*" multiple style="display: none;" onchange="handleAudioUpload(event)">
+      </label>
+
+      <div style="font-size: 12px; opacity: 0.7; margin-bottom: 10px;">قائمة الصوتيات المضافة:</div>
+      <div id="playlistContainer">
+        <div style="font-size: 13px; opacity: 0.5; text-align: center;">لا توجد ملفات صوتية بعد.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5️⃣ TAB: QUIZ -->
+  <div id="tab-quiz" class="tab-content" style="text-align: center; padding-top: 40px;">
+    <div class="card">
+      <h2 style="color: var(--accent-gold);">🧩 قسم الكويزات</h2>
+      <p style="opacity: 0.7;">سيتم إطلاق كويزات التحدي التفاعلية قريباً...</p>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab('home', this)">
+      🏠 <span>الرئيسية</span>
     </button>
     <button class="nav-btn" onclick="switchTab('meet', this)">
-      <span class="icon">🎥</span>
-      <span>Meet</span>
+      🎥 <span>Meet</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('pomodoro', this)">
+      ⏳ <span>بومودورو</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('music', this)">
+      🎵 <span>استماع</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('quiz', this)">
+      🧩 <span>كويزات</span>
     </button>
   </div>
 
+  <!-- JavaScript Logic -->
   <script>
-    // إعداد مكتبة Supabase
-    const SUPABASE_URL = "https://ocdbasxvdcqnemclblmh.supabase.co";
-    // انظر للسطر 2 في الصورة وانسخ النص الموجود بعد =NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY وضعه هنا مكان النص أسفله:
-    const SUPABASE_KEY = "ضع_المفتاح_الخاص_بيك_هنا";
-    
-    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    let tg = window.Telegram ? window.Telegram.WebApp : null;
-    if (tg) tg.expand();
-
-    let userData = JSON.parse(localStorage.getItem('ff_user_data_v5')) || null;
-
-    window.onload = function() {
-      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        const tgUser = tg.initDataUnsafe.user;
-        const fullName = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim();
-        if (fullName) document.getElementById('reg-name').value = fullName;
-      }
-
-      if (!userData) {
-        document.getElementById('onboarding').style.display = 'flex';
-      } else {
-        document.getElementById('onboarding').style.display = 'none';
-        updateUI();
-      }
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
     }
 
-    async function syncToSupabase(data) {
-      try {
-        await db.from('users').upsert({
-          telegram_id: data.telegram_id,
-          name: data.name,
-          email: data.email,
-          branch: data.branch,
-          study_hours: data.studyHours,
-          points: data.points,
-          last_meet_joined: data.last_meet || null
-        }, { onConflict: 'email' });
-      } catch (err) {
-        console.error("Supabase Sync Error:", err);
-      }
-    }
-
-    function loginWithTelegram() {
-      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        const tgUser = tg.initDataUnsafe.user;
-        const fullName = `${tgUser.first_name || ''} ${tgUser.last_name || ''}`.trim();
-        document.getElementById('reg-name').value = fullName || "Rayane";
-        alert(`تم ربط حساب تيليجرام: ${fullName}`);
-      }
-    }
-
-    async function finishLogin() {
-      const email = document.getElementById('reg-email').value.trim();
-      const name = document.getElementById('reg-name').value || "Rayane";
-      const branch = document.getElementById('reg-branch').value || "عام";
-
-      if (!email || !email.includes('@') || !email.includes('.')) {
-        alert("⚠️ يرجى كتابة بريد إلكتروني صحيح للتمكن من الدخول!");
-        return;
-      }
-
-      let tgId = "guest";
-      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-        tgId = tg.initDataUnsafe.user.id.toString();
-      }
-
-      userData = {
-        telegram_id: tgId,
-        name: name,
-        email: email,
-        branch: branch,
-        points: 0,
-        studyHours: 0,
-        quizzesSolved: 0
-      };
-
-      localStorage.setItem('ff_user_data_v5', JSON.stringify(userData));
-      await syncToSupabase(userData);
-
-      document.getElementById('onboarding').style.display = 'none';
-      updateUI();
-    }
-
-    function updateUI() {
-      if(!userData) return;
-      document.getElementById('dash-name').textContent = userData.name;
-      document.getElementById('dash-email').textContent = `${userData.email} (${userData.branch})`;
-      document.getElementById('dash-pts').textContent = userData.points;
-      document.getElementById('dash-hours').textContent = `${userData.studyHours} ساعة`;
-    }
-
-    async function addStudyHours() {
-      const input = document.getElementById('study-hours-input');
-      const hrs = parseFloat(input.value);
-      if (hrs && hrs > 0) {
-        userData.studyHours += hrs;
-        userData.points += (hrs * 50);
-        localStorage.setItem('ff_user_data_v5', JSON.stringify(userData));
-        updateUI();
-        await syncToSupabase(userData);
-        input.value = '';
-        alert(`تمت إضافة ${hrs} ساعة دراسة والحفظ في قاعدة البيانات!`);
-      }
-    }
-
-    async function recordMeet() {
-      userData.points += 30;
-      userData.last_meet = new Date().toLocaleString('ar-DZ');
-      localStorage.setItem('ff_user_data_v5', JSON.stringify(userData));
-      updateUI();
-      await syncToSupabase(userData);
-    }
-
+    // --- Navigation ---
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-      document.getElementById(`tab-${tabId}`).classList.add('active');
+      document.getElementById('tab-' + tabId).classList.add('active');
       btn.classList.add('active');
+    }
+
+    // --- Theme Toggle ---
+    let isDark = true;
+    function toggleTheme() {
+      isDark = !isDark;
+      document.body.classList.toggle('light-mode', !isDark);
+      document.querySelector('.theme-toggle').innerText = isDark ? '🌙 الوضع الداكن' : '☀️ الوضع الفاتح';
+    }
+
+    // --- Pomodoro Logic ---
+    let pomoSeconds = 25 * 60;
+    let timerInterval = null;
+    let isRunning = false;
+
+    function updateTimerDisplay() {
+      const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
+      const s = (pomoSeconds % 60).toString().padStart(2, '0');
+      document.getElementById('timeText').innerText = `${m}:${s}`;
+    }
+
+    function toggleTimer() {
+      const btn = document.getElementById('startBtn');
+      if (isRunning) {
+        clearInterval(timerInterval);
+        btn.innerText = 'بدء';
+        btn.style.backgroundColor = '#5CB85C';
+      } else {
+        timerInterval = setInterval(() => {
+          if (pomoSeconds > 0) {
+            pomoSeconds--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            alert('⏱️ انتهى الوقت!');
+          }
+        }, 1000);
+        btn.innerText = 'إيقاف';
+        btn.style.backgroundColor = '#D9534F';
+      }
+      isRunning = !isRunning;
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      isRunning = false;
+      pomoSeconds = 25 * 60;
+      updateTimerDisplay();
+      document.getElementById('startBtn').innerText = 'بدء';
+      document.getElementById('startBtn').style.backgroundColor = '#5CB85C';
+    }
+
+    function setTimerMinutes(mins) {
+      pomoSeconds = mins * 60;
+      resetTimer();
+    }
+
+    function applyCustomTime() {
+      const val = parseInt(document.getElementById('customMins').value);
+      if (val && val > 0) {
+        setTimerMinutes(val);
+      }
+    }
+
+    function setClockTheme(themeClass) {
+      const el = document.getElementById('timerDisplay');
+      el.className = 'timer-display ' + themeClass;
+    }
+
+    // --- Rain Sound ---
+    let rainPlaying = false;
+    function toggleRain() {
+      const audio = document.getElementById('rainAudio');
+      const btn = document.getElementById('rainBtn');
+      if (rainPlaying) {
+        audio.pause();
+        btn.innerText = '⛈️ تشغيل صوت المطر والبرق (HQ)';
+        btn.style.background = 'transparent';
+      } else {
+        audio.play();
+        btn.innerText = '🌧️ إيقاف صوت المطر والبرق';
+        btn.style.background = 'var(--accent-burgundy)';
+      }
+      rainPlaying = !rainPlaying;
+    }
+
+    // --- Music Playlist ---
+    let playlist = [];
+    function handleAudioUpload(event) {
+      const files = Array.from(event.target.files);
+      files.forEach(f => {
+        playlist.push({ name: f.name, url: URL.createObjectURL(f) });
+      });
+      renderPlaylist();
+    }
+
+    function renderPlaylist() {
+      const container = document.getElementById('playlistContainer');
+      if (playlist.length === 0) return;
+      container.innerHTML = '';
+      playlist.forEach((track, index) => {
+        const div = document.createElement('div');
+        div.className = 'track-item';
+        div.innerHTML = `<span>🎧 ${track.name}</span><span>▶️</span>`;
+        div.onclick = () => playLocalTrack(index, div);
+        container.appendChild(div);
+      });
+    }
+
+    function playLocalTrack(index, element) {
+      document.querySelectorAll('.track-item').forEach(el => el.classList.remove('active'));
+      element.classList.add('active');
+      const audio = document.getElementById('localAudio');
+      audio.src = playlist[index].url;
+      audio.play();
     }
   </script>
 </body>
