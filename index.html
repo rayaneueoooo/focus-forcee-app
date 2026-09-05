@@ -1,100 +1,340 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Focus & Force - بنك الكويزات التفاعلية</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Focus & Force - Ultra iOS Edition</title>
   <!-- Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    :root {
-      --bg-color: #0b0d10;
-      --card-bg: rgba(255, 255, 255, 0.03);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --accent-gold: #e2b714;
-      --text-main: #f0f3f8;
-      --text-muted: #9aa0a6;
-      --glass-glow: rgba(226, 183, 20, 0.12);
-      --correct-color: #2ec4b6;
-      --wrong-color: #e63946;
+    /* =========================================================
+       🎨 ثيمات الألوان المخصصة (Focus & Force Palette)
+       ========================================================= */
+    :root[data-theme="dark"] {
+      --bg-gradient: radial-gradient(circle at 50% 20%, #152238 0%, #0b1326 100%);
+      --bg-color: #0b1326; /* أزرق ليلي (Bleu Nuit) */
+      --card-bg: rgba(21, 34, 56, 0.45);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --primary-burgundy: #9e1b32; /* أحمر عنابي */
+      --burgundy-glow: rgba(158, 27, 50, 0.4);
+      --text-main: #f4f6fa;
+      --text-muted: #8e9bb0;
+      --glass-taskbar: rgba(11, 19, 38, 0.75);
+      --clock-card-bg: rgba(15, 24, 42, 0.85);
+      --clock-text: #ffffff;
+      --accent-highlight: #c92a42;
+    }
+
+    :root[data-theme="light"] {
+      --bg-gradient: radial-gradient(circle at 50% 20%, #fffdfa 0%, #f7f3eb 100%);
+      --bg-color: #f7f3eb; /* كريمي ناعم (Cream) */
+      --card-bg: rgba(255, 255, 255, 0.65);
+      --card-border: rgba(128, 0, 32, 0.15);
+      --primary-burgundy: #800020; /* أحمر عنابي داكن */
+      --burgundy-glow: rgba(128, 0, 32, 0.25);
+      --text-main: #2b181d;
+      --text-muted: #6e595f;
+      --glass-taskbar: rgba(253, 251, 247, 0.8);
+      --clock-card-bg: rgba(255, 255, 255, 0.9);
+      --clock-text: #800020;
+      --accent-highlight: #a31237;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arabic Typesetting, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
       user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.4s ease, color 0.3s ease, border-color 0.3s ease;
     }
 
     body {
-      background-color: var(--bg-color);
+      background: var(--bg-gradient);
+      background-attachment: fixed;
       color: var(--text-main);
       padding: 16px;
-      padding-bottom: 90px;
+      padding-bottom: 120px;
       direction: rtl;
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    /* الهيدر بتصميم زجاجي مطفي */
-    .header-card {
-      background: rgba(18, 20, 26, 0.75);
+    /* أزرار الثيم العلوي الزجاجي */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.2rem;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--text-main), var(--primary-burgundy));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .theme-toggle-btn {
+      background: var(--card-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 8px 16px;
       border-radius: 20px;
-      padding: 18px;
-      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    /* التصميم الزجاجي الرئيسي */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(25px) saturate(180%);
+      -webkit-backdrop-filter: blur(25px) saturate(180%);
+      border: 1px solid var(--card-border);
+      border-radius: 28px;
+      padding: 20px;
       margin-bottom: 20px;
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .header-card {
+      text-align: center;
     }
 
     .header-card h2 {
-      color: var(--accent-gold);
+      color: var(--primary-burgundy);
       font-size: 1.3rem;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      font-weight: 700;
+      margin-bottom: 4px;
     }
 
     .header-card p {
       color: var(--text-muted);
       font-size: 0.85rem;
-      line-height: 1.4;
     }
 
-    /* كارت الكويز بالطابع الزجاجي السائل Liquid Glass */
-    .quiz-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
+    /* ⏳ تصميم Flip-Clock / Aesthetic Digital Timer */
+    .flip-clock-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin: 25px 0;
+      direction: ltr; /* للحفاظ على ترتيب الأرقام */
+    }
+
+    .flip-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .flip-card {
+      background: var(--clock-card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 24px;
-      padding: 22px 18px;
+      border-radius: 18px;
+      width: 72px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: var(--clock-text);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255,255,255,0.2);
       position: relative;
       overflow: hidden;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
     }
 
-    .quiz-card::before {
-      content: '';
+    /* خط المنتصف المحاكي للـ Flip Clock */
+    .flip-card::after {
+      content: "";
       position: absolute;
-      top: -40%;
-      right: -40%;
-      width: 180%;
-      height: 180%;
-      background: radial-gradient(circle, var(--glass-glow) 0%, transparent 60%);
-      pointer-events: none;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(0, 0, 0, 0.3);
+      box-shadow: 0 1px 1px rgba(255, 255, 255, 0.15);
     }
 
+    .unit-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: 6px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .clock-colon {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-burgundy);
+      margin-bottom: 20px;
+    }
+
+    /* أزرار تحكم البومودورو Liquid Glass */
+    .timer-modes {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .mode-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 10px 16px;
+      border-radius: 16px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+
+    .mode-btn.active {
+      background: var(--primary-burgundy);
+      color: #fff;
+      border-color: var(--primary-burgundy);
+      box-shadow: 0 0 20px var(--burgundy-glow);
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      background: var(--primary-burgundy);
+      color: #ffffff;
+      border: none;
+      padding: 14px 36px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 6px 25px var(--burgundy-glow);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.96);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      padding: 14px 22px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* تعديل الإعدادات */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .setting-item {
+      background: rgba(0, 0, 0, 0.08);
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid var(--card-border);
+      text-align: center;
+    }
+
+    .setting-item label {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .setting-item input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--primary-burgundy);
+      font-weight: 800;
+      text-align: center;
+      font-size: 1.1rem;
+      outline: none;
+    }
+
+    /* 📹 قسم جلسات الميت (Meet Sessions) */
+    .meet-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      padding: 16px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .meet-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .meet-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      background: rgba(0, 0, 0, 0.1);
+      color: var(--text-main);
+      outline: none;
+      font-size: 0.88rem;
+    }
+
+    /* 🔊 الأصوات والأجواء */
+    .sound-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      padding: 14px 18px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+
+    .volume-slider {
+      width: 100px;
+      accent-color: var(--primary-burgundy);
+    }
+
+    /* 🧩 الكويزات التفاعلية */
     .quiz-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
       font-size: 0.85rem;
-      color: var(--accent-gold);
+      color: var(--primary-burgundy);
       font-weight: bold;
     }
 
@@ -103,238 +343,454 @@
       font-weight: 600;
       line-height: 1.6;
       margin-bottom: 20px;
-      color: var(--text-main);
     }
 
-    /* خيارات الاستطلاع (Poll Style) */
     .options-container {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .option-btn {
       background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
       padding: 14px 16px;
       color: var(--text-main);
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       text-align: right;
       cursor: pointer;
-      backdrop-filter: blur(10px);
-      transition: all 0.2s ease;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
 
-    .option-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: var(--accent-gold);
-    }
-
     .option-btn.correct {
-      background: rgba(46, 196, 182, 0.2) !important;
-      border-color: var(--correct-color) !important;
-      color: #fff;
+      background: rgba(46, 196, 182, 0.25) !important;
+      border-color: #2ec4b6 !important;
       font-weight: bold;
     }
 
     .option-btn.wrong {
-      background: rgba(230, 57, 70, 0.2) !important;
-      border-color: var(--wrong-color) !important;
-      color: #fff;
+      background: rgba(230, 57, 70, 0.25) !important;
+      border-color: #e63946 !important;
     }
 
-    .option-btn.disabled {
-      pointer-events: none;
-      opacity: 0.75;
-    }
-
-    /* أزرار التنقل */
-    .actions-bar {
+    /* 📱 Liquid Glass Taskbar (iOS Edition) */
+    .taskbar-wrapper {
+      position: fixed;
+      bottom: 20px;
+      left: 0;
+      right: 0;
       display: flex;
-      justify-content: space-between;
-      margin-top: 22px;
+      justify-content: center;
+      z-index: 999;
+      padding: 0 12px;
     }
 
-    .action-btn {
-      background: var(--accent-gold);
-      color: #0b0d10;
-      border: none;
-      padding: 12px 26px;
-      border-radius: 14px;
-      font-weight: bold;
-      font-size: 0.9rem;
+    .liquid-taskbar {
+      background: var(--glass-taskbar);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
+      border: 1px solid var(--card-border);
+      border-radius: 32px;
+      padding: 6px 12px;
+      display: flex;
+      gap: 6px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3),
+                  inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border-radius: 22px;
+      color: var(--text-muted);
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .action-btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
+    .nav-item .icon {
+      font-size: 1.3rem;
+      margin-bottom: 2px;
+    }
+
+    .nav-item .label {
+      font-size: 0.65rem;
+      font-weight: 700;
+    }
+
+    .nav-item.active {
+      color: var(--primary-burgundy);
+      background: rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-item.active .icon {
+      transform: translateY(-2px) scale(1.15);
+    }
+
+    .app-section {
+      display: none;
+      animation: iosFade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .app-section.active {
+      display: block;
+    }
+
+    @keyframes iosFade {
+      from { opacity: 0; transform: scale(0.97) translateY(8px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
   </style>
 </head>
 <body>
 
-  <!-- الهيدر -->
-  <div class="header-card">
-    <h2>🧩 قسم الكويزات التفاعلية</h2>
-    <p>اختبر معلوماتك، اجمع النقاط، واكتشف مستوى تحضيرك مع عائلة Focus & Force ✨</p>
+  <!-- الشريط العلوي والتمرير بين الوضعين -->
+  <div class="top-bar">
+    <div class="brand-title">FOCUS & FORCE</div>
+    <button class="theme-toggle-btn" onclick="toggleTheme()">
+      <span id="themeIcon">🌙</span>
+      <span id="themeText">الوضع الليلي</span>
+    </button>
   </div>
 
-  <!-- حاوية الكويز -->
-  <div class="quiz-card" id="quizCard">
-    <div class="quiz-header">
-      <span id="subjectBadge">تركيب البروتين 🧬</span>
-      <span id="questionProgress">السؤال 1 / 300</span>
+  <!-- 1️⃣ قسم البومودورو (Flip Timer) -->
+  <div id="section-timer" class="app-section active">
+    <div class="glass-card header-card">
+      <h2>⏱️ مؤقت التركيز iOS</h2>
+      <p>عد تنازلي أنيق للتركيز الفائق ودراسة المواد بدون تشتيت 🎯</p>
     </div>
 
-    <div class="question-title" id="questionText">
-      جاري تحميل السؤال...
+    <div class="glass-card">
+      <div class="timer-modes">
+        <button class="mode-btn active" onclick="setTimerMode('work', this)">تركيز 🧠</button>
+        <button class="mode-btn" onclick="setTimerMode('short', this)">راحة قصيرة ☕</button>
+        <button class="mode-btn" onclick="setTimerMode('long', this)">راحة طويلة 🌴</button>
+      </div>
+
+      <!-- Flip Clock Interface -->
+      <div class="flip-clock-container">
+        <div class="flip-unit">
+          <div class="flip-card" id="hoursCard">00</div>
+          <div class="unit-label">ساعة</div>
+        </div>
+        <div class="clock-colon">:</div>
+        <div class="flip-unit">
+          <div class="flip-card" id="minutesCard">25</div>
+          <div class="unit-label">دقيقة</div>
+        </div>
+        <div class="clock-colon">:</div>
+        <div class="flip-unit">
+          <div class="flip-card" id="secondsCard">00</div>
+          <div class="unit-label">ثانية</div>
+        </div>
+      </div>
+
+      <div class="controls-row">
+        <button class="btn-primary" id="startBtn" onclick="toggleTimer()">بدء 🚀</button>
+        <button class="btn-secondary" onclick="resetTimer()">إعادة 🔄</button>
+      </div>
+
+      <div class="settings-grid">
+        <div class="setting-item">
+          <label>الدراسة (د)</label>
+          <input type="number" id="workInput" value="25" min="1" max="180" onchange="updateSettings()">
+        </div>
+        <div class="setting-item">
+          <label>راحة قصيرة</label>
+          <input type="number" id="shortInput" value="5" min="1" max="45" onchange="updateSettings()">
+        </div>
+        <div class="setting-item">
+          <label>راحة طويلة</label>
+          <input type="number" id="longInput" value="15" min="1" max="90" onchange="updateSettings()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2️⃣ قسم جلسات الميت (Meet Sessions) -->
+  <div id="section-meet" class="app-section">
+    <div class="glass-card header-card">
+      <h2>📹 جلسات الدراسة المباشرة (Meet)</h2>
+      <p>انضم للجلسات الجماعية عبر Google Meet مع زملائك 👥</p>
     </div>
 
-    <div class="options-container" id="optionsContainer"></div>
+    <div class="glass-card">
+      <div class="meet-card">
+        <div class="meet-title">🔴 غرفة الجلسة المباشرة الحالية</div>
+        <input type="text" class="meet-input" id="meetLink" value="https://meet.google.com/krd-aesq-sgt" readonly>
+        <button class="btn-primary" onclick="openMeet()">دخول الجلسة الآن 🚀</button>
+      </div>
 
-    <div class="actions-bar">
-      <button class="action-btn" id="nextBtn" onclick="nextQuestion()" disabled>السؤال التالي ➔</button>
+      <div class="meet-card">
+        <div class="meet-title">➕ إنشاء أو تغيير رابط الجلسة</div>
+        <input type="text" class="meet-input" id="customMeetInput" placeholder="أدخل رابط Google Meet جديد...">
+        <button class="btn-secondary" onclick="saveCustomMeet()">حفظ الرابط الجديد 💾</button>
+      </div>
     </div>
+  </div>
+
+  <!-- 3️⃣ قسم أصوات الأجواء -->
+  <div id="section-sounds" class="app-section">
+    <div class="glass-card header-card">
+      <h2>🎧 أصوات الطبيعة والهدوء</h2>
+      <p>دمج خلفيات صوتية عزل الضوضاء المباشر 🌧️🔥</p>
+    </div>
+
+    <div class="glass-card">
+      <div class="sound-card">
+        <span>🌧️⚡ مطر وبرق</span>
+        <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0" oninput="adjustVolume('rain', this.value)">
+      </div>
+      <div class="sound-card">
+        <span>🪵🔥 نار وحطب</span>
+        <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0" oninput="adjustVolume('fire', this.value)">
+      </div>
+    </div>
+  </div>
+
+  <!-- 4️⃣ قسم الكويزات التفاعلية -->
+  <div id="section-quiz" class="app-section">
+    <div class="glass-card header-card">
+      <h2>🧩 الكويزات التفاعلية</h2>
+      <p>اختبر جاهزيتك للبكالوريا واكتسب النقاط ✨</p>
+    </div>
+
+    <div class="glass-card">
+      <div class="quiz-header">
+        <span id="subjectBadge">تركيب البروتين 🧬</span>
+        <span id="questionProgress">1 / 4</span>
+      </div>
+      <div class="question-title" id="questionText">جاري تحميل السؤال...</div>
+      <div class="options-container" id="optionsContainer"></div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 18px;">
+        <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>التالي ➔</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📱 Liquid Glass Taskbar (iOS Edition) -->
+  <div class="taskbar-wrapper">
+    <nav class="liquid-taskbar">
+      <div class="nav-item active" onclick="switchSection('timer', this)">
+        <span class="icon">⏱️</span>
+        <span class="label">المؤقت</span>
+      </div>
+      <div class="nav-item" onclick="switchSection('meet', this)">
+        <span class="icon">📹</span>
+        <span class="label">الجلسات</span>
+      </div>
+      <div class="nav-item" onclick="switchSection('sounds', this)">
+        <span class="icon">🎧</span>
+        <span class="label">الأصوات</span>
+      </div>
+      <div class="nav-item" onclick="switchSection('quiz', this)">
+        <span class="icon">🧩</span>
+        <span class="label">الكويزات</span>
+      </div>
+    </nav>
   </div>
 
   <script>
-    // البيانات الخام المحولة تلقائياً إلى خيارات استطلاع (1 صحيحة + 2 خاطئة)
-    const rawData = [
-      // مجموعة 1: تركيب البروتين
-      { q: "أين يتم تركيب البروتين في الخلية حقيقية النواة؟", a: "في الهيولة", w1: "في النواة", w2: "في جهاز غولجي", cat: "تركيب البروتين 🧬" },
-      { q: "ما هي العضية المتخصصة في بناء السلسلة الببتيدية؟", a: "الريبوزوم (الشبكة المحببة)", w1: "الجسيم المركزي", w2: "المايتوكندريا", cat: "تركيب البروتين 🧬" },
-      { q: "ما هي العمارة الأساسية لبناء البروتينات؟", a: "الأحماض الأمينية", w1: "الأحماض الدهنية", w2: "السكريات الأحادية", cat: "تركيب البروتين 🧬" },
-      { q: "ما هو جزيء النقل المحمول للمعلومة الوراثية من النواة للهيولة؟", a: "الـ ARNm", w1: "الـ ARNt", w2: "الـ ARNr", cat: "تركيب البروتين 🧬" },
-      { q: "ما اسم الإنزيم المسؤول عن ظاهرة الاستنساخ؟", a: "إنزيم ARN بوليميراز", w1: "إنزيم ADN بوليميراز", w2: "إنزيم الليجاز", cat: "تركيب البروتين 🧬" },
-      { q: "ما هي المراحل الأساسية لظاهرة الاستنساخ؟", a: "الانطلاق، الاستطالة، والنهاية", w1: "التنشيط، التثبيت، والقطع", w2: "التمهيدية، الاستوائية، والانفصالية", cat: "تركيب البروتين 🧬" },
-      { q: "ما السلسلة التي يعتمد عليها الإنزيم في النسخ؟", a: "السلسلة المستنسخة (3' إلى 5')", w1: "السلسلة غير المستنسخة", w2: "السلسلتان معاً", cat: "تركيب البروتين 🧬" },
-      { q: "ما القاعدة الإزوتية المميزة للـ ARN مقارنة بالـ ADN؟", a: "اليوراسيل (U)", w1: "الثيمين (T)", w2: "الساميتوزين (C)", cat: "تركيب البروتين 🧬" },
-      { q: "ما هو السكر الخماسي في الـ ARN؟", a: "سكر الريبوز (C5H10O5)", w1: "سكر الريبوز منقوص الأكسجين", w2: "سكر الجلوكوز", cat: "تركيب البروتين 🧬" },
-      { q: "ما هو السكر الخماسي في الـ ADN؟", a: "سكر الريبوز منقوص الأكسجين (C5H10O4)", w1: "سكر الريبوز العادي", w2: "سكر الفركتوز", cat: "تركيب البروتين 🧬" },
-      { q: "ما هي الشفرة الوراثية؟", a: "نظام التشفير يربط النيوكليوتيدات بالأحماض الأمينية", w1: "تسلسل الأحماض الدهنية في الغشاء", w2: "عدد الروابط الهيدروجينية في الـ ADN", cat: "تركيب البروتين 🧬" },
-      { q: "ما هي الرامزة (Codon)؟", a: "ثلاثية من النيوكليوتيدات المتتالية على ARNm", w1: "ثنائية نيوكليوتيدية على الـ ARNt", w2: "حمض أميني مرتبط بإنزيم", cat: "تركيب البروتين 🧬" },
-      { q: "كم عدد الرامزات الممكنة في الشفرة الوراثية؟", a: "64 رامزة", w1: "20 رامزة", w2: "46 رامزة", cat: "تركيب البروتين 🧬" },
-      { q: "كم عدد الرامزات المشفرة للأحماض الأمينية؟", a: "61 رامزة", w1: "64 رامزة", w2: "20 رامزة", cat: "تركيب البروتين 🧬" },
-      { q: "ما هي رامزة الانطلاق الشهيرة وما الحمض الذي تشفره؟", a: "AUG وتوافق حمض الميثيونين (Met)", w1: "UAA وتوافق حمض الفالين", w2: "UAG وتوافق حمض الليسين", cat: "تركيب البروتين 🧬" },
-      { q: "ما هي رامزات التوقف (Stop Codons) الثلاث؟", a: "UAA ، UAG ، UGA", w1: "AUG ، UAA ، GGG", w2: "CCC ، UAA ، UGA", cat: "تركيب البروتين 🧬" },
-      { q: "ما معنى أن الشفرة الوراثية 'مترادفة'؟", a: "حمض أميني واحد تشفره عدة رامزات", w1: "كل رامزة تشفر عدة أحماض أمينية", w2: "تتغير الشفرة من خلية لأخرى", cat: "تركيب البروتين 🧬" },
-      { q: "ما معنى أن الشفرة الوراثية 'شاملة'؟", a: "محددة ونفسها تقريباً في معظم الكائنات", w1: "توجد فقط في الإنسان والحيوان", w2: "تتكون من جميع القواعد النيتروجينية", cat: "تركيب البروتين 🧬" },
-      { q: "ما هي المكونات الدقيقة للريبوزوم؟", a: "تحت وحدة صغرى وتحت وحدة كبرى", w1: "غشاء مضاعف وحشوة", w2: "سلسلة ببتيدية وجزيء غلوكوز", cat: "تركيب البروتين 🧬" },
-      { q: "ما هما موقعا التثبيت الأساسيان في تحت الوحدة الكبرى؟", a: "الموقع P والموقع A", w1: "الموقع X والموقع Y", w2: "الموقع 3' والموقع 5'", cat: "تركيب البروتين 🧬" },
-
-      // مجموعة 2: العلاقة بين بنية ووظيفة البروتين
-      { q: "ما هي الصيغة العامة للحمض الأميني؟", a: "R-CH(NH2)-COOH", w1: "R-CO-NH2", w2: "R-CH2-OH", cat: "بنية ووظيفة البروتين 🧪" },
-      { q: "بماذا يختلف حمض أميني عن آخر؟", a: "بالجذر الكيميائي السلسلي الجانبي (R)", w1: "بالوظيفة الكربوكسيلية", w2: "بالوظيفة الأمينية", cat: "بنية ووظيفة البروتين 🧪" },
-      { q: "كم عدد الأحماض الأمينية القياسية التي تدخل في تركيب البروتينات؟", a: "20 حمضاً أمينياً", w1: "64 حمضاً", w2: "12 حمضاً", cat: "بنية ووظيفة البروتين 🧪" },
-      { q: "ما هي الخاصية الأمفوتيرية (الحمقلية) للأحماض الأمينية؟", a: "السلوك كحمض في الوسط القاعدي وكقاعدة في الحامضي", w1: "الذوبان في الدهون فقط", w2: "تغيير ألوان الكواشف بشكل دائمل", cat: "بنية ووظيفة البروتين 🧪" },
-      { q: "ما هي نقطة التكهرب التعادلي (pHi) للحمض الأميني؟", a: "قيمة pH الوسط التي تكون عندها محصلة الشحنة صفر", w1: "درجة غليان الحمض الأميني", w2: "أقصى شحنة موجبة يتحملها الحمض", cat: "بنية ووظيفة البروتين 🧪" },
-      { q: "ما هي مستويات البنية الفراغية للبروتينات؟", a: "أولية، ثانوية، ثالثية، ورابعية", w1: "خطية، دائريّة، ومكعبة", w2: "أحادية وثنائية فقط", cat: "بنية ووظيفة البروتين 🧪" },
-      { q: "بين أي الأحماض الأمينية تنشأ الرابطة ثنائية الكبريت؟", a: "بين جذور حمض السستئين (Cysteine)", w1: "بين جذور الجليسين", w2: "بين الألانين والفالين", cat: "بنية ووظيفة البروتين 🧪" },
-
-      // مجموعة 3: النشاط الإنزيمي
-      { q: "ما هو الإنزيم؟", a: "وسيط حيوي بروتيني يسرع التفاعلات دون أن يُستهلك", w1: "مادة سكرية توفر الطاقة للخلية", w2: "دهن غشائي ينقل الشوارئ", cat: "النشاط الإنزيمي ⚡" },
-      { q: "ما معنى 'التخصص الوظيفي المزدوج' للإنزيم؟", a: "نوعي لركيزة معينة ولنوع التفاعل", w1: "يعمل في الوسط الحامضي والقاعدي معاً", w2: "يبني ويهدم في نفس اللحظة", cat: "النشاط الإنزيمي ⚡" },
-      { q: "ما هو الموقع الفعال للإنزيم؟", a: "تجويف يتكامل مع الركيزة ويرتبط بها للتفاعل", w1: "الغشاء الخارجي للإنزيم", w2: "الذيل الهيدروكربوني للبروتين", cat: "النشاط الإنزيمي ⚡" },
-      { q: "ما هي درجة الحرارة المثلى للإنزيم في جسم الإنسان؟", a: "37°C تقريباً", w1: "0°C", w2: "100°C", cat: "النشاط الإنزيمي ⚡" },
-
-      // مجموعة 4: المناعة والدفاع عن الذات
-      { q: "ما هي الجزيئات البروتينية الأساسية المحددة للذات؟", a: "معقد التوافق النسيجي الرئيسي (CMH / HLA)", w1: "الهيموجلوبين", w2: "الأستيل كولين", cat: "المناعة والدفاع عن الذات 🛡️" },
-      { q: "ما هي السلاسل المكونة للجسم المضاد (IgG)؟", a: "سلسلتان ثقيلتان (H) وسلسلتان خفيفتان (L)", w1: "4 سلاسل ثقيلة متماثلة", w2: "سلسلة واحدة حلزونية", cat: "المناعة والدفاع عن الذات 🛡️" },
-      { q: "ما هي الخلايا اللمفاوية المسؤولة عن المناعة الخلطية؟", a: "الخلايا اللمفاوية B (الـ LB)", w1: "الخلايا اللمفاوية T (الـ LT)", w2: "الكريات الحمراء", cat: "المناعة والدفاع عن الذات 🛡️" },
-      { q: "ما الخلية المستهدفة الرئيسية لفيروس السيدا (VIH)؟", a: "الخلايا الحاملة لـ CD4 (كالـ LT4 والبالعات)", w1: "الكريات الحمراء", w2: "خلايا العضلات", cat: "المناعة والدفاع عن الذات 🛡️" },
-
-      // مجموعة 5: الاتصال العصبي
-      { q: "ما هو كمون الراحة للعصبون؟", a: "-70mV تقريباً", w1: "+30mV", w2: "0mV", cat: "الاتصال العصبي 🧠" },
-      { q: "ما هو المبلغ العصبي التنبيهي الشهير؟", a: "الأستيل كولين (Acetylcholine)", w1: "حمض GABA", w2: "البيرفورين", cat: "الاتصال العصبي 🧠" },
-      { q: "ما هو المبلغ العصبي التثبيطي الشهير؟", a: "حمض غاما أمينوبوتيريك (GABA)", w1: "الأستيل كولين", w2: "الأدرينالين", cat: "الاتصال العصبي 🧠" },
-
-      // مجموعة 6: التركيب الضوئي والتنفس
-      { q: "ما هي العضية المتخصصة في ظاهرة التركيب الضوئي؟", a: "الصانعة الخضراء (Chloroplast)", w1: "الميتوكندريا", w2: "جهاز غولجي", cat: "التركيب الضوئي والتنفس 🌿" },
-      { q: "أين تحدث المرحلة الكيميوضوئية؟", a: "في غشاء التيلاكويد", w1: "في الحشوة (Stroma)", w2: "في الهيولة الشفافة", cat: "التركيب الضوئي والتنفس 🌿" },
-      { q: "ما هي العضية الأساسية لعملية التنفس الخلوي؟", a: "الميتوكندريا (Mitochondria)", w1: "الصانعة الخضراء", w2: "الريبوزوم", cat: "التركيب الضوئي والتنفس 🌿" },
-      { q: "ما الحصيلة الطاقوية الإجمالية لأكسدة جلوكوز واحد تنفسياً؟", a: "38 جزيء ATP (أو 36)", w1: "2 جزيء ATP", w2: "100 جزيء ATP", cat: "التركيب الضوئي والتنفس 🌿" }
-    ];
-
-    let currentIndex = 0;
-    let answered = false;
-
-    // خلط ترتيب الخيارات لتصبح عشوائية في كل مرة
-    function shuffle(array) {
-      return array.sort(() => Math.random() - 0.5);
+    // ----------------------------------------------------
+    // 1. إدارة الثيم (Dark / Light Mode)
+    // ----------------------------------------------------
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      
+      document.getElementById('themeIcon').innerText = newTheme === 'dark' ? '🌙' : '☀️';
+      document.getElementById('themeText').innerText = newTheme === 'dark' ? 'الوضع الليلي' : 'الوضع النهاري';
     }
 
-    function renderQuestion() {
-      const item = rawData[currentIndex];
-      answered = false;
+    // ----------------------------------------------------
+    // 2. التنقل في Taskbar
+    // ----------------------------------------------------
+    function switchSection(secId, el) {
+      document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      
+      document.getElementById(`section-${secId}`).classList.add('active');
+      el.classList.add('active');
+    }
 
+    // ----------------------------------------------------
+    // 3. محرك البومودورو والـ Flip Clock
+    // ----------------------------------------------------
+    let workMins = 25, shortMins = 5, longMins = 15;
+    let currentMode = 'work';
+    let totalSecs = workMins * 60;
+    let remainingSecs = totalSecs;
+    let timerInt = null;
+    let isRunning = false;
+
+    function updateSettings() {
+      workMins = parseInt(document.getElementById('workInput').value) || 25;
+      shortMins = parseInt(document.getElementById('shortInput').value) || 5;
+      longMins = parseInt(document.getElementById('longInput').value) || 15;
+      resetTimer();
+    }
+
+    function setTimerMode(mode, btn) {
+      currentMode = mode;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (mode === 'work') totalSecs = workMins * 60;
+      else if (mode === 'short') totalSecs = shortMins * 60;
+      else if (mode === 'long') totalSecs = longMins * 60;
+
+      resetTimer();
+    }
+
+    function toggleTimer() {
+      if (isRunning) {
+        clearInterval(timerInt);
+        document.getElementById('startBtn').innerText = 'استئناف 🚀';
+        isRunning = false;
+      } else {
+        timerInt = setInterval(tick, 1000);
+        document.getElementById('startBtn').innerText = 'إيقاف ⏸️';
+        isRunning = true;
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInt);
+      isRunning = false;
+      document.getElementById('startBtn').innerText = 'بدء 🚀';
+      
+      if (currentMode === 'work') totalSecs = workMins * 60;
+      else if (currentMode === 'short') totalSecs = shortMins * 60;
+      else if (currentMode === 'long') totalSecs = longMins * 60;
+
+      remainingSecs = totalSecs;
+      updateClockDisplay();
+    }
+
+    function tick() {
+      if (remainingSecs > 0) {
+        remainingSecs--;
+        updateClockDisplay();
+      } else {
+        clearInterval(timerInt);
+        isRunning = false;
+        alert('🎉 انتهت الجلسة بنجاح!');
+        resetTimer();
+      }
+    }
+
+    function updateClockDisplay() {
+      const hrs = Math.floor(remainingSecs / 3600);
+      const mins = Math.floor((remainingSecs % 3600) / 60);
+      const secs = remainingSecs % 60;
+
+      document.getElementById('hoursCard').innerText = hrs.toString().padStart(2, '0');
+      document.getElementById('minutesCard').innerText = mins.toString().padStart(2, '0');
+      document.getElementById('secondsCard').innerText = secs.toString().padStart(2, '0');
+    }
+
+    // ----------------------------------------------------
+    // 4. إدارة الجلسات والميت (Meet Sessions)
+    // ----------------------------------------------------
+    function openMeet() {
+      const url = document.getElementById('meetLink').value;
+      if (url) window.open(url, '_blank');
+    }
+
+    function saveCustomMeet() {
+      const newUrl = document.getElementById('customMeetInput').value;
+      if (newUrl) {
+        document.getElementById('meetLink').value = newUrl;
+        document.getElementById('customMeetInput').value = '';
+        alert('تم تحديث رابط الجلسة بنجاح! 📹');
+      }
+    }
+
+    // ----------------------------------------------------
+    // 5. الأصوات والكويزات
+    // ----------------------------------------------------
+    let audioCtx = null, rainGain = null, fireGain = null;
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Rain
+        const rb = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
+        const rd = rb.getChannelData(0);
+        for (let i = 0; i < rb.length; i++) rd[i] = Math.random() * 2 - 1;
+        const rs = audioCtx.createBufferSource(); rs.buffer = rb; rs.loop = true;
+        const rf = audioCtx.createBiquadFilter(); rf.type = 'lowpass'; rf.frequency.value = 800;
+        rainGain = audioCtx.createGain(); rainGain.gain.value = 0;
+        rs.connect(rf); rf.connect(rainGain); rainGain.connect(audioCtx.destination); rs.start();
+
+        // Fire
+        const fb = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
+        const fd = fb.getChannelData(0);
+        for (let i = 0; i < fb.length; i++) fd[i] = (Math.random() * 2 - 1) * (Math.random() > 0.98 ? 2.5 : 0.2);
+        const fs = audioCtx.createBufferSource(); fs.buffer = fb; fs.loop = true;
+        const ff = audioCtx.createBiquadFilter(); ff.type = 'bandpass'; ff.frequency.value = 700;
+        fireGain = audioCtx.createGain(); fireGain.gain.value = 0;
+        fs.connect(ff); ff.connect(fireGain); fireGain.connect(audioCtx.destination); fs.start();
+      }
+    }
+
+    function adjustVolume(type, val) {
+      initAudio();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (type === 'rain' && rainGain) rainGain.gain.value = parseFloat(val);
+      if (type === 'fire' && fireGain) fireGain.gain.value = parseFloat(val);
+    }
+
+    const rawData = [
+      { q: "أين يتم تركيب البروتين في الخلية حقيقية النواة؟", a: "في الهيولة", w1: "في النواة", w2: "في جهاز غولجي", cat: "تركيب البروتين 🧬" },
+      { q: "ما هو جزيء النقل المحمول للمعلومة الوراثية؟", a: "الـ ARNm", w1: "الـ ARNt", w2: "الـ ARNr", cat: "تركيب البروتين 🧬" },
+      { q: "ما هي الصيغة العامة للحمض الأميني؟", a: "R-CH(NH2)-COOH", w1: "R-CO-NH2", w2: "R-CH2-OH", cat: "بنية ووظيفة البروتين 🧪" },
+      { q: "ما هو كمون الراحة للعصبون؟", a: "-70mV تقريباً", w1: "+30mV", w2: "0mV", cat: "الاتصال العصبي 🧠" }
+    ];
+
+    let quizIndex = 0, quizAnswered = false;
+
+    function renderQuestion() {
+      const item = rawData[quizIndex];
+      quizAnswered = false;
       document.getElementById("subjectBadge").innerText = item.cat;
-      document.getElementById("questionProgress").innerText = `السؤال ${currentIndex + 1} / ${rawData.length}`;
+      document.getElementById("questionProgress").innerText = `${quizIndex + 1} / ${rawData.length}`;
       document.getElementById("questionText").innerText = item.q;
       document.getElementById("nextBtn").disabled = true;
 
       const container = document.getElementById("optionsContainer");
       container.innerHTML = "";
+      const opts = [{ text: item.a, c: true }, { text: item.w1, c: false }, { text: item.w2, c: false }].sort(() => Math.random() - 0.5);
 
-      // تجهيز الخيارات (واحدة صح و 2 خطأ)
-      const options = shuffle([
-        { text: item.a, correct: true },
-        { text: item.w1, correct: false },
-        { text: item.w2, correct: false }
-      ]);
-
-      options.forEach(opt => {
+      opts.forEach(o => {
         const btn = document.createElement("div");
         btn.className = "option-btn";
-        btn.innerHTML = `<span>${opt.text}</span><span class="icon"></span>`;
-        btn.onclick = () => handleAnswer(btn, opt.correct);
+        btn.innerHTML = `<span>${o.text}</span><span class="icon"></span>`;
+        btn.onclick = () => {
+          if (quizAnswered) return;
+          quizAnswered = true;
+          if (o.c) btn.classList.add("correct"); else btn.classList.add("wrong");
+          document.getElementById("nextBtn").disabled = false;
+        };
         container.appendChild(btn);
       });
     }
 
-    function handleAnswer(selectedBtn, isCorrect) {
-      if (answered) return;
-      answered = true;
-
-      const allBtns = document.querySelectorAll(".option-btn");
-      allBtns.forEach(btn => btn.classList.add("disabled"));
-
-      if (isCorrect) {
-        selectedBtn.classList.add("correct");
-        selectedBtn.querySelector(".icon").innerText = "✓";
-      } else {
-        selectedBtn.classList.add("wrong");
-        selectedBtn.querySelector(".icon").innerText = "✗";
-
-        // إبراز الإجابة الصحيحة للتلميذ
-        allBtns.forEach(btn => {
-          const item = rawData[currentIndex];
-          if (btn.innerText.includes(item.a)) {
-            btn.classList.add("correct");
-            btn.querySelector(".icon").innerText = "✓";
-          }
-        });
-      }
-
-      document.getElementById("nextBtn").disabled = false;
-    }
-
     function nextQuestion() {
-      if (currentIndex < rawData.length - 1) {
-        currentIndex++;
-        renderQuestion();
-      } else {
-        alert("🎉 ممتاز يا بطل! أنهيت الكويزات المتوفرة بنجاح.");
-      }
+      if (quizIndex < rawData.length - 1) { quizIndex++; renderQuestion(); }
     }
 
-    // بدء التشغيل
-    window.onload = renderQuestion;
+    window.onload = function() {
+      updateClockDisplay();
+      renderQuestion();
+    };
   </script>
 </body>
 </html>
