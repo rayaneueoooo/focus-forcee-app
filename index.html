@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Focus & Force - Ultra iOS Edition</title>
+  <title>Focus & Force - Léa's Story Edition</title>
   <!-- Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
@@ -12,31 +12,27 @@
         ========================================================= */
     :root[data-theme="dark"] {
       --bg-gradient: radial-gradient(circle at 50% 20%, #152238 0%, #0b1326 100%);
-      --bg-color: #0b1326; /* أزرق ليلي (Bleu Nuit) */
+      --bg-color: #0b1326;
       --card-bg: rgba(21, 34, 56, 0.45);
       --card-border: rgba(255, 255, 255, 0.12);
-      --primary-burgundy: #9e1b32; /* أحمر عنابي */
+      --primary-burgundy: #9e1b32;
       --burgundy-glow: rgba(158, 27, 50, 0.4);
       --text-main: #f4f6fa;
       --text-muted: #8e9bb0;
       --glass-taskbar: rgba(11, 19, 38, 0.75);
-      --clock-card-bg: rgba(15, 24, 42, 0.85);
-      --clock-text: #ffffff;
       --accent-highlight: #c92a42;
     }
 
     :root[data-theme="light"] {
       --bg-gradient: radial-gradient(circle at 50% 20%, #fffdfa 0%, #f7f3eb 100%);
-      --bg-color: #f7f3eb; /* كريمي ناعم (Cream) */
+      --bg-color: #f7f3eb;
       --card-bg: rgba(255, 255, 255, 0.65);
       --card-border: rgba(128, 0, 32, 0.15);
-      --primary-burgundy: #800020; /* أحمر عنابي داكن */
+      --primary-burgundy: #800020;
       --burgundy-glow: rgba(128, 0, 32, 0.25);
       --text-main: #2b181d;
       --text-muted: #6e595f;
       --glass-taskbar: rgba(253, 251, 247, 0.8);
-      --clock-card-bg: rgba(255, 255, 255, 0.9);
-      --clock-text: #800020;
       --accent-highlight: #a31237;
     }
 
@@ -61,7 +57,53 @@
       overflow-x: hidden;
     }
 
-    /* أزرار الثيم العلوي الزجاجي */
+    /* 🎬 Intro Animation Overlay */
+    #introOverlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-color);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: fadeOutIntro 0.8s ease 2.2s forwards;
+      pointer-events: none;
+    }
+
+    .intro-logo {
+      font-size: 2rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--text-main), var(--primary-burgundy));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: scaleInIntro 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      text-align: center;
+    }
+
+    .intro-sub {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      opacity: 0;
+      animation: fadeInIntro 0.8s ease 0.5s forwards;
+    }
+
+    @keyframes scaleInIntro {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes fadeInIntro {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeOutIntro {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* الشريط العلوي */
     .top-bar {
       display: flex;
       justify-content: space-between;
@@ -118,6 +160,7 @@
       margin-bottom: 20px;
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
       position: relative;
+      overflow: hidden;
     }
 
     .header-card {
@@ -136,187 +179,109 @@
       font-size: 0.85rem;
     }
 
-    /* ⏳ تصميم Flip-Clock / Aesthetic Digital Timer */
-    .flip-clock-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      margin: 25px 0;
-      direction: ltr; /* للحفاظ على ترتيب الأرقام */
-    }
-
-    .flip-unit {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .flip-card {
-      background: var(--clock-card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      width: 72px;
-      height: 90px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.6rem;
-      font-weight: 800;
-      color: var(--clock-text);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255,255,255,0.2);
+    /* ✨ تصميم القصة (Story Timeline & Léa's Feature) */
+    .story-hero {
+      text-align: center;
+      padding: 10px 0 20px 0;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 20px;
       position: relative;
-      overflow: hidden;
     }
 
-    .flip-card::after {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: rgba(0, 0, 0, 0.3);
-      box-shadow: 0 1px 1px rgba(255, 255, 255, 0.15);
-    }
-
-    .unit-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-top: 6px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .clock-colon {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--primary-burgundy);
-      margin-bottom: 20px;
-    }
-
-    .timer-modes {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-bottom: 20px;
-    }
-
-    .mode-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 10px 16px;
-      border-radius: 16px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-    }
-
-    .mode-btn.active {
-      background: var(--primary-burgundy);
-      color: #fff;
-      border-color: var(--primary-burgundy);
-      box-shadow: 0 0 20px var(--burgundy-glow);
-    }
-
-    .controls-row {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .btn-primary {
-      background: var(--primary-burgundy);
-      color: #ffffff;
-      border: none;
-      padding: 14px 36px;
-      border-radius: 20px;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      box-shadow: 0 6px 25px var(--burgundy-glow);
-    }
-
-    .btn-primary:active {
-      transform: scale(0.96);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-main);
-      border: 1px solid var(--card-border);
-      padding: 14px 22px;
-      border-radius: 20px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .settings-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 22px;
-    }
-
-    .setting-item {
-      background: rgba(0, 0, 0, 0.08);
-      padding: 12px;
-      border-radius: 18px;
-      border: 1px solid var(--card-border);
-      text-align: center;
-    }
-
-    .setting-item label {
-      display: block;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-      font-weight: 600;
-    }
-
-    .setting-item input {
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: var(--primary-burgundy);
+    .story-hero h1 {
+      font-size: 1.25rem;
       font-weight: 800;
-      text-align: center;
-      font-size: 1.1rem;
-      outline: none;
+      color: var(--primary-burgundy);
+      margin-bottom: 8px;
+      line-height: 1.5;
     }
 
-    /* 📹 قسم جلسات الميت (Meet Sessions) */
-    .meet-card {
+    .story-hero p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* إيموجيات متحركة في الخلفية / الهيرو */
+    .floating-emojis {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      font-size: 1.5rem;
+      margin: 12px 0;
+    }
+
+    .floating-emojis span {
+      animation: floatEmoji 3s ease-in-out infinite alternate;
+    }
+    .floating-emojis span:nth-child(2) { animation-delay: 0.5s; }
+    .floating-emojis span:nth-child(3) { animation-delay: 1s; }
+    .floating-emojis span:nth-child(4) { animation-delay: 1.5s; }
+
+    @keyframes floatEmoji {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-8px) scale(1.1); }
+    }
+
+    .timeline {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 16px;
+    }
+
+    .timeline-item {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--card-border);
-      padding: 16px;
       border-radius: 20px;
-      margin-bottom: 12px;
+      padding: 16px;
+      position: relative;
     }
 
-    .meet-title {
-      font-size: 0.95rem;
+    .timeline-year {
+      display: inline-block;
+      background: var(--primary-burgundy);
+      color: #fff;
+      font-size: 0.75rem;
       font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      box-shadow: 0 4px 15px var(--burgundy-glow);
     }
 
-    .meet-input {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 14px;
-      border: 1px solid var(--card-border);
-      background: rgba(0, 0, 0, 0.1);
+    .timeline-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
       color: var(--text-main);
-      outline: none;
+    }
+
+    .timeline-desc {
       font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .lea-signature {
+      background: linear-gradient(135deg, rgba(158, 27, 50, 0.1), rgba(0,0,0,0));
+      border: 1px solid var(--primary-burgundy);
+      border-radius: 22px;
+      padding: 18px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .lea-signature h3 {
+      color: var(--primary-burgundy);
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .lea-signature p {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--text-main);
     }
 
     /* 🔊 الأصوات والأجواء */
@@ -385,7 +350,19 @@
       border-color: #e63946 !important;
     }
 
-    /* 📝 قسم الملخصات / المهام السريعة المضاف حديثاً */
+    .btn-primary {
+      background: var(--primary-burgundy);
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 18px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 6px 25px var(--burgundy-glow);
+    }
+
+    /* 📌 قسم الملخصات والأفكار السريعة */
     .notes-input-row {
       display: flex;
       gap: 8px;
@@ -461,7 +438,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 8px 10px;
+      padding: 8px 12px;
       border-radius: 22px;
       color: var(--text-muted);
       cursor: pointer;
@@ -505,7 +482,13 @@
 </head>
 <body>
 
-  <!-- الشريط العلوي والتمرير بين الوضعين مع مؤشر النقاط -->
+  <!-- 🎬 Intro Animation Overlay -->
+  <div id="introOverlay">
+    <div class="intro-logo">FOCUS & FORCE 🎓✨</div>
+    <div class="intro-sub">رحلة شغف صُنعت بكل حب... 🤍</div>
+  </div>
+
+  <!-- الشريط العلوي -->
   <div class="top-bar">
     <div class="brand-title">FOCUS & FORCE</div>
     <div class="header-actions">
@@ -517,83 +500,61 @@
     </div>
   </div>
 
-  <!-- 1️⃣ قسم البومودورو (Flip Timer) -->
-  <div id="section-timer" class="app-section active">
-    <div class="glass-card header-card">
-      <h2>⏱️ مؤقت التركيز iOS</h2>
-      <p>عد تنازلي أنيق للتركيز الفائق ودراسة المواد بدون تشتيت 🎯</p>
-    </div>
-
+  <!-- 1️⃣ قسم القصة (Our Story - Léa 🩵) -->
+  <div id="section-story" class="app-section active">
     <div class="glass-card">
-      <div class="timer-modes">
-        <button class="mode-btn active" onclick="setTimerMode('work', this)">تركيز 🧠</button>
-        <button class="mode-btn" onclick="setTimerMode('short', this)">راحة قصيرة ☕</button>
-        <button class="mode-btn" onclick="setTimerMode('long', this)">راحة طويلة 🌴</button>
+      <div class="story-hero">
+        <div class="floating-emojis">
+          <span>🎓</span>
+          <span>✨</span>
+          <span>🤍</span>
+          <span>🔥</span>
+          <span>🍓</span>
+        </div>
+        <h1>من طالبة تبحث عن ملخصات... إلى مؤسسة عائلة "Focus & Force"</h1>
+        <p>قصة بدأت من معاناة... وتحوّلت إلى حلم يجمع آلاف الطلبة 🤍</p>
       </div>
 
-      <!-- Flip Clock Interface -->
-      <div class="flip-clock-container">
-        <div class="flip-unit">
-          <div class="flip-card" id="hoursCard">00</div>
-          <div class="unit-label">ساعة</div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="timeline-year">2024</span>
+          <div class="timeline-title">🍃 بداية الحكاية والشرارة الأولى</div>
+          <div class="timeline-desc">كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث بين الصفحات عن مصادر صحيحة، ملخصات مفيدة، وقناة تكون لي سنداً حقيقياً. وفي لحظة صدق مع نفسي تساءلت: "علاش ما نصنعش أنا المكان اللي تمنيت نلقاه؟" ومن تلك الشرارة، بدأت الحكاية ✨.</div>
         </div>
-        <div class="clock-colon">:</div>
-        <div class="flip-unit">
-          <div class="flip-card" id="minutesCard">25</div>
-          <div class="unit-label">دقيقة</div>
+
+        <div class="timeline-item">
+          <span class="timeline-year">2024</span>
+          <div class="timeline-title">🤍 حلم صغير... وطموح لا يحدّه شيء</div>
+          <div class="timeline-desc">بدأت القناة بمجهودي الفردي وبكثير من الحب. كل معلومة، كل ملخص، وكل خطوة... كان وراءها وقت، تعب، ورغبة صادقة من أعماق قلبي في مساعدة طالب آخر يعيش نفس شعوري.</div>
         </div>
-        <div class="clock-colon">:</div>
-        <div class="flip-unit">
-          <div class="flip-card" id="secondsCard">00</div>
-          <div class="unit-label">ثانية</div>
+
+        <div class="timeline-item">
+          <span class="timeline-year">2025</span>
+          <div class="timeline-title">🔥 الشرارة الحقيقية والتحدي</div>
+          <div class="timeline-desc">عندما قررت خوض تجربة البكالوريا للمرة الثانية، وسط كل الضغط والتعب والخوف... لم تكن القناة مجرد منصة ننشر فيها، بل كانت المتنفس الحقيقي لي والحافز لأكمل الطريق معاً 🤲🏻💗.</div>
+        </div>
+
+        <div class="timeline-item">
+          <span class="timeline-year">2026</span>
+          <div class="timeline-title">✨ الحلم يكبر والعائلة تتسع</div>
+          <div class="timeline-desc">سنوات الصبر جعلت Focus & Force تتحول إلى مساحة موثوقة تجمع الجميع. انضم إليّ مشرفون رائعون وبدأنا شراكات نجاح... هنا أدركت أن الحلم أصبح عائلة واحدة 👥🤍.</div>
+        </div>
+
+        <div class="timeline-item">
+          <span class="timeline-year">2027</span>
+          <div class="timeline-title">💗 عهد جديد بروح مختلفة</div>
+          <div class="timeline-desc">كل تجربة علمتني الكثير. **Léa 🩵** التي ترونها اليوم... لم تأتِ من عدم ولا صدفة، بل جاءت بعد سنوات من المحاولة، الصمود، والإيمان المطلق بالحلم 🌱.</div>
         </div>
       </div>
 
-      <div class="controls-row">
-        <button class="btn-primary" id="startBtn" onclick="toggleTimer()">بدء 🚀</button>
-        <button class="btn-secondary" onclick="resetTimer()">إعادة 🔄</button>
-      </div>
-
-      <div class="settings-grid">
-        <div class="setting-item">
-          <label>الدراسة (د)</label>
-          <input type="number" id="workInput" value="25" min="1" max="180" onchange="updateSettings()">
-        </div>
-        <div class="setting-item">
-          <label>راحة قصيرة</label>
-          <input type="number" id="shortInput" value="5" min="1" max="45" onchange="updateSettings()">
-        </div>
-        <div class="setting-item">
-          <label>راحة طويلة</label>
-          <input type="number" id="longInput" value="15" min="1" max="90" onchange="updateSettings()">
-        </div>
+      <div class="lea-signature">
+        <h3>رسالة من Léa 🩵</h3>
+        <p>Focus & Force مش مجرد منصة تعليمية... هي قطعة حقيقية من قلبي 💗💗، ورسالة نعيشها سوياً كل يوم. أنا هنا لأكون السند الذي تمنيتُ لو وجدته يوماً وأنا طالبة 🍓✨، ومع باقي الفريق... سنواصل إيقاد الشغف ونقود هذه العائلة دائماً نحو القمة.</p>
       </div>
     </div>
   </div>
 
-  <!-- 2️⃣ قسم جلسات الميت (Meet Sessions) -->
-  <div id="section-meet" class="app-section">
-    <div class="glass-card header-card">
-      <h2>📹 جلسات الدراسة المباشرة (Meet)</h2>
-      <p>انضم للجلسات الجماعية عبر Google Meet مع زملائك 👥</p>
-    </div>
-
-    <div class="glass-card">
-      <div class="meet-card">
-        <div class="meet-title">🔴 غرفة الجلسة المباشرة الحالية</div>
-        <input type="text" class="meet-input" id="meetLink" value="https://meet.google.com/krd-aesq-sgt" readonly>
-        <button class="btn-primary" onclick="openMeet()">دخول الجلسة الآن 🚀</button>
-      </div>
-
-      <div class="meet-card">
-        <div class="meet-title">➕ إنشاء أو تغيير رابط الجلسة</div>
-        <input type="text" class="meet-input" id="customMeetInput" placeholder="أدخل رابط Google Meet جديد...">
-        <button class="btn-secondary" onclick="saveCustomMeet()">حفظ الرابط الجديد 💾</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3️⃣ قسم أصوات الأجواء -->
+  <!-- 2️⃣ قسم أصوات الأجواء -->
   <div id="section-sounds" class="app-section">
     <div class="glass-card header-card">
       <h2>🎧 أصوات الطبيعة والهدوء</h2>
@@ -612,7 +573,7 @@
     </div>
   </div>
 
-  <!-- 4️⃣ قسم الكويزات التفاعلية -->
+  <!-- 3️⃣ قسم الكويزات التفاعلية -->
   <div id="section-quiz" class="app-section">
     <div class="glass-card header-card">
       <h2>🧩 الكويزات التفاعلية</h2>
@@ -632,7 +593,7 @@
     </div>
   </div>
 
-  <!-- 5️⃣ قسم الملخصات والأفكار السريعة (مضاف جديد) -->
+  <!-- 4️⃣ قسم الملخصات والأفكار السريعة -->
   <div id="section-notes" class="app-section">
     <div class="glass-card header-card">
       <h2>📌 ملخصات وأفكار سريعة</h2>
@@ -644,22 +605,16 @@
         <input type="text" class="notes-input" id="noteInput" placeholder="أضف فكرة أو ملاحظة جديدة...">
         <button class="btn-primary" onclick="addNote()">إضافة ✍️</button>
       </div>
-      <div class="notes-list" id="notesListContainer">
-        <!-- يتم تعبئتها ديناميكياً -->
-      </div>
+      <div class="notes-list" id="notesListContainer"></div>
     </div>
   </div>
 
   <!-- 📱 Liquid Glass Taskbar (iOS Edition) -->
   <div class="taskbar-wrapper">
     <nav class="liquid-taskbar">
-      <div class="nav-item active" onclick="switchSection('timer', this)">
-        <span class="icon">⏱️</span>
-        <span class="label">المؤقت</span>
-      </div>
-      <div class="nav-item" onclick="switchSection('meet', this)">
-        <span class="icon">📹</span>
-        <span class="label">الجلسات</span>
+      <div class="nav-item active" onclick="switchSection('story', this)">
+        <span class="icon">📖</span>
+        <span class="label">قصتنا</span>
       </div>
       <div class="nav-item" onclick="switchSection('sounds', this)">
         <span class="icon">🎧</span>
@@ -677,14 +632,12 @@
   </div>
 
   <script>
-    // تهيئة تليجرام ويب أب إن وجد
     let tg = window.Telegram?.WebApp;
     if (tg) {
       tg.expand();
       tg.ready();
     }
 
-    // نظام النقاط المحفوظ محلياً
     let userScore = parseInt(localStorage.getItem('ff_score')) || 0;
     function updateScoreDisplay() {
       document.getElementById('userScoreDisplay').innerText = `⭐ ${userScore} نقطة`;
@@ -695,9 +648,6 @@
       updateScoreDisplay();
     }
 
-    // ----------------------------------------------------
-    // 1. إدارة الثيم (Dark / Light Mode)
-    // ----------------------------------------------------
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -707,9 +657,6 @@
       document.getElementById('themeText').innerText = newTheme === 'dark' ? 'الوضع الليلي' : 'الوضع النهاري';
     }
 
-    // ----------------------------------------------------
-    // 2. التنقل في Taskbar
-    // ----------------------------------------------------
     function switchSection(secId, el) {
       document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -718,112 +665,11 @@
       el.classList.add('active');
     }
 
-    // ----------------------------------------------------
-    // 3. محرك البومودورو والـ Flip Clock
-    // ----------------------------------------------------
-    let workMins = 25, shortMins = 5, longMins = 15;
-    let currentMode = 'work';
-    let totalSecs = workMins * 60;
-    let remainingSecs = totalSecs;
-    let timerInt = null;
-    let isRunning = false;
-
-    function updateSettings() {
-      workMins = parseInt(document.getElementById('workInput').value) || 25;
-      shortMins = parseInt(document.getElementById('shortInput').value) || 5;
-      longMins = parseInt(document.getElementById('longInput').value) || 15;
-      resetTimer();
-    }
-
-    function setTimerMode(mode, btn) {
-      currentMode = mode;
-      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      if (mode === 'work') totalSecs = workMins * 60;
-      else if (mode === 'short') totalSecs = shortMins * 60;
-      else if (mode === 'long') totalSecs = longMins * 60;
-
-      resetTimer();
-    }
-
-    function toggleTimer() {
-      if (isRunning) {
-        clearInterval(timerInt);
-        document.getElementById('startBtn').innerText = 'استئناف 🚀';
-        isRunning = false;
-      } else {
-        timerInt = setInterval(tick, 1000);
-        document.getElementById('startBtn').innerText = 'إيقاف ⏸️';
-        isRunning = true;
-      }
-    }
-
-    function resetTimer() {
-      clearInterval(timerInt);
-      isRunning = false;
-      document.getElementById('startBtn').innerText = 'بدء 🚀';
-      
-      if (currentMode === 'work') totalSecs = workMins * 60;
-      else if (currentMode === 'short') totalSecs = shortMins * 60;
-      else if (currentMode === 'long') totalSecs = longMins * 60;
-
-      remainingSecs = totalSecs;
-      updateClockDisplay();
-    }
-
-    function tick() {
-      if (remainingSecs > 0) {
-        remainingSecs--;
-        updateClockDisplay();
-      } else {
-        clearInterval(timerInt);
-        isRunning = false;
-        if (currentMode === 'work') {
-          addScore(10); // مكافأة 10 نقاط عند إتمام جلسة تركيز كاملة
-          if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-        }
-        alert('🎉 انتهت الجلسة بنجاح! تمت إضافة 10 نقاط لرصيدك ⭐');
-        resetTimer();
-      }
-    }
-
-    function updateClockDisplay() {
-      const hrs = Math.floor(remainingSecs / 3600);
-      const mins = Math.floor((remainingSecs % 3600) / 60);
-      const secs = remainingSecs % 60;
-
-      document.getElementById('hoursCard').innerText = hrs.toString().padStart(2, '0');
-      document.getElementById('minutesCard').innerText = mins.toString().padStart(2, '0');
-      document.getElementById('secondsCard').innerText = secs.toString().padStart(2, '0');
-    }
-
-    // ----------------------------------------------------
-    // 4. إدارة الجلسات والميت (Meet Sessions)
-    // ----------------------------------------------------
-    function openMeet() {
-      const url = document.getElementById('meetLink').value;
-      if (url) window.open(url, '_blank');
-    }
-
-    function saveCustomMeet() {
-      const newUrl = document.getElementById('customMeetInput').value;
-      if (newUrl) {
-        document.getElementById('meetLink').value = newUrl;
-        document.getElementById('customMeetInput').value = '';
-        alert('تم تحديث رابط الجلسة بنجاح! 📹');
-      }
-    }
-
-    // ----------------------------------------------------
-    // 5. الأصوات والكويزات
-    // ----------------------------------------------------
     let audioCtx = null, rainGain = null, fireGain = null;
     function initAudio() {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
-        // Rain
         const rb = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
         const rd = rb.getChannelData(0);
         for (let i = 0; i < rb.length; i++) rd[i] = Math.random() * 2 - 1;
@@ -832,7 +678,6 @@
         rainGain = audioCtx.createGain(); rainGain.gain.value = 0;
         rs.connect(rf); rf.connect(rainGain); rainGain.connect(audioCtx.destination); rs.start();
 
-        // Fire
         const fb = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
         const fd = fb.getChannelData(0);
         for (let i = 0; i < fb.length; i++) fd[i] = (Math.random() * 2 - 1) * (Math.random() > 0.98 ? 2.5 : 0.2);
@@ -880,7 +725,7 @@
           quizAnswered = true;
           if (o.c) {
             btn.classList.add("correct");
-            addScore(5); // 5 نقاط للإجابة الصحيحة
+            addScore(5);
             if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
           } else {
             btn.classList.add("wrong");
@@ -903,9 +748,6 @@
       }
     }
 
-    // ----------------------------------------------------
-    // 6. إدارة الملخصات (Local Storage Notes)
-    // ----------------------------------------------------
     let notesList = JSON.parse(localStorage.getItem('ff_notes')) || [];
 
     function renderNotes() {
@@ -941,7 +783,6 @@
     }
 
     window.onload = function() {
-      updateClockDisplay();
       renderQuestion();
       updateScoreDisplay();
       renderNotes();
