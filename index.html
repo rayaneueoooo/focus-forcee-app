@@ -202,7 +202,6 @@
       line-height: 1.6;
     }
 
-    /* إيموجيات متحركة في الخلفية / الهيرو */
     .floating-emojis {
       display: flex;
       justify-content: center;
@@ -408,6 +407,98 @@
       font-size: 1rem;
     }
 
+    /* 🍅 تصميم واجهة بومودورو الجديدة */
+    .pomodoro-container {
+      text-align: center;
+      padding: 10px;
+    }
+
+    .pomodoro-timer-display {
+      font-size: 3.2rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      margin: 20px 0;
+      font-variant-numeric: tabular-nums;
+      color: #fff;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .pomodoro-controls {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .pomodoro-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .pomodoro-btn.active-control {
+      background: #fff;
+      color: #2b181d;
+    }
+
+    .pomodoro-settings {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.15);
+      padding: 14px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      text-align: right;
+    }
+
+    .pomodoro-settings label {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 600;
+    }
+
+    .pomodoro-settings select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .pomodoro-settings select option {
+      background: #152238;
+      color: #fff;
+    }
+
+    .color-picker-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .color-dot {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      transition: transform 0.2s;
+    }
+
+    .color-dot:hover {
+      transform: scale(1.1);
+    }
+
     /* 📱 Liquid Glass Taskbar (iOS Edition) */
     .taskbar-wrapper {
       position: fixed;
@@ -609,6 +700,42 @@
     </div>
   </div>
 
+  <!-- 5️⃣ قسم بومودورو الجديد (Pomodoro Timer) -->
+  <div id="section-pomodoro" class="app-section">
+    <div class="glass-card header-card">
+      <h2>🍅 مؤقت بومودورو</h2>
+      <p>ركز بعمق ونظم وقت دراستك باحترافية ⏱️✨</p>
+    </div>
+
+    <div class="glass-card pomodoro-container" id="pomodoroCard" style="background: rgba(158, 27, 50, 0.25);">
+      <div class="pomodoro-settings">
+        <label for="pomodoroTimeSelect">اختر مدة الجلسة:</label>
+        <select id="pomodoroTimeSelect" onchange="changePomodoroDuration(this.value)">
+          <option value="15">15 دقيقة (سريعة)</option>
+          <option value="25" selected>25 دقيقة (ميارس)</option>
+          <option value="45">45 دقيقة (عميق)</option>
+          <option value="60">60 دقيقة (ساعة كاملة)</option>
+        </select>
+      </div>
+
+      <div class="pomodoro-timer-display" id="pomodoroDisplay">25:00</div>
+
+      <div class="pomodoro-controls">
+        <button class="pomodoro-btn active-control" id="startPomoBtn" onclick="startPomodoro()">تشغيل 🎯</button>
+        <button class="pomodoro-btn" onclick="pausePomodoro()">إيقاف مؤقت ⏸️</button>
+        <button class="pomodoro-btn" onclick="resetPomodoro()">إعادة ضبط 🔄</button>
+      </div>
+
+      <div style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-bottom: 6px;">اختر لون الخلفية المفضلة:</div>
+      <div class="color-picker-row">
+        <div class="color-dot" style="background: #9e1b32;" onclick="setPomodoroColor('rgba(158, 27, 50, 0.25)')" title="عنابي"></div>
+        <div class="color-dot" style="background: #152238;" onclick="setPomodoroColor('rgba(21, 34, 56, 0.65)')" title="أزرق ليلي"></div>
+        <div class="color-dot" style="background: #2e7d32;" onclick="setPomodoroColor('rgba(46, 125, 50, 0.35)')" title="أخضر هادئ"></div>
+        <div class="color-dot" style="background: #4a148c;" onclick="setPomodoroColor('rgba(74, 20, 140, 0.4)')" title="بنفسجي عميق"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- 📱 Liquid Glass Taskbar (iOS Edition) -->
   <div class="taskbar-wrapper">
     <nav class="liquid-taskbar">
@@ -627,6 +754,10 @@
       <div class="nav-item" onclick="switchSection('notes', this)">
         <span class="icon">📌</span>
         <span class="label">الملخصات</span>
+      </div>
+      <div class="nav-item" onclick="switchSection('pomodoro', this)">
+        <span class="icon">🍅</span>
+        <span class="label">بومودورو</span>
       </div>
     </nav>
   </div>
@@ -782,10 +913,71 @@
       renderNotes();
     }
 
+    // 🍅 Pomodoro Logic
+    let pomoMinutes = 25;
+    let pomoSeconds = 0;
+    let pomoInterval = null;
+    let isPomoRunning = false;
+
+    function updatePomoDisplay() {
+      const m = String(pomoMinutes).padStart(2, '0');
+      const s = String(pomoSeconds).padStart(2, '0');
+      document.getElementById('pomodoroDisplay').innerText = `${m}:${s}`;
+    }
+
+    function changePomodoroDuration(val) {
+      pausePomodoro();
+      pomoMinutes = parseInt(val);
+      pomoSeconds = 0;
+      updatePomoDisplay();
+    }
+
+    function startPomodoro() {
+      if (isPomoRunning) return;
+      isPomoRunning = true;
+      document.getElementById('startPomoBtn').classList.add('active-control');
+      
+      pomoInterval = setInterval(() => {
+        if (pomoSeconds === 0) {
+          if (pomoMinutes === 0) {
+            clearInterval(pomoInterval);
+            isPomoRunning = false;
+            alert("🎉 انتهت جلسة البومودورو بنجاح! خذ استراحة قصيرة ☕");
+            addScore(10);
+            return;
+          }
+          pomoMinutes--;
+          pomoSeconds = 59;
+        } else {
+          pomoSeconds--;
+        }
+        updatePomoDisplay();
+      }, 1000);
+    }
+
+    function pausePomodoro() {
+      isPomoRunning = false;
+      clearInterval(pomoInterval);
+      document.getElementById('startPomoBtn').classList.remove('active-control');
+    }
+
+    function resetPomodoro() {
+      pausePomodoro();
+      const selectVal = document.getElementById('pomodoroTimeSelect').value;
+      pomoMinutes = parseInt(selectVal);
+      pomoSeconds = 0;
+      updatePomoDisplay();
+    }
+
+    function setPomodoroColor(colorBg) {
+      document.getElementById('pomodoroCard').style.background = colorBg;
+    }
+
     window.onload = function() {
       renderQuestion();
       updateScoreDisplay();
       renderNotes();
+      updatePomoDisplay();
     };
   </script>
 </body>
