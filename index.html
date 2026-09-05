@@ -3,658 +3,338 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Focus & Force - Mini App</title>
+  <title>Focus & Force - بنك الكويزات التفاعلية</title>
+  <!-- Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg-color: #0F0F12;
-      --text-color: #FFFFFF;
-      --card-bg: rgba(25, 15, 20, 0.65);
-      --glass-border: rgba(212, 175, 55, 0.25);
-      --accent-burgundy: #8B0000;
-      --accent-gold: #D4AF37;
+      --bg-color: #0b0d10;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent-gold: #e2b714;
+      --text-main: #f0f3f8;
+      --text-muted: #9aa0a6;
+      --glass-glow: rgba(226, 183, 20, 0.12);
+      --correct-color: #2ec4b6;
+      --wrong-color: #e63946;
     }
 
-    body.light-mode {
-      --bg-color: #F5F2EB;
-      --text-color: #2C2A29;
-      --card-bg: rgba(255, 255, 255, 0.75);
-      --glass-border: rgba(139, 0, 0, 0.2);
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arabic Typesetting, sans-serif;
+      user-select: none;
     }
 
     body {
       background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      margin: 0;
-      padding: 0;
-      padding-bottom: 95px;
-      transition: background-color 0.3s, color 0.3s;
-      user-select: none;
+      color: var(--text-main);
+      padding: 16px;
+      padding-bottom: 90px;
+      direction: rtl;
     }
 
-    /* Header Liquid Glass */
-    .header {
-      padding: 12px 20px;
+    /* الهيدر بتصميم زجاجي مطفي */
+    .header-card {
+      background: rgba(18, 20, 26, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 18px;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .header-card h2 {
+      color: var(--accent-gold);
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .header-card p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    /* كارت الكويز بالطابع الزجاجي السائل Liquid Glass */
+    .quiz-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 22px 18px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .quiz-card::before {
+      content: '';
+      position: absolute;
+      top: -40%;
+      right: -40%;
+      width: 180%;
+      height: 180%;
+      background: radial-gradient(circle, var(--glass-glow) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .quiz-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(15, 15, 18, 0.7);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      border-bottom: 1px solid var(--glass-border);
-    }
-
-    .logo {
-      font-weight: 800;
-      font-size: 18px;
-      color: var(--accent-burgundy);
-      letter-spacing: 1px;
-    }
-
-    .theme-toggle {
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid var(--accent-gold);
-      background: rgba(212, 175, 55, 0.1);
-      color: var(--text-color);
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      backdrop-filter: blur(8px);
-    }
-
-    /* Container Controls */
-    .tab-content {
-      display: none;
-      padding: 16px;
-      animation: fadeIn 0.3s ease-in-out;
-    }
-    .tab-content.active { display: block; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Glass Cards */
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 20px;
-      padding: 18px;
-      margin-bottom: 15px;
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-    }
-
-    .card-hero {
-      background: linear-gradient(135deg, rgba(139, 0, 0, 0.85) 0%, rgba(40, 0, 0, 0.95) 100%);
-      color: #FFF;
-      border: 1px solid rgba(212, 175, 55, 0.4);
-    }
-
-    /* Story Overlay Modal */
-    .story-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(10, 5, 8, 0.92);
-      backdrop-filter: blur(20px);
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 25px;
-      text-align: center;
-    }
-
-    .story-card {
-      background: rgba(45, 15, 25, 0.7);
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      border-radius: 24px;
-      padding: 25px;
-      max-width: 400px;
-      width: 90%;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-      animation: pulseGlow 2s infinite alternate;
-    }
-
-    @keyframes pulseGlow {
-      from { box-shadow: 0 0 15px rgba(139,0,0,0.4); }
-      to { box-shadow: 0 0 30px rgba(212,175,55,0.5); }
-    }
-
-    .floating-emoji {
-      font-size: 50px;
-      margin-bottom: 15px;
-      animation: floatAnim 2.5s infinite ease-in-out;
-    }
-
-    @keyframes floatAnim {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-12px) rotate(5deg); }
-    }
-
-    /* Timer Styles */
-    .timer-display {
-      padding: 35px 20px;
-      border-radius: 24px;
-      text-align: center;
-      margin-bottom: 20px;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    }
-    /* Flip Pink: خلفية وردية وأعداد بيضاء */
-    .timer-display.flip-pink {
-      background: linear-gradient(135deg, #FF85A1 0%, #FF2E93 100%);
-      color: #FFFFFF;
-    }
-    /* Dark Minimal (Blue Nuit): أزرق ليلي وأرقام بنفسجية */
-    .timer-display.minimal-dark {
-      background: #0A1128;
-      color: #C77DFF;
-      border: 1px solid rgba(199, 125, 255, 0.3);
-    }
-    .timer-display.sage-green {
-      background: #52796F;
-      color: #CAD2C5;
-    }
-
-    .timer-text {
-      font-size: 58px;
-      font-weight: 900;
-      font-family: 'Courier New', Courier, monospace;
-      margin: 12px 0;
-      letter-spacing: 2px;
-    }
-
-    /* Apple Music Player Custom Style */
-    .player-card {
-      background: rgba(30, 15, 22, 0.75);
-      border-radius: 24px;
-      padding: 20px;
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      backdrop-filter: blur(20px);
-    }
-
-    .player-controls {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      margin-top: 18px;
-    }
-
-    .glass-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #FFF;
-      font-size: 18px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .glass-btn:active {
-      transform: scale(0.9);
-      background: rgba(212, 175, 55, 0.3);
-    }
-
-    .btn-play-main {
-      width: 60px;
-      height: 60px;
-      background: var(--accent-burgundy);
-      border: 1px solid var(--accent-gold);
-      font-size: 22px;
-    }
-
-    /* Bottom Nav Liquid Glass */
-    .bottom-nav {
-      position: fixed;
-      bottom: 12px;
-      left: 15px;
-      right: 15px;
-      height: 65px;
-      background: rgba(20, 10, 15, 0.75);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border-radius: 35px;
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 200;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
-
-    .nav-btn {
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.5);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 18px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .nav-btn.active {
+      margin-bottom: 16px;
+      font-size: 0.85rem;
       color: var(--accent-gold);
-      transform: translateY(-2px);
+      font-weight: bold;
     }
 
-    .nav-btn span {
-      font-size: 10px;
-      margin-top: 3px;
+    .question-title {
+      font-size: 1.05rem;
       font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      color: var(--text-main);
+    }
+
+    /* خيارات الاستطلاع (Poll Style) */
+    .options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 14px 16px;
+      color: var(--text-main);
+      font-size: 0.92rem;
+      text-align: right;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .option-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent-gold);
+    }
+
+    .option-btn.correct {
+      background: rgba(46, 196, 182, 0.2) !important;
+      border-color: var(--correct-color) !important;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .option-btn.wrong {
+      background: rgba(230, 57, 70, 0.2) !important;
+      border-color: var(--wrong-color) !important;
+      color: #fff;
+    }
+
+    .option-btn.disabled {
+      pointer-events: none;
+      opacity: 0.75;
+    }
+
+    /* أزرار التنقل */
+    .actions-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 22px;
+    }
+
+    .action-btn {
+      background: var(--accent-gold);
+      color: #0b0d10;
+      border: none;
+      padding: 12px 26px;
+      border-radius: 14px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .action-btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
     }
   </style>
 </head>
 <body>
 
-  <!-- Background Audios (Embedded YouTube Direct Links Fallback) -->
-  <audio id="rainAudio" loop src="https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3"></audio>
-  <audio id="fireAudio" loop src="https://assets.mixkit.co/active_storage/sfx/2670/2670-preview.mp3"></audio>
-  <audio id="localAudio"></audio>
-
-  <!-- 📖 INTRO STORY ANIMATION OVERLAY -->
-  <div id="storyOverlay" class="story-overlay" style="display: none;">
-    <div class="story-card">
-      <div id="storyEmoji" class="floating-emoji">🎓</div>
-      <h3 id="storyTitle" style="color: #FFD700; margin: 0 0 10px 0;">2024 | بداية القصة 🍃🌱</h3>
-      <p id="storyBody" style="font-size: 13.5px; line-height: 1.6; opacity: 0.95; min-height: 120px;">
-        كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث بين الصفحات عن مصادر صحيحة، ملخصات مفيدة، وقناة تكون لي سنداً حقيقياً...
-      </p>
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
-        <button onclick="skipStory()" style="background: none; border: none; color: #AAA; font-size: 12px; cursor: pointer;">تخطي القصة</button>
-        <button onclick="nextStoryStep()" id="storyNextBtn" style="background: var(--accent-burgundy); color: #FFF; border: 1px solid #D4AF37; padding: 8px 18px; border-radius: 15px; font-weight: bold; cursor: pointer;">التالي ➔</button>
-      </div>
-    </div>
+  <!-- الهيدر -->
+  <div class="header-card">
+    <h2>🧩 قسم الكويزات التفاعلية</h2>
+    <p>اختبر معلوماتك، اجمع النقاط، واكتشف مستوى تحضيرك مع عائلة Focus & Force ✨</p>
   </div>
 
-  <!-- Header -->
-  <div class="header">
-    <div class="logo">FOCUS & FORCE</div>
-    <button class="theme-toggle" onclick="toggleTheme()">🌙 الوضع الداكن</button>
-  </div>
-
-  <!-- 1️⃣ TAB: HOME -->
-  <div id="tab-home" class="tab-content active">
-    <!-- Story Launch Card -->
-    <div class="card" onclick="openStoryModal()" style="cursor: pointer; background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(139, 0, 0, 0.2) 100%); border: 1px solid var(--accent-gold); text-align: center;">
-      <span style="font-size: 20px;">✨📖</span>
-      <strong style="color: var(--accent-gold); display: block; margin-top: 5px;">قصة ملهمة Léa - مؤسسة Focus & Force</strong>
-      <span style="font-size: 11px; opacity: 0.8;">اضغط لقراءة القصة التفاعلية والتأثيرات 🌸</span>
+  <!-- حاوية الكويز -->
+  <div class="quiz-card" id="quizCard">
+    <div class="quiz-header">
+      <span id="subjectBadge">تركيب البروتين 🧬</span>
+      <span id="questionProgress">السؤال 1 / 300</span>
     </div>
 
-    <div class="card card-hero">
-      <div style="font-size: 13px; opacity: 0.9;">⏰ إجمالي ساعات المذاكرة المسجلة</div>
-      <div style="font-size: 38px; font-weight: 800; margin: 8px 0; color: #FFD700;">0 ساعة</div>
-      <div style="font-size: 11px; color: #E0C080;">🎉 كل 1 ساعة مذاكرة = 50 نقطة إضافية</div>
+    <div class="question-title" id="questionText">
+      جاري تحميل السؤال...
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-      <div class="card">
-        <div style="font-size: 12px;">📚 الدروس المكتملة</div>
-        <div style="font-size: 24px; font-weight: bold; margin-top: 6px; color: var(--accent-gold);">0</div>
-      </div>
-      <div class="card">
-        <div style="font-size: 12px;">🧩 كويزات محلولة</div>
-        <div style="font-size: 24px; font-weight: bold; margin-top: 6px; color: var(--accent-gold);">0</div>
-      </div>
+    <div class="options-container" id="optionsContainer"></div>
+
+    <div class="actions-bar">
+      <button class="action-btn" id="nextBtn" onclick="nextQuestion()" disabled>السؤال التالي ➔</button>
     </div>
-
-    <div class="card">
-      <div style="font-size: 13px; margin-bottom: 10px;">📝 إضافة ساعات دراسة اليوم</div>
-      <div style="display: flex; gap: 8px;">
-        <input type="number" placeholder="عدد الساعات" style="flex: 1; padding: 10px; border-radius: 12px; border: 1px solid #444; background: rgba(0,0,0,0.3); color: var(--text-color); text-align: center;">
-        <button style="background: var(--accent-burgundy); color: #FFF; border: none; padding: 10px 18px; border-radius: 12px; font-weight: bold; cursor: pointer;">إضافة +</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 2️⃣ TAB: MEET -->
-  <div id="tab-meet" class="tab-content" style="text-align: center; padding-top: 30px;">
-    <div class="card">
-      <div style="font-size: 40px; margin-bottom: 10px;">🎥</div>
-      <h2 style="color: var(--accent-gold); margin: 0 0 10px 0;">غرف المذاكرة الجماعية</h2>
-      <p style="font-size: 13px; opacity: 0.8; line-height: 1.5;">انضم المباشر مع الزملاء على Google Meet لزيادة الإنتاجية والتركيز مع الفريق.</p>
-      <button style="background: var(--accent-burgundy); color: #FFF; border: 1px solid var(--accent-gold); padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 15px;">دخول الغرفة الصوتية 🚀</button>
-    </div>
-  </div>
-
-  <!-- 3️⃣ TAB: POMODORO -->
-  <div id="tab-pomodoro" class="tab-content">
-    <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 15px;">
-      <button onclick="setClockTheme('flip-pink')" style="padding: 6px 12px; border-radius: 12px; border: 1px solid #FF85A1; background: rgba(255,133,161,0.2); color: inherit; cursor: pointer; font-size: 11px;">🎀 Flip Pink</button>
-      <button onclick="setClockTheme('minimal-dark')" style="padding: 6px 12px; border-radius: 12px; border: 1px solid #C77DFF; background: rgba(10,17,40,0.5); color: inherit; cursor: pointer; font-size: 11px;">🖤 Dark Blue Nuit</button>
-      <button onclick="setClockTheme('sage-green')" style="padding: 6px 12px; border-radius: 12px; border: 1px solid #52796F; background: rgba(82,121,111,0.2); color: inherit; cursor: pointer; font-size: 11px;">🌿 Sage Green</button>
-    </div>
-
-    <!-- Timer Screen -->
-    <div id="timerDisplay" class="timer-display flip-pink">
-      <div style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.9;">FOCUS TIMER</div>
-      <div id="timeText" class="timer-text">25:00</div>
-      <div style="display: flex; justify-content: center; gap: 10px;">
-        <button id="startBtn" onclick="toggleTimer()" style="background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4); color: #FFF; padding: 8px 20px; border-radius: 12px; font-weight: bold; cursor: pointer;">بدء</button>
-        <button onclick="resetTimer()" style="background: transparent; border: 1px solid rgba(255,255,255,0.3); color: inherit; padding: 8px 15px; border-radius: 12px; cursor: pointer;">إعادة ضبط</button>
-      </div>
-    </div>
-
-    <!-- Ambient Sound Selection (Rain / Fire) -->
-    <div class="card">
-      <div style="font-size: 13px; font-weight: bold; margin-bottom: 12px; color: var(--accent-gold);">🎧 الخلفيات الصوتية للترددات والتركيز:</div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-        <button id="rainBtn" onclick="toggleSound('rain')" style="padding: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: var(--text-color); font-weight: 600; cursor: pointer;">
-          ⛈️ صوت المطر والبرق
-        </button>
-        <button id="fireBtn" onclick="toggleSound('fire')" style="padding: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: var(--text-color); font-weight: 600; cursor: pointer;">
-          🔥 صوت الحطب والنار
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 4️⃣ TAB: MUSIC (Apple Music Style) -->
-  <div id="tab-music" class="tab-content">
-    <div class="player-card">
-      <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
-        <div style="width: 55px; height: 55px; border-radius: 16px; background: linear-gradient(135deg, #8B0000, #D4AF37); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-          🎵
-        </div>
-        <div>
-          <div id="currentTrackTitle" style="font-weight: bold; font-size: 14px;">لا يوجد مقطع قيد التشغيل</div>
-          <div style="font-size: 11px; opacity: 0.6; margin-top: 2px;">Focus & Force Music Player</div>
-        </div>
-      </div>
-
-      <!-- Import Button -->
-      <label style="display: block; text-align: center; padding: 12px; border-radius: 14px; border: 1px dashed var(--accent-gold); cursor: pointer; background: rgba(212, 175, 55, 0.08); margin-bottom: 15px; font-size: 12px; font-weight: bold;">
-        📂 استيراد صوتيات من جوالك / البيسي
-        <input type="file" id="audioInput" accept="audio/*" multiple style="display: none;" onchange="handleAudioUpload(event)">
-      </label>
-
-      <!-- Apple Music Controls -->
-      <div class="player-controls">
-        <button class="glass-btn" onclick="toggleRepeat()" id="repeatBtn" title="إعادة">🔁</button>
-        <button class="glass-btn" onclick="prevTrack()">⏮️</button>
-        <button class="glass-btn btn-play-main" onclick="togglePlayPause()" id="mainPlayBtn">▶️</button>
-        <button class="glass-btn" onclick="nextTrack()">⏭️</button>
-        <button class="glass-btn" onclick="changeSpeed()" id="speedBtn" style="font-size: 11px; font-weight: bold;">1x</button>
-      </div>
-
-      <div style="font-size: 12px; opacity: 0.7; margin: 20px 0 10px 0;">القائمة الصوتية الحالية:</div>
-      <div id="playlistContainer"></div>
-    </div>
-  </div>
-
-  <!-- 5️⃣ TAB: QUIZ -->
-  <div id="tab-quiz" class="tab-content">
-    <div id="quizMainView">
-      <div class="card" style="text-align: center;">
-        <h2 style="color: var(--accent-gold); margin: 0 0 10px 0;">🧩 قسم الكويزات التفاعلية</h2>
-        <p style="font-size: 13px; opacity: 0.8; line-height: 1.5;">اختبر معلوماتك، اجمع النقاط، واكتشف مستوى تحضيرك مع عائلة Focus & Force ✨</p>
-      </div>
-      <div id="quizListContainer"></div>
-    </div>
-    <div id="quizActiveView" style="display: none;"></div>
-  </div>
-
-  <!-- 💎 LIQUID GLASS BOTTOM NAVIGATION -->
-  <div class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('home', this)">
-      🏠 <span>الرئيسية</span>
-    </button>
-    <button class="nav-btn" onclick="switchTab('meet', this)">
-      🎥 <span>Meet</span>
-    </button>
-    <button class="nav-btn" onclick="switchTab('pomodoro', this)">
-      ⏳ <span>بومودورو</span>
-    </button>
-    <button class="nav-btn" onclick="switchTab('music', this)">
-      🎵 <span>استماع</span>
-    </button>
-    <button class="nav-btn" onclick="switchTab('quiz', this)">
-      🧩 <span>كويزات</span>
-    </button>
   </div>
 
   <script>
-    if (window.Telegram && window.Telegram.WebApp) {
-      window.Telegram.WebApp.ready();
-      window.Telegram.WebApp.expand();
-    }
+    // البيانات الخام المحولة تلقائياً إلى خيارات استطلاع (1 صحيحة + 2 خاطئة)
+    const rawData = [
+      // مجموعة 1: تركيب البروتين
+      { q: "أين يتم تركيب البروتين في الخلية حقيقية النواة؟", a: "في الهيولة", w1: "في النواة", w2: "في جهاز غولجي", cat: "تركيب البروتين 🧬" },
+      { q: "ما هي العضية المتخصصة في بناء السلسلة الببتيدية؟", a: "الريبوزوم (الشبكة المحببة)", w1: "الجسيم المركزي", w2: "المايتوكندريا", cat: "تركيب البروتين 🧬" },
+      { q: "ما هي العمارة الأساسية لبناء البروتينات؟", a: "الأحماض الأمينية", w1: "الأحماض الدهنية", w2: "السكريات الأحادية", cat: "تركيب البروتين 🧬" },
+      { q: "ما هو جزيء النقل المحمول للمعلومة الوراثية من النواة للهيولة؟", a: "الـ ARNm", w1: "الـ ARNt", w2: "الـ ARNr", cat: "تركيب البروتين 🧬" },
+      { q: "ما اسم الإنزيم المسؤول عن ظاهرة الاستنساخ؟", a: "إنزيم ARN بوليميراز", w1: "إنزيم ADN بوليميراز", w2: "إنزيم الليجاز", cat: "تركيب البروتين 🧬" },
+      { q: "ما هي المراحل الأساسية لظاهرة الاستنساخ؟", a: "الانطلاق، الاستطالة، والنهاية", w1: "التنشيط، التثبيت، والقطع", w2: "التمهيدية، الاستوائية، والانفصالية", cat: "تركيب البروتين 🧬" },
+      { q: "ما السلسلة التي يعتمد عليها الإنزيم في النسخ؟", a: "السلسلة المستنسخة (3' إلى 5')", w1: "السلسلة غير المستنسخة", w2: "السلسلتان معاً", cat: "تركيب البروتين 🧬" },
+      { q: "ما القاعدة الإزوتية المميزة للـ ARN مقارنة بالـ ADN؟", a: "اليوراسيل (U)", w1: "الثيمين (T)", w2: "الساميتوزين (C)", cat: "تركيب البروتين 🧬" },
+      { q: "ما هو السكر الخماسي في الـ ARN؟", a: "سكر الريبوز (C5H10O5)", w1: "سكر الريبوز منقوص الأكسجين", w2: "سكر الجلوكوز", cat: "تركيب البروتين 🧬" },
+      { q: "ما هو السكر الخماسي في الـ ADN؟", a: "سكر الريبوز منقوص الأكسجين (C5H10O4)", w1: "سكر الريبوز العادي", w2: "سكر الفركتوز", cat: "تركيب البروتين 🧬" },
+      { q: "ما هي الشفرة الوراثية؟", a: "نظام التشفير يربط النيوكليوتيدات بالأحماض الأمينية", w1: "تسلسل الأحماض الدهنية في الغشاء", w2: "عدد الروابط الهيدروجينية في الـ ADN", cat: "تركيب البروتين 🧬" },
+      { q: "ما هي الرامزة (Codon)؟", a: "ثلاثية من النيوكليوتيدات المتتالية على ARNm", w1: "ثنائية نيوكليوتيدية على الـ ARNt", w2: "حمض أميني مرتبط بإنزيم", cat: "تركيب البروتين 🧬" },
+      { q: "كم عدد الرامزات الممكنة في الشفرة الوراثية؟", a: "64 رامزة", w1: "20 رامزة", w2: "46 رامزة", cat: "تركيب البروتين 🧬" },
+      { q: "كم عدد الرامزات المشفرة للأحماض الأمينية؟", a: "61 رامزة", w1: "64 رامزة", w2: "20 رامزة", cat: "تركيب البروتين 🧬" },
+      { q: "ما هي رامزة الانطلاق الشهيرة وما الحمض الذي تشفره؟", a: "AUG وتوافق حمض الميثيونين (Met)", w1: "UAA وتوافق حمض الفالين", w2: "UAG وتوافق حمض الليسين", cat: "تركيب البروتين 🧬" },
+      { q: "ما هي رامزات التوقف (Stop Codons) الثلاث؟", a: "UAA ، UAG ، UGA", w1: "AUG ، UAA ، GGG", w2: "CCC ، UAA ، UGA", cat: "تركيب البروتين 🧬" },
+      { q: "ما معنى أن الشفرة الوراثية 'مترادفة'؟", a: "حمض أميني واحد تشفره عدة رامزات", w1: "كل رامزة تشفر عدة أحماض أمينية", w2: "تتغير الشفرة من خلية لأخرى", cat: "تركيب البروتين 🧬" },
+      { q: "ما معنى أن الشفرة الوراثية 'شاملة'؟", a: "محددة ونفسها تقريباً في معظم الكائنات", w1: "توجد فقط في الإنسان والحيوان", w2: "تتكون من جميع القواعد النيتروجينية", cat: "تركيب البروتين 🧬" },
+      { q: "ما هي المكونات الدقيقة للريبوزوم؟", a: "تحت وحدة صغرى وتحت وحدة كبرى", w1: "غشاء مضاعف وحشوة", w2: "سلسلة ببتيدية وجزيء غلوكوز", cat: "تركيب البروتين 🧬" },
+      { q: "ما هما موقعا التثبيت الأساسيان في تحت الوحدة الكبرى؟", a: "الموقع P والموقع A", w1: "الموقع X والموقع Y", w2: "الموقع 3' والموقع 5'", cat: "تركيب البروتين 🧬" },
 
-    // --- Story Data & Animation ---
-    const storySteps = [
-      {
-        emoji: "🍃",
-        title: "2024 | بداية القصة 🌱",
-        body: "كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث بين الصفحات عن مصادر صحيحة، ملخصات مفيدة، وقناة تكون لي سنداً حقيقياً يربك الشتات ويمنحني الأمل. لكنني لم أجد ذلك المكان... وفي لحظة صدق تساءلت: 'علاش ما نصنعش أنا المكان اللي تمنيت نلقاه؟' ✨"
-      },
-      {
-        emoji: "🤍",
-        title: "2024 | حلم صغير... وطموح لا يحدّه شيء",
-        body: "بدأت القناة بمجهودي الفردي وبكثير من الحب. كل معلومة، كل ملخص... كان وراءها وقت وتعب ورغبة صادقة في مساعدة طالب آخر يعيش نفس شعوري. ولد في داخلي حلم: أن تصصبح Focus & Force من أكبر المنصات التعليمية."
-      },
-      {
-        emoji: "❤️‍🔥",
-        title: "2025 | الشرارة الحقيقية 🔥😍",
-        body: "عندما قررت خوض تجربة البكالوريا للمرة الثانية، وسط كل الضغط والخوف... لم تكن القناة مجرد منصة، بل كانت المتنفس الحقيقي لي والحافز لأكمل الطريق. كبرنا مع بعضنا وشاركتكم كل ما أملك بكل حب وصمود 🤲🏻💗."
-      },
-      {
-        emoji: "👥",
-        title: "2026 | الحلم يكبر... والتغيير يتجسّد ✨",
-        body: "سنوات الصبر جعلت Focus & Force تتحول إلى مساحة موثوقة تجمع الجميع. انضم إليّ مشرفون رائعون وشراكات نجاح مع قنوات تعليمية كبيرة. أدركت أن الحلم لم يعد فردياً... بل أصبحنا عائلة واحدة 🤍."
-      },
-      {
-        emoji: "🍓",
-        title: "2027 | عهد جديد 💗 | Léa 🩵",
-        body: "Léa 🩵 التي ترونها اليوم جاءت بعد سنوات من المحاولة والصمود والإيمان المطلق بالحلم. Focus & Force هي قطعة حقيقية من قلبي 💗💗 ورسالة نعيشها سوياً لنقود هذه العائلة دائماً نحو القمة 🚀."
-      }
+      // مجموعة 2: العلاقة بين بنية ووظيفة البروتين
+      { q: "ما هي الصيغة العامة للحمض الأميني؟", a: "R-CH(NH2)-COOH", w1: "R-CO-NH2", w2: "R-CH2-OH", cat: "بنية ووظيفة البروتين 🧪" },
+      { q: "بماذا يختلف حمض أميني عن آخر؟", a: "بالجذر الكيميائي السلسلي الجانبي (R)", w1: "بالوظيفة الكربوكسيلية", w2: "بالوظيفة الأمينية", cat: "بنية ووظيفة البروتين 🧪" },
+      { q: "كم عدد الأحماض الأمينية القياسية التي تدخل في تركيب البروتينات؟", a: "20 حمضاً أمينياً", w1: "64 حمضاً", w2: "12 حمضاً", cat: "بنية ووظيفة البروتين 🧪" },
+      { q: "ما هي الخاصية الأمفوتيرية (الحمقلية) للأحماض الأمينية؟", a: "السلوك كحمض في الوسط القاعدي وكقاعدة في الحامضي", w1: "الذوبان في الدهون فقط", w2: "تغيير ألوان الكواشف بشكل دائمل", cat: "بنية ووظيفة البروتين 🧪" },
+      { q: "ما هي نقطة التكهرب التعادلي (pHi) للحمض الأميني؟", a: "قيمة pH الوسط التي تكون عندها محصلة الشحنة صفر", w1: "درجة غليان الحمض الأميني", w2: "أقصى شحنة موجبة يتحملها الحمض", cat: "بنية ووظيفة البروتين 🧪" },
+      { q: "ما هي مستويات البنية الفراغية للبروتينات؟", a: "أولية، ثانوية، ثالثية، ورابعية", w1: "خطية، دائريّة، ومكعبة", w2: "أحادية وثنائية فقط", cat: "بنية ووظيفة البروتين 🧪" },
+      { q: "بين أي الأحماض الأمينية تنشأ الرابطة ثنائية الكبريت؟", a: "بين جذور حمض السستئين (Cysteine)", w1: "بين جذور الجليسين", w2: "بين الألانين والفالين", cat: "بنية ووظيفة البروتين 🧪" },
+
+      // مجموعة 3: النشاط الإنزيمي
+      { q: "ما هو الإنزيم؟", a: "وسيط حيوي بروتيني يسرع التفاعلات دون أن يُستهلك", w1: "مادة سكرية توفر الطاقة للخلية", w2: "دهن غشائي ينقل الشوارئ", cat: "النشاط الإنزيمي ⚡" },
+      { q: "ما معنى 'التخصص الوظيفي المزدوج' للإنزيم؟", a: "نوعي لركيزة معينة ولنوع التفاعل", w1: "يعمل في الوسط الحامضي والقاعدي معاً", w2: "يبني ويهدم في نفس اللحظة", cat: "النشاط الإنزيمي ⚡" },
+      { q: "ما هو الموقع الفعال للإنزيم؟", a: "تجويف يتكامل مع الركيزة ويرتبط بها للتفاعل", w1: "الغشاء الخارجي للإنزيم", w2: "الذيل الهيدروكربوني للبروتين", cat: "النشاط الإنزيمي ⚡" },
+      { q: "ما هي درجة الحرارة المثلى للإنزيم في جسم الإنسان؟", a: "37°C تقريباً", w1: "0°C", w2: "100°C", cat: "النشاط الإنزيمي ⚡" },
+
+      // مجموعة 4: المناعة والدفاع عن الذات
+      { q: "ما هي الجزيئات البروتينية الأساسية المحددة للذات؟", a: "معقد التوافق النسيجي الرئيسي (CMH / HLA)", w1: "الهيموجلوبين", w2: "الأستيل كولين", cat: "المناعة والدفاع عن الذات 🛡️" },
+      { q: "ما هي السلاسل المكونة للجسم المضاد (IgG)؟", a: "سلسلتان ثقيلتان (H) وسلسلتان خفيفتان (L)", w1: "4 سلاسل ثقيلة متماثلة", w2: "سلسلة واحدة حلزونية", cat: "المناعة والدفاع عن الذات 🛡️" },
+      { q: "ما هي الخلايا اللمفاوية المسؤولة عن المناعة الخلطية؟", a: "الخلايا اللمفاوية B (الـ LB)", w1: "الخلايا اللمفاوية T (الـ LT)", w2: "الكريات الحمراء", cat: "المناعة والدفاع عن الذات 🛡️" },
+      { q: "ما الخلية المستهدفة الرئيسية لفيروس السيدا (VIH)؟", a: "الخلايا الحاملة لـ CD4 (كالـ LT4 والبالعات)", w1: "الكريات الحمراء", w2: "خلايا العضلات", cat: "المناعة والدفاع عن الذات 🛡️" },
+
+      // مجموعة 5: الاتصال العصبي
+      { q: "ما هو كمون الراحة للعصبون؟", a: "-70mV تقريباً", w1: "+30mV", w2: "0mV", cat: "الاتصال العصبي 🧠" },
+      { q: "ما هو المبلغ العصبي التنبيهي الشهير؟", a: "الأستيل كولين (Acetylcholine)", w1: "حمض GABA", w2: "البيرفورين", cat: "الاتصال العصبي 🧠" },
+      { q: "ما هو المبلغ العصبي التثبيطي الشهير؟", a: "حمض غاما أمينوبوتيريك (GABA)", w1: "الأستيل كولين", w2: "الأدرينالين", cat: "الاتصال العصبي 🧠" },
+
+      // مجموعة 6: التركيب الضوئي والتنفس
+      { q: "ما هي العضية المتخصصة في ظاهرة التركيب الضوئي؟", a: "الصانعة الخضراء (Chloroplast)", w1: "الميتوكندريا", w2: "جهاز غولجي", cat: "التركيب الضوئي والتنفس 🌿" },
+      { q: "أين تحدث المرحلة الكيميوضوئية؟", a: "في غشاء التيلاكويد", w1: "في الحشوة (Stroma)", w2: "في الهيولة الشفافة", cat: "التركيب الضوئي والتنفس 🌿" },
+      { q: "ما هي العضية الأساسية لعملية التنفس الخلوي؟", a: "الميتوكندريا (Mitochondria)", w1: "الصانعة الخضراء", w2: "الريبوزوم", cat: "التركيب الضوئي والتنفس 🌿" },
+      { q: "ما الحصيلة الطاقوية الإجمالية لأكسدة جلوكوز واحد تنفسياً؟", a: "38 جزيء ATP (أو 36)", w1: "2 جزيء ATP", w2: "100 جزيء ATP", cat: "التركيب الضوئي والتنفس 🌿" }
     ];
 
-    let currentStoryIdx = 0;
+    let currentIndex = 0;
+    let answered = false;
 
-    function openStoryModal() {
-      currentStoryIdx = 0;
-      updateStoryUI();
-      document.getElementById('storyOverlay').style.display = 'flex';
+    // خلط ترتيب الخيارات لتصبح عشوائية في كل مرة
+    function shuffle(array) {
+      return array.sort(() => Math.random() - 0.5);
     }
 
-    function updateStoryUI() {
-      const data = storySteps[currentStoryIdx];
-      document.getElementById('storyEmoji').innerText = data.emoji;
-      document.getElementById('storyTitle').innerText = data.title;
-      document.getElementById('storyBody').innerText = data.body;
-      document.getElementById('storyNextBtn').innerText = (currentStoryIdx === storySteps.length - 1) ? "إنهاء 🌸" : "التالي ➔";
-    }
+    function renderQuestion() {
+      const item = rawData[currentIndex];
+      answered = false;
 
-    function nextStoryStep() {
-      if (currentStoryIdx < storySteps.length - 1) {
-        currentStoryIdx++;
-        updateStoryUI();
-      } else {
-        skipStory();
-      }
-    }
+      document.getElementById("subjectBadge").innerText = item.cat;
+      document.getElementById("questionProgress").innerText = `السؤال ${currentIndex + 1} / ${rawData.length}`;
+      document.getElementById("questionText").innerText = item.q;
+      document.getElementById("nextBtn").disabled = true;
 
-    function skipStory() {
-      document.getElementById('storyOverlay').style.display = 'none';
-    }
+      const container = document.getElementById("optionsContainer");
+      container.innerHTML = "";
 
-    // --- Navigation ---
-    function switchTab(tabId, btn) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-      document.getElementById('tab-' + tabId).classList.add('active');
-      btn.classList.add('active');
-    }
+      // تجهيز الخيارات (واحدة صح و 2 خطأ)
+      const options = shuffle([
+        { text: item.a, correct: true },
+        { text: item.w1, correct: false },
+        { text: item.w2, correct: false }
+      ]);
 
-    // --- Light/Dark Theme ---
-    let isDark = true;
-    function toggleTheme() {
-      isDark = !isDark;
-      document.body.classList.toggle('light-mode', !isDark);
-      document.querySelector('.theme-toggle').innerText = isDark ? '🌙 الوضع الداكن' : '☀️ الوضع الفاتح';
-    }
-
-    // --- Pomodoro Clock ---
-    let pomoSeconds = 25 * 60;
-    let timerInterval = null;
-    let isRunning = false;
-
-    function updateTimerDisplay() {
-      const m = Math.floor(pomoSeconds / 60).toString().padStart(2, '0');
-      const s = (pomoSeconds % 60).toString().padStart(2, '0');
-      document.getElementById('timeText').innerText = `${m}:${s}`;
-    }
-
-    function toggleTimer() {
-      const btn = document.getElementById('startBtn');
-      if (isRunning) {
-        clearInterval(timerInterval);
-        btn.innerText = 'بدء';
-      } else {
-        timerInterval = setInterval(() => {
-          if (pomoSeconds > 0) {
-            pomoSeconds--;
-            updateTimerDisplay();
-          } else {
-            clearInterval(timerInterval);
-            alert('⏱️ انتهت الجلسة!');
-          }
-        }, 1000);
-        btn.innerText = 'إيقاف';
-      }
-      isRunning = !isRunning;
-    }
-
-    function resetTimer() {
-      clearInterval(timerInterval);
-      isRunning = false;
-      pomoSeconds = 25 * 60;
-      updateTimerDisplay();
-      document.getElementById('startBtn').innerText = 'بدء';
-    }
-
-    function setClockTheme(themeClass) {
-      document.getElementById('timerDisplay').className = 'timer-display ' + themeClass;
-    }
-
-    // --- Ambient Sounds (Rain & Fire) ---
-    let activeSound = null;
-    function toggleSound(type) {
-      const rain = document.getElementById('rainAudio');
-      const fire = document.getElementById('fireAudio');
-
-      if (type === 'rain') {
-        if (activeSound === 'rain') {
-          rain.pause(); activeSound = null;
-          document.getElementById('rainBtn').style.background = 'rgba(255,255,255,0.05)';
-        } else {
-          fire.pause(); rain.play(); activeSound = 'rain';
-          document.getElementById('rainBtn').style.background = 'var(--accent-burgundy)';
-          document.getElementById('fireBtn').style.background = 'rgba(255,255,255,0.05)';
-        }
-      } else if (type === 'fire') {
-        if (activeSound === 'fire') {
-          fire.pause(); activeSound = null;
-          document.getElementById('fireBtn').style.background = 'rgba(255,255,255,0.05)';
-        } else {
-          rain.pause(); fire.play(); activeSound = 'fire';
-          document.getElementById('fireBtn').style.background = 'var(--accent-burgundy)';
-          document.getElementById('rainBtn').style.background = 'rgba(255,255,255,0.05)';
-        }
-      }
-    }
-
-    // --- Music Player (Apple Music Logic) ---
-    let playlist = [];
-    let currentIdx = null;
-    let isRepeating = false;
-    const speeds = [1, 1.25, 1.5, 2];
-    let speedIdx = 0;
-
-    function handleAudioUpload(e) {
-      const files = Array.from(e.target.files);
-      files.forEach(f => playlist.push({ name: f.name, url: URL.createObjectURL(f) }));
-      renderPlaylist();
-      if (currentIdx === null && playlist.length > 0) playTrack(0);
-    }
-
-    function renderPlaylist() {
-      const container = document.getElementById('playlistContainer');
-      container.innerHTML = '';
-      playlist.forEach((track, i) => {
-        const div = document.createElement('div');
-        div.style.cssText = `padding:10px 12px; border-radius:12px; margin-bottom:6px; cursor:pointer; background:${currentIdx === i ? 'var(--accent-burgundy)' : 'rgba(255,255,255,0.05)'}; font-size:12px; display:flex; justify-content:space-between;`;
-        div.innerHTML = `<span>🎧 ${track.name}</span><span>${currentIdx === i ? '▶️' : ''}</span>`;
-        div.onclick = () => playTrack(i);
-        container.appendChild(div);
+      options.forEach(opt => {
+        const btn = document.createElement("div");
+        btn.className = "option-btn";
+        btn.innerHTML = `<span>${opt.text}</span><span class="icon"></span>`;
+        btn.onclick = () => handleAnswer(btn, opt.correct);
+        container.appendChild(btn);
       });
     }
 
-    function playTrack(idx) {
-      currentIdx = idx;
-      const audio = document.getElementById('localAudio');
-      audio.src = playlist[idx].url;
-      audio.play();
-      document.getElementById('currentTrackTitle').innerText = playlist[idx].name;
-      document.getElementById('mainPlayBtn').innerText = '⏸️';
-      renderPlaylist();
+    function handleAnswer(selectedBtn, isCorrect) {
+      if (answered) return;
+      answered = true;
+
+      const allBtns = document.querySelectorAll(".option-btn");
+      allBtns.forEach(btn => btn.classList.add("disabled"));
+
+      if (isCorrect) {
+        selectedBtn.classList.add("correct");
+        selectedBtn.querySelector(".icon").innerText = "✓";
+      } else {
+        selectedBtn.classList.add("wrong");
+        selectedBtn.querySelector(".icon").innerText = "✗";
+
+        // إبراز الإجابة الصحيحة للتلميذ
+        allBtns.forEach(btn => {
+          const item = rawData[currentIndex];
+          if (btn.innerText.includes(item.a)) {
+            btn.classList.add("correct");
+            btn.querySelector(".icon").innerText = "✓";
+          }
+        });
+      }
+
+      document.getElementById("nextBtn").disabled = false;
     }
 
-    function togglePlayPause() {
-      const audio = document.getElementById('localAudio');
-      if (!audio.src) return;
-      if (audio.paused) {
-        audio.play();
-        document.getElementById('mainPlayBtn').innerText = '⏸️';
+    function nextQuestion() {
+      if (currentIndex < rawData.length - 1) {
+        currentIndex++;
+        renderQuestion();
       } else {
-        audio.pause();
-        document.getElementById('mainPlayBtn').innerText = '▶️';
+        alert("🎉 ممتاز يا بطل! أنهيت الكويزات المتوفرة بنجاح.");
       }
     }
 
-    function nextTrack() {
-      if (playlist.length === 0) return;
-      currentIdx = (currentIdx + 1) % playlist.length;
-      playTrack(currentIdx);
-    }
-
-    function prevTrack() {
-      if (playlist.length === 0) return;
-      currentIdx = (currentIdx - 1 + playlist.length) % playlist.length;
-      playTrack(currentIdx);
-    }
-
-    function toggleRepeat() {
-      isRepeating = !isRepeating;
-      document.getElementById('localAudio').loop = isRepeating;
-      document.getElementById('repeatBtn').style.background = isRepeating ? 'var(--accent-gold)' : 'rgba(255,255,255,0.08)';
-    }
-
-    function changeSpeed() {
-      speedIdx = (speedIdx + 1) % speeds.length;
-      const rate = speeds[speedIdx];
-      document.getElementById('localAudio').playbackRate = rate;
-      document.getElementById('speedBtn').innerText = rate + 'x';
-    }
+    // بدء التشغيل
+    window.onload = renderQuestion;
   </script>
-
-  <!-- استدعاء ملف الكويزات الخارجية -->
-  <script src="quizzes.js"></script>
 </body>
 </html>
