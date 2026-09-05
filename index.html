@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Focus & Force</title>
+  <title>Focus & Force - Mini App</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
       --bg-color: #0F0F12;
       --text-color: #FFFFFF;
-      --card-bg: rgba(30, 20, 25, 0.75);
+      --card-bg: rgba(25, 15, 20, 0.65);
+      --glass-border: rgba(212, 175, 55, 0.25);
       --accent-burgundy: #8B0000;
       --accent-gold: #D4AF37;
     }
@@ -17,191 +18,270 @@
     body.light-mode {
       --bg-color: #F5F2EB;
       --text-color: #2C2A29;
-      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-bg: rgba(255, 255, 255, 0.75);
+      --glass-border: rgba(139, 0, 0, 0.2);
     }
 
     body {
       background-color: var(--bg-color);
       color: var(--text-color);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       margin: 0;
       padding: 0;
-      padding-bottom: 90px;
+      padding-bottom: 95px;
       transition: background-color 0.3s, color 0.3s;
+      user-select: none;
     }
 
-    /* Header */
+    /* Header Liquid Glass */
     .header {
-      padding: 15px 20px;
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: var(--card-bg);
-      backdrop-filter: blur(10px);
+      background: rgba(15, 15, 18, 0.7);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
       position: sticky;
       top: 0;
-      z-index: 10;
-      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      z-index: 100;
+      border-bottom: 1px solid var(--glass-border);
     }
 
     .logo {
-      font-weight: bold;
+      font-weight: 800;
       font-size: 18px;
       color: var(--accent-burgundy);
+      letter-spacing: 1px;
     }
 
     .theme-toggle {
-      padding: 8px 14px;
+      padding: 6px 14px;
       border-radius: 20px;
       border: 1px solid var(--accent-gold);
-      background: rgba(139, 0, 0, 0.1);
+      background: rgba(212, 175, 55, 0.1);
       color: var(--text-color);
       cursor: pointer;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
     }
 
-    /* Tab Containers */
+    /* Container Controls */
     .tab-content {
       display: none;
-      padding: 20px;
+      padding: 16px;
+      animation: fadeIn 0.3s ease-in-out;
     }
-    .tab-content.active {
-      display: block;
+    .tab-content.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Glass Cards */
     .card {
       background: var(--card-bg);
-      backdrop-filter: blur(12px);
-      border-radius: 16px;
-      padding: 20px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 18px;
       margin-bottom: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
     }
 
     .card-hero {
-      background: linear-gradient(135deg, #4A0000 0%, #1A0000 100%);
+      background: linear-gradient(135deg, rgba(139, 0, 0, 0.85) 0%, rgba(40, 0, 0, 0.95) 100%);
       color: #FFF;
       border: 1px solid rgba(212, 175, 55, 0.4);
     }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
+    /* Story Overlay Modal */
+    .story-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(10, 5, 8, 0.92);
+      backdrop-filter: blur(20px);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 25px;
+      text-align: center;
     }
 
-    /* Timer Themes */
+    .story-card {
+      background: rgba(45, 15, 25, 0.7);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 24px;
+      padding: 25px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 15px rgba(139,0,0,0.4); }
+      to { box-shadow: 0 0 30px rgba(212,175,55,0.5); }
+    }
+
+    .floating-emoji {
+      font-size: 50px;
+      margin-bottom: 15px;
+      animation: floatAnim 2.5s infinite ease-in-out;
+    }
+
+    @keyframes floatAnim {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(5deg); }
+    }
+
+    /* Timer Styles */
     .timer-display {
-      padding: 30px;
-      border-radius: 20px;
+      padding: 35px 20px;
+      border-radius: 24px;
       text-align: center;
       margin-bottom: 20px;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
-    .timer-display.flip-pink { background-color: #FAD02C; color: #222; }
-    .timer-display.minimal-dark { background-color: #000; color: #FFF; border: 1px solid #333; }
-    .timer-display.sage-green { background-color: #83A385; color: #FFF; }
+    /* Flip Pink: خلفية وردية وأعداد بيضاء */
+    .timer-display.flip-pink {
+      background: linear-gradient(135deg, #FF85A1 0%, #FF2E93 100%);
+      color: #FFFFFF;
+    }
+    /* Dark Minimal (Blue Nuit): أزرق ليلي وأرقام بنفسجية */
+    .timer-display.minimal-dark {
+      background: #0A1128;
+      color: #C77DFF;
+      border: 1px solid rgba(199, 125, 255, 0.3);
+    }
+    .timer-display.sage-green {
+      background: #52796F;
+      color: #CAD2C5;
+    }
 
     .timer-text {
-      font-size: 52px;
-      font-weight: bold;
-      font-family: monospace;
-      margin: 10px 0;
+      font-size: 58px;
+      font-weight: 900;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 12px 0;
+      letter-spacing: 2px;
     }
 
-    /* Buttons & Inputs */
-    button {
-      cursor: pointer;
-      font-family: inherit;
+    /* Apple Music Player Custom Style */
+    .player-card {
+      background: rgba(30, 15, 22, 0.75);
+      border-radius: 24px;
+      padding: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      backdrop-filter: blur(20px);
     }
 
-    .btn-main {
-      background-color: var(--accent-burgundy);
-      color: #FFF;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: bold;
-    }
-
-    .btn-theme {
-      padding: 6px 12px;
-      border-radius: 12px;
-      border: 1px solid #555;
-      background: rgba(255,255,255,0.1);
-      color: inherit;
-      font-size: 11px;
-    }
-
-    input[type="number"] {
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #444;
-      background: rgba(0, 0, 0, 0.2);
-      color: var(--text-color);
-      text-align: center;
-    }
-
-    /* Bottom Nav (Liquid Glass) */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 70px;
-      background: var(--card-bg);
-      backdrop-filter: blur(15px);
-      border-top: 1px solid rgba(212, 175, 55, 0.3);
+    .player-controls {
       display: flex;
       justify-content: space-around;
       align-items: center;
-      z-index: 100;
+      margin-top: 18px;
+    }
+
+    .glass-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #FFF;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .glass-btn:active {
+      transform: scale(0.9);
+      background: rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-play-main {
+      width: 60px;
+      height: 60px;
+      background: var(--accent-burgundy);
+      border: 1px solid var(--accent-gold);
+      font-size: 22px;
+    }
+
+    /* Bottom Nav Liquid Glass */
+    .bottom-nav {
+      position: fixed;
+      bottom: 12px;
+      left: 15px;
+      right: 15px;
+      height: 65px;
+      background: rgba(20, 10, 15, 0.75);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-radius: 35px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 200;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
     .nav-btn {
       background: none;
       border: none;
-      color: #888;
+      color: rgba(255, 255, 255, 0.5);
       display: flex;
       flex-direction: column;
       align-items: center;
       font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s;
     }
 
     .nav-btn.active {
       color: var(--accent-gold);
-      font-weight: bold;
+      transform: translateY(-2px);
     }
 
     .nav-btn span {
       font-size: 10px;
-      margin-top: 2px;
-    }
-
-    /* Playlist Style */
-    .track-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 5px;
-      cursor: pointer;
-      background: rgba(0,0,0,0.1);
-    }
-    .track-item.active {
-      background: var(--accent-burgundy);
-      color: #FFF;
+      margin-top: 3px;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
 
-  <!-- Audio Elements -->
+  <!-- Background Audios (Embedded YouTube Direct Links Fallback) -->
   <audio id="rainAudio" loop src="https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3"></audio>
+  <audio id="fireAudio" loop src="https://assets.mixkit.co/active_storage/sfx/2670/2670-preview.mp3"></audio>
   <audio id="localAudio"></audio>
+
+  <!-- 📖 INTRO STORY ANIMATION OVERLAY -->
+  <div id="storyOverlay" class="story-overlay" style="display: none;">
+    <div class="story-card">
+      <div id="storyEmoji" class="floating-emoji">🎓</div>
+      <h3 id="storyTitle" style="color: #FFD700; margin: 0 0 10px 0;">2024 | بداية القصة 🍃🌱</h3>
+      <p id="storyBody" style="font-size: 13.5px; line-height: 1.6; opacity: 0.95; min-height: 120px;">
+        كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث بين الصفحات عن مصادر صحيحة، ملخصات مفيدة، وقناة تكون لي سنداً حقيقياً...
+      </p>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+        <button onclick="skipStory()" style="background: none; border: none; color: #AAA; font-size: 12px; cursor: pointer;">تخطي القصة</button>
+        <button onclick="nextStoryStep()" id="storyNextBtn" style="background: var(--accent-burgundy); color: #FFF; border: 1px solid #D4AF37; padding: 8px 18px; border-radius: 15px; font-weight: bold; cursor: pointer;">التالي ➔</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Header -->
   <div class="header">
@@ -211,101 +291,124 @@
 
   <!-- 1️⃣ TAB: HOME -->
   <div id="tab-home" class="tab-content active">
-    <div class="card card-hero">
-      <div style="font-size: 14px; opacity: 0.9;">⏰ إجمالي ساعات المذاكرة المسجلة</div>
-      <div style="font-size: 36px; font-weight: bold; margin: 10px 0; color: #FFD700;">0 ساعة</div>
-      <div style="font-size: 12px; color: #E0C080;">🎉 كل 1 ساعة مذاكرة = 50 نقطة إضافية</div>
+    <!-- Story Launch Card -->
+    <div class="card" onclick="openStoryModal()" style="cursor: pointer; background: linear-gradient(135deg, rgba(212, 175, 55, 0.15) 0%, rgba(139, 0, 0, 0.2) 100%); border: 1px solid var(--accent-gold); text-align: center;">
+      <span style="font-size: 20px;">✨📖</span>
+      <strong style="color: var(--accent-gold); display: block; margin-top: 5px;">قصة ملهمة Léa - مؤسسة Focus & Force</strong>
+      <span style="font-size: 11px; opacity: 0.8;">اضغط لقراءة القصة التفاعلية والتأثيرات 🌸</span>
     </div>
 
-    <div class="grid-2">
+    <div class="card card-hero">
+      <div style="font-size: 13px; opacity: 0.9;">⏰ إجمالي ساعات المذاكرة المسجلة</div>
+      <div style="font-size: 38px; font-weight: 800; margin: 8px 0; color: #FFD700;">0 ساعة</div>
+      <div style="font-size: 11px; color: #E0C080;">🎉 كل 1 ساعة مذاكرة = 50 نقطة إضافية</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
       <div class="card">
-        <div style="font-size: 13px;">📚 الدروس المكتملة</div>
-        <div style="font-size: 24px; font-weight: bold; margin-top: 8px; color: #D4AF37;">0</div>
+        <div style="font-size: 12px;">📚 الدروس المكتملة</div>
+        <div style="font-size: 24px; font-weight: bold; margin-top: 6px; color: var(--accent-gold);">0</div>
       </div>
       <div class="card">
-        <div style="font-size: 13px;">🧩 كويزات محلولة</div>
-        <div style="font-size: 24px; font-weight: bold; margin-top: 8px; color: #D4AF37;">0</div>
+        <div style="font-size: 12px;">🧩 كويزات محلولة</div>
+        <div style="font-size: 24px; font-weight: bold; margin-top: 6px; color: var(--accent-gold);">0</div>
       </div>
     </div>
 
     <div class="card">
-      <div style="font-size: 14px; margin-bottom: 10px;">📝 إضافة ساعات دراسة اليوم</div>
-      <div style="display: flex; gap: 10px;">
-        <input type="number" placeholder="عدد الساعات (مثال: 3)" style="flex: 1;">
-        <button class="btn-main">إضافة +</button>
+      <div style="font-size: 13px; margin-bottom: 10px;">📝 إضافة ساعات دراسة اليوم</div>
+      <div style="display: flex; gap: 8px;">
+        <input type="number" placeholder="عدد الساعات" style="flex: 1; padding: 10px; border-radius: 12px; border: 1px solid #444; background: rgba(0,0,0,0.3); color: var(--text-color); text-align: center;">
+        <button style="background: var(--accent-burgundy); color: #FFF; border: none; padding: 10px 18px; border-radius: 12px; font-weight: bold; cursor: pointer;">إضافة +</button>
       </div>
     </div>
   </div>
 
   <!-- 2️⃣ TAB: MEET -->
-  <div id="tab-meet" class="tab-content" style="text-align: center; padding-top: 40px;">
-    <h2 style="color: var(--accent-gold);">📹 غرف المذاكرة الجماعية</h2>
-    <p style="font-size: 14px; opacity: 0.8;">انضم للزملاء على Google Meet للمذاكرة المباشرة</p>
-    <button class="btn-main" style="border-radius: 25px; margin-top: 20px;">دخول الغرفة الصوتية 🚀</button>
+  <div id="tab-meet" class="tab-content" style="text-align: center; padding-top: 30px;">
+    <div class="card">
+      <div style="font-size: 40px; margin-bottom: 10px;">🎥</div>
+      <h2 style="color: var(--accent-gold); margin: 0 0 10px 0;">غرف المذاكرة الجماعية</h2>
+      <p style="font-size: 13px; opacity: 0.8; line-height: 1.5;">انضم المباشر مع الزملاء على Google Meet لزيادة الإنتاجية والتركيز مع الفريق.</p>
+      <button style="background: var(--accent-burgundy); color: #FFF; border: 1px solid var(--accent-gold); padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; margin-top: 15px;">دخول الغرفة الصوتية 🚀</button>
+    </div>
   </div>
 
   <!-- 3️⃣ TAB: POMODORO -->
   <div id="tab-pomodoro" class="tab-content">
     <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 15px;">
-      <button class="btn-theme" onclick="setClockTheme('flip-pink')">🎀 Flip Pink</button>
-      <button class="btn-theme" onclick="setClockTheme('minimal-dark')">🖤 Dark</button>
-      <button class="btn-theme" onclick="setClockTheme('sage-green')">🌿 Sage Green</button>
+      <button onclick="setClockTheme('flip-pink')" style="padding: 6px 12px; border-radius: 12px; border: 1px solid #FF85A1; background: rgba(255,133,161,0.2); color: inherit; cursor: pointer; font-size: 11px;">🎀 Flip Pink</button>
+      <button onclick="setClockTheme('minimal-dark')" style="padding: 6px 12px; border-radius: 12px; border: 1px solid #C77DFF; background: rgba(10,17,40,0.5); color: inherit; cursor: pointer; font-size: 11px;">🖤 Dark Blue Nuit</button>
+      <button onclick="setClockTheme('sage-green')" style="padding: 6px 12px; border-radius: 12px; border: 1px solid #52796F; background: rgba(82,121,111,0.2); color: inherit; cursor: pointer; font-size: 11px;">🌿 Sage Green</button>
     </div>
 
+    <!-- Timer Screen -->
     <div id="timerDisplay" class="timer-display flip-pink">
-      <div style="font-size: 12px; letter-spacing: 2px;">TIMER</div>
+      <div style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.9;">FOCUS TIMER</div>
       <div id="timeText" class="timer-text">25:00</div>
-      <div>
-        <button id="startBtn" class="btn-main" style="background-color: #5CB85C;" onclick="toggleTimer()">بدء</button>
-        <button class="btn-theme" style="padding: 10px 15px;" onclick="resetTimer()">إعادة ضبط</button>
+      <div style="display: flex; justify-content: center; gap: 10px;">
+        <button id="startBtn" onclick="toggleTimer()" style="background: rgba(255,255,255,0.25); border: 1px solid rgba(255,255,255,0.4); color: #FFF; padding: 8px 20px; border-radius: 12px; font-weight: bold; cursor: pointer;">بدء</button>
+        <button onclick="resetTimer()" style="background: transparent; border: 1px solid rgba(255,255,255,0.3); color: inherit; padding: 8px 15px; border-radius: 12px; cursor: pointer;">إعادة ضبط</button>
       </div>
     </div>
 
-    <div class="card" style="text-align: center;">
-      <div style="font-size: 14px; margin-bottom: 10px;">اختر مدة الجلسة:</div>
-      <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
-        <button class="btn-theme" style="border-color: var(--accent-gold);" onclick="setTimerMinutes(25)">25 دقيقة</button>
-        <button class="btn-theme" style="border-color: var(--accent-gold);" onclick="setTimerMinutes(45)">45 دقيقة</button>
-      </div>
-      <div style="display: flex; gap: 10px; justify-content: center;">
-        <input type="number" id="customMins" placeholder="دقائق مخصصة" style="width: 120px;">
-        <button class="btn-main" onclick="applyCustomTime()">تحديد</button>
-      </div>
-    </div>
-
+    <!-- Ambient Sound Selection (Rain / Fire) -->
     <div class="card">
-      <button id="rainBtn" onclick="toggleRain()" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--accent-gold); background: transparent; color: var(--text-color); font-weight: bold;">
-        ⛈️ تشغيل صوت المطر والبرق (HQ)
-      </button>
+      <div style="font-size: 13px; font-weight: bold; margin-bottom: 12px; color: var(--accent-gold);">🎧 الخلفيات الصوتية للترددات والتركيز:</div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <button id="rainBtn" onclick="toggleSound('rain')" style="padding: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: var(--text-color); font-weight: 600; cursor: pointer;">
+          ⛈️ صوت المطر والبرق
+        </button>
+        <button id="fireBtn" onclick="toggleSound('fire')" style="padding: 12px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.05); color: var(--text-color); font-weight: 600; cursor: pointer;">
+          🔥 صوت الحطب والنار
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- 4️⃣ TAB: MUSIC -->
+  <!-- 4️⃣ TAB: MUSIC (Apple Music Style) -->
   <div id="tab-music" class="tab-content">
-    <div class="card">
-      <h3 style="color: var(--accent-gold); margin-top: 0;">🎵 مشغل صوتيات المذاكرة</h3>
-      
-      <label style="display: block; text-align: center; padding: 15px; border-radius: 12px; border: 2px dashed var(--accent-gold); cursor: pointer; background: rgba(212, 175, 55, 0.1); margin-bottom: 20px; font-weight: bold;">
-        📂 استيراد مقاطع صوتية من الهاتف / البيسي
+    <div class="player-card">
+      <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+        <div style="width: 55px; height: 55px; border-radius: 16px; background: linear-gradient(135deg, #8B0000, #D4AF37); display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+          🎵
+        </div>
+        <div>
+          <div id="currentTrackTitle" style="font-weight: bold; font-size: 14px;">لا يوجد مقطع قيد التشغيل</div>
+          <div style="font-size: 11px; opacity: 0.6; margin-top: 2px;">Focus & Force Music Player</div>
+        </div>
+      </div>
+
+      <!-- Import Button -->
+      <label style="display: block; text-align: center; padding: 12px; border-radius: 14px; border: 1px dashed var(--accent-gold); cursor: pointer; background: rgba(212, 175, 55, 0.08); margin-bottom: 15px; font-size: 12px; font-weight: bold;">
+        📂 استيراد صوتيات من جوالك / البيسي
         <input type="file" id="audioInput" accept="audio/*" multiple style="display: none;" onchange="handleAudioUpload(event)">
       </label>
 
-      <div style="font-size: 12px; opacity: 0.7; margin-bottom: 10px;">قائمة الصوتيات المضافة:</div>
-      <div id="playlistContainer">
-        <div style="font-size: 13px; opacity: 0.5; text-align: center;">لا توجد ملفات صوتية بعد.</div>
+      <!-- Apple Music Controls -->
+      <div class="player-controls">
+        <button class="glass-btn" onclick="toggleRepeat()" id="repeatBtn" title="إعادة">🔁</button>
+        <button class="glass-btn" onclick="prevTrack()">⏮️</button>
+        <button class="glass-btn btn-play-main" onclick="togglePlayPause()" id="mainPlayBtn">▶️</button>
+        <button class="glass-btn" onclick="nextTrack()">⏭️</button>
+        <button class="glass-btn" onclick="changeSpeed()" id="speedBtn" style="font-size: 11px; font-weight: bold;">1x</button>
       </div>
+
+      <div style="font-size: 12px; opacity: 0.7; margin: 20px 0 10px 0;">القائمة الصوتية الحالية:</div>
+      <div id="playlistContainer"></div>
     </div>
   </div>
 
   <!-- 5️⃣ TAB: QUIZ -->
-  <div id="tab-quiz" class="tab-content" style="text-align: center; padding-top: 40px;">
+  <div id="tab-quiz" class="tab-content" style="text-align: center; padding-top: 30px;">
     <div class="card">
-      <h2 style="color: var(--accent-gold);">🧩 قسم الكويزات</h2>
-      <p style="opacity: 0.7;">سيتم إطلاق كويزات التحدي التفاعلية قريباً...</p>
+      <div style="font-size: 40px; margin-bottom: 10px;">🧩</div>
+      <h2 style="color: var(--accent-gold); margin: 0 0 10px 0;">قسم الكويزات</h2>
+      <p style="font-size: 13px; opacity: 0.7;">سيتم ربط اختبارات التحدي التفاعلية قريباً عبر quizzes.js ...</p>
     </div>
   </div>
 
-  <!-- Bottom Navigation -->
+  <!-- 💎 LIQUID GLASS BOTTOM NAVIGATION -->
   <div class="bottom-nav">
     <button class="nav-btn active" onclick="switchTab('home', this)">
       🏠 <span>الرئيسية</span>
@@ -324,11 +427,68 @@
     </button>
   </div>
 
-  <!-- JavaScript Logic -->
   <script>
     if (window.Telegram && window.Telegram.WebApp) {
       window.Telegram.WebApp.ready();
       window.Telegram.WebApp.expand();
+    }
+
+    // --- Story Data & Animation ---
+    const storySteps = [
+      {
+        emoji: "🍃",
+        title: "2024 | بداية القصة 🌱",
+        body: "كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث بين الصفحات عن مصادر صحيحة، ملخصات مفيدة، وقناة تكون لي سنداً حقيقياً يربك الشتات ويمنحني الأمل. لكنني لم أجد ذلك المكان... وفي لحظة صدق تساءلت: 'علاش ما نصنعش أنا المكان اللي تمنيت نلقاه؟' ✨"
+      },
+      {
+        emoji: "🤍",
+        title: "2024 | حلم صغير... وطموح لا يحدّه شيء",
+        body: "بدأت القناة بمجهودي الفردي وبكثير من الحب. كل معلومة، كل ملخص... كان وراءها وقت وتعب ورغبة صادقة في مساعدة طالب آخر يعيش نفس شعوري. ولد في داخلي حلم: أن تصصبح Focus & Force من أكبر المنصات التعليمية."
+      },
+      {
+        emoji: "❤️‍🔥",
+        title: "2025 | الشرارة الحقيقية 🔥😍",
+        body: "عندما قررت خوض تجربة البكالوريا للمرة الثانية، وسط كل الضغط والخوف... لم تكن القناة مجرد منصة، بل كانت المتنفس الحقيقي لي والحافز لأكمل الطريق. كبرنا مع بعضنا وشاركتكم كل ما أملك بكل حب وصمود 🤲🏻💗."
+      },
+      {
+        emoji: "👥",
+        title: "2026 | الحلم يكبر... والتغيير يتجسّد ✨",
+        body: "سنوات الصبر جعلت Focus & Force تتحول إلى مساحة موثوقة تجمع الجميع. انضم إليّ مشرفون رائعون وشراكات نجاح مع قنوات تعليمية كبيرة. أدركت أن الحلم لم يعد فردياً... بل أصبحنا عائلة واحدة 🤍."
+      },
+      {
+        emoji: "🍓",
+        title: "2027 | عهد جديد 💗 | Léa 🩵",
+        body: "Léa 🩵 التي ترونها اليوم جاءت بعد سنوات من المحاولة والصمود والإيمان المطلق بالحلم. Focus & Force هي قطعة حقيقية من قلبي 💗💗 ورسالة نعيشها سوياً لنقود هذه العائلة دائماً نحو القمة 🚀."
+      }
+    ];
+
+    let currentStoryIdx = 0;
+
+    function openStoryModal() {
+      currentStoryIdx = 0;
+      updateStoryUI();
+      document.getElementById('storyOverlay').style.display = 'flex';
+    }
+
+    function updateStoryUI() {
+      const data = storySteps[currentStoryIdx];
+      document.getElementById('storyEmoji').innerText = data.emoji;
+      document.getElementById('storyTitle').innerText = data.title;
+      document.getElementById('storyBody').innerText = data.body;
+      document.getElementById('storyNextBtn').innerText = (currentStoryIdx === storySteps.length - 1) ? "إنهاء 🌸" : "التالي ➔";
+    }
+
+    function nextStoryStep() {
+      if (currentStoryIdx < storySteps.length - 1) {
+        currentStoryIdx++;
+        updateStoryUI();
+      } else {
+        skipStory();
+      }
+    }
+
+    function skipStory() {
+      document.getElementById('storyOverlay').style.display = 'none';
     }
 
     // --- Navigation ---
@@ -339,7 +499,7 @@
       btn.classList.add('active');
     }
 
-    // --- Theme Toggle ---
+    // --- Light/Dark Theme ---
     let isDark = true;
     function toggleTheme() {
       isDark = !isDark;
@@ -347,7 +507,7 @@
       document.querySelector('.theme-toggle').innerText = isDark ? '🌙 الوضع الداكن' : '☀️ الوضع الفاتح';
     }
 
-    // --- Pomodoro Logic ---
+    // --- Pomodoro Clock ---
     let pomoSeconds = 25 * 60;
     let timerInterval = null;
     let isRunning = false;
@@ -363,7 +523,6 @@
       if (isRunning) {
         clearInterval(timerInterval);
         btn.innerText = 'بدء';
-        btn.style.backgroundColor = '#5CB85C';
       } else {
         timerInterval = setInterval(() => {
           if (pomoSeconds > 0) {
@@ -371,11 +530,10 @@
             updateTimerDisplay();
           } else {
             clearInterval(timerInterval);
-            alert('⏱️ انتهى الوقت!');
+            alert('⏱️ انتهت الجلسة!');
           }
         }, 1000);
         btn.innerText = 'إيقاف';
-        btn.style.backgroundColor = '#D9534F';
       }
       isRunning = !isRunning;
     }
@@ -386,72 +544,110 @@
       pomoSeconds = 25 * 60;
       updateTimerDisplay();
       document.getElementById('startBtn').innerText = 'بدء';
-      document.getElementById('startBtn').style.backgroundColor = '#5CB85C';
-    }
-
-    function setTimerMinutes(mins) {
-      pomoSeconds = mins * 60;
-      resetTimer();
-    }
-
-    function applyCustomTime() {
-      const val = parseInt(document.getElementById('customMins').value);
-      if (val && val > 0) {
-        setTimerMinutes(val);
-      }
     }
 
     function setClockTheme(themeClass) {
-      const el = document.getElementById('timerDisplay');
-      el.className = 'timer-display ' + themeClass;
+      document.getElementById('timerDisplay').className = 'timer-display ' + themeClass;
     }
 
-    // --- Rain Sound ---
-    let rainPlaying = false;
-    function toggleRain() {
-      const audio = document.getElementById('rainAudio');
-      const btn = document.getElementById('rainBtn');
-      if (rainPlaying) {
-        audio.pause();
-        btn.innerText = '⛈️ تشغيل صوت المطر والبرق (HQ)';
-        btn.style.background = 'transparent';
-      } else {
-        audio.play();
-        btn.innerText = '🌧️ إيقاف صوت المطر والبرق';
-        btn.style.background = 'var(--accent-burgundy)';
+    // --- Ambient Sounds (Rain & Fire) ---
+    let activeSound = null;
+    function toggleSound(type) {
+      const rain = document.getElementById('rainAudio');
+      const fire = document.getElementById('fireAudio');
+
+      if (type === 'rain') {
+        if (activeSound === 'rain') {
+          rain.pause(); activeSound = null;
+          document.getElementById('rainBtn').style.background = 'rgba(255,255,255,0.05)';
+        } else {
+          fire.pause(); rain.play(); activeSound = 'rain';
+          document.getElementById('rainBtn').style.background = 'var(--accent-burgundy)';
+          document.getElementById('fireBtn').style.background = 'rgba(255,255,255,0.05)';
+        }
+      } else if (type === 'fire') {
+        if (activeSound === 'fire') {
+          fire.pause(); activeSound = null;
+          document.getElementById('fireBtn').style.background = 'rgba(255,255,255,0.05)';
+        } else {
+          rain.pause(); fire.play(); activeSound = 'fire';
+          document.getElementById('fireBtn').style.background = 'var(--accent-burgundy)';
+          document.getElementById('rainBtn').style.background = 'rgba(255,255,255,0.05)';
+        }
       }
-      rainPlaying = !rainPlaying;
     }
 
-    // --- Music Playlist ---
+    // --- Music Player (Apple Music Logic) ---
     let playlist = [];
-    function handleAudioUpload(event) {
-      const files = Array.from(event.target.files);
-      files.forEach(f => {
-        playlist.push({ name: f.name, url: URL.createObjectURL(f) });
-      });
+    let currentIdx = null;
+    let isRepeating = false;
+    const speeds = [1, 1.25, 1.5, 2];
+    let speedIdx = 0;
+
+    function handleAudioUpload(e) {
+      const files = Array.from(e.target.files);
+      files.forEach(f => playlist.push({ name: f.name, url: URL.createObjectURL(f) }));
       renderPlaylist();
+      if (currentIdx === null && playlist.length > 0) playTrack(0);
     }
 
     function renderPlaylist() {
       const container = document.getElementById('playlistContainer');
-      if (playlist.length === 0) return;
       container.innerHTML = '';
-      playlist.forEach((track, index) => {
+      playlist.forEach((track, i) => {
         const div = document.createElement('div');
-        div.className = 'track-item';
-        div.innerHTML = `<span>🎧 ${track.name}</span><span>▶️</span>`;
-        div.onclick = () => playLocalTrack(index, div);
+        div.style.cssText = `padding:10px 12px; border-radius:12px; margin-bottom:6px; cursor:pointer; background:${currentIdx === i ? 'var(--accent-burgundy)' : 'rgba(255,255,255,0.05)'}; font-size:12px; display:flex; justify-content:space-between;`;
+        div.innerHTML = `<span>🎧 ${track.name}</span><span>${currentIdx === i ? '▶️' : ''}</span>`;
+        div.onclick = () => playTrack(i);
         container.appendChild(div);
       });
     }
 
-    function playLocalTrack(index, element) {
-      document.querySelectorAll('.track-item').forEach(el => el.classList.remove('active'));
-      element.classList.add('active');
+    function playTrack(idx) {
+      currentIdx = idx;
       const audio = document.getElementById('localAudio');
-      audio.src = playlist[index].url;
+      audio.src = playlist[idx].url;
       audio.play();
+      document.getElementById('currentTrackTitle').innerText = playlist[idx].name;
+      document.getElementById('mainPlayBtn').innerText = '⏸️';
+      renderPlaylist();
+    }
+
+    function togglePlayPause() {
+      const audio = document.getElementById('localAudio');
+      if (!audio.src) return;
+      if (audio.paused) {
+        audio.play();
+        document.getElementById('mainPlayBtn').innerText = '⏸️';
+      } else {
+        audio.pause();
+        document.getElementById('mainPlayBtn').innerText = '▶️';
+      }
+    }
+
+    function nextTrack() {
+      if (playlist.length === 0) return;
+      currentIdx = (currentIdx + 1) % playlist.length;
+      playTrack(currentIdx);
+    }
+
+    function prevTrack() {
+      if (playlist.length === 0) return;
+      currentIdx = (currentIdx - 1 + playlist.length) % playlist.length;
+      playTrack(currentIdx);
+    }
+
+    function toggleRepeat() {
+      isRepeating = !isRepeating;
+      document.getElementById('localAudio').loop = isRepeating;
+      document.getElementById('repeatBtn').style.background = isRepeating ? 'var(--accent-gold)' : 'rgba(255,255,255,0.08)';
+    }
+
+    function changeSpeed() {
+      speedIdx = (speedIdx + 1) % speeds.length;
+      const rate = speeds[speedIdx];
+      document.getElementById('localAudio').playbackRate = rate;
+      document.getElementById('speedBtn').innerText = rate + 'x';
     }
   </script>
 </body>
