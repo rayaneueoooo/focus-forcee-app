@@ -254,6 +254,35 @@
     }
 
     /* الكويزات */
+    .quiz-filter-container {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .quiz-filter-container label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .quiz-select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      font-size: 0.88rem;
+      outline: none;
+    }
+
+    .quiz-select option {
+      background: #3b1119;
+      color: #fff;
+    }
+
     .quiz-header {
       display: flex;
       justify-content: space-between;
@@ -302,6 +331,19 @@
       border-color: #e63946 !important;
     }
 
+    .quiz-result-card {
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .quiz-result-score {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #fff;
+      margin: 14px 0;
+      text-shadow: 0 4px 15px var(--burgundy-glow);
+    }
+
     .btn-primary {
       background: var(--primary-burgundy);
       color: #ffffff;
@@ -312,6 +354,11 @@
       font-size: 0.95rem;
       cursor: pointer;
       box-shadow: 0 6px 25px var(--burgundy-glow);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     /* 📚 المكتبة والملخصات */
@@ -726,22 +773,50 @@
     </div>
   </div>
 
-  <!-- 2️⃣ قسم الكويزات -->
+  <!-- 2️⃣ قسم الكويزات (المطور) -->
   <div id="section-quiz" class="app-section">
     <div class="glass-card header-card">
       <h2>🧩 الكويزات والأسئلة السريعة</h2>
-      <p>اختبر مراجعتك وجاهزيتك باختبارات سريعة 📚✨</p>
+      <p>اختبر مراجعتك وجاهزيتك باختبارات سريعة وممتعة 📚✨</p>
     </div>
 
-    <div class="glass-card">
-      <div class="quiz-header">
-        <span id="subjectBadge">تركيب البروتين 🧬</span>
-        <span id="questionProgress">1 / 4</span>
+    <!-- تصفية حسب المادة -->
+    <div class="glass-card" style="padding: 14px 20px;">
+      <div class="quiz-filter-container">
+        <label for="categorySelect">اختر المادة أو التخصص للاختبار:</label>
+        <select id="categorySelect" class="quiz-select" onchange="filterQuizCategory(this.value)">
+          <option value="ALL">جميع المواد 🌟</option>
+          <option value="تركيب البروتين 🧬">علوم: تركيب البروتين 🧬</option>
+          <option value="بنية ووظيفة البروتين 🧪">علوم: بنية ووظيفة البروتين 🧪</option>
+          <option value="الاتصال العصبي 🧠">علوم: الاتصال العصبي 🧠</option>
+          <option value="الفيزياء ⚡">الفيزياء ⚡</option>
+          <option value="الرياضيات 📐">الرياضيات 📐</option>
+          <option value="الفلسفة 📖">الفلسفة 📖</option>
+        </select>
       </div>
-      <div class="question-title" id="questionText">جاري تحميل السؤال...</div>
-      <div class="options-container" id="optionsContainer"></div>
-      <div style="display: flex; justify-content: flex-end; margin-top: 18px;">
-        <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>التالي ➔</button>
+    </div>
+
+    <!-- حاوية عرض الأسئلة والنتائج -->
+    <div class="glass-card" id="quizBodyCard">
+      <div id="quizQuestionBox">
+        <div class="quiz-header">
+          <span id="subjectBadge">تركيب البروتين 🧬</span>
+          <span id="questionProgress">1 / 4</span>
+        </div>
+        <div class="question-title" id="questionText">جاري تحميل السؤال...</div>
+        <div class="options-container" id="optionsContainer"></div>
+        <div style="display: flex; justify-content: flex-end; margin-top: 18px;">
+          <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>التالي ➔</button>
+        </div>
+      </div>
+
+      <!-- نتيجة الاختبار -->
+      <div id="quizResultBox" class="quiz-result-card" style="display: none;">
+        <h3 style="font-size: 1.3rem; color: #fff;">🎉 أحسنت! أكملت الاختبار</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 6px;">إليك النتيجة النهائية لمراجعتك:</p>
+        <div class="quiz-result-score" id="resultScoreDisplay">0 / 0</div>
+        <p id="resultMessage" style="color: var(--text-main); font-weight: bold; margin-bottom: 20px;"></p>
+        <button class="btn-primary" onclick="restartQuiz()">إعادة الاختبار 🔄</button>
       </div>
     </div>
   </div>
@@ -896,21 +971,50 @@
       el.classList.add('active');
     }
 
-    /* الكويزات */
+    /* =========================================================
+       🧩 الكويزات (المطورة)
+       ========================================================= */
     const rawData = [
       { q: "أين يتم تركيب البروتين في الخلية حقيقية النواة؟", a: "في الهيولة", w1: "في النواة", w2: "في جهاز غولجي", cat: "تركيب البروتين 🧬" },
       { q: "ما هو جزيء النقل المحمول للمعلومة الوراثية؟", a: "الـ ARNm", w1: "الـ ARNt", w2: "الـ ARNr", cat: "تركيب البروتين 🧬" },
+      { q: "ما هو الإنزيم المسئول عن الاستنساخ؟", a: "ARN بوليميراز", w1: "الليزوزيم", w2: "البروتياز", cat: "تركيب البروتين 🧬" },
       { q: "ما هي الصيغة العامة للحمض الأميني؟", a: "R-CH(NH2)-COOH", w1: "R-CO-NH2", w2: "R-CH2-OH", cat: "بنية ووظيفة البروتين 🧪" },
-      { q: "ما هو كمون الراحة للعصبون؟", a: "-70mV تقريباً", w1: "+30mV", w2: "0mV", cat: "الاتصال العصبي 🧠" }
+      { q: "ما نوع الرابطة التي تنشأ بين الأحماض الأمينية أثناء الترجمة؟", a: "ببتيدية", w1: "هيدروجينية", w2: "شاردية", cat: "بنية ووظيفة البروتين 🧪" },
+      { q: "ما هو كمون الراحة للعصبون؟", a: "-70mV تقريباً", w1: "+30mV", w2: "0mV", cat: "الاتصال العصبي 🧠" },
+      { q: "ما هو الوسيط الكيميائي العصبي المنتشر في المشابك المحفزة؟", a: "أستيل كولين", w1: "GABA", w2: "الأنسولين", cat: "الاتصال العصبي 🧠" },
+      { q: "ما هي وحدة قياس الشدة الكهربائية في الفيزياء؟", a: "الأمبير (A)", w1: "الفولت (V)", w2: "الأوم (Ω)", cat: "الفيزياء ⚡" },
+      { q: "ما هي مشتقة الدالة e^x؟", a: "e^x", w1: "x · e^(x-1)", w2: "1 / e^x", cat: "الرياضيات 📐" },
+      { q: "من هو المؤسس الشهير للمنهج التجريبي في الفلسفة؟", a: "فرانسيس بيكون", w1: "رينيه ديكارت", w2: "أرسطو", cat: "الفلسفة 📖" }
     ];
 
-    let quizIndex = 0, quizAnswered = false;
+    let currentQuestions = [...rawData];
+    let quizIndex = 0;
+    let quizAnswered = false;
+    let score = 0;
+
+    function filterQuizCategory(cat) {
+      if (cat === "ALL") {
+        currentQuestions = [...rawData];
+      } else {
+        currentQuestions = rawData.filter(item => item.cat === cat);
+      }
+      restartQuiz();
+    }
 
     function renderQuestion() {
-      const item = rawData[quizIndex];
+      if (currentQuestions.length === 0) {
+        document.getElementById("questionText").innerText = "لا توجد أسئلة متوفرة في هذا القسم حالياً.";
+        document.getElementById("optionsContainer").innerHTML = "";
+        return;
+      }
+
+      const item = currentQuestions[quizIndex];
       quizAnswered = false;
+      
+      document.getElementById("quizQuestionBox").style.display = "block";
+      document.getElementById("quizResultBox").style.display = "none";
       document.getElementById("subjectBadge").innerText = item.cat;
-      document.getElementById("questionProgress").innerText = `${quizIndex + 1} / ${rawData.length}`;
+      document.getElementById("questionProgress").innerText = `${quizIndex + 1} / ${currentQuestions.length}`;
       document.getElementById("questionText").innerText = item.q;
       document.getElementById("nextBtn").disabled = true;
 
@@ -927,6 +1031,7 @@
           quizAnswered = true;
           if (o.c) {
             btn.classList.add("correct");
+            score++;
             if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
           } else {
             btn.classList.add("wrong");
@@ -942,14 +1047,35 @@
     }
 
     function nextQuestion() {
-      if (quizIndex < rawData.length - 1) { 
+      if (quizIndex < currentQuestions.length - 1) { 
         quizIndex++; 
         renderQuestion(); 
       } else {
-        alert("🎉 أتممت جميع الكويزات بنجاح!");
-        quizIndex = 0;
-        renderQuestion();
+        showQuizResult();
       }
+    }
+
+    function showQuizResult() {
+      document.getElementById("quizQuestionBox").style.display = "none";
+      document.getElementById("quizResultBox").style.display = "block";
+      
+      const total = currentQuestions.length;
+      document.getElementById("resultScoreDisplay").innerText = `${score} / ${total}`;
+      
+      const percentage = (score / total) * 100;
+      let msg = "";
+      if (percentage === 100) msg = "ممتاز جداً! إجاباتك كلها صحيحة 🌟👏";
+      else if (percentage >= 70) msg = "عمل رائع! مستواك ممتاذ وبطل 🌿💪";
+      else if (percentage >= 50) msg = "نتيجة حسنة، واصل المراجعة والتركيز 👍✨";
+      else msg = "لا بأس، أعد الكرة وستحقق نتيجة أفضل حتماً 🤍🌱";
+      
+      document.getElementById("resultMessage").innerText = msg;
+    }
+
+    function restartQuiz() {
+      quizIndex = 0;
+      score = 0;
+      renderQuestion();
     }
 
     function openPdfViewer(url) {
