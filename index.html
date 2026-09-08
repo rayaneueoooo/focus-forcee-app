@@ -4,35 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Focus & Force - Léa's Story Edition</title>
-  <!-- Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     /* =========================================================
-        🎨 ثيمات الألوان المخصصة (Focus & Force Palette)
-        ========================================================= */
+       🎨 ثيمات الألوان المخصصة (Focus & Force Palette)
+       ========================================================= */
     :root[data-theme="dark"] {
-      --bg-gradient: radial-gradient(circle at 50% 20%, #152238 0%, #0b1326 100%);
-      --bg-color: #0b1326;
-      --card-bg: rgba(21, 34, 56, 0.45);
+      --bg-gradient: radial-gradient(circle at 50% 20%, #3b1119 0%, #1a060a 100%);
+      --bg-color: #1a060a;
+      --card-bg: rgba(59, 17, 25, 0.55);
       --card-border: rgba(255, 255, 255, 0.12);
-      --primary-burgundy: #9e1b32;
-      --burgundy-glow: rgba(158, 27, 50, 0.4);
-      --text-main: #f4f6fa;
-      --text-muted: #8e9bb0;
-      --glass-taskbar: rgba(11, 19, 38, 0.75);
-      --accent-highlight: #c92a42;
+      --primary-burgundy: #800020;
+      --burgundy-glow: rgba(128, 0, 32, 0.5);
+      --text-main: #fcefeF;
+      --text-muted: #c4aead;
+      --glass-taskbar: rgba(26, 6, 10, 0.85);
+      --accent-highlight: #e63946;
     }
 
     :root[data-theme="light"] {
       --bg-gradient: radial-gradient(circle at 50% 20%, #fffdfa 0%, #f7f3eb 100%);
       --bg-color: #f7f3eb;
-      --card-bg: rgba(255, 255, 255, 0.65);
+      --card-bg: rgba(255, 255, 255, 0.7);
       --card-border: rgba(128, 0, 32, 0.15);
       --primary-burgundy: #800020;
       --burgundy-glow: rgba(128, 0, 32, 0.25);
       --text-main: #2b181d;
       --text-muted: #6e595f;
-      --glass-taskbar: rgba(253, 251, 247, 0.8);
+      --glass-taskbar: rgba(253, 251, 247, 0.85);
       --accent-highlight: #a31237;
     }
 
@@ -57,7 +56,7 @@
       overflow-x: hidden;
     }
 
-    /* 🎬 Intro Animation Overlay */
+    /* 🎬 Intro Overlay */
     #introOverlay {
       position: fixed;
       inset: 0;
@@ -72,13 +71,13 @@
     }
 
     .intro-logo {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 900;
-      background: linear-gradient(135deg, var(--text-main), var(--primary-burgundy));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #fff;
+      text-shadow: 0 0 15px var(--burgundy-glow);
       animation: scaleInIntro 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       text-align: center;
+      letter-spacing: 1px;
     }
 
     .intro-sub {
@@ -112,12 +111,11 @@
     }
 
     .brand-title {
-      font-weight: 800;
-      font-size: 1.2rem;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, var(--text-main), var(--primary-burgundy));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+      color: var(--text-main);
+      text-shadow: 0 2px 8px var(--burgundy-glow);
     }
 
     .header-actions {
@@ -126,7 +124,7 @@
       align-items: center;
     }
 
-    .theme-toggle-btn, .score-badge {
+    .theme-toggle-btn {
       background: var(--card-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
@@ -140,16 +138,10 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
-    .score-badge {
-      cursor: default;
-      color: var(--primary-burgundy);
-      font-weight: 700;
-    }
-
-    /* التصميم الزجاجي الرئيسي */
+    /* البطاقات الزجاجية */
     .glass-card {
       background: var(--card-bg);
       backdrop-filter: blur(25px) saturate(180%);
@@ -158,7 +150,7 @@
       border-radius: 28px;
       padding: 20px;
       margin-bottom: 20px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
       position: relative;
       overflow: hidden;
     }
@@ -168,7 +160,7 @@
     }
 
     .header-card h2 {
-      color: var(--primary-burgundy);
+      color: #fff;
       font-size: 1.3rem;
       font-weight: 700;
       margin-bottom: 4px;
@@ -179,19 +171,18 @@
       font-size: 0.85rem;
     }
 
-    /* ✨ تصميم القصة (Story Timeline & Léa's Feature) */
+    /* القصة */
     .story-hero {
       text-align: center;
       padding: 10px 0 20px 0;
       border-bottom: 1px solid var(--card-border);
       margin-bottom: 20px;
-      position: relative;
     }
 
     .story-hero h1 {
       font-size: 1.25rem;
       font-weight: 800;
-      color: var(--primary-burgundy);
+      color: #fff;
       margin-bottom: 8px;
       line-height: 1.5;
     }
@@ -202,26 +193,6 @@
       line-height: 1.6;
     }
 
-    .floating-emojis {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      font-size: 1.5rem;
-      margin: 12px 0;
-    }
-
-    .floating-emojis span {
-      animation: floatEmoji 3s ease-in-out infinite alternate;
-    }
-    .floating-emojis span:nth-child(2) { animation-delay: 0.5s; }
-    .floating-emojis span:nth-child(3) { animation-delay: 1s; }
-    .floating-emojis span:nth-child(4) { animation-delay: 1.5s; }
-
-    @keyframes floatEmoji {
-      0% { transform: translateY(0) scale(1); }
-      100% { transform: translateY(-8px) scale(1.1); }
-    }
-
     .timeline {
       display: flex;
       flex-direction: column;
@@ -229,11 +200,10 @@
     }
 
     .timeline-item {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
       border-radius: 20px;
       padding: 16px;
-      position: relative;
     }
 
     .timeline-year {
@@ -262,7 +232,7 @@
     }
 
     .lea-signature {
-      background: linear-gradient(135deg, rgba(158, 27, 50, 0.1), rgba(0,0,0,0));
+      background: linear-gradient(135deg, rgba(128, 0, 32, 0.3), rgba(0,0,0,0));
       border: 1px solid var(--primary-burgundy);
       border-radius: 22px;
       padding: 18px;
@@ -271,7 +241,7 @@
     }
 
     .lea-signature h3 {
-      color: var(--primary-burgundy);
+      color: #fff;
       font-size: 1.1rem;
       margin-bottom: 8px;
       font-weight: 800;
@@ -283,12 +253,12 @@
       color: var(--text-main);
     }
 
-    /* 🔊 الأصوات والأجواء */
+    /* الصوتيات */
     .sound-card {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
       padding: 14px 18px;
       border-radius: 20px;
@@ -296,18 +266,18 @@
     }
 
     .volume-slider {
-      width: 100px;
-      accent-color: var(--primary-burgundy);
+      width: 110px;
+      accent-color: #d84315;
     }
 
-    /* 🧩 الكويزات التفاعلية */
+    /* الكويزات */
     .quiz-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
       font-size: 0.85rem;
-      color: var(--primary-burgundy);
+      color: #fff;
       font-weight: bold;
     }
 
@@ -325,7 +295,7 @@
     }
 
     .option-btn {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--card-border);
       border-radius: 18px;
       padding: 14px 16px;
@@ -339,13 +309,13 @@
     }
 
     .option-btn.correct {
-      background: rgba(46, 196, 182, 0.25) !important;
+      background: rgba(46, 196, 182, 0.3) !important;
       border-color: #2ec4b6 !important;
       font-weight: bold;
     }
 
     .option-btn.wrong {
-      background: rgba(230, 57, 70, 0.25) !important;
+      background: rgba(230, 57, 70, 0.3) !important;
       border-color: #e63946 !important;
     }
 
@@ -361,7 +331,7 @@
       box-shadow: 0 6px 25px var(--burgundy-glow);
     }
 
-    /* 📌 قسم الملخصات والأفكار السريعة */
+    /* الملخصات والملاحظات */
     .notes-input-row {
       display: flex;
       gap: 8px;
@@ -373,7 +343,7 @@
       padding: 12px 16px;
       border-radius: 14px;
       border: 1px solid var(--card-border);
-      background: rgba(0, 0, 0, 0.1);
+      background: rgba(0, 0, 0, 0.2);
       color: var(--text-main);
       outline: none;
       font-size: 0.88rem;
@@ -382,20 +352,27 @@
     .notes-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      max-height: 200px;
+      gap: 10px;
+      max-height: 250px;
       overflow-y: auto;
     }
 
     .note-item {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--card-border);
-      padding: 10px 14px;
-      border-radius: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 0.88rem;
+    }
+
+    .note-date {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      display: block;
+      margin-top: 4px;
     }
 
     .note-delete {
@@ -404,23 +381,24 @@
       font-weight: bold;
       background: none;
       border: none;
-      font-size: 1rem;
+      font-size: 1.2rem;
+      padding: 0 6px;
     }
 
-    /* 🍅 تصميم واجهة بومودورو الجديدة */
+    /* بومودورو */
     .pomodoro-container {
       text-align: center;
       padding: 10px;
     }
 
     .pomodoro-timer-display {
-      font-size: 3.2rem;
+      font-size: 3.5rem;
       font-weight: 900;
       letter-spacing: 2px;
       margin: 20px 0;
       font-variant-numeric: tabular-nums;
       color: #fff;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      text-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
 
     .pomodoro-controls {
@@ -450,7 +428,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      background: rgba(0, 0, 0, 0.15);
+      background: rgba(0, 0, 0, 0.25);
       padding: 14px;
       border-radius: 16px;
       margin-bottom: 16px;
@@ -475,31 +453,11 @@
     }
 
     .pomodoro-settings select option {
-      background: #152238;
+      background: #3b1119;
       color: #fff;
     }
 
-    .color-picker-row {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 15px;
-    }
-
-    .color-dot {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 2px solid rgba(255, 255, 255, 0.4);
-      transition: transform 0.2s;
-    }
-
-    .color-dot:hover {
-      transform: scale(1.1);
-    }
-
-    /* 📱 Liquid Glass Taskbar (iOS Edition) */
+    /* الشريط السفلي */
     .taskbar-wrapper {
       position: fixed;
       bottom: 20px;
@@ -520,8 +478,7 @@
       padding: 6px 12px;
       display: flex;
       gap: 4px;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3),
-                  inset 0 1px 1px rgba(255, 255, 255, 0.25);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
     }
 
     .nav-item {
@@ -547,9 +504,8 @@
     }
 
     .nav-item.active {
-      color: var(--primary-burgundy);
-      background: rgba(255, 255, 255, 0.12);
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2);
+      color: #fff;
+      background: rgba(255, 255, 255, 0.15);
     }
 
     .nav-item.active .icon {
@@ -573,7 +529,7 @@
 </head>
 <body>
 
-  <!-- 🎬 Intro Animation Overlay -->
+  <!-- Intro Overlay -->
   <div id="introOverlay">
     <div class="intro-logo">FOCUS & FORCE 🎓✨</div>
     <div class="intro-sub">رحلة شغف صُنعت بكل حب... 🤍</div>
@@ -583,7 +539,6 @@
   <div class="top-bar">
     <div class="brand-title">FOCUS & FORCE</div>
     <div class="header-actions">
-      <div class="score-badge" id="userScoreDisplay">⭐ 0 نقطة</div>
       <button class="theme-toggle-btn" onclick="toggleTheme()">
         <span id="themeIcon">🌙</span>
         <span id="themeText">الوضع الليلي</span>
@@ -591,17 +546,10 @@
     </div>
   </div>
 
-  <!-- 1️⃣ قسم القصة (Our Story - Léa 🩵) -->
+  <!-- 1️⃣ قسم القصة -->
   <div id="section-story" class="app-section active">
     <div class="glass-card">
       <div class="story-hero">
-        <div class="floating-emojis">
-          <span>🎓</span>
-          <span>✨</span>
-          <span>🤍</span>
-          <span>🔥</span>
-          <span>🍓</span>
-        </div>
         <h1>من طالبة تبحث عن ملخصات... إلى مؤسسة عائلة "Focus & Force"</h1>
         <p>قصة بدأت من معاناة... وتحوّلت إلى حلم يجمع آلاف الطلبة 🤍</p>
       </div>
@@ -645,30 +593,30 @@
     </div>
   </div>
 
-  <!-- 2️⃣ قسم أصوات الأجواء -->
+  <!-- 2️⃣ قسم الصوتيات -->
   <div id="section-sounds" class="app-section">
     <div class="glass-card header-card">
       <h2>🎧 أصوات الطبيعة والهدوء</h2>
-      <p>دمج خلفيات صوتية عزل الضوضاء المباشر 🌧️🔥</p>
+      <p>تركيز عميق وعزل تام للضوضاء المباشرة 🌧️🔥</p>
     </div>
 
     <div class="glass-card">
       <div class="sound-card">
-        <span>🌧️⚡ مطر وبرق</span>
+        <span>🌧️⚡ صوت المطر والأجواء</span>
         <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0" oninput="adjustVolume('rain', this.value)">
       </div>
       <div class="sound-card">
-        <span>🪵🔥 نار وحطب</span>
+        <span>🪵🔥 صوت احتراق الحطب والنار</span>
         <input type="range" class="volume-slider" min="0" max="1" step="0.01" value="0" oninput="adjustVolume('fire', this.value)">
       </div>
     </div>
   </div>
 
-  <!-- 3️⃣ قسم الكويزات التفاعلية -->
+  <!-- 3️⃣ قسم الكويزات -->
   <div id="section-quiz" class="app-section">
     <div class="glass-card header-card">
       <h2>🧩 الكويزات التفاعلية</h2>
-      <p>اختبر جاهزيتك للبكالوريا واكتسب النقاط ✨</p>
+      <p>اختبر مراجعتك وجاهزيتك للبكالوريا 📚✨</p>
     </div>
 
     <div class="glass-card">
@@ -684,7 +632,7 @@
     </div>
   </div>
 
-  <!-- 4️⃣ قسم الملخصات والأفكار السريعة -->
+  <!-- 4️⃣ قسم الملخصات والأفكار -->
   <div id="section-notes" class="app-section">
     <div class="glass-card header-card">
       <h2>📌 ملخصات وأفكار سريعة</h2>
@@ -700,20 +648,20 @@
     </div>
   </div>
 
-  <!-- 5️⃣ قسم بومودورو الجديد (Pomodoro Timer) -->
+  <!-- 5️⃣ قسم بومودورو -->
   <div id="section-pomodoro" class="app-section">
     <div class="glass-card header-card">
       <h2>🍅 مؤقت بومودورو</h2>
       <p>ركز بعمق ونظم وقت دراستك باحترافية ⏱️✨</p>
     </div>
 
-    <div class="glass-card pomodoro-container" id="pomodoroCard" style="background: rgba(158, 27, 50, 0.25);">
+    <div class="glass-card pomodoro-container" id="pomodoroCard" style="background: rgba(128, 0, 32, 0.35);">
       <div class="pomodoro-settings">
         <label for="pomodoroTimeSelect">اختر مدة الجلسة:</label>
         <select id="pomodoroTimeSelect" onchange="changePomodoroDuration(this.value)">
           <option value="15">15 دقيقة (سريعة)</option>
-          <option value="25" selected>25 دقيقة (ميارس)</option>
-          <option value="45">45 دقيقة (عميق)</option>
+          <option value="25" selected>25 دقيقة (قياسية)</option>
+          <option value="45">45 دقيقة (تركيز عميق)</option>
           <option value="60">60 دقيقة (ساعة كاملة)</option>
         </select>
       </div>
@@ -725,18 +673,10 @@
         <button class="pomodoro-btn" onclick="pausePomodoro()">إيقاف مؤقت ⏸️</button>
         <button class="pomodoro-btn" onclick="resetPomodoro()">إعادة ضبط 🔄</button>
       </div>
-
-      <div style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-bottom: 6px;">اختر لون الخلفية المفضلة:</div>
-      <div class="color-picker-row">
-        <div class="color-dot" style="background: #9e1b32;" onclick="setPomodoroColor('rgba(158, 27, 50, 0.25)')" title="عنابي"></div>
-        <div class="color-dot" style="background: #152238;" onclick="setPomodoroColor('rgba(21, 34, 56, 0.65)')" title="أزرق ليلي"></div>
-        <div class="color-dot" style="background: #2e7d32;" onclick="setPomodoroColor('rgba(46, 125, 50, 0.35)')" title="أخضر هادئ"></div>
-        <div class="color-dot" style="background: #4a148c;" onclick="setPomodoroColor('rgba(74, 20, 140, 0.4)')" title="بنفسجي عميق"></div>
-      </div>
     </div>
   </div>
 
-  <!-- 📱 Liquid Glass Taskbar (iOS Edition) -->
+  <!-- الشريط السفلي Nav -->
   <div class="taskbar-wrapper">
     <nav class="liquid-taskbar">
       <div class="nav-item active" onclick="switchSection('story', this)">
@@ -769,16 +709,6 @@
       tg.ready();
     }
 
-    let userScore = parseInt(localStorage.getItem('ff_score')) || 0;
-    function updateScoreDisplay() {
-      document.getElementById('userScoreDisplay').innerText = `⭐ ${userScore} نقطة`;
-    }
-    function addScore(points) {
-      userScore += points;
-      localStorage.setItem('ff_score', userScore);
-      updateScoreDisplay();
-    }
-
     function toggleTheme() {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -796,11 +726,16 @@
       el.classList.add('active');
     }
 
+    /* =========================================================
+       🔊 محاكي أصوات الطبيعة (Rain & Improved Realistic Fire)
+       ========================================================= */
     let audioCtx = null, rainGain = null, fireGain = null;
+    
     function initAudio() {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
+        // 🌧️ Rain Sound Simulation
         const rb = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
         const rd = rb.getChannelData(0);
         for (let i = 0; i < rb.length; i++) rd[i] = Math.random() * 2 - 1;
@@ -809,13 +744,28 @@
         rainGain = audioCtx.createGain(); rainGain.gain.value = 0;
         rs.connect(rf); rf.connect(rainGain); rainGain.connect(audioCtx.destination); rs.start();
 
+        // 🪵🔥 Realistic Fire Crackle & Rumble
         const fb = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
         const fd = fb.getChannelData(0);
-        for (let i = 0; i < fb.length; i++) fd[i] = (Math.random() * 2 - 1) * (Math.random() > 0.98 ? 2.5 : 0.2);
+        for (let i = 0; i < fb.length; i++) {
+          let noise = Math.random() * 2 - 1;
+          // Crackle pop generation logic
+          let isCrackle = Math.random() > 0.992;
+          fd[i] = isCrackle ? (Math.random() > 0.5 ? 1 : -1) * (0.6 + Math.random() * 0.4) : noise * 0.08;
+        }
         const fs = audioCtx.createBufferSource(); fs.buffer = fb; fs.loop = true;
-        const ff = audioCtx.createBiquadFilter(); ff.type = 'bandpass'; ff.frequency.value = 700;
-        fireGain = audioCtx.createGain(); fireGain.gain.value = 0;
-        fs.connect(ff); ff.connect(fireGain); fireGain.connect(audioCtx.destination); fs.start();
+        
+        const ff = audioCtx.createBiquadFilter(); 
+        ff.type = 'lowpass'; 
+        ff.frequency.value = 1200;
+
+        fireGain = audioCtx.createGain(); 
+        fireGain.gain.value = 0;
+        
+        fs.connect(ff); 
+        ff.connect(fireGain); 
+        fireGain.connect(audioCtx.destination); 
+        fs.start();
       }
     }
 
@@ -826,6 +776,9 @@
       if (type === 'fire' && fireGain) fireGain.gain.value = parseFloat(val);
     }
 
+    /* =========================================================
+       🧩 Quiz Logic
+       ========================================================= */
     const rawData = [
       { q: "أين يتم تركيب البروتين في الخلية حقيقية النواة؟", a: "في الهيولة", w1: "في النواة", w2: "في جهاز غولجي", cat: "تركيب البروتين 🧬" },
       { q: "ما هو جزيء النقل المحمول للمعلومة الوراثية؟", a: "الـ ARNm", w1: "الـ ARNt", w2: "الـ ARNr", cat: "تركيب البروتين 🧬" },
@@ -856,10 +809,13 @@
           quizAnswered = true;
           if (o.c) {
             btn.classList.add("correct");
-            addScore(5);
             if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
           } else {
             btn.classList.add("wrong");
+            // Highlight the right option
+            Array.from(container.children).forEach(child => {
+              if (child.innerText.includes(item.a)) child.classList.add("correct");
+            });
             if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
           }
           document.getElementById("nextBtn").disabled = false;
@@ -873,25 +829,34 @@
         quizIndex++; 
         renderQuestion(); 
       } else {
-        alert("🎉 لقد أتممت جميع كويزات اليوم بنجاح!");
+        alert("🎉 أتممت جميع الكويزات بنجاح!");
         quizIndex = 0;
         renderQuestion();
       }
     }
 
-    let notesList = JSON.parse(localStorage.getItem('ff_notes')) || [];
+    /* =========================================================
+       📌 Memos / Notes Logic
+       ========================================================= */
+    let notesList = JSON.parse(localStorage.getItem('ff_notes_v2')) || [];
 
     function renderNotes() {
       const container = document.getElementById('notesListContainer');
       container.innerHTML = '';
       if (notesList.length === 0) {
-        container.innerHTML = '<div style="text-align:center; color: var(--text-muted); font-size: 0.85rem; padding: 10px;">لا توجد ملاحظات مضافة بعد...</div>';
+        container.innerHTML = '<div style="text-align:center; color: var(--text-muted); font-size: 0.85rem; padding: 15px;">لا توجد ملاحظات مضافة بعد...</div>';
         return;
       }
-      notesList.forEach((note, index) => {
+      notesList.forEach((noteObj, index) => {
         const item = document.createElement('div');
         item.className = 'note-item';
-        item.innerHTML = `<span>${note}</span><button class="note-delete" onclick="deleteNote(${index})">×</button>`;
+        item.innerHTML = `
+          <div>
+            <span>${noteObj.text}</span>
+            <span class="note-date">${noteObj.date}</span>
+          </div>
+          <button class="note-delete" onclick="deleteNote(${index})">×</button>
+        `;
         container.appendChild(item);
       });
     }
@@ -900,8 +865,9 @@
       const input = document.getElementById('noteInput');
       const val = input.value.trim();
       if (val) {
-        notesList.unshift(val);
-        localStorage.setItem('ff_notes', JSON.stringify(notesList));
+        const dateStr = new Date().toLocaleDateString('ar-EG', { hour: '2-digit', minute: '2-digit' });
+        notesList.unshift({ text: val, date: dateStr });
+        localStorage.setItem('ff_notes_v2', JSON.stringify(notesList));
         input.value = '';
         renderNotes();
       }
@@ -909,11 +875,13 @@
 
     function deleteNote(index) {
       notesList.splice(index, 1);
-      localStorage.setItem('ff_notes', JSON.stringify(notesList));
+      localStorage.setItem('ff_notes_v2', JSON.stringify(notesList));
       renderNotes();
     }
 
-    // 🍅 Pomodoro Logic
+    /* =========================================================
+       🍅 Pomodoro Timer Logic
+       ========================================================= */
     let pomoMinutes = 25;
     let pomoSeconds = 0;
     let pomoInterval = null;
@@ -942,8 +910,7 @@
           if (pomoMinutes === 0) {
             clearInterval(pomoInterval);
             isPomoRunning = false;
-            alert("🎉 انتهت جلسة البومودورو بنجاح! خذ استراحة قصيرة ☕");
-            addScore(10);
+            alert("🎉 انتهت جلسة التركيز! خذ استراحة قصيرة ☕");
             return;
           }
           pomoMinutes--;
@@ -969,15 +936,9 @@
       updatePomoDisplay();
     }
 
-    function setPomodoroColor(colorBg) {
-      document.getElementById('pomodoroCard').style.background = colorBg;
-    }
-
     window.onload = function() {
       renderQuestion();
-      updateScoreDisplay();
       renderNotes();
-      updatePomoDisplay();
     };
   </script>
 </body>
