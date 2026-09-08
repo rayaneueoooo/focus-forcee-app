@@ -315,6 +315,16 @@
     }
 
     /* 📚 المكتبة والملخصات */
+    .section-subtitle {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .filter-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -740,16 +750,14 @@
     </div>
   </div>
 
-  <!-- 2️⃣ قسم الكويزات (مقسم: اختبارات سريعة + امتحانات الباك) -->
+  <!-- 2️⃣ قسم الكويزات (فقط للأسئلة والاختبارات السريعة) -->
   <div id="section-quiz" class="app-section">
     <div class="glass-card header-card">
-      <h2>🧩 الكويزات والامتحانات</h2>
-      <p>اختبر مراجعتك وجاهزيتك للبكالوريا 📚✨</p>
+      <h2>🧩 الكويزات والأسئلة السريعة</h2>
+      <p>اختبر مراجعتك وجاهزيتك باختبارات سريعة 📚✨</p>
     </div>
 
-    <!-- الجزء العلوي: اختبارات سريعة -->
     <div class="glass-card">
-      <h3 style="font-size: 1.05rem; margin-bottom: 12px; color: #fff;">📝 أسئلة واختبارات سريعة</h3>
       <div class="quiz-header">
         <span id="subjectBadge">تركيب البروتين 🧬</span>
         <span id="questionProgress">1 / 4</span>
@@ -760,23 +768,29 @@
         <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>التالي ➔</button>
       </div>
     </div>
-
-    <!-- الجزء السفلي: مواضيع وامتحانات البكالوريا (BAC) -->
-    <div class="glass-card">
-      <h3 style="font-size: 1.05rem; margin-bottom: 10px; color: #fff;">🎓 مواضيع وامتحانات البكالوريا (BAC)</h3>
-      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">اختر الشعبة للوصول المباشر إلى مواضيع البكالوريا السابقة مع التصحيح النموذجي:</p>
-      <div class="pdf-list" id="bacListContainer"></div>
-    </div>
   </div>
 
-  <!-- 3️⃣ قسم المكتبة والملخصات -->
+  <!-- 3️⃣ قسم المكتبة والملخصات + مواضيع امتحانات البكالوريا لكل الشعب -->
   <div id="section-notes" class="app-section">
     <div class="glass-card header-card">
-      <h2>📚 مكتبة البكالوريا والملخصات</h2>
-      <p>اختر الشعبة للانتقال للمستندات والامتحانات الخاصة بها مباشرة 📥✨</p>
+      <h2>📚 المكتبة والمستندات</h2>
+      <p>تصفح مواضيع البكالوريا لكل الشعب والملخصات الخاصة بك 📥✨</p>
     </div>
 
+    <!-- 🎓 قسم امتحانات البكالوريا لكل الشعب -->
     <div class="glass-card">
+      <div class="section-subtitle">
+        🎓 مواضيع وامتحانات البكالوريا (BAC) - جميع الشعب
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">اختر الشعبة للوصول المباشر لمواضيع البكالوريا السابقة والتصحيحات النموذجية:</p>
+      <div class="pdf-list" id="bacListContainer"></div>
+    </div>
+
+    <!-- 📖 قسم الدروس والملخصات حسب الشعبة -->
+    <div class="glass-card">
+      <div class="section-subtitle">
+        📖 الدروس والملخصات الخاصة
+      </div>
       <div class="filter-grid">
         <select class="filter-select" id="streamSelect" onchange="renderLibrary()">
           <option value="all">كل الشعب 🎓</option>
@@ -955,14 +969,14 @@
       }
     }
 
-    /* بيانات المكتبة ومواضيع الباك */
+    /* بيانات جميع الشعب المتاحة للباك والمكتبة */
     const streamsData = [
-      { id: "exp", title: "شعبة علوم تجريبية 🧪", desc: "امتحانات، ملخصات وحوليات مواضيع علوم تجريبية", url: "https://www.dzexams.com/ar/3as/se" },
-      { id: "math", title: "شعبة رياضيات 📐", desc: "جميع مواضيع وملخصات شعبة الرياضيات", url: "https://www.dzexams.com/ar/3as/m" },
-      { id: "tm", title: "شعبة تقني رياضي ⚙️", desc: "دروس وملخصات ميكانيك، مدنية ورعب الهندسات", url: "https://www.dzexams.com/ar/3as/tm" },
-      { id: "ge", title: "شعبة تسيير واقتصاد 📊", desc: "محاسبة، اقتصاد وتسيير ألمالي وإداري", url: "https://www.dzexams.com/ar/3as/ge" },
-      { id: "ph", title: "شعبة آداب وفلسفة 📖", desc: "مقالات فلسفية وملخصات المواد الأدبية", url: "https://www.dzexams.com/ar/3as/lp" },
-      { id: "lang", title: "شعبة لغات أجنبية 🌐", desc: "ملخصات وقواعد اللغات الأجنبية المختلفة", url: "https://www.dzexams.com/ar/3as/le" }
+      { id: "exp", title: "شعبة علوم تجريبية 🧪", desc: "مواضيع وتصحيحات البكالوريا الرسمية", url: "https://www.dzexams.com/ar/3as/se" },
+      { id: "math", title: "شعبة رياضيات 📐", desc: "مواضيع وتصحيحات البكالوريا الرسمية", url: "https://www.dzexams.com/ar/3as/m" },
+      { id: "tm", title: "شعبة تقني رياضي ⚙️", desc: "مواضيع وتصحيحات البكالوريا الرسمية", url: "https://www.dzexams.com/ar/3as/tm" },
+      { id: "ge", title: "شعبة تسيير واقتصاد 📊", desc: "مواضيع وتصحيحات البكالوريا الرسمية", url: "https://www.dzexams.com/ar/3as/ge" },
+      { id: "ph", title: "شعبة آداب وفلسفة 📖", desc: "مواضيع وتصحيحات البكالوريا الرسمية", url: "https://www.dzexams.com/ar/3as/lp" },
+      { id: "lang", title: "شعبة لغات أجنبية 🌐", desc: "مواضيع وتصحيحات البكالوريا الرسمية", url: "https://www.dzexams.com/ar/3as/le" }
     ];
 
     function renderLibrary() {
@@ -970,28 +984,29 @@
       const container = document.getElementById("pdfListContainer");
       const bacContainer = document.getElementById("bacListContainer");
 
-      const filtered = streamsData.filter(item => selectedStream === 'all' || item.id === selectedStream);
-
-      container.innerHTML = filtered.map(item => `
+      /* 1. عرض مواضيع الباك لكل الشعب دائماً في القسم المخصص له */
+      bacContainer.innerHTML = streamsData.map(item => `
         <div class="pdf-card">
           <div class="pdf-info">
-            <h4>${item.title}</h4>
+            <h4>باكالوريات ${item.title}</h4>
             <span>${item.desc}</span>
           </div>
           <div class="pdf-actions">
-            <button class="btn-action btn-view" onclick="openPdfViewer('${item.url}')">فتح DzExams 🔗</button>
+            <button class="btn-action btn-view" onclick="openPdfViewer('${item.url}')">عرض المواضيع 🎓</button>
           </div>
         </div>
       `).join('');
 
-      bacContainer.innerHTML = filtered.map(item => `
+      /* 2. عرض الدروس حسب تصفية الشعبة */
+      const filtered = streamsData.filter(item => selectedStream === 'all' || item.id === selectedStream);
+      container.innerHTML = filtered.map(item => `
         <div class="pdf-card">
           <div class="pdf-info">
-            <h4>باكالوريات ${item.title}</h4>
-            <span>مواضيع وتصحيحات البكالوريا السابقة</span>
+            <h4>ملخصات ${item.title}</h4>
+            <span>دروس وحوليات مخصصة</span>
           </div>
           <div class="pdf-actions">
-            <button class="btn-action btn-view" onclick="openPdfViewer('${item.url}')">عرض المواضيع 🎓</button>
+            <button class="btn-action btn-view" onclick="openPdfViewer('${item.url}')">فتح المكتبة 🔗</button>
           </div>
         </div>
       `).join('');
