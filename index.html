@@ -331,6 +331,154 @@
       box-shadow: 0 6px 25px var(--burgundy-glow);
     }
 
+    /* 📚 عناصر المكتبة والملخصات */
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .filter-select option {
+      background: #3b1119;
+      color: #fff;
+    }
+
+    .pdf-category-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+    }
+
+    .pdf-tab {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .pdf-tab.active {
+      background: var(--primary-burgundy);
+      color: #fff;
+      border-color: transparent;
+      font-weight: bold;
+    }
+
+    .pdf-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+
+    .pdf-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pdf-info h4 {
+      font-size: 0.9rem;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .pdf-info span {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .pdf-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-action {
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-view {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .btn-download {
+      background: var(--primary-burgundy);
+      color: #fff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* PDF Reader Overlay Inside App */
+    #pdfViewerModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 10000;
+      flex-direction: column;
+    }
+
+    .pdf-viewer-header {
+      padding: 12px 16px;
+      background: var(--bg-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .pdf-viewer-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .pdf-viewer-close {
+      background: var(--accent-highlight);
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #pdfIframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+    }
+
     /* الملخصات والملاحظات */
     .notes-input-row {
       display: flex;
@@ -632,14 +780,57 @@
     </div>
   </div>
 
-  <!-- 4️⃣ قسم الملخصات والأفكار -->
+  <!-- 4️⃣ قسم المكتبة والملخصات المحدث بالكامل 📚 -->
   <div id="section-notes" class="app-section">
     <div class="glass-card header-card">
-      <h2>📌 ملخصات وأفكار سريعة</h2>
-      <p>دون ملاحظاتك السريعة لكي لا تنسى شيئاً أثناء المراجعة 💡</p>
+      <h2>📚 مكتبة البكالوريا الشاملة</h2>
+      <p>اقرأ الملخصات والامتحانات مباشرة داخل البوت مع خيار التحميل 📥✨</p>
     </div>
 
     <div class="glass-card">
+      <!-- اختيار الشعبة والمادة -->
+      <div class="filter-grid">
+        <select class="filter-select" id="streamSelect" onchange="filterLibrary()">
+          <option value="all">جميع الشعب 🎓</option>
+          <option value="exp">علوم تجريبية 🧪</option>
+          <option value="math">رياضيات 📐</option>
+          <option value="tm">تقني رياضي ⚙️</option>
+          <option value="ge">تسيير واقتصاد 📊</option>
+          <option value="ph">آداب وفلسفة 📖</option>
+          <option value="lang">لغات أجنبية 🌐</option>
+        </select>
+
+        <select class="filter-select" id="subjectSelect" onchange="filterLibrary()">
+          <option value="all">جميع المواد 📖</option>
+          <option value="science">علوم الطبيعة والحياة</option>
+          <option value="math">الرياضيات</option>
+          <option value="physics">العلوم الفيزيائية</option>
+          <option value="arabic">اللغة العربية</option>
+          <option value="history">الاجتماعيات</option>
+          <option value="islamic">العلوم الإسلامية</option>
+          <option value="philo">الفلسفة</option>
+        </select>
+      </div>
+
+      <!-- تبويبات التصنيف -->
+      <div class="pdf-category-tabs">
+        <button class="pdf-tab active" onclick="setCategory('all', this)">الكل</button>
+        <button class="pdf-tab" onclick="setCategory('summary', this)">📚 ملخصات شاملة</button>
+        <button class="pdf-tab" onclick="setCategory('bac', this)">🎓 بكالوريات (DzExams)</button>
+        <button class="pdf-tab" onclick="setCategory('exams', this)">📝 اختبارات فصلية</button>
+        <button class="pdf-tab" onclick="setCategory('ashbal', this)">⚔️ أشبال الأمة</button>
+        <button class="pdf-tab" onclick="setCategory('okba', this)">🧠 مسائل عقبة بن نافع</button>
+      </div>
+
+      <!-- قائمة الملفات -->
+      <div class="pdf-list" id="pdfListContainer">
+        <!-- يتم التحميل التلقائي عبر السكريبت -->
+      </div>
+    </div>
+
+    <!-- بطاقة إضافة ملاحظات سريعة -->
+    <div class="glass-card">
+      <h3 style="font-size: 1rem; margin-bottom: 12px; color: #fff;">📌 مفكرتك السريعة</h3>
       <div class="notes-input-row">
         <input type="text" class="notes-input" id="noteInput" placeholder="أضف فكرة أو ملاحظة جديدة...">
         <button class="btn-primary" onclick="addNote()">إضافة ✍️</button>
@@ -676,6 +867,15 @@
     </div>
   </div>
 
+  <!-- 📖 عارض الملفات المدمج داخل التطبيق بدون الخروج -->
+  <div id="pdfViewerModal">
+    <div class="pdf-viewer-header">
+      <span class="pdf-viewer-title" id="pdfViewerTitle">قراءة المستند</span>
+      <button class="pdf-viewer-close" onclick="closePdfViewer()">إغلاق ✖</button>
+    </div>
+    <iframe id="pdfIframe" src=""></iframe>
+  </div>
+
   <!-- الشريط السفلي Nav -->
   <div class="taskbar-wrapper">
     <nav class="liquid-taskbar">
@@ -692,8 +892,8 @@
         <span class="label">الكويزات</span>
       </div>
       <div class="nav-item" onclick="switchSection('notes', this)">
-        <span class="icon">📌</span>
-        <span class="label">الملخصات</span>
+        <span class="icon">📚</span>
+        <span class="label">المكتبة</span>
       </div>
       <div class="nav-item" onclick="switchSection('pomodoro', this)">
         <span class="icon">🍅</span>
@@ -749,7 +949,6 @@
         const fd = fb.getChannelData(0);
         for (let i = 0; i < fb.length; i++) {
           let noise = Math.random() * 2 - 1;
-          // Crackle pop generation logic
           let isCrackle = Math.random() > 0.992;
           fd[i] = isCrackle ? (Math.random() > 0.5 ? 1 : -1) * (0.6 + Math.random() * 0.4) : noise * 0.08;
         }
@@ -812,7 +1011,6 @@
             if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
           } else {
             btn.classList.add("wrong");
-            // Highlight the right option
             Array.from(container.children).forEach(child => {
               if (child.innerText.includes(item.a)) child.classList.add("correct");
             });
@@ -833,6 +1031,84 @@
         quizIndex = 0;
         renderQuestion();
       }
+    }
+
+    /* =========================================================
+       📚 مكتبة الملخصات والمستندات (PDF DzExams / DzSubjects)
+       ========================================================= */
+    const libraryData = [
+      { id: 1, title: "ملخص تركيب البروتين الشامل", category: "summary", stream: "exp", subject: "science", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+      { id: 2, title: "بكالوريا 2023 علوم تجريبية - التصحيح النموذجي", category: "bac", stream: "exp", subject: "science", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+      { id: 3, title: "سلسلة مسائل عقبة بن نافع في الرياضيات", category: "okba", stream: "math", subject: "math", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+      { id: 4, title: "اختبارات الفصل الأول - ثانوية أشبال الأمة", category: "ashbal", stream: "exp", subject: "physics", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+      { id: 5, title: "جميع المقالات الفلسفية المقترحة للبكالوريا", category: "summary", stream: "ph", subject: "philo", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
+      { id: 6, title: "اختبار الفصل الثاني في اللغة العربية", category: "exams", stream: "all", subject: "arabic", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
+    ];
+
+    let activeCategory = 'all';
+
+    function setCategory(cat, btn) {
+      activeCategory = cat;
+      document.querySelectorAll('.pdf-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      filterLibrary();
+    }
+
+    function filterLibrary() {
+      const stream = document.getElementById('streamSelect').value;
+      const subject = document.getElementById('subjectSelect').value;
+      const container = document.getElementById('pdfListContainer');
+      container.innerHTML = '';
+
+      const filtered = libraryData.filter(item => {
+        const matchesCategory = (activeCategory === 'all' || item.category === activeCategory);
+        const matchesStream = (stream === 'all' || item.stream === 'all' || item.stream === stream);
+        const matchesSubject = (subject === 'all' || item.subject === subject);
+        return matchesCategory && matchesStream && matchesSubject;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<div style="text-align:center; color: var(--text-muted); padding: 20px; font-size:0.85rem;">لا توجد مستندات متوفرة بهذا التصنيف حالياً...</div>';
+        return;
+      }
+
+      filtered.forEach(doc => {
+        const card = document.createElement('div');
+        card.className = 'pdf-card';
+        card.innerHTML = `
+          <div class="pdf-info">
+            <h4>📄 ${doc.title}</h4>
+            <span>${getCategoryName(doc.category)}</span>
+          </div>
+          <div class="pdf-actions">
+            <button class="btn-action btn-view" onclick="openPdfViewer('${doc.url}', '${doc.title}')">قراءة 👁️</button>
+            <a class="btn-action btn-download" href="${doc.url}" download target="_blank">تحميل 📥</a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function getCategoryName(cat) {
+      switch(cat) {
+        case 'summary': return '📚 ملخص دروس';
+        case 'bac': return '🎓 DzExams - بكالوريا';
+        case 'exams': return '📝 اختبار اختباري';
+        case 'ashbal': return '⚔️ أشبال الأمة';
+        case 'okba': return '🧠 عقبة بن نافع';
+        default: return '📄 مستند تعليمي';
+      }
+    }
+
+    function openPdfViewer(url, title) {
+      document.getElementById('pdfViewerTitle').innerText = title;
+      document.getElementById('pdfIframe').src = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+      document.getElementById('pdfViewerModal').style.display = 'flex';
+    }
+
+    function closePdfViewer() {
+      document.getElementById('pdfViewerModal').style.display = 'none';
+      document.getElementById('pdfIframe').src = '';
     }
 
     /* =========================================================
@@ -939,6 +1215,7 @@
     window.onload = function() {
       renderQuestion();
       renderNotes();
+      filterLibrary();
     };
   </script>
 </body>
