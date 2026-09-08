@@ -514,7 +514,7 @@
       color: #fff;
     }
 
-    /* 🎧 مشغل الصوت المخصص للرابط الخص بك */
+    /* 🎧 مشغل الصوت المخفي (صوت فقط) */
     .custom-sound-section {
       margin-top: 20px;
       padding-top: 16px;
@@ -531,23 +531,38 @@
       gap: 6px;
     }
 
-    .yt-player-container {
-      width: 100%;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-      background: #000;
-      margin-top: 12px;
+    .hidden-audio-player {
+      width: 0;
+      height: 0;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
     }
 
-    .yt-player-container iframe {
-      width: 100%;
-      height: 190px;
+    .audio-control-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 12px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--card-border);
+      margin-top: 10px;
+    }
+
+    .audio-play-btn {
+      background: var(--primary-burgundy);
+      color: #fff;
       border: none;
+      padding: 8px 18px;
+      border-radius: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.85rem;
     }
 
-    /* 💻 جلسات الزوم (Zoom Sessions) */
-    .zoom-card {
+    /* 💻 جلسات Google Meet */
+    .meet-card {
       margin-top: 20px;
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--card-border);
@@ -556,7 +571,7 @@
       text-align: right;
     }
 
-    .zoom-card h3 {
+    .meet-card h3 {
       font-size: 1.05rem;
       color: #fff;
       margin-bottom: 6px;
@@ -565,16 +580,16 @@
       gap: 8px;
     }
 
-    .zoom-card p {
+    .meet-card p {
       font-size: 0.82rem;
       color: var(--text-muted);
       margin-bottom: 12px;
       line-height: 1.5;
     }
 
-    .zoom-btn {
+    .meet-btn {
       width: 100%;
-      background: #2D8CFF;
+      background: #00897B;
       color: #fff;
       border: none;
       padding: 12px;
@@ -586,7 +601,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 4px 15px rgba(45, 140, 255, 0.3);
+      box-shadow: 0 4px 15px rgba(0, 137, 123, 0.3);
     }
 
     /* الشريط السفلي */
@@ -725,14 +740,16 @@
     </div>
   </div>
 
-  <!-- 2️⃣ قسم الكويزات -->
+  <!-- 2️⃣ قسم الكويزات (مقسم: اختبارات سريعة + امتحانات الباك) -->
   <div id="section-quiz" class="app-section">
     <div class="glass-card header-card">
-      <h2>🧩 الكويزات التفاعلية</h2>
+      <h2>🧩 الكويزات والامتحانات</h2>
       <p>اختبر مراجعتك وجاهزيتك للبكالوريا 📚✨</p>
     </div>
 
+    <!-- الجزء العلوي: اختبارات سريعة -->
     <div class="glass-card">
+      <h3 style="font-size: 1.05rem; margin-bottom: 12px; color: #fff;">📝 أسئلة واختبارات سريعة</h3>
       <div class="quiz-header">
         <span id="subjectBadge">تركيب البروتين 🧬</span>
         <span id="questionProgress">1 / 4</span>
@@ -743,9 +760,16 @@
         <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>التالي ➔</button>
       </div>
     </div>
+
+    <!-- الجزء السفلي: مواضيع وامتحانات البكالوريا (BAC) -->
+    <div class="glass-card">
+      <h3 style="font-size: 1.05rem; margin-bottom: 10px; color: #fff;">🎓 مواضيع وامتحانات البكالوريا (BAC)</h3>
+      <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px;">اختر الشعبة للوصول المباشر إلى مواضيع البكالوريا السابقة مع التصحيح النموذجي:</p>
+      <div class="pdf-list" id="bacListContainer"></div>
+    </div>
   </div>
 
-  <!-- 3️⃣ قسم المكتبة والملخصات (روابط dzexams المباشرة) -->
+  <!-- 3️⃣ قسم المكتبة والملخصات -->
   <div id="section-notes" class="app-section">
     <div class="glass-card header-card">
       <h2>📚 مكتبة البكالوريا والملخصات</h2>
@@ -779,7 +803,7 @@
     </div>
   </div>
 
-  <!-- 4️⃣ قسم بومودورو مع أجواء المطر والنار وجلسات الزوم -->
+  <!-- 4️⃣ قسم بومودورو مع صوت مخفي وجلسات Google Meet -->
   <div id="section-pomodoro" class="app-section">
     <div class="glass-card header-card">
       <h2>🍅 مؤقت بومودورو</h2>
@@ -805,22 +829,25 @@
         <button class="pomodoro-btn" onclick="resetPomodoro()">إعادة ضبط 🔄</button>
       </div>
 
-      <!-- 🌧️🔥 صوت الأمطار والرعد والنار والحطب من الرابط الخص بك -->
+      <!-- 🌧️🔥 صوت فقط بدون إظهار الفيديو -->
       <div class="custom-sound-section">
-        <h3>🌧️🔥 أجواء الأمطار والنار والحطب</h3>
-        <p style="font-size: 0.78rem; color: var(--text-muted);">الصوت المفضل للتركيز والدراسة المباشرة:</p>
-        
-        <div class="yt-player-container">
-          <iframe id="rainFireAudioFrame" src="https://www.youtube.com/embed/JrG0F5fVGKM?enablejsapi=1" allow="autoplay"></iframe>
+        <h3>🌧️🔥 صوت الأمطار والنار والحطب (صوت فقط)</h3>
+        <p style="font-size: 0.78rem; color: var(--text-muted);">تم تحويل الفيديو إلى خلفية صوتية نقية للتركيز:</p>
+
+        <div class="audio-control-box">
+          <span style="font-size: 0.85rem; color: #fff;">صوت المطر والنار والتركيز 🎧</span>
+          <button class="audio-play-btn" id="audioToggleBtn" onclick="toggleAudioBg()">تشغيل الصوت ▶️</button>
         </div>
+
+        <iframe id="audioFrame" class="hidden-audio-player" src="" allow="autoplay"></iframe>
       </div>
 
-      <!-- 💻 جلسات الدراسة المباشرة عبر الزوم (Zoom Sessions) -->
-      <div class="zoom-card">
-        <h3>💻 جلسات الدراسية الجماعية (Zoom)</h3>
-        <p>انضم إلى جلسات المذاكرة الجماعية والمباشرة مع باقي زملائك لرفع مستوى التركيز والالتزام 🔥✨</p>
-        <button class="zoom-btn" onclick="openZoomSession()">
-          <span>انضمام إلى جلسة الزوم الآن 🚀</span>
+      <!-- 💻 جلسات الدراسة المباشرة عبر Google Meet -->
+      <div class="meet-card">
+        <h3>💻 جلسات الدراسية الجماعية (Google Meet)</h3>
+        <p>انضم إلى جلسات المذاكرة المباشرة عبر Google Meet لرفع التحدي والتركيز مع باقي الأعضاء 🔥✨</p>
+        <button class="meet-btn" onclick="openMeetSession()">
+          <span>انضمام إلى جلسة Google Meet الآن 🚀</span>
         </button>
       </div>
     </div>
@@ -928,7 +955,7 @@
       }
     }
 
-    /* المكتبة والمستندات DzExams */
+    /* بيانات المكتبة ومواضيع الباك */
     const streamsData = [
       { id: "exp", title: "شعبة علوم تجريبية 🧪", desc: "امتحانات، ملخصات وحوليات مواضيع علوم تجريبية", url: "https://www.dzexams.com/ar/3as/se" },
       { id: "math", title: "شعبة رياضيات 📐", desc: "جميع مواضيع وملخصات شعبة الرياضيات", url: "https://www.dzexams.com/ar/3as/m" },
@@ -941,6 +968,7 @@
     function renderLibrary() {
       const selectedStream = document.getElementById("streamSelect").value;
       const container = document.getElementById("pdfListContainer");
+      const bacContainer = document.getElementById("bacListContainer");
 
       const filtered = streamsData.filter(item => selectedStream === 'all' || item.id === selectedStream);
 
@@ -952,6 +980,18 @@
           </div>
           <div class="pdf-actions">
             <button class="btn-action btn-view" onclick="openPdfViewer('${item.url}')">فتح DzExams 🔗</button>
+          </div>
+        </div>
+      `).join('');
+
+      bacContainer.innerHTML = filtered.map(item => `
+        <div class="pdf-card">
+          <div class="pdf-info">
+            <h4>باكالوريات ${item.title}</h4>
+            <span>مواضيع وتصحيحات البكالوريا السابقة</span>
+          </div>
+          <div class="pdf-actions">
+            <button class="btn-action btn-view" onclick="openPdfViewer('${item.url}')">عرض المواضيع 🎓</button>
           </div>
         </div>
       `).join('');
@@ -1045,13 +1085,30 @@
       updatePomodoroDisplay();
     }
 
-    /* فتح رابط جلسة الزوم */
-    function openZoomSession() {
-      const zoomUrl = "https://zoom.us/join"; // يمكنك وضع رابط الزوم المباشر الخاص بك هنا
-      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openLink) {
-        window.Telegram.WebApp.openLink(zoomUrl);
+    /* تشغيل وإيقاف الصوت المخفي */
+    let isAudioPlaying = false;
+    function toggleAudioBg() {
+      const frame = document.getElementById('audioFrame');
+      const btn = document.getElementById('audioToggleBtn');
+      
+      if (!isAudioPlaying) {
+        frame.src = "https://www.youtube.com/embed/JrG0F5fVGKM?enablejsapi=1&autoplay=1";
+        btn.innerText = "إيقاف الصوت ⏸️";
+        isAudioPlaying = true;
       } else {
-        window.open(zoomUrl, '_blank');
+        frame.src = "";
+        btn.innerText = "تشغيل الصوت ▶️";
+        isAudioPlaying = false;
+      }
+    }
+
+    /* فتح رابط Google Meet */
+    function openMeetSession() {
+      const meetUrl = "https://meet.google.com/krd-aesq-sgt";
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openLink) {
+        window.Telegram.WebApp.openLink(meetUrl);
+      } else {
+        window.open(meetUrl, '_blank');
       }
     }
 
