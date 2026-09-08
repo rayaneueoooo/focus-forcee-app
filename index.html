@@ -823,9 +823,7 @@
       </div>
 
       <!-- قائمة الملفات المجلوبة تلقائياً -->
-      <div class="pdf-list" id="pdfListContainer">
-        <!-- يتم التحميل التلقائي عبر السكريبت من dzexams_bac_library.json -->
-      </div>
+      <div class="pdf-list" id="pdfListContainer"></div>
     </div>
 
     <!-- بطاقة إضافة ملاحظات سريعة -->
@@ -1025,40 +1023,63 @@
     }
 
     /* =========================================================
-       📚 مكتبة المستندات (ربط تلقائي مع dzexams_bac_library.json)
+       📚 مكتبة المستندات (مدمجة مباشرة لمنع أخطاء الجلب)
        ========================================================= */
     let libraryData = [];
     let currentCategory = 'all';
 
-    async function fetchScrapedLibrary() {
-      const container = document.getElementById("pdfListContainer");
-      container.innerHTML = "<p style='text-align:center; padding:20px; color:var(--text-muted);'>جاري تحميل المكتبة الشاملة... ⏳</p>";
-
-      try {
-        const response = await fetch('dzexams_bac_library.json');
-        if (!response.ok) throw new Error("لم يتم العثور على الملف");
-        
-        const rawJson = await response.json();
-        libraryData = [];
-        let idCounter = 1;
-
-        for (const [subjectName, files] of Object.entries(rawJson)) {
-          files.forEach(file => {
-            libraryData.push({
-              id: idCounter++,
-              title: file.title || "مستند تعليمي",
-              subjectName: subjectName,
-              category: file.category || "bac",
-              url: file.pdf_url
-            });
-          });
+    // يمكنك إضافة كل الـ JSON المقتنص هنا مباشرة داخل هذا المتغير:
+    const embeddedJsonData = {
+      "العلوم الفيزيائية": [
+        {
+          "title": "موضوع بكالوريا 2023 علوم تجريبية مع التصحيح",
+          "category": "bac",
+          "pdf_url": "https://www.dzexams.com/ar/bac/2023/subject"
+        },
+        {
+          "title": "ملخص شامل لوحدة المتابعة الزمنية لتحول كيميائي",
+          "category": "summary",
+          "pdf_url": "https://www.dzexams.com/ar/bac/summary"
         }
+      ],
+      "علوم الطبيعة والحياة": [
+        {
+          "title": "سلسلة مسائل عقبة بن نافع في تركيب البروتين",
+          "category": "okba",
+          "pdf_url": "https://www.dzexams.com/ar/bac/science"
+        },
+        {
+          "title": "امتحان أشبال الأمة مع التصحيح النموذجي",
+          "category": "ashbal",
+          "pdf_url": "https://www.dzexams.com/ar/bac/ashbal"
+        }
+      ],
+      "الرياضيات": [
+        {
+          "title": "اختبار الفصل الأول - شعبة رياضيات وتكني ماث",
+          "category": "exams",
+          "pdf_url": "https://www.dzexams.com/ar/bac/math"
+        }
+      ]
+    };
 
-        renderLibrary();
-      } catch (error) {
-        console.error("خطأ في جلب بيانات المكتبة:", error);
-        container.innerHTML = "<p style='text-align:center; padding:20px; color:var(--accent-highlight);'>⚠️ يتعذر تحميل ملف dzexams_bac_library.json. تأكد من رفعه في نفس المجلد.</p>";
+    function loadLibraryData() {
+      libraryData = [];
+      let idCounter = 1;
+
+      for (const [subjectName, files] of Object.entries(embeddedJsonData)) {
+        files.forEach(file => {
+          libraryData.push({
+            id: idCounter++,
+            title: file.title || "مستند تعليمي",
+            subjectName: subjectName,
+            category: file.category || "bac",
+            url: file.pdf_url
+          });
+        });
       }
+
+      renderLibrary();
     }
 
     function renderLibrary() {
@@ -1081,7 +1102,7 @@
           </div>
           <div class="pdf-actions">
             <button class="btn-action btn-view" onclick="openPdfViewer('${item.url}', '${item.title.replace(/'/g, "\\'")}')">قراءة 👁️</button>
-            <a href="${item.url}" target="_blank" class="btn-action btn-download" download>تحميل 📥</a>
+            <a href="${item.url}" target="_blank" class="btn-action btn-download">تحميل 📥</a>
           </div>
         </div>
       `).join('');
@@ -1197,7 +1218,7 @@
     document.addEventListener("DOMContentLoaded", () => {
       renderQuestion();
       renderNotes();
-      fetchScrapedLibrary();
+      loadLibraryData();
     });
   </script>
 </body>
