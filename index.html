@@ -325,30 +325,6 @@
       gap: 8px;
     }
 
-    .filter-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .filter-select {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 14px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      font-size: 0.9rem;
-      font-weight: 600;
-      outline: none;
-    }
-
-    .filter-select option {
-      background: #3b1119;
-      color: #fff;
-    }
-
     .pdf-list {
       display: flex;
       flex-direction: column;
@@ -524,7 +500,7 @@
       color: #fff;
     }
 
-    /* 🎧 مشغل الصوت المخفي (صوت فقط) */
+    /* 🎧 مشغل الصوت */
     .custom-sound-section {
       margin-top: 20px;
       padding-top: 16px;
@@ -824,7 +800,7 @@
     </div>
   </div>
 
-  <!-- 4️⃣ قسم بومودورو مع صوت مخفي وجلسات Google Meet -->
+  <!-- 4️⃣ قسم بومودورو مع الصوت والمؤقت -->
   <div id="section-pomodoro" class="app-section">
     <div class="glass-card header-card">
       <h2>🍅 مؤقت بومودورو</h2>
@@ -850,13 +826,13 @@
         <button class="pomodoro-btn" onclick="resetPomodoro()">إعادة ضبط 🔄</button>
       </div>
 
-      <!-- 🌧️🔥 صوت فقط -->
+      <!-- 🌧️🔥 خلفية صوتية للتركيز -->
       <div class="custom-sound-section">
-        <h3>🌧️🔥 صوت الأمطار والنار والحطب (صوت فقط)</h3>
-        <p style="font-size: 0.78rem; color: var(--text-muted);">تم تحويل الفيديو إلى خلفية صوتية نقية للتركيز:</p>
+        <h3>🌧️🔥 صوت الأمطار والنار للتركيز</h3>
+        <p style="font-size: 0.78rem; color: var(--text-muted);">خلفية صوتية مهدئة ومحفزة للتركيز:</p>
 
         <div class="audio-control-box">
-          <span style="font-size: 0.85rem; color: #fff;">صوت المطر والنار والتركيز 🎧</span>
+          <span style="font-size: 0.85rem; color: #fff;">صوت المطر والنار للتركيز 🎧</span>
           <button class="audio-play-btn" id="audioToggleBtn" onclick="toggleAudioBg()">تشغيل الصوت ▶️</button>
         </div>
 
@@ -1064,14 +1040,14 @@
       updatePomodoroDisplay();
     }
 
-    /* تشغيل وإيقاف الصوت المخفي */
+    /* تشغيل وإيقاف الصوت المخفي مع قص أول 10 ثوانٍ (start=10) */
     let isAudioPlaying = false;
     function toggleAudioBg() {
       const frame = document.getElementById('audioFrame');
       const btn = document.getElementById('audioToggleBtn');
       
       if (!isAudioPlaying) {
-        frame.src = "https://www.youtube.com/embed/JrG0F5fVGKM?enablejsapi=1&autoplay=1";
+        frame.src = "https://www.youtube.com/embed/JrG0F5fVGKM?enablejsapi=1&autoplay=1&start=10";
         btn.innerText = "إيقاف الصوت ⏸️";
         isAudioPlaying = true;
       } else {
