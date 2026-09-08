@@ -780,7 +780,7 @@
     </div>
   </div>
 
-  <!-- 4️⃣ قسم المكتبة والملخصات المحدث بالكامل 📚 -->
+  <!-- 4️⃣ قسم المكتبة والملخصات 📚 -->
   <div id="section-notes" class="app-section">
     <div class="glass-card header-card">
       <h2>📚 مكتبة البكالوريا الشاملة</h2>
@@ -822,9 +822,9 @@
         <button class="pdf-tab" onclick="setCategory('okba', this)">🧠 مسائل عقبة بن نافع</button>
       </div>
 
-      <!-- قائمة الملفات -->
+      <!-- قائمة الملفات المجلوبة تلقائياً -->
       <div class="pdf-list" id="pdfListContainer">
-        <!-- يتم التحميل التلقائي عبر السكريبت -->
+        <!-- يتم التحميل التلقائي عبر السكريبت من dzexams_bac_library.json -->
       </div>
     </div>
 
@@ -867,7 +867,7 @@
     </div>
   </div>
 
-  <!-- 📖 عارض الملفات المدمج داخل التطبيق بدون الخروج -->
+  <!-- 📖 عارض الملفات المدمج داخل التطبيق -->
   <div id="pdfViewerModal">
     <div class="pdf-viewer-header">
       <span class="pdf-viewer-title" id="pdfViewerTitle">قراءة المستند</span>
@@ -927,7 +927,7 @@
     }
 
     /* =========================================================
-       🔊 محاكي أصوات الطبيعة (Rain & Improved Realistic Fire)
+       🔊 محاكي أصوات الطبيعة (Rain & Fire)
        ========================================================= */
     let audioCtx = null, rainGain = null, fireGain = null;
     
@@ -935,7 +935,7 @@
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         
-        // 🌧️ Rain Sound Simulation
+        // Rain Sound
         const rb = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
         const rd = rb.getChannelData(0);
         for (let i = 0; i < rb.length; i++) rd[i] = Math.random() * 2 - 1;
@@ -944,7 +944,7 @@
         rainGain = audioCtx.createGain(); rainGain.gain.value = 0;
         rs.connect(rf); rf.connect(rainGain); rainGain.connect(audioCtx.destination); rs.start();
 
-        // 🪵🔥 Realistic Fire Crackle & Rumble
+        // Fire Sound
         const fb = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
         const fd = fb.getChannelData(0);
         for (let i = 0; i < fb.length; i++) {
@@ -953,18 +953,9 @@
           fd[i] = isCrackle ? (Math.random() > 0.5 ? 1 : -1) * (0.6 + Math.random() * 0.4) : noise * 0.08;
         }
         const fs = audioCtx.createBufferSource(); fs.buffer = fb; fs.loop = true;
-        
-        const ff = audioCtx.createBiquadFilter(); 
-        ff.type = 'lowpass'; 
-        ff.frequency.value = 1200;
-
-        fireGain = audioCtx.createGain(); 
-        fireGain.gain.value = 0;
-        
-        fs.connect(ff); 
-        ff.connect(fireGain); 
-        fireGain.connect(audioCtx.destination); 
-        fs.start();
+        const ff = audioCtx.createBiquadFilter(); ff.type = 'lowpass'; ff.frequency.value = 1200;
+        fireGain = audioCtx.createGain(); fireGain.gain.value = 0;
+        fs.connect(ff); ff.connect(fireGain); fireGain.connect(audioCtx.destination); fs.start();
       }
     }
 
@@ -976,7 +967,7 @@
     }
 
     /* =========================================================
-       🧩 Quiz Logic
+       🧩 الكويزات
        ========================================================= */
     const rawData = [
       { q: "أين يتم تركيب البروتين في الخلية حقيقية النواة؟", a: "في الهيولة", w1: "في النواة", w2: "في جهاز غولجي", cat: "تركيب البروتين 🧬" },
@@ -1034,189 +1025,180 @@
     }
 
     /* =========================================================
-       📚 مكتبة الملخصات والمستندات (PDF DzExams / DzSubjects)
+       📚 مكتبة المستندات (ربط تلقائي مع dzexams_bac_library.json)
        ========================================================= */
-    const libraryData = [
-      { id: 1, title: "ملخص تركيب البروتين الشامل", category: "summary", stream: "exp", subject: "science", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
-      { id: 2, title: "بكالوريا 2023 علوم تجريبية - التصحيح النموذجي", category: "bac", stream: "exp", subject: "science", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
-      { id: 3, title: "سلسلة مسائل عقبة بن نافع في الرياضيات", category: "okba", stream: "math", subject: "math", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
-      { id: 4, title: "اختبارات الفصل الأول - ثانوية أشبال الأمة", category: "ashbal", stream: "exp", subject: "physics", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
-      { id: 5, title: "جميع المقالات الفلسفية المقترحة للبكالوريا", category: "summary", stream: "ph", subject: "philo", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" },
-      { id: 6, title: "اختبار الفصل الثاني في اللغة العربية", category: "exams", stream: "all", subject: "arabic", url: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" }
-    ];
+    let libraryData = [];
+    let currentCategory = 'all';
 
-    let activeCategory = 'all';
+    async function fetchScrapedLibrary() {
+      const container = document.getElementById("pdfListContainer");
+      container.innerHTML = "<p style='text-align:center; padding:20px; color:var(--text-muted);'>جاري تحميل المكتبة الشاملة... ⏳</p>";
 
-    function setCategory(cat, btn) {
-      activeCategory = cat;
-      document.querySelectorAll('.pdf-tab').forEach(t => t.classList.remove('active'));
-      btn.classList.add('active');
-      filterLibrary();
+      try {
+        const response = await fetch('dzexams_bac_library.json');
+        if (!response.ok) throw new Error("لم يتم العثور على الملف");
+        
+        const rawJson = await response.json();
+        libraryData = [];
+        let idCounter = 1;
+
+        for (const [subjectName, files] of Object.entries(rawJson)) {
+          files.forEach(file => {
+            libraryData.push({
+              id: idCounter++,
+              title: file.title || "مستند تعليمي",
+              subjectName: subjectName,
+              category: file.category || "bac",
+              url: file.pdf_url
+            });
+          });
+        }
+
+        renderLibrary();
+      } catch (error) {
+        console.error("خطأ في جلب بيانات المكتبة:", error);
+        container.innerHTML = "<p style='text-align:center; padding:20px; color:var(--accent-highlight);'>⚠️ يتعذر تحميل ملف dzexams_bac_library.json. تأكد من رفعه في نفس المجلد.</p>";
+      }
     }
 
-    function filterLibrary() {
-      const stream = document.getElementById('streamSelect').value;
-      const subject = document.getElementById('subjectSelect').value;
-      const container = document.getElementById('pdfListContainer');
-      container.innerHTML = '';
+    function renderLibrary() {
+      const container = document.getElementById("pdfListContainer");
 
       const filtered = libraryData.filter(item => {
-        const matchesCategory = (activeCategory === 'all' || item.category === activeCategory);
-        const matchesStream = (stream === 'all' || item.stream === 'all' || item.stream === stream);
-        const matchesSubject = (subject === 'all' || item.subject === subject);
-        return matchesCategory && matchesStream && matchesSubject;
+        return (currentCategory === 'all' || item.category === currentCategory);
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = '<div style="text-align:center; color: var(--text-muted); padding: 20px; font-size:0.85rem;">لا توجد مستندات متوفرة بهذا التصنيف حالياً...</div>';
+        container.innerHTML = "<p style='text-align:center; padding:20px; color:var(--text-muted);'>لا توجد ملفات متوفرة بهذا التصنيف حالياً 📭</p>";
         return;
       }
 
-      filtered.forEach(doc => {
-        const card = document.createElement('div');
-        card.className = 'pdf-card';
-        card.innerHTML = `
+      container.innerHTML = filtered.map(item => `
+        <div class="pdf-card">
           <div class="pdf-info">
-            <h4>📄 ${doc.title}</h4>
-            <span>${getCategoryName(doc.category)}</span>
+            <h4>${item.title}</h4>
+            <span>📁 ${item.subjectName}</span>
           </div>
           <div class="pdf-actions">
-            <button class="btn-action btn-view" onclick="openPdfViewer('${doc.url}', '${doc.title}')">قراءة 👁️</button>
-            <a class="btn-action btn-download" href="${doc.url}" download target="_blank">تحميل 📥</a>
+            <button class="btn-action btn-view" onclick="openPdfViewer('${item.url}', '${item.title.replace(/'/g, "\\'")}')">قراءة 👁️</button>
+            <a href="${item.url}" target="_blank" class="btn-action btn-download" download>تحميل 📥</a>
           </div>
-        `;
-        container.appendChild(card);
-      });
+        </div>
+      `).join('');
     }
 
-    function getCategoryName(cat) {
-      switch(cat) {
-        case 'summary': return '📚 ملخص دروس';
-        case 'bac': return '🎓 DzExams - بكالوريا';
-        case 'exams': return '📝 اختبار اختباري';
-        case 'ashbal': return '⚔️ أشبال الأمة';
-        case 'okba': return '🧠 عقبة بن نافع';
-        default: return '📄 مستند تعليمي';
-      }
+    function setCategory(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll('.pdf-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      renderLibrary();
+    }
+
+    function filterLibrary() {
+      renderLibrary();
     }
 
     function openPdfViewer(url, title) {
-      document.getElementById('pdfViewerTitle').innerText = title;
-      document.getElementById('pdfIframe').src = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
-      document.getElementById('pdfViewerModal').style.display = 'flex';
+      document.getElementById("pdfViewerTitle").innerText = title;
+      document.getElementById("pdfIframe").src = url;
+      document.getElementById("pdfViewerModal").style.display = "flex";
     }
 
     function closePdfViewer() {
-      document.getElementById('pdfViewerModal').style.display = 'none';
-      document.getElementById('pdfIframe').src = '';
+      document.getElementById("pdfViewerModal").style.display = "none";
+      document.getElementById("pdfIframe").src = "";
     }
 
     /* =========================================================
-       📌 Memos / Notes Logic
+       📌 المفكرة السريعة
        ========================================================= */
-    let notesList = JSON.parse(localStorage.getItem('ff_notes_v2')) || [];
+    let notes = JSON.parse(localStorage.getItem('user_notes') || '[]');
 
     function renderNotes() {
-      const container = document.getElementById('notesListContainer');
-      container.innerHTML = '';
-      if (notesList.length === 0) {
-        container.innerHTML = '<div style="text-align:center; color: var(--text-muted); font-size: 0.85rem; padding: 15px;">لا توجد ملاحظات مضافة بعد...</div>';
+      const container = document.getElementById("notesListContainer");
+      if (notes.length === 0) {
+        container.innerHTML = "<p style='text-align:center; color:var(--text-muted); font-size:0.8rem;'>لا توجد ملاحظات محفوظة.</p>";
         return;
       }
-      notesList.forEach((noteObj, index) => {
-        const item = document.createElement('div');
-        item.className = 'note-item';
-        item.innerHTML = `
+      container.innerHTML = notes.map((note, i) => `
+        <div class="note-item">
           <div>
-            <span>${noteObj.text}</span>
-            <span class="note-date">${noteObj.date}</span>
+            <div>${note.text}</div>
+            <span class="note-date">${note.date}</span>
           </div>
-          <button class="note-delete" onclick="deleteNote(${index})">×</button>
-        `;
-        container.appendChild(item);
-      });
+          <button class="note-delete" onclick="deleteNote(${i})">✕</button>
+        </div>
+      `).join('');
     }
 
     function addNote() {
-      const input = document.getElementById('noteInput');
+      const input = document.getElementById("noteInput");
       const val = input.value.trim();
-      if (val) {
-        const dateStr = new Date().toLocaleDateString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-        notesList.unshift({ text: val, date: dateStr });
-        localStorage.setItem('ff_notes_v2', JSON.stringify(notesList));
-        input.value = '';
-        renderNotes();
-      }
+      if (!val) return;
+      notes.unshift({ text: val, date: new Date().toLocaleDateString('ar-DZ') });
+      localStorage.setItem('user_notes', JSON.stringify(notes));
+      input.value = "";
+      renderNotes();
     }
 
-    function deleteNote(index) {
-      notesList.splice(index, 1);
-      localStorage.setItem('ff_notes_v2', JSON.stringify(notesList));
+    function deleteNote(i) {
+      notes.splice(i, 1);
+      localStorage.setItem('user_notes', JSON.stringify(notes));
       renderNotes();
     }
 
     /* =========================================================
-       🍅 Pomodoro Timer Logic
+       🍅 مؤقت بومودورو
        ========================================================= */
-    let pomoMinutes = 25;
-    let pomoSeconds = 0;
-    let pomoInterval = null;
-    let isPomoRunning = false;
+    let pomodoroDuration = 25 * 60;
+    let pomodoroTimeLeft = pomodoroDuration;
+    let pomodoroTimer = null;
 
-    function updatePomoDisplay() {
-      const m = String(pomoMinutes).padStart(2, '0');
-      const s = String(pomoSeconds).padStart(2, '0');
-      document.getElementById('pomodoroDisplay').innerText = `${m}:${s}`;
+    function updatePomodoroDisplay() {
+      const m = Math.floor(pomodoroTimeLeft / 60).toString().padStart(2, '0');
+      const s = (pomodoroTimeLeft % 60).toString().padStart(2, '0');
+      document.getElementById("pomodoroDisplay").innerText = `${m}:${s}`;
     }
 
     function changePomodoroDuration(val) {
       pausePomodoro();
-      pomoMinutes = parseInt(val);
-      pomoSeconds = 0;
-      updatePomoDisplay();
+      pomodoroDuration = parseInt(val) * 60;
+      pomodoroTimeLeft = pomodoroDuration;
+      updatePomodoroDisplay();
     }
 
     function startPomodoro() {
-      if (isPomoRunning) return;
-      isPomoRunning = true;
-      document.getElementById('startPomoBtn').classList.add('active-control');
-      
-      pomoInterval = setInterval(() => {
-        if (pomoSeconds === 0) {
-          if (pomoMinutes === 0) {
-            clearInterval(pomoInterval);
-            isPomoRunning = false;
-            alert("🎉 انتهت جلسة التركيز! خذ استراحة قصيرة ☕");
-            return;
-          }
-          pomoMinutes--;
-          pomoSeconds = 59;
+      if (pomodoroTimer) return;
+      document.getElementById("startPomoBtn").classList.add("active-control");
+      pomodoroTimer = setInterval(() => {
+        if (pomodoroTimeLeft > 0) {
+          pomodoroTimeLeft--;
+          updatePomodoroDisplay();
         } else {
-          pomoSeconds--;
+          pausePomodoro();
+          alert("🎉 انتهى وقت الجلسة! خذ قسطاً من الراحة.");
         }
-        updatePomoDisplay();
       }, 1000);
     }
 
     function pausePomodoro() {
-      isPomoRunning = false;
-      clearInterval(pomoInterval);
-      document.getElementById('startPomoBtn').classList.remove('active-control');
+      clearInterval(pomodoroTimer);
+      pomodoroTimer = null;
+      document.getElementById("startPomoBtn").classList.remove("active-control");
     }
 
     function resetPomodoro() {
       pausePomodoro();
-      const selectVal = document.getElementById('pomodoroTimeSelect').value;
-      pomoMinutes = parseInt(selectVal);
-      pomoSeconds = 0;
-      updatePomoDisplay();
+      pomodoroTimeLeft = pomodoroDuration;
+      updatePomodoroDisplay();
     }
 
-    window.onload = function() {
+    // التهيئة الابتدائية عند تحميل الصفحة
+    document.addEventListener("DOMContentLoaded", () => {
       renderQuestion();
       renderNotes();
-      filterLibrary();
-    };
+      fetchScrapedLibrary();
+    });
   </script>
 </body>
 </html>
