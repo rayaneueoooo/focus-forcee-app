@@ -416,9 +416,9 @@
     }
 
     .btn-action {
-      padding: 6px 12px;
-      border-radius: 10px;
-      font-size: 0.75rem;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 0.78rem;
       font-weight: 700;
       border: none;
       cursor: pointer;
@@ -432,54 +432,10 @@
     .btn-download {
       background: var(--primary-burgundy);
       color: #fff;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      box-shadow: 0 4px 12px var(--burgundy-glow);
     }
 
-    /* PDF Reader Overlay Inside App */
-    #pdfViewerModal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 10000;
-      flex-direction: column;
-    }
-
-    .pdf-viewer-header {
-      padding: 12px 16px;
-      background: var(--bg-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--card-border);
-    }
-
-    .pdf-viewer-title {
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: #fff;
-    }
-
-    .pdf-viewer-close {
-      background: var(--accent-highlight);
-      color: #fff;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    #pdfIframe {
-      flex: 1;
-      width: 100%;
-      border: none;
-    }
-
-    /* الملخصات والملاحظات */
+    /* المفكرة */
     .notes-input-row {
       display: flex;
       gap: 8px;
@@ -865,15 +821,6 @@
     </div>
   </div>
 
-  <!-- 📖 عارض الملفات المدمج داخل التطبيق -->
-  <div id="pdfViewerModal">
-    <div class="pdf-viewer-header">
-      <span class="pdf-viewer-title" id="pdfViewerTitle">قراءة المستند</span>
-      <button class="pdf-viewer-close" onclick="closePdfViewer()">إغلاق ✖</button>
-    </div>
-    <iframe id="pdfIframe" src=""></iframe>
-  </div>
-
   <!-- الشريط السفلي Nav -->
   <div class="taskbar-wrapper">
     <nav class="liquid-taskbar">
@@ -1023,12 +970,11 @@
     }
 
     /* =========================================================
-       📚 مكتبة المستندات (مدمجة مباشرة لمنع أخطاء الجلب)
+       📚 مكتبة المستندات (مدمجة مباشرة لمنع أخطاء الجلب والحظر)
        ========================================================= */
     let libraryData = [];
     let currentCategory = 'all';
 
-    // يمكنك إضافة كل الـ JSON المقتنص هنا مباشرة داخل هذا المتغير:
     const embeddedJsonData = {
       "العلوم الفيزيائية": [
         {
@@ -1101,8 +1047,8 @@
             <span>📁 ${item.subjectName}</span>
           </div>
           <div class="pdf-actions">
-            <button class="btn-action btn-view" onclick="openPdfViewer('${item.url}', '${item.title.replace(/'/g, "\\'")}')">قراءة 👁️</button>
-            <a href="${item.url}" target="_blank" class="btn-action btn-download">تحميل 📥</a>
+            <button class="btn-action btn-view" onclick="openPdfViewer('${item.url}')">عرض 👁️</button>
+            <button class="btn-action btn-download" onclick="openPdfViewer('${item.url}')">تحميل 📥</button>
           </div>
         </div>
       `).join('');
@@ -1119,15 +1065,13 @@
       renderLibrary();
     }
 
-    function openPdfViewer(url, title) {
-      document.getElementById("pdfViewerTitle").innerText = title;
-      document.getElementById("pdfIframe").src = url;
-      document.getElementById("pdfViewerModal").style.display = "flex";
-    }
-
-    function closePdfViewer() {
-      document.getElementById("pdfViewerModal").style.display = "none";
-      document.getElementById("pdfIframe").src = "";
+    /* 📖 فتح روابط المستندات عبر المتصفح لتجاوز حظر الـ iframe */
+    function openPdfViewer(url) {
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openLink) {
+        window.Telegram.WebApp.openLink(url);
+      } else {
+        window.open(url, '_blank');
+      }
     }
 
     /* =========================================================
