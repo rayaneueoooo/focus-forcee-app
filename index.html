@@ -111,7 +111,7 @@
                 </p>
             </div>
 
-            <!-- User Registration Screen (Centered) -->
+            <!-- User Registration Screen -->
             <div id="slide-setup" class="story-slide flex flex-col items-center justify-center text-center space-y-5 w-full max-w-sm mx-auto">
                 <div class="space-y-1">
                     <h2 class="text-2xl font-black text-white">مرحباً بك في العائلة! 🎉</h2>
@@ -184,7 +184,7 @@
         <!-- Dynamic Main Content Area -->
         <main class="flex-1 pb-24 overflow-y-auto" id="main-content">
 
-            <!-- TAB 1: HOME (الرئيسية) WITH BAC COUNTDOWN -->
+            <!-- TAB 1: HOME (الرئيسية) -->
             <div id="tab-home" class="tab-content space-y-6">
                 <!-- BAC Countdown Hero Card -->
                 <div class="bg-light-card dark:bg-dark-card p-6 md:p-10 rounded-3xl space-y-6 shadow-sm border border-stone-200/50 dark:border-stone-800 text-center">
@@ -219,7 +219,7 @@
                 </div>
             </div>
 
-            <!-- TAB 2: STUDY ROOM (غرفة الدراسة / الميت فقط) -->
+            <!-- TAB 2: STUDY ROOM (غرفة الدراسة) -->
             <div id="tab-study" class="tab-content space-y-4 hidden">
                 <div class="bg-light-card dark:bg-dark-card p-8 md:p-12 rounded-3xl text-center space-y-6 shadow-sm border border-stone-200/50 dark:border-stone-800 max-w-xl mx-auto my-6">
                     <div class="w-16 h-16 rounded-3xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto text-3xl">
@@ -236,18 +236,18 @@
                 </div>
             </div>
 
-            <!-- TAB 3: POMODORO TIMER (مؤقت التركيز - مطبق من الصورة) -->
+            <!-- TAB 3: POMODORO TIMER (مؤقت التركيز) -->
             <div id="tab-timer" class="tab-content space-y-6 hidden">
                 
                 <div class="space-y-1 text-right">
                     <h2 class="text-2xl md:text-3xl font-black">مؤقت التركيز</h2>
-                    <p class="text-xs text-light-subtext dark:text-dark-subtext">جلسة واحدة في كل مرة. عدّل الإيقاع حق يناسب يومك، لا العكس.</p>
+                    <p class="text-xs text-light-subtext dark:text-dark-subtext">جلسة واحدة في كل مرة. عدّل الإيقاع حتى يناسب يومك، لا العكس.</p>
                 </div>
 
                 <!-- 2-Column Grid Layout matching the Screenshot -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
                     
-                    <!-- LEFT SIDE CARD: Custom Duration Settings (إيقاعك الخاص) -->
+                    <!-- LEFT SIDE CARD: Custom Duration Settings -->
                     <div class="bg-light-card dark:bg-dark-card p-6 rounded-3xl space-y-5 shadow-sm border border-stone-200/50 dark:border-stone-800">
                         <div class="flex items-center justify-between border-b border-stone-200/40 dark:border-stone-800 pb-4">
                             <div>
@@ -260,7 +260,6 @@
                         </div>
 
                         <div class="space-y-4 text-right">
-                            <!-- Focus Duration Input -->
                             <div class="space-y-1">
                                 <label class="text-xs font-bold">جلسة التركيز</label>
                                 <span class="text-[10px] text-light-subtext dark:text-dark-subtext block">العمل العميق</span>
@@ -270,7 +269,6 @@
                                 </div>
                             </div>
 
-                            <!-- Short Break Duration Input -->
                             <div class="space-y-1">
                                 <label class="text-xs font-bold">الاستراحة القصيرة</label>
                                 <span class="text-[10px] text-light-subtext dark:text-dark-subtext block">تنفس قليلاً</span>
@@ -280,7 +278,6 @@
                                 </div>
                             </div>
 
-                            <!-- Long Break Duration Input -->
                             <div class="space-y-1">
                                 <label class="text-xs font-bold">الاستراحة الطويلة</label>
                                 <span class="text-[10px] text-light-subtext dark:text-dark-subtext block">استعد طاقتك</span>
@@ -290,7 +287,6 @@
                                 </div>
                             </div>
 
-                            <!-- Save Button -->
                             <button onclick="saveTimerSettings()" class="w-full py-3.5 rounded-2xl border border-brand-burgundy/30 dark:border-brand-gold/30 text-brand-burgundy dark:text-brand-gold font-bold text-xs hover:bg-brand-burgundy hover:text-white dark:hover:bg-brand-gold dark:hover:text-dark-bg transition duration-300 flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-check text-xs"></i>
                                 <span>حفظ الإعدادات</span>
@@ -309,8 +305,8 @@
                         </div>
 
                         <!-- Clock Circle -->
-                        <div class="w-60 h-60 sm:w-64 sm:h-64 rounded-full border-[7px] border-amber-100 dark:border-amber-950/40 flex flex-col justify-center items-center relative shadow-inner">
-                            <div class="text-5xl font-black tracking-tighter text-brand-burgundy dark:text-brand-gold font-mono" id="timer-display">
+                        <div class="w-60 h-60 sm:w-64 sm:h-64 rounded-full border-[6px] border-stone-200/60 dark:border-stone-800/80 flex flex-col justify-center items-center relative shadow-inner">
+                            <div class="text-5xl font-black tracking-tight text-brand-burgundy dark:text-brand-gold font-mono" id="timer-display">
                                 25 : 00
                             </div>
                             <span id="timer-mode-label" class="text-xs font-bold text-light-subtext dark:text-dark-subtext mt-2">وقت التركيز</span>
@@ -318,13 +314,13 @@
 
                         <!-- Controls -->
                         <div class="flex items-center justify-center gap-3">
-                            <button onclick="resetTimer()" class="w-12 h-12 rounded-full border border-stone-200 dark:border-stone-700 flex items-center justify-center text-light-subtext dark:text-dark-subtext hover:bg-light-cardSoft dark:hover:bg-dark-cardSoft active:scale-95 transition">
-                                <i class="fa-solid fa-rotate-right text-base"></i>
-                            </button>
-                            <button onclick="startTimer()" id="timer-start-btn" class="px-8 py-3.5 bg-brand-burgundy text-white font-bold text-sm rounded-full shadow-md hover:bg-opacity-90 active:scale-95 transition flex items-center gap-2">
+                            <button onclick="toggleTimer()" id="timer-start-btn" class="px-8 py-3.5 bg-brand-burgundy text-white font-bold text-sm rounded-full shadow-md hover:bg-opacity-90 active:scale-95 transition flex items-center gap-2">
                                 <i id="timer-play-icon" class="fa-solid fa-play text-xs"></i>
                                 <span id="timer-btn-label">ابدأ الآن</span>
                             </button>
+                            <button onclick="resetTimer()" class="w-12 h-12 rounded-full border border-stone-300 dark:border-stone-700 flex items-center justify-center text-light-subtext dark:text-dark-subtext hover:bg-light-cardSoft dark:hover:bg-dark-cardSoft active:scale-95 transition">
+                                <i class="fa-solid fa-rotate-right text-sm"></i>
+                            </button>
                         </div>
 
                     </div>
@@ -332,26 +328,9 @@
                 </div>
             </div>
 
-            <!-- TAB 4: LEADERBOARD (التصنيف) -->
-            <div id="tab-leaderboard" class="tab-content space-y-4 hidden max-w-2xl mx-auto">
-                <div class="bg-light-card dark:bg-dark-card p-6 rounded-3xl space-y-4 shadow-sm border border-stone-200/50 dark:border-stone-800">
-                    <div class="flex justify-between items-start">
-                        <span class="px-3 py-1 bg-brand-goldLight dark:bg-amber-950/60 text-amber-900 dark:text-brand-gold text-xs font-bold rounded-full">ترتيبك الحالي</span>
-                        <div class="w-12 h-12 rounded-2xl bg-light-cardSoft dark:bg-dark-cardSoft flex items-center justify-center text-brand-burgundy dark:text-brand-gold text-xl">
-                            <i class="fa-solid fa-trophy"></i>
-                        </div>
-                    </div>
-                    <div>
-                        <span id="user-display-fullname" class="text-xs text-light-subtext dark:text-dark-subtext font-medium">طالب البكالوريا</span>
-                        <span id="user-display-stream" class="block text-[10px] text-amber-600 dark:text-brand-gold font-bold">علوم تجريبية</span>
-                        <h2 class="text-3xl font-black mt-1">بداية قوية</h2>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB 5: SETTINGS (الإعدادات) -->
+            <!-- TAB 4: SETTINGS (الإعدادات) -->
             <div id="tab-settings" class="tab-content space-y-4 hidden max-w-2xl mx-auto">
-                <div class="bg-light-card dark:bg-dark-card p-5 rounded-3xl flex justify-between items-center shadow-sm">
+                <div class="bg-light-card dark:bg-dark-card p-5 rounded-3xl flex justify-between items-center shadow-sm border border-stone-200/50 dark:border-stone-800">
                     <div class="space-y-0.5">
                         <h3 class="font-bold text-sm">مظهر المساحة</h3>
                         <p id="theme-status-text" class="text-xs text-light-subtext dark:text-dark-subtext">الوضع الليلي مفعّل</p>
@@ -364,7 +343,7 @@
 
         </main>
 
-        <!-- FLOATING BOTTOM NAVIGATION BAR (MATCHING SCREENSHOT) -->
+        <!-- FLOATING BOTTOM NAVIGATION BAR -->
         <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-light-card/90 dark:bg-dark-card/90 backdrop-blur-md rounded-full px-4 md:px-8 py-2.5 shadow-2xl border border-stone-200/60 dark:border-stone-800/80 flex items-center gap-2 md:gap-6 z-40">
             
             <!-- Home -->
@@ -385,12 +364,6 @@
                 <span class="text-xs font-bold">المؤقت</span>
             </button>
 
-            <!-- Leaderboard -->
-            <button onclick="switchTab('leaderboard')" id="nav-leaderboard" class="nav-btn flex items-center gap-2 px-3 py-2 rounded-full text-light-subtext dark:text-dark-subtext transition-all duration-300">
-                <i class="fa-solid fa-trophy text-sm"></i>
-                <span class="text-xs font-bold">التصنيف</span>
-            </button>
-
             <!-- Settings -->
             <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex items-center gap-2 px-3 py-2 rounded-full text-light-subtext dark:text-dark-subtext transition-all duration-300">
                 <i class="fa-solid fa-gear text-sm"></i>
@@ -405,7 +378,7 @@
         let currentSlideIndex = 0;
         const totalSlides = 3;
 
-        // Pomodoro state
+        // Pomodoro State
         let currentMode = 'focus';
         let modeTimes = {
             focus: 25 * 60,
@@ -452,19 +425,13 @@
         function saveUserInfo() {
             const fn = document.getElementById('input-firstname').value.trim();
             const ln = document.getElementById('input-lastname').value.trim();
-            const stream = document.getElementById('input-stream').value;
-            const subStream = document.getElementById('input-substream').value;
 
             if (!fn || !ln) {
                 alert('يرجى كتابة الاسم واللقب لمتابعة الدخول.');
                 return;
             }
 
-            const fullStream = (stream === 'تقني رياضي') ? `تقني رياضي (${subStream})` : stream;
-
             document.getElementById('user-header-name').innerText = `أهلاً بك، ${fn}`;
-            document.getElementById('user-display-fullname').innerText = `${fn} ${ln}`;
-            document.getElementById('user-display-stream').innerText = fullStream;
 
             const overlay = document.getElementById('story-overlay');
             overlay.classList.add('opacity-0');
@@ -506,7 +473,6 @@
                 'home': 'الرئيسية',
                 'study': 'غرفة الدراسة',
                 'timer': 'مؤقت التركيز',
-                'leaderboard': 'التصنيف',
                 'settings': 'الإعدادات'
             };
 
@@ -517,107 +483,112 @@
 
             const activeBtn = document.getElementById(`nav-${tabName}`);
             if (activeBtn) {
-                activeBtn.className = 'nav-btn flex items-center gap-2 px-4 py-2 rounded-full text-white bg-brand-burgundy transition-all duration-300 shadow-md';
+                activeBtn.className = 'nav-btn flex items-center gap-2 px-4 py-2 rounded-full text-white bg-brand-burgundy transition-all duration-300';
             }
         }
 
-        // Pomodoro Settings Save
-        function saveTimerSettings() {
-            const focusVal = parseInt(document.getElementById('setting-focus-min').value) || 25;
-            const shortVal = parseInt(document.getElementById('setting-short-min').value) || 5;
-            const longVal = parseInt(document.getElementById('setting-long-min').value) || 15;
-
-            modeTimes.focus = focusVal * 60;
-            modeTimes.shortBreak = shortVal * 60;
-            modeTimes.longBreak = longVal * 60;
-
-            resetTimer();
-            alert('تم حفظ إعدادات الوقت الجديدة بنجاح!');
+        // Pomodoro Clock Logic
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            document.getElementById('timer-display').innerText = 
+                `${mins.toString().padStart(2, '0')} : ${secs.toString().padStart(2, '0')}`;
         }
 
-        // Pomodoro Modes Logic
-        function setTimerMode(mode) {
+        function toggleTimer() {
             if (isTimerRunning) {
-                clearInterval(timerInterval);
-                isTimerRunning = false;
+                pauseTimer();
+            } else {
+                startTimer();
             }
-            currentMode = mode;
-            timerSeconds = modeTimes[mode];
-            
-            const btnFocus = document.getElementById('mode-btn-focus');
-            const btnShort = document.getElementById('mode-btn-short');
-            const btnLong = document.getElementById('mode-btn-long');
-
-            const inactiveStyle = 'px-4 py-2 rounded-full text-light-subtext dark:text-dark-subtext hover:text-brand-burgundy dark:hover:text-brand-gold transition duration-300';
-            const activeStyle = 'px-5 py-2 rounded-full bg-brand-burgundy text-white transition duration-300';
-
-            btnFocus.className = mode === 'focus' ? activeStyle : inactiveStyle;
-            btnShort.className = mode === 'shortBreak' ? activeStyle : inactiveStyle;
-            btnLong.className = mode === 'longBreak' ? activeStyle : inactiveStyle;
-
-            const labels = {
-                focus: 'وقت التركيز',
-                shortBreak: 'استراحة قصيرة',
-                longBreak: 'استراحة طويلة'
-            };
-            document.getElementById('timer-mode-label').innerText = labels[mode];
-            document.getElementById('timer-btn-label').innerText = 'ابدأ الآن';
-            document.getElementById('timer-play-icon').className = 'fa-solid fa-play text-xs';
-
-            updateTimerDisplay();
         }
 
         function startTimer() {
-            const btnLabel = document.getElementById('timer-btn-label');
-            const playIcon = document.getElementById('timer-play-icon');
+            if (isTimerRunning) return;
+            isTimerRunning = true;
+            document.getElementById('timer-btn-label').innerText = 'إيقاف مؤقت';
+            document.getElementById('timer-play-icon').className = 'fa-solid fa-pause text-xs';
 
-            if (isTimerRunning) {
-                clearInterval(timerInterval);
-                isTimerRunning = false;
-                btnLabel.innerText = 'مواصلة';
-                playIcon.className = 'fa-solid fa-play text-xs';
-            } else {
-                isTimerRunning = true;
-                btnLabel.innerText = 'إيقاف مؤقت';
-                playIcon.className = 'fa-solid fa-pause text-xs';
+            timerInterval = setInterval(() => {
+                if (timerSeconds > 0) {
+                    timerSeconds--;
+                    updateTimerDisplay();
+                } else {
+                    pauseTimer();
+                    alert('انتهت الجلسة!');
+                    resetTimer();
+                }
+            }, 1000);
+        }
 
-                timerInterval = setInterval(() => {
-                    if (timerSeconds > 0) {
-                        timerSeconds--;
-                        updateTimerDisplay();
-                    } else {
-                        clearInterval(timerInterval);
-                        isTimerRunning = false;
-                        resetTimer();
-                        alert('انتهت الجلسة!');
-                    }
-                }, 1000);
-            }
+        function pauseTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('timer-btn-label').innerText = 'ابدأ الآن';
+            document.getElementById('timer-play-icon').className = 'fa-solid fa-play text-xs';
         }
 
         function resetTimer() {
-            clearInterval(timerInterval);
-            isTimerRunning = false;
+            pauseTimer();
             timerSeconds = modeTimes[currentMode];
-            document.getElementById('timer-btn-label').innerText = 'ابدأ الآن';
-            document.getElementById('timer-play-icon').className = 'fa-solid fa-play text-xs';
             updateTimerDisplay();
         }
 
-        function updateTimerDisplay() {
-            const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
-            const s = (timerSeconds % 60).toString().padStart(2, '0');
-            document.getElementById('timer-display').innerText = `${m} : ${s}`;
+        function setTimerMode(mode) {
+            currentMode = mode;
+            pauseTimer();
+
+            const focusBtn = document.getElementById('mode-btn-focus');
+            const shortBtn = document.getElementById('mode-btn-short');
+            const longBtn = document.getElementById('mode-btn-long');
+            const label = document.getElementById('timer-mode-label');
+
+            const activeClass = 'px-5 py-2 rounded-full bg-brand-burgundy text-white transition duration-300';
+            const inactiveClass = 'px-4 py-2 rounded-full text-light-subtext dark:text-dark-subtext hover:text-brand-burgundy dark:hover:text-brand-gold transition duration-300';
+
+            focusBtn.className = mode === 'focus' ? activeClass : inactiveClass;
+            shortBtn.className = mode === 'shortBreak' ? activeClass : inactiveClass;
+            longBtn.className = mode === 'longBreak' ? activeClass : inactiveClass;
+
+            if (mode === 'focus') label.innerText = 'وقت التركيز';
+            else if (mode === 'shortBreak') label.innerText = 'استراحة قصيرة';
+            else if (mode === 'longBreak') label.innerText = 'استراحة طويلة';
+
+            timerSeconds = modeTimes[mode];
+            updateTimerDisplay();
         }
 
+        function saveTimerSettings() {
+            const focusInput = parseInt(document.getElementById('setting-focus-min').value) || 25;
+            const shortInput = parseInt(document.getElementById('setting-short-min').value) || 5;
+            const longInput = parseInt(document.getElementById('setting-long-min').value) || 15;
+
+            modeTimes.focus = focusInput * 60;
+            modeTimes.shortBreak = shortInput * 60;
+            modeTimes.longBreak = longInput * 60;
+
+            resetTimer();
+            alert('تم حفظ الإعدادات بنجاح!');
+        }
+
+        // Dark/Light Theme Switcher
         function toggleTheme() {
             const html = document.documentElement;
-            html.classList.toggle('dark');
-            const isDark = html.classList.contains('dark');
+            const icon = document.getElementById('theme-icon');
+            const statusText = document.getElementById('theme-status-text');
+            const toggleBall = document.getElementById('toggle-ball');
 
-            document.getElementById('theme-icon').className = isDark 
-                ? 'fa-solid fa-moon text-brand-gold text-lg' 
-                : 'fa-solid fa-sun text-brand-burgundy text-lg';
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                if (icon) icon.className = 'fa-solid fa-sun text-amber-600 text-lg';
+                if (statusText) statusText.innerText = 'الوضع المضيء مفعّل';
+                if (toggleBall) toggleBall.classList.add('translate-x-6');
+            } else {
+                html.classList.add('dark');
+                if (icon) icon.className = 'fa-solid fa-moon text-brand-gold text-lg';
+                if (statusText) statusText.innerText = 'الوضع الليلي مفعّل';
+                if (toggleBall) toggleBall.classList.remove('translate-x-6');
+            }
         }
     </script>
 </body>
