@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Focus & Force - منصة التركيز للبكالوريا</title>
+    <title>Focus & Force - منصة البكالوريا</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Tajawal -->
@@ -24,16 +24,16 @@
                             goldLight: '#F3DBB5',
                         },
                         light: {
-                            bg: '#F6EFE6',
+                            bg: '#F5EFE6',
                             card: '#FFFFFF',
                             cardSoft: '#EFE6DA',
                             text: '#2D121A',
                             subtext: '#7A5E68'
                         },
                         dark: {
-                            bg: '#221117',
-                            card: '#331B22',
-                            cardSoft: '#42242D',
+                            bg: '#1E0E14',
+                            card: '#2D1720',
+                            cardSoft: '#3D202B',
                             text: '#FAF3EC',
                             subtext: '#BAA5AD'
                         }
@@ -50,9 +50,8 @@
             font-family: 'Tajawal', sans-serif;
             user-select: none;
         }
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
-            width: 4px;
+            width: 6px;
         }
         ::-webkit-scrollbar-track {
             background: transparent;
@@ -61,7 +60,6 @@
             background: rgba(120, 120, 120, 0.3);
             border-radius: 10px;
         }
-        /* Story Slide Animations */
         .story-slide {
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
@@ -77,25 +75,20 @@
         }
     </style>
 </head>
-<body class="bg-light-bg text-light-text dark:bg-dark-bg dark:text-dark-text transition-colors duration-300 min-h-screen flex justify-center items-center p-0 sm:p-4">
+<body class="bg-light-bg text-light-text dark:bg-dark-bg dark:text-dark-text transition-colors duration-300 min-h-screen flex justify-center items-center p-2 md:p-6">
 
     <!-- STORY & ONBOARDING OVERLAY -->
     <div id="story-overlay" class="fixed inset-0 z-50 bg-[#350B1A] text-white flex flex-col justify-between p-6 overflow-hidden select-none transition-opacity duration-500">
-        <!-- Background Circles Decoration -->
         <div class="absolute -top-24 -left-24 w-80 h-80 rounded-full border border-white/10 pointer-events-none"></div>
-        <div class="absolute -top-12 -left-12 w-56 h-56 rounded-full border border-white/5 pointer-events-none"></div>
 
-        <!-- Top Header Badge -->
         <div class="pt-6 text-center space-y-2 z-10">
             <div class="w-12 h-12 rounded-2xl border border-white/20 bg-white/5 flex items-center justify-center mx-auto text-xl font-bold font-serif">F.</div>
             <p class="text-[10px] tracking-[0.2em] font-extrabold uppercase text-amber-200/70">FOCUS & FORCE</p>
             <p class="text-xs text-stone-300 font-medium">مساحة الطالب الجزائري المقبل على شهادة البكالوريا</p>
         </div>
 
-        <!-- Dynamic Story Slides Container -->
         <div class="relative flex-1 my-auto max-w-md mx-auto w-full flex items-center justify-center min-h-[380px]">
 
-            <!-- Slide 1 -->
             <div id="slide-0" class="story-slide active flex flex-col items-center text-center space-y-5">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-400/30 bg-amber-400/10 text-xs font-bold text-amber-200">
                     <span class="bg-amber-400/20 px-1.5 py-0.5 rounded text-[10px]">2024</span>
@@ -103,87 +96,40 @@
                 </div>
                 <h2 class="text-3xl font-black leading-tight text-white">من طالبة تبحث عن ملخصات...</h2>
                 <p class="text-xs text-stone-300 leading-relaxed max-w-xs">
-                    كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث بين الصفحات عن مصادر صحيحة، ملخصات مفيدة، وقناة تكون لي سنداً حقيقياً يربك الشتات ويمنحني الأمل. لكني لم أجد ذلك المكان الذي احتجته بشدة... وفي لحظة صدق مع نفسي تساءلت: "علاش ما نصنعش أنا المكان اللي تمنيت نلقاه؟" ومن تلك الشرارة، بدأت الحكاية ✨.
+                    كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث بين الصفحات عن مصادر صحيحة، ملخصات مفيدة، وقناة تكون لي سنداً حقيقياً ✨.
                 </p>
             </div>
 
-            <!-- Slide 2 -->
             <div id="slide-1" class="story-slide flex flex-col items-center text-center space-y-5">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-400/30 bg-amber-400/10 text-xs font-bold text-amber-200">
-                    <span class="bg-amber-400/20 px-1.5 py-0.5 rounded text-[10px]">2024</span>
-                    <span>حلم صغير... وطموح لا حدّه شيء 🤍</span>
-                </div>
-                <h2 class="text-3xl font-black leading-tight text-white">كل معلومة كانت خطوة</h2>
-                <p class="text-xs text-stone-300 leading-relaxed max-w-xs">
-                    بدأت القناة بمجهودي الفردي وبكثير من الحب. كل معلومة، كل ملخص، وكل خطوة... كان وراءها وقت، تعب، ورغبة صادقة من أعماق قلبي في مساعدة طالب آخر يعيش نفس شعوري. ومنذ اليوم الأول، ولد في داخلي حلم كبر معي: أن تصبح Focus & Force واحدة من أكبر المنصات التعليمية في الجزائر.
-                </p>
-            </div>
-
-            <!-- Slide 3 -->
-            <div id="slide-2" class="story-slide flex flex-col items-center text-center space-y-5">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-400/30 bg-amber-400/10 text-xs font-bold text-amber-200">
                     <span class="bg-amber-400/20 px-1.5 py-0.5 rounded text-[10px]">2025</span>
-                    <span>الشرارة الحقيقية 💖🤩🔥</span>
+                    <span>الشرارة الحقيقية 💖</span>
                 </div>
                 <h2 class="text-3xl font-black leading-tight text-white">كبرنا مع بعضنا</h2>
                 <p class="text-xs text-stone-300 leading-relaxed max-w-xs">
-                    عندما قررت خوض تجربة البكالوريا للمرة الثانية، وسط كل الضغط، التعب، والخوف... لم تكن القناة مجرد منصة ننشر فيها، بل كانت المتنفس الحقيقي لي، والحافز الذي يدفعني لأكمل الطريق. كبرنا مع بعضنا، وشاركتكم كل ما أملك بكل حب وصمود 🤲💖.
+                    كبرنا مع بعضنا، وشاركتكم كل ما أملك بكل حب وصمود 🤲💖.
                 </p>
             </div>
 
-            <!-- Slide 4 -->
-            <div id="slide-3" class="story-slide flex flex-col items-center text-center space-y-5">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-400/30 bg-amber-400/10 text-xs font-bold text-amber-200">
-                    <span class="bg-amber-400/20 px-1.5 py-0.5 rounded text-[10px]">2026</span>
-                    <span>الحلم يكبر... والتغيير الحقيقي يتجسد ✨</span>
+            <!-- User Registration Screen (Centered) -->
+            <div id="slide-setup" class="story-slide flex flex-col items-center justify-center text-center space-y-5 w-full max-w-sm mx-auto">
+                <div class="space-y-1">
+                    <h2 class="text-2xl font-black text-white">مرحباً بك في العائلة! 🎉</h2>
+                    <p class="text-xs text-stone-300">أدخل معلوماتك لنبدأ رحلة البكالوريا معاً</p>
                 </div>
-                <h2 class="text-3xl font-black leading-tight text-white">ما بقيناش وحدنا</h2>
-                <p class="text-xs text-stone-300 leading-relaxed max-w-xs">
-                    سنوات الصبر والعمل المتواصل جعلت Focus & Force تتحول من مجرد فكرة شخصية إلى مساحة موثوقة تجمع الجميع. انضم إليّ مشرفون رائعون، وتعرفت على أناس من أروع ما يكون، وبدأنا شراكات نجاح مع قنوات تعليمية كبيرة. هنا أدركت أن الحلم لم يعد فردياً... بل أصبحنا عائلة واحدة 👥💜.
-                </p>
-            </div>
 
-            <!-- Slide 5 -->
-            <div id="slide-4" class="story-slide flex flex-col items-center text-center space-y-5">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-400/30 bg-amber-400/10 text-xs font-bold text-amber-200">
-                    <span class="bg-amber-400/20 px-1.5 py-0.5 rounded text-[10px]">2027</span>
-                    <span>عهد جديد 💗 | تجربة جديدة... بروح مختلفة</span>
-                </div>
-                <h2 class="text-3xl font-black leading-tight text-white">كل محاولة صنعتنا</h2>
-                <p class="text-xs text-stone-300 leading-relaxed max-w-xs">
-                    كل تجربة مرت بي علمتني الكثير، كل سقوط قوّاني، وكل لحظة شك صنعت مني الشخص الذي تعرفونه اليوم. Léa التي ترونها اليوم... لم تأتِ من عدم ولا صدفة، بل جاءت بعد سنوات من المحاولة، الصمود، والإيمان المطلق بالحلم 🌱💙.
-                </p>
-            </div>
-
-            <!-- Slide 6 -->
-            <div id="slide-5" class="story-slide flex flex-col items-center text-center space-y-5">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-amber-400/30 bg-amber-400/10 text-xs font-bold text-amber-200">
-                    <span class="bg-amber-400/20 px-1.5 py-0.5 rounded text-[10px]">∞</span>
-                    <span>Focus & Force مش مجرد منصة تعليمية...</span>
-                </div>
-                <h2 class="text-3xl font-black leading-tight text-white">هي عائلة نكبر معها</h2>
-                <p class="text-xs text-stone-300 leading-relaxed max-w-xs">
-                    هي قطعة حقيقية من قلبي 💖💖، ورسالة نعيشها سوياً كل يوم. أنا هنا لأكون السند الذي تمنيتُ لو وجدته يوماً وأنا طالبة 🍓✨، ومع باقي الفريق... سنواصل إيقاد الشغف ونقود هذه العائلة دائماً نحو القمة.
-                </p>
-            </div>
-
-            <!-- User Registration Screen (Step 7) -->
-            <div id="slide-setup" class="story-slide flex flex-col items-center text-center space-y-4 w-full max-w-xs">
-                <h2 class="text-2xl font-black text-white">مرحباً بك في العائلة! 🎉</h2>
-                <p class="text-xs text-stone-300">أدخل معلوماتك لنبدأ رحلة البكالوريا معاً</p>
-
-                <div class="w-full space-y-3 text-right text-xs">
-                    <div>
-                        <label class="block mb-1 font-bold text-amber-200">الاسم:</label>
-                        <input type="text" id="input-firstname" placeholder="أدخل اسمك" class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-stone-400 outline-none focus:border-amber-400">
+                <div class="w-full space-y-3 text-center text-xs">
+                    <div class="space-y-1">
+                        <label class="block font-bold text-amber-200 text-center">الاسم</label>
+                        <input type="text" id="input-firstname" placeholder="أدخل اسمك" class="w-full p-3 text-center rounded-xl bg-white/10 border border-white/20 text-white placeholder-stone-400 outline-none focus:border-amber-400 transition">
                     </div>
-                    <div>
-                        <label class="block mb-1 font-bold text-amber-200">اللقب:</label>
-                        <input type="text" id="input-lastname" placeholder="أدخل لقبك" class="w-full p-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-stone-400 outline-none focus:border-amber-400">
+                    <div class="space-y-1">
+                        <label class="block font-bold text-amber-200 text-center">اللقب</label>
+                        <input type="text" id="input-lastname" placeholder="أدخل لقبك" class="w-full p-3 text-center rounded-xl bg-white/10 border border-white/20 text-white placeholder-stone-400 outline-none focus:border-amber-400 transition">
                     </div>
-                    <div>
-                        <label class="block mb-1 font-bold text-amber-200">الشعبة:</label>
-                        <select id="input-stream" onchange="toggleTechOptions()" class="w-full p-3 rounded-xl bg-[#4A1325] border border-white/20 text-white outline-none focus:border-amber-400">
+                    <div class="space-y-1">
+                        <label class="block font-bold text-amber-200 text-center">الشعبة</label>
+                        <select id="input-stream" onchange="toggleTechOptions()" class="w-full p-3 text-center rounded-xl bg-[#4A1325] border border-white/20 text-white outline-none focus:border-amber-400">
                             <option value="علوم تجريبية">علوم تجريبية</option>
                             <option value="رياضيات">رياضيات</option>
                             <option value="تسيير واقتصاد">تسيير واقتصاد</option>
@@ -193,10 +139,10 @@
                         </select>
                     </div>
 
-                    <!-- Technical Sub-Branch Option (Appears when "تقني رياضي" is selected) -->
+                    <!-- Technical Sub-Branch Option -->
                     <div id="tech-subbranch-container" class="hidden transition-all duration-300 space-y-1">
-                        <label class="block font-bold text-amber-300">تخصص التقني رياضي:</label>
-                        <select id="input-substream" class="w-full p-3 rounded-xl bg-[#5C1A30] border border-amber-400/50 text-white outline-none focus:border-amber-400">
+                        <label class="block font-bold text-amber-300 text-center">تخصص التقني رياضي</label>
+                        <select id="input-substream" class="w-full p-3 text-center rounded-xl bg-[#5C1A30] border border-amber-400/50 text-white outline-none focus:border-amber-400">
                             <option value="هندسة ميكانيكية">هندسة ميكانيكية</option>
                             <option value="هندسة كهربائية">هندسة كهربائية</option>
                             <option value="هندسة مدنية">هندسة مدنية</option>
@@ -208,111 +154,186 @@
 
         </div>
 
-        <!-- Bottom Pagination Dots & Next Button -->
         <div class="pb-6 text-center space-y-4 z-10">
-            <!-- Dots -->
             <div id="story-dots" class="flex justify-center items-center gap-1.5">
                 <span class="dot w-6 h-1.5 rounded-full bg-amber-200 transition-all"></span>
                 <span class="dot w-1.5 h-1.5 rounded-full bg-white/30 transition-all"></span>
-                <span class="dot w-1.5 h-1.5 rounded-full bg-white/30 transition-all"></span>
-                <span class="dot w-1.5 h-1.5 rounded-full bg-white/30 transition-all"></span>
-                <span class="dot w-1.5 h-1.5 rounded-full bg-white/30 transition-all"></span>
-                <span class="dot w-1.5 h-1.5 rounded-full bg-white/30 transition-all"></span>
             </div>
 
-            <!-- Action Button -->
             <button id="story-next-btn" onclick="nextStorySlide()" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-gradient-to-r from-amber-100 to-amber-200 text-brand-burgundy font-bold text-xs shadow-lg hover:brightness-110 active:scale-95 transition">
-                <span id="story-btn-text">تابع القصة</span>
+                <span id="story-btn-text">التالي</span>
                 <i class="fa-solid fa-arrow-left"></i>
             </button>
-            <p id="story-subtext" class="text-[10px] text-stone-400 hidden">من هنا تبدأ خطوتك القادمة.</p>
         </div>
     </div>
 
-    <!-- Main Mobile Shell container -->
-    <div class="w-full max-w-md h-screen sm:h-[900px] bg-light-bg dark:bg-dark-bg sm:rounded-[36px] sm:shadow-2xl flex flex-col justify-between overflow-hidden relative border-0 sm:border border-stone-300 dark:border-stone-800">
+    <!-- MAIN DESKTOP CONTAINER -->
+    <div class="w-full max-w-6xl min-h-[90vh] bg-light-bg dark:bg-dark-bg rounded-3xl md:shadow-2xl flex flex-col justify-between overflow-hidden relative border border-stone-300/40 dark:border-stone-800/60 p-4 md:p-8">
 
-        <!-- Dynamic Header -->
-        <header class="p-5 flex justify-between items-center z-10">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-6">
             <div>
-                <span class="text-xs font-bold tracking-widest uppercase opacity-70 text-amber-700 dark:text-brand-gold">مساحتك، بطريقتك</span>
-                <h1 id="page-title" class="text-2xl font-black">غرفة الدراسة</h1>
+                <span id="user-header-name" class="text-xs font-bold tracking-widest uppercase text-brand-burgundy dark:text-brand-gold">مرحباً بك</span>
+                <h1 id="page-title" class="text-2xl md:text-3xl font-black">الرئيسية</h1>
             </div>
-            <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-light-cardSoft dark:bg-dark-card flex items-center justify-center transition hover:scale-105 active:scale-95 shadow-sm">
+            <button onclick="toggleTheme()" class="w-11 h-11 rounded-2xl bg-light-cardSoft dark:bg-dark-card flex items-center justify-center transition hover:scale-105 active:scale-95 shadow-sm border border-stone-200/50 dark:border-stone-800">
                 <i id="theme-icon" class="fa-solid fa-moon text-brand-burgundy dark:text-brand-gold text-lg"></i>
             </button>
         </header>
 
         <!-- Dynamic Main Content Area -->
-        <main class="flex-1 overflow-y-auto px-5 pb-24 space-y-4" id="main-content">
+        <main class="flex-1 pb-24 overflow-y-auto" id="main-content">
 
-            <!-- SECTION 1: STUDY ROOM (غرفة الدراسة) -->
-            <div id="tab-study" class="tab-content space-y-4">
-                <!-- Hero Card -->
-                <div class="bg-light-card dark:bg-dark-card p-6 rounded-3xl space-y-3 relative overflow-hidden shadow-sm border border-stone-200/50 dark:border-stone-800">
-                    <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                        <span>الغرفة مفتوحة الآن</span>
+            <!-- TAB 1: HOME (الرئيسية) WITH BAC COUNTDOWN -->
+            <div id="tab-home" class="tab-content space-y-6">
+                <!-- BAC Countdown Hero Card -->
+                <div class="bg-light-card dark:bg-dark-card p-6 md:p-10 rounded-3xl space-y-6 shadow-sm border border-stone-200/50 dark:border-stone-800 text-center">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-burgundy/10 dark:bg-brand-gold/10 text-brand-burgundy dark:text-brand-gold text-xs font-bold">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                        <span>العد التنازلي لشهادة البكالوريا 2027</span>
                     </div>
-                    <h2 class="text-2xl font-black leading-tight">ساعة هادئة.<br>هدف واضح.</h2>
-                    <p class="text-xs text-light-subtext dark:text-dark-subtext leading-relaxed">ادخل، ابدأ مؤقتك، واترك الباقي على الرف. لا أحد يسألك عن سرعتك هنا.</p>
-                    <a href="https://meet.google.com" target="_blank" class="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-brand-burgundy text-white rounded-2xl font-bold text-sm shadow-md hover:bg-opacity-90 active:scale-[0.98] transition">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                        <span>انضم عبر Google Meet</span>
-                    </a>
-                </div>
 
-                <!-- Stats Grid -->
-                <div class="space-y-2.5">
-                    <div class="bg-light-card dark:bg-dark-card p-4 rounded-2xl flex justify-between items-center shadow-sm">
-                        <span class="text-xs text-light-subtext dark:text-dark-subtext font-medium">وقت Meet المسجل</span>
-                        <span class="font-black text-lg"><span id="meet-minutes-display">0</span> دقيقة</span>
-                    </div>
-                    <div class="bg-light-card dark:bg-dark-card p-4 rounded-2xl flex justify-between items-center shadow-sm">
-                        <span class="text-xs text-light-subtext dark:text-dark-subtext font-medium">جلساتك مع الرفاق</span>
-                        <span class="font-black text-lg"><span id="meet-sessions-display">0</span> جلسة</span>
-                    </div>
-                    <div class="bg-light-card dark:bg-dark-card p-4 rounded-2xl flex justify-between items-center shadow-sm">
-                        <span class="text-xs text-light-subtext dark:text-dark-subtext font-medium">نقاط غرفة الدراسة</span>
-                        <span class="font-black text-lg text-brand-burgundy dark:text-brand-gold"><span id="meet-points-display">0</span> نقطة</span>
-                    </div>
-                </div>
+                    <h2 class="text-xl md:text-3xl font-black">كل ثانية تصنع الفرق في معدلك 🎓</h2>
 
-                <!-- Live Buddies Card -->
-                <div class="bg-light-card dark:bg-dark-card p-5 rounded-3xl space-y-3 shadow-sm">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-users text-amber-800 dark:text-brand-gold"></i>
-                            <h3 class="font-bold text-sm">رفاق التركيز</h3>
+                    <!-- Countdown Timer Grid -->
+                    <div class="grid grid-cols-4 gap-3 max-w-2xl mx-auto pt-2">
+                        <div class="bg-light-cardSoft dark:bg-dark-cardSoft p-4 md:p-6 rounded-2xl">
+                            <span id="bac-days" class="block text-3xl md:text-5xl font-black text-brand-burgundy dark:text-brand-gold">00</span>
+                            <span class="text-xs text-light-subtext dark:text-dark-subtext font-bold mt-1 block">يوم</span>
                         </div>
-                        <span class="text-xs font-bold text-light-subtext dark:text-dark-subtext">LIVE / 04</span>
+                        <div class="bg-light-cardSoft dark:bg-dark-cardSoft p-4 md:p-6 rounded-2xl">
+                            <span id="bac-hours" class="block text-3xl md:text-5xl font-black text-brand-burgundy dark:text-brand-gold">00</span>
+                            <span class="text-xs text-light-subtext dark:text-dark-subtext font-bold mt-1 block">ساعة</span>
+                        </div>
+                        <div class="bg-light-cardSoft dark:bg-dark-cardSoft p-4 md:p-6 rounded-2xl">
+                            <span id="bac-minutes" class="block text-3xl md:text-5xl font-black text-brand-burgundy dark:text-brand-gold">00</span>
+                            <span class="text-xs text-light-subtext dark:text-dark-subtext font-bold mt-1 block">دقيقة</span>
+                        </div>
+                        <div class="bg-light-cardSoft dark:bg-dark-cardSoft p-4 md:p-6 rounded-2xl">
+                            <span id="bac-seconds" class="block text-3xl md:text-5xl font-black text-brand-burgundy dark:text-brand-gold">00</span>
+                            <span class="text-xs text-light-subtext dark:text-dark-subtext font-bold mt-1 block">ثانية</span>
+                        </div>
                     </div>
-                    <p class="text-xs text-light-subtext dark:text-dark-subtext">أربعة مقاعد مشغولة الآن. خذ مقعدك بهدوء.</p>
-                    <div class="flex items-center gap-1.5 pt-1">
-                        <div class="w-8 h-8 rounded-full bg-amber-900 text-amber-200 flex items-center justify-center font-bold text-xs">س</div>
-                        <div class="w-8 h-8 rounded-full bg-emerald-800 text-emerald-200 flex items-center justify-center font-bold text-xs">ن</div>
-                        <div class="w-8 h-8 rounded-full bg-amber-700 text-amber-100 flex items-center justify-center font-bold text-xs">م</div>
-                        <div class="w-8 h-8 rounded-full bg-brand-burgundy text-white flex items-center justify-center font-bold text-xs">+1</div>
-                    </div>
-                </div>
 
-                <!-- Time Logger Box -->
-                <div class="bg-light-card dark:bg-dark-card p-5 rounded-3xl space-y-3 shadow-sm border border-stone-200/50 dark:border-stone-800">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-regular fa-calendar-check text-brand-burgundy dark:text-brand-gold"></i>
-                        <h3 class="font-bold text-sm">سجّل وقتك مع الرفاق</h3>
-                    </div>
-                    <p class="text-xs text-light-subtext dark:text-dark-subtext leading-relaxed">من بعد ما تكمل جلسة Meet، سجّل الدقائق باش تدخل في نقاطك تلقائياً.</p>
-                    <div class="flex gap-2">
-                        <input type="number" id="meet-input-minutes" placeholder="25" value="25" class="w-20 p-3 bg-light-cardSoft dark:bg-dark-cardSoft rounded-xl text-center font-bold text-sm outline-none focus:ring-2 focus:ring-brand-burgundy dark:focus:ring-brand-gold">
-                        <button onclick="logMeetTime()" class="flex-1 bg-brand-burgundy text-white font-bold text-sm py-3 rounded-xl hover:bg-opacity-90 active:scale-95 transition">سجّل الدقائق</button>
-                    </div>
+                    <p class="text-xs text-light-subtext dark:text-dark-subtext">"الانضباط هو الجسر بين الأهداف والإنجاز."</p>
                 </div>
             </div>
 
-            <!-- SECTION 2: LEADERBOARD / POINTS (التصنيف) -->
-            <div id="tab-leaderboard" class="tab-content space-y-4 hidden">
-                <!-- User Current Rank Card -->
+            <!-- TAB 2: STUDY ROOM (غرفة الدراسة / الميت فقط) -->
+            <div id="tab-study" class="tab-content space-y-4 hidden">
+                <div class="bg-light-card dark:bg-dark-card p-8 md:p-12 rounded-3xl text-center space-y-6 shadow-sm border border-stone-200/50 dark:border-stone-800 max-w-xl mx-auto my-6">
+                    <div class="w-16 h-16 rounded-3xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto text-3xl">
+                        <i class="fa-solid fa-video"></i>
+                    </div>
+                    <div class="space-y-2">
+                        <h2 class="text-2xl font-black">غرفة الدراسة المباشرة</h2>
+                        <p class="text-xs text-light-subtext dark:text-dark-subtext leading-relaxed">انضم إلى رفاقك عبر Google Meet للدراسة الصامتة والتركيز الجماعي.</p>
+                    </div>
+                    <a href="https://meet.google.com" target="_blank" class="inline-flex items-center justify-center gap-3 w-full py-4 bg-brand-burgundy text-white rounded-2xl font-bold text-sm shadow-lg hover:bg-opacity-90 active:scale-95 transition">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        <span>انضم الآن عبر Google Meet</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- TAB 3: POMODORO TIMER (مؤقت التركيز - مطبق من الصورة) -->
+            <div id="tab-timer" class="tab-content space-y-6 hidden">
+                
+                <div class="space-y-1 text-right">
+                    <h2 class="text-2xl md:text-3xl font-black">مؤقت التركيز</h2>
+                    <p class="text-xs text-light-subtext dark:text-dark-subtext">جلسة واحدة في كل مرة. عدّل الإيقاع حق يناسب يومك، لا العكس.</p>
+                </div>
+
+                <!-- 2-Column Grid Layout matching the Screenshot -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    
+                    <!-- LEFT SIDE CARD: Custom Duration Settings (إيقاعك الخاص) -->
+                    <div class="bg-light-card dark:bg-dark-card p-6 rounded-3xl space-y-5 shadow-sm border border-stone-200/50 dark:border-stone-800">
+                        <div class="flex items-center justify-between border-b border-stone-200/40 dark:border-stone-800 pb-4">
+                            <div>
+                                <h3 class="font-bold text-base">إيقاعك الخاص</h3>
+                                <p class="text-[11px] text-light-subtext dark:text-dark-subtext">الدقائق الافتراضية لجلساتك</p>
+                            </div>
+                            <div class="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-950/40 text-brand-burgundy dark:text-brand-gold flex items-center justify-center">
+                                <i class="fa-solid fa-sliders text-sm"></i>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 text-right">
+                            <!-- Focus Duration Input -->
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold">جلسة التركيز</label>
+                                <span class="text-[10px] text-light-subtext dark:text-dark-subtext block">العمل العميق</span>
+                                <div class="relative">
+                                    <input type="number" id="setting-focus-min" value="25" class="w-full p-3.5 bg-light-cardSoft dark:bg-dark-cardSoft rounded-2xl font-bold text-sm outline-none border border-transparent focus:border-brand-burgundy dark:focus:border-brand-gold text-left pl-14">
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-light-subtext dark:text-dark-subtext font-bold">دقيقة</span>
+                                </div>
+                            </div>
+
+                            <!-- Short Break Duration Input -->
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold">الاستراحة القصيرة</label>
+                                <span class="text-[10px] text-light-subtext dark:text-dark-subtext block">تنفس قليلاً</span>
+                                <div class="relative">
+                                    <input type="number" id="setting-short-min" value="5" class="w-full p-3.5 bg-light-cardSoft dark:bg-dark-cardSoft rounded-2xl font-bold text-sm outline-none border border-transparent focus:border-brand-burgundy dark:focus:border-brand-gold text-left pl-14">
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-light-subtext dark:text-dark-subtext font-bold">دقيقة</span>
+                                </div>
+                            </div>
+
+                            <!-- Long Break Duration Input -->
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold">الاستراحة الطويلة</label>
+                                <span class="text-[10px] text-light-subtext dark:text-dark-subtext block">استعد طاقتك</span>
+                                <div class="relative">
+                                    <input type="number" id="setting-long-min" value="15" class="w-full p-3.5 bg-light-cardSoft dark:bg-dark-cardSoft rounded-2xl font-bold text-sm outline-none border border-transparent focus:border-brand-burgundy dark:focus:border-brand-gold text-left pl-14">
+                                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-light-subtext dark:text-dark-subtext font-bold">دقيقة</span>
+                                </div>
+                            </div>
+
+                            <!-- Save Button -->
+                            <button onclick="saveTimerSettings()" class="w-full py-3.5 rounded-2xl border border-brand-burgundy/30 dark:border-brand-gold/30 text-brand-burgundy dark:text-brand-gold font-bold text-xs hover:bg-brand-burgundy hover:text-white dark:hover:bg-brand-gold dark:hover:text-dark-bg transition duration-300 flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-check text-xs"></i>
+                                <span>حفظ الإعدادات</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT SIDE CARD: Timer Interface -->
+                    <div class="bg-light-card dark:bg-dark-card p-6 md:p-8 rounded-3xl text-center space-y-6 shadow-sm border border-stone-200/50 dark:border-stone-800 flex flex-col items-center justify-center">
+                        
+                        <!-- Mode Selector Pills -->
+                        <div class="inline-flex p-1.5 bg-light-cardSoft dark:bg-dark-cardSoft rounded-full gap-1 text-xs font-bold">
+                            <button onclick="setTimerMode('focus')" id="mode-btn-focus" class="px-5 py-2 rounded-full bg-brand-burgundy text-white transition duration-300">تركيز</button>
+                            <button onclick="setTimerMode('shortBreak')" id="mode-btn-short" class="px-4 py-2 rounded-full text-light-subtext dark:text-dark-subtext hover:text-brand-burgundy dark:hover:text-brand-gold transition duration-300">استراحة قصيرة</button>
+                            <button onclick="setTimerMode('longBreak')" id="mode-btn-long" class="px-4 py-2 rounded-full text-light-subtext dark:text-dark-subtext hover:text-brand-burgundy dark:hover:text-brand-gold transition duration-300">استراحة طويلة</button>
+                        </div>
+
+                        <!-- Clock Circle -->
+                        <div class="w-60 h-60 sm:w-64 sm:h-64 rounded-full border-[7px] border-amber-100 dark:border-amber-950/40 flex flex-col justify-center items-center relative shadow-inner">
+                            <div class="text-5xl font-black tracking-tighter text-brand-burgundy dark:text-brand-gold font-mono" id="timer-display">
+                                25 : 00
+                            </div>
+                            <span id="timer-mode-label" class="text-xs font-bold text-light-subtext dark:text-dark-subtext mt-2">وقت التركيز</span>
+                        </div>
+
+                        <!-- Controls -->
+                        <div class="flex items-center justify-center gap-3">
+                            <button onclick="resetTimer()" class="w-12 h-12 rounded-full border border-stone-200 dark:border-stone-700 flex items-center justify-center text-light-subtext dark:text-dark-subtext hover:bg-light-cardSoft dark:hover:bg-dark-cardSoft active:scale-95 transition">
+                                <i class="fa-solid fa-rotate-right text-base"></i>
+                            </button>
+                            <button onclick="startTimer()" id="timer-start-btn" class="px-8 py-3.5 bg-brand-burgundy text-white font-bold text-sm rounded-full shadow-md hover:bg-opacity-90 active:scale-95 transition flex items-center gap-2">
+                                <i id="timer-play-icon" class="fa-solid fa-play text-xs"></i>
+                                <span id="timer-btn-label">ابدأ الآن</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TAB 4: LEADERBOARD (التصنيف) -->
+            <div id="tab-leaderboard" class="tab-content space-y-4 hidden max-w-2xl mx-auto">
                 <div class="bg-light-card dark:bg-dark-card p-6 rounded-3xl space-y-4 shadow-sm border border-stone-200/50 dark:border-stone-800">
                     <div class="flex justify-between items-start">
                         <span class="px-3 py-1 bg-brand-goldLight dark:bg-amber-950/60 text-amber-900 dark:text-brand-gold text-xs font-bold rounded-full">ترتيبك الحالي</span>
@@ -323,221 +344,57 @@
                     <div>
                         <span id="user-display-fullname" class="text-xs text-light-subtext dark:text-dark-subtext font-medium">طالب البكالوريا</span>
                         <span id="user-display-stream" class="block text-[10px] text-amber-600 dark:text-brand-gold font-bold">علوم تجريبية</span>
-                        <h2 id="user-badge-title" class="text-3xl font-black mt-1">بداية قوية</h2>
-                    </div>
-                    <div class="pt-2 border-t border-stone-200/40 dark:border-stone-800 flex justify-between items-end">
-                        <div>
-                            <span class="text-[10px] text-light-subtext dark:text-dark-subtext block uppercase font-bold">مجموع النقاط</span>
-                            <span id="total-points-display" class="text-3xl font-black text-brand-burgundy dark:text-brand-gold">0</span>
-                        </div>
-                        <span id="next-rank-text" class="text-xs font-bold text-light-subtext dark:text-dark-subtext">باقي 150 نقطة للرتبة التالية</span>
-                    </div>
-                </div>
-
-                <!-- Points Calculation Rules Card -->
-                <div class="bg-light-card dark:bg-dark-card p-5 rounded-3xl space-y-3 shadow-sm">
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-950/50 flex items-center justify-center text-amber-700 dark:text-brand-gold text-xs">
-                            <i class="fa-solid fa-arrow-trend-up"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-sm">كيف تحسب نقاطك؟</h3>
-                            <p class="text-[10px] text-light-subtext dark:text-dark-subtext">ماشي السرعة، المهم الوقت الصادق.</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2 pt-2">
-                        <div class="bg-light-cardSoft dark:bg-dark-cardSoft p-3 rounded-2xl text-center space-y-1">
-                            <span class="text-[11px] text-light-subtext dark:text-dark-subtext font-bold block">بومودورو</span>
-                            <span id="pomo-points-calc" class="text-lg font-black block">0 نقطة</span>
-                            <span class="text-[9px] opacity-75 block">نقطتان لكل دقيقة</span>
-                        </div>
-                        <div class="bg-light-cardSoft dark:bg-dark-cardSoft p-3 rounded-2xl text-center space-y-1">
-                            <span class="text-[11px] text-light-subtext dark:text-dark-subtext font-bold block">غرفة Meet</span>
-                            <span id="meet-points-calc" class="text-lg font-black block">0 نقطة</span>
-                            <span class="text-[9px] opacity-75 block">نقطة لكل دقيقة</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Progress Ladder -->
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center px-1">
-                        <h3 class="font-bold text-sm">سلم التقدم</h3>
-                        <span class="text-xs text-light-subtext dark:text-dark-subtext">كل جلسة تقربك</span>
-                    </div>
-
-                    <!-- Rank 1 -->
-                    <div id="rank-card-1" class="bg-light-card dark:bg-dark-card p-4 rounded-2xl flex items-center gap-4 border-2 border-brand-burgundy dark:border-brand-gold shadow-sm transition">
-                        <div class="w-10 h-10 rounded-full bg-brand-burgundy dark:bg-brand-gold text-white dark:text-dark-bg flex items-center justify-center font-bold">
-                            <i class="fa-solid fa-check text-sm"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-sm">بداية قوية</h4>
-                            <p class="text-xs text-light-subtext dark:text-dark-subtext">أول خطوة هي اللي تصنع الطريق</p>
-                        </div>
-                        <span class="text-xs font-bold text-brand-burgundy dark:text-brand-gold">0</span>
-                    </div>
-
-                    <!-- Rank 2 -->
-                    <div id="rank-card-2" class="bg-light-card dark:bg-dark-card p-4 rounded-2xl flex items-center gap-4 opacity-50 border border-transparent shadow-sm transition">
-                        <div class="w-10 h-10 rounded-full bg-light-cardSoft dark:bg-dark-cardSoft flex items-center justify-center font-bold text-xs text-light-subtext dark:text-dark-subtext">
-                            150
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-sm">مستعد</h4>
-                            <p class="text-xs text-light-subtext dark:text-dark-subtext">الاستمرارية بدات تبان</p>
-                        </div>
-                    </div>
-
-                    <!-- Rank 3 -->
-                    <div id="rank-card-3" class="bg-light-card dark:bg-dark-card p-4 rounded-2xl flex items-center gap-4 opacity-50 border border-transparent shadow-sm transition">
-                        <div class="w-10 h-10 rounded-full bg-light-cardSoft dark:bg-dark-cardSoft flex items-center justify-center font-bold text-xs text-light-subtext dark:text-dark-subtext">
-                            400
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-sm">مركز</h4>
-                            <p class="text-xs text-light-subtext dark:text-dark-subtext">راك تبني إشعاع قوي</p>
-                        </div>
-                    </div>
-
-                    <!-- Rank 4 -->
-                    <div id="rank-card-4" class="bg-light-card dark:bg-dark-card p-4 rounded-2xl flex items-center gap-4 opacity-50 border border-transparent shadow-sm transition">
-                        <div class="w-10 h-10 rounded-full bg-light-cardSoft dark:bg-dark-cardSoft flex items-center justify-center font-bold text-xs text-light-subtext dark:text-dark-subtext">
-                            800
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-bold text-sm">قائد العائلة</h4>
-                            <p class="text-xs text-light-subtext dark:text-dark-subtext">تولي سند لروحك وللغير</p>
-                        </div>
+                        <h2 class="text-3xl font-black mt-1">بداية قوية</h2>
                     </div>
                 </div>
             </div>
 
-            <!-- SECTION 3: TIMER / POMODORO (المؤقت) -->
-            <div id="tab-timer" class="tab-content space-y-4 hidden">
-
-                <!-- Target Study Hours Setup Box -->
-                <div class="bg-light-card dark:bg-dark-card p-4 rounded-3xl space-y-3 shadow-sm border border-stone-200/50 dark:border-stone-800">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-bullseye text-brand-burgundy dark:text-brand-gold"></i>
-                            <h3 class="font-bold text-xs">هدف الدراسة اليومي</h3>
-                        </div>
-                        <span id="target-progress-text" class="text-xs font-bold text-brand-burgundy dark:text-brand-gold">0 / 2 ساعة</span>
-                    </div>
-                    
-                    <div class="flex items-center gap-2">
-                        <label class="text-xs text-light-subtext dark:text-dark-subtext whitespace-nowrap">شحال حاب تقرا اليوم؟</label>
-                        <select id="input-target-hours" onchange="updateTargetHours()" class="flex-1 p-2 bg-light-cardSoft dark:bg-dark-cardSoft rounded-xl font-bold text-xs outline-none focus:ring-1 focus:ring-brand-burgundy dark:focus:ring-brand-gold">
-                            <option value="1">ساعة واحدة (1h)</option>
-                            <option value="2" selected>ساعتان (2h)</option>
-                            <option value="3">3 ساعات (3h)</option>
-                            <option value="4">4 ساعات (4h)</option>
-                            <option value="5">5 ساعات (5h)</option>
-                            <option value="6">6 ساعات (6h)</option>
-                            <option value="8">8 ساعات (8h)</option>
-                        </select>
-                    </div>
-
-                    <!-- Progress Bar -->
-                    <div class="w-full bg-light-cardSoft dark:bg-dark-cardSoft h-2 rounded-full overflow-hidden">
-                        <div id="target-progress-bar" class="bg-brand-burgundy dark:bg-brand-gold h-full w-0 transition-all duration-500"></div>
-                    </div>
-                </div>
-
-                <!-- Main Pomodoro Card matching the Screenshot -->
-                <div class="bg-light-card dark:bg-dark-card p-6 rounded-3xl text-center space-y-6 shadow-sm border border-stone-200/50 dark:border-stone-800 flex flex-col items-center">
-                    
-                    <!-- Mode Selector Pills -->
-                    <div class="inline-flex p-1.5 bg-light-cardSoft dark:bg-dark-cardSoft rounded-full gap-1 text-xs font-bold">
-                        <button onclick="setTimerMode('focus')" id="mode-btn-focus" class="px-5 py-2 rounded-full bg-brand-burgundy text-white transition duration-300">تركيز</button>
-                        <button onclick="setTimerMode('shortBreak')" id="mode-btn-short" class="px-4 py-2 rounded-full text-light-subtext dark:text-dark-subtext hover:text-brand-burgundy dark:hover:text-brand-gold transition duration-300">استراحة قصيرة</button>
-                        <button onclick="setTimerMode('longBreak')" id="mode-btn-long" class="px-4 py-2 rounded-full text-light-subtext dark:text-dark-subtext hover:text-brand-burgundy dark:hover:text-brand-gold transition duration-300">استراحة طويلة</button>
-                    </div>
-
-                    <!-- Circular Timer Container -->
-                    <div class="w-60 h-60 sm:w-64 sm:h-64 rounded-full border-[7px] border-amber-100 dark:border-amber-950/40 flex flex-col justify-center items-center relative shadow-inner">
-                        <div class="text-5xl font-black tracking-tighter text-brand-burgundy dark:text-brand-gold font-mono" id="timer-display">
-                            25 : 00
-                        </div>
-                        <span id="timer-mode-label" class="text-xs font-bold text-light-subtext dark:text-dark-subtext mt-2">وقت التركيز</span>
-                    </div>
-
-                    <!-- Controls -->
-                    <div class="flex items-center justify-center gap-3">
-                        <button onclick="resetTimer()" class="w-12 h-12 rounded-full border border-stone-200 dark:border-stone-700 flex items-center justify-center text-light-subtext dark:text-dark-subtext hover:bg-light-cardSoft dark:hover:bg-dark-cardSoft active:scale-95 transition">
-                            <i class="fa-solid fa-rotate-right text-base"></i>
-                        </button>
-                        <button onclick="startTimer()" id="timer-start-btn" class="px-8 py-3.5 bg-brand-burgundy text-white font-bold text-sm rounded-full shadow-md hover:bg-opacity-90 active:scale-95 transition flex items-center gap-2">
-                            <i id="timer-play-icon" class="fa-solid fa-play text-xs"></i>
-                            <span id="timer-btn-label">ابدأ الآن</span>
-                        </button>
-                    </div>
-
-                    <p class="text-[11px] text-light-subtext dark:text-dark-subtext">كل دقيقة تركيز تزيد من تقدمك ونقاطك في الترتيب!</p>
-                </div>
-            </div>
-
-            <!-- SECTION 4: SETTINGS (الإعدادات) -->
-            <div id="tab-settings" class="tab-content space-y-4 hidden">
-                <!-- Theme Switcher Card -->
+            <!-- TAB 5: SETTINGS (الإعدادات) -->
+            <div id="tab-settings" class="tab-content space-y-4 hidden max-w-2xl mx-auto">
                 <div class="bg-light-card dark:bg-dark-card p-5 rounded-3xl flex justify-between items-center shadow-sm">
                     <div class="space-y-0.5">
                         <h3 class="font-bold text-sm">مظهر المساحة</h3>
                         <p id="theme-status-text" class="text-xs text-light-subtext dark:text-dark-subtext">الوضع الليلي مفعّل</p>
                     </div>
                     <button onclick="toggleTheme()" class="w-14 h-8 bg-brand-gold rounded-full p-1 flex items-center transition duration-300">
-                        <div id="toggle-ball" class="w-6 h-6 bg-white dark:bg-dark-bg rounded-full shadow-md transform transition duration-300 translate-x-6 dark:translate-x-0"></div>
+                        <div id="toggle-ball" class="w-6 h-6 bg-white dark:bg-dark-bg rounded-full shadow-md transform transition duration-300 translate-x-0"></div>
                     </button>
-                </div>
-
-                <!-- Story Replay Card -->
-                <div class="bg-light-card dark:bg-dark-card p-5 rounded-3xl space-y-3 shadow-sm">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-book-open text-brand-burgundy dark:text-brand-gold"></i>
-                        <h3 class="font-bold text-sm">قصة Focus & Force</h3>
-                    </div>
-                    <p class="text-xs text-light-subtext dark:text-dark-subtext">أعد مشاهدة البداية عندما تحتاج إلى تذكير بسبب وجودنا.</p>
-                    <button onclick="replayStory()" class="inline-flex items-center gap-2 text-xs font-bold text-brand-burgundy dark:text-brand-gold hover:underline">
-                        <span>إعادة القصة</span>
-                        <i class="fa-solid fa-arrow-left"></i>
-                    </button>
-                </div>
-
-                <!-- Our Motto Card -->
-                <div class="bg-light-card dark:bg-dark-card p-5 rounded-3xl space-y-2 shadow-sm">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-bolt text-brand-gold"></i>
-                        <h3 class="font-bold text-sm">مبدأنا</h3>
-                    </div>
-                    <p class="text-xs text-light-subtext dark:text-dark-subtext leading-relaxed">لا نطارد ساعات كثيرة. نبني ساعات صادقة، ونتركها تراكم.</p>
                 </div>
             </div>
 
         </main>
 
-        <!-- Bottom Navigation Bar -->
-        <nav class="absolute bottom-0 left-0 right-0 p-3 bg-light-card/90 dark:bg-dark-card/90 backdrop-blur-md border-t border-stone-200/50 dark:border-stone-800/80 flex justify-around items-center z-20">
-            <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex flex-col items-center gap-1 text-light-subtext dark:text-dark-subtext transition">
-                <i class="fa-solid fa-house text-base"></i>
-                <span class="text-[10px] font-bold">الرئيسية</span>
+        <!-- FLOATING BOTTOM NAVIGATION BAR (MATCHING SCREENSHOT) -->
+        <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-light-card/90 dark:bg-dark-card/90 backdrop-blur-md rounded-full px-4 md:px-8 py-2.5 shadow-2xl border border-stone-200/60 dark:border-stone-800/80 flex items-center gap-2 md:gap-6 z-40">
+            
+            <!-- Home -->
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn flex items-center gap-2 px-4 py-2 rounded-full text-white bg-brand-burgundy transition-all duration-300">
+                <i class="fa-solid fa-house text-sm"></i>
+                <span class="text-xs font-bold">الرئيسية</span>
             </button>
-            <button onclick="switchTab('study')" id="nav-study" class="nav-btn flex flex-col items-center gap-1 text-brand-burgundy dark:text-brand-gold font-bold transition">
-                <i class="fa-solid fa-user-group text-base"></i>
-                <span class="text-[10px]">غرفة الدراسة</span>
+
+            <!-- Study Room -->
+            <button onclick="switchTab('study')" id="nav-study" class="nav-btn flex items-center gap-2 px-3 py-2 rounded-full text-light-subtext dark:text-dark-subtext transition-all duration-300">
+                <i class="fa-solid fa-user-group text-sm"></i>
+                <span class="text-xs font-bold">غرفة الدراسة</span>
             </button>
-            <button onclick="switchTab('timer')" id="nav-timer" class="nav-btn flex flex-col items-center gap-1 text-light-subtext dark:text-dark-subtext transition">
-                <i class="fa-regular fa-clock text-base"></i>
-                <span class="text-[10px] font-bold">المؤقت</span>
+
+            <!-- Timer -->
+            <button onclick="switchTab('timer')" id="nav-timer" class="nav-btn flex items-center gap-2 px-3 py-2 rounded-full text-light-subtext dark:text-dark-subtext transition-all duration-300">
+                <i class="fa-regular fa-clock text-sm"></i>
+                <span class="text-xs font-bold">المؤقت</span>
             </button>
-            <button onclick="switchTab('leaderboard')" id="nav-leaderboard" class="nav-btn flex flex-col items-center gap-1 text-light-subtext dark:text-dark-subtext transition">
-                <i class="fa-solid fa-trophy text-base"></i>
-                <span class="text-[10px] font-bold">التصنيف</span>
+
+            <!-- Leaderboard -->
+            <button onclick="switchTab('leaderboard')" id="nav-leaderboard" class="nav-btn flex items-center gap-2 px-3 py-2 rounded-full text-light-subtext dark:text-dark-subtext transition-all duration-300">
+                <i class="fa-solid fa-trophy text-sm"></i>
+                <span class="text-xs font-bold">التصنيف</span>
             </button>
-            <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex flex-col items-center gap-1 text-light-subtext dark:text-dark-subtext transition">
-                <i class="fa-solid fa-gear text-base"></i>
-                <span class="text-[10px] font-bold">الإعدادات</span>
+
+            <!-- Settings -->
+            <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex items-center gap-2 px-3 py-2 rounded-full text-light-subtext dark:text-dark-subtext transition-all duration-300">
+                <i class="fa-solid fa-gear text-sm"></i>
+                <span class="text-xs font-bold">الإعدادات</span>
             </button>
         </nav>
 
@@ -545,27 +402,12 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // State Management
-        let state = {
-            meetMinutes: 0,
-            meetSessions: 0,
-            meetPoints: 0,
-            pomoMinutes: 0,
-            pomoPoints: 0,
-            totalPoints: 0,
-            isDark: true,
-            userFirstName: '',
-            userLastName: '',
-            userStream: 'علوم تجريبية'
-        };
-
-        // Story State
         let currentSlideIndex = 0;
-        const totalSlides = 6;
+        const totalSlides = 3;
 
-        // Pomodoro Modes & Timer Logic
-        let currentMode = 'focus'; // 'focus', 'shortBreak', 'longBreak'
-        const modeTimes = {
+        // Pomodoro state
+        let currentMode = 'focus';
+        let modeTimes = {
             focus: 25 * 60,
             shortBreak: 5 * 60,
             longBreak: 15 * 60
@@ -573,52 +415,30 @@
         let timerSeconds = modeTimes.focus;
         let timerInterval = null;
         let isTimerRunning = false;
-        let targetHours = 2;
-        let totalFocusMinutesCompleted = 0;
 
-        // Init App
         window.onload = () => {
-            updateUI();
-            updateTargetProgress();
+            startBacCountdown();
+            updateTimerDisplay();
         };
 
-        // Slide Navigation Logic
+        // Onboarding Slide Logic
         function nextStorySlide() {
             if (currentSlideIndex < totalSlides - 1) {
                 document.getElementById(`slide-${currentSlideIndex}`).classList.remove('active');
                 currentSlideIndex++;
-                document.getElementById(`slide-${currentSlideIndex}`).classList.add('active');
-                updateStoryControls();
-            } else if (currentSlideIndex === totalSlides - 1) {
-                document.getElementById(`slide-${currentSlideIndex}`).classList.remove('active');
-                document.getElementById('slide-setup').classList.add('active');
-                currentSlideIndex++;
                 
-                document.getElementById('story-dots').classList.add('hidden');
-                document.getElementById('story-subtext').classList.add('hidden');
-                document.getElementById('story-btn-text').innerText = 'تأكيد ودخول المنصة';
+                if (currentSlideIndex === totalSlides - 1) {
+                    document.getElementById('slide-setup').classList.add('active');
+                    document.getElementById('story-dots').classList.add('hidden');
+                    document.getElementById('story-btn-text').innerText = 'تأكيد ودخول المنصة';
+                } else {
+                    document.getElementById(`slide-${currentSlideIndex}`).classList.add('active');
+                }
             } else {
                 saveUserInfo();
             }
         }
 
-        function updateStoryControls() {
-            const dots = document.querySelectorAll('#story-dots .dot');
-            dots.forEach((dot, idx) => {
-                if (idx === currentSlideIndex) {
-                    dot.className = 'dot w-6 h-1.5 rounded-full bg-amber-200 transition-all';
-                } else {
-                    dot.className = 'dot w-1.5 h-1.5 rounded-full bg-white/30 transition-all';
-                }
-            });
-
-            if (currentSlideIndex === totalSlides - 1) {
-                document.getElementById('story-btn-text').innerText = 'نبدأ رحلتي للبكالوريا';
-                document.getElementById('story-subtext').classList.remove('hidden');
-            }
-        }
-
-        // Toggle Technical Sub-Branch Option
         function toggleTechOptions() {
             const stream = document.getElementById('input-stream').value;
             const container = document.getElementById('tech-subbranch-container');
@@ -629,7 +449,6 @@
             }
         }
 
-        // Save User Details and Hide Overlay
         function saveUserInfo() {
             const fn = document.getElementById('input-firstname').value.trim();
             const ln = document.getElementById('input-lastname').value.trim();
@@ -641,12 +460,11 @@
                 return;
             }
 
-            state.userFirstName = fn;
-            state.userLastName = ln;
-            state.userStream = (stream === 'تقني رياضي') ? `تقني رياضي (${subStream})` : stream;
+            const fullStream = (stream === 'تقني رياضي') ? `تقني رياضي (${subStream})` : stream;
 
+            document.getElementById('user-header-name').innerText = `أهلاً بك، ${fn}`;
             document.getElementById('user-display-fullname').innerText = `${fn} ${ln}`;
-            document.getElementById('user-display-stream').innerText = state.userStream;
+            document.getElementById('user-display-stream').innerText = fullStream;
 
             const overlay = document.getElementById('story-overlay');
             overlay.classList.add('opacity-0');
@@ -655,83 +473,69 @@
             }, 500);
         }
 
-        // Replay Story from Settings
-        function replayStory() {
-            currentSlideIndex = 0;
-            document.querySelectorAll('.story-slide').forEach(s => s.classList.remove('active'));
-            document.getElementById('slide-0').classList.add('active');
-            document.getElementById('story-dots').classList.remove('hidden');
-            document.getElementById('story-btn-text').innerText = 'تابع القصة';
-            document.getElementById('story-subtext').classList.add('hidden');
-            
-            const overlay = document.getElementById('story-overlay');
-            overlay.style.display = 'flex';
-            setTimeout(() => {
-                overlay.classList.remove('opacity-0');
-            }, 10);
-            updateStoryControls();
+        // BAC Countdown Timer Logic (June 2027 Target)
+        function startBacCountdown() {
+            const bacDate = new Date('June 15, 2027 08:00:00').getTime();
+
+            setInterval(() => {
+                const now = new Date().getTime();
+                const distance = bacDate - now;
+
+                if (distance > 0) {
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    document.getElementById('bac-days').innerText = days.toString().padStart(2, '0');
+                    document.getElementById('bac-hours').innerText = hours.toString().padStart(2, '0');
+                    document.getElementById('bac-minutes').innerText = minutes.toString().padStart(2, '0');
+                    document.getElementById('bac-seconds').innerText = seconds.toString().padStart(2, '0');
+                }
+            }, 1000);
         }
 
-        // Theme Toggle Function
-        function toggleTheme() {
-            const html = document.documentElement;
-            state.isDark = !state.isDark;
-
-            if (state.isDark) {
-                html.classList.add('dark');
-                document.getElementById('theme-icon').className = 'fa-solid fa-moon text-brand-gold text-lg';
-                document.getElementById('theme-status-text').innerText = 'الوضع الليلي مفعّل';
-            } else {
-                html.classList.remove('dark');
-                document.getElementById('theme-icon').className = 'fa-solid fa-sun text-brand-burgundy text-lg';
-                document.getElementById('theme-status-text').innerText = 'الوضع النهاري مفعّل';
-            }
-        }
-
-        // Tab Navigation Switcher
+        // Navigation Switcher
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.className = 'nav-btn flex flex-col items-center gap-1 text-light-subtext dark:text-dark-subtext transition';
+                btn.className = 'nav-btn flex items-center gap-2 px-3 py-2 rounded-full text-light-subtext dark:text-dark-subtext transition-all duration-300';
             });
 
             const titleMap = {
                 'home': 'الرئيسية',
                 'study': 'غرفة الدراسة',
-                'timer': 'المؤقت',
+                'timer': 'مؤقت التركيز',
                 'leaderboard': 'التصنيف',
                 'settings': 'الإعدادات'
             };
 
-            document.getElementById('page-title').innerText = titleMap[tabName] || 'غرفة الدراسة';
+            document.getElementById('page-title').innerText = titleMap[tabName] || 'الرئيسية';
             
-            const targetTab = document.getElementById(`tab-${tabName == 'home' ? 'study' : tabName}`);
+            const targetTab = document.getElementById(`tab-${tabName}`);
             if (targetTab) targetTab.classList.remove('hidden');
 
             const activeBtn = document.getElementById(`nav-${tabName}`);
             if (activeBtn) {
-                activeBtn.className = 'nav-btn flex flex-col items-center gap-1 text-brand-burgundy dark:text-brand-gold font-bold transition';
+                activeBtn.className = 'nav-btn flex items-center gap-2 px-4 py-2 rounded-full text-white bg-brand-burgundy transition-all duration-300 shadow-md';
             }
         }
 
-        // Meet Time Logging Logic
-        function logMeetTime() {
-            const input = document.getElementById('meet-input-minutes');
-            const mins = parseInt(input.value) || 0;
+        // Pomodoro Settings Save
+        function saveTimerSettings() {
+            const focusVal = parseInt(document.getElementById('setting-focus-min').value) || 25;
+            const shortVal = parseInt(document.getElementById('setting-short-min').value) || 5;
+            const longVal = parseInt(document.getElementById('setting-long-min').value) || 15;
 
-            if (mins <= 0) return;
+            modeTimes.focus = focusVal * 60;
+            modeTimes.shortBreak = shortVal * 60;
+            modeTimes.longBreak = longVal * 60;
 
-            state.meetMinutes += mins;
-            state.meetSessions += 1;
-            state.meetPoints += mins * 1; // 1 Point per minute
-            
-            recalculatePoints();
-            updateUI();
-
-            alert(`يعطيك الصحة! زدت ${mins} دقيقة وحصلت على ${mins} نقطة جديدة.`);
+            resetTimer();
+            alert('تم حفظ إعدادات الوقت الجديدة بنجاح!');
         }
 
-        // Pomodoro Modes Handler
+        // Pomodoro Modes Logic
         function setTimerMode(mode) {
             if (isTimerRunning) {
                 clearInterval(timerInterval);
@@ -740,7 +544,6 @@
             currentMode = mode;
             timerSeconds = modeTimes[mode];
             
-            // Highlight current active pill tab
             const btnFocus = document.getElementById('mode-btn-focus');
             const btnShort = document.getElementById('mode-btn-short');
             const btnLong = document.getElementById('mode-btn-long');
@@ -764,21 +567,6 @@
             updateTimerDisplay();
         }
 
-        // Goal Hours Tracker
-        function updateTargetHours() {
-            targetHours = parseFloat(document.getElementById('input-target-hours').value) || 2;
-            updateTargetProgress();
-        }
-
-        function updateTargetProgress() {
-            const currentHours = (totalFocusMinutesCompleted / 60).toFixed(1);
-            document.getElementById('target-progress-text').innerText = `${currentHours} / ${targetHours} ساعة`;
-            
-            const percentage = Math.min(100, Math.round((totalFocusMinutesCompleted / (targetHours * 60)) * 100));
-            document.getElementById('target-progress-bar').style.width = `${percentage}%`;
-        }
-
-        // Pomodoro Start / Pause
         function startTimer() {
             const btnLabel = document.getElementById('timer-btn-label');
             const playIcon = document.getElementById('timer-play-icon');
@@ -800,24 +588,8 @@
                     } else {
                         clearInterval(timerInterval);
                         isTimerRunning = false;
-                        btnLabel.innerText = 'ابدأ الآن';
-                        playIcon.className = 'fa-solid fa-play text-xs';
-
-                        if (currentMode === 'focus') {
-                            const minutes = Math.round(modeTimes.focus / 60);
-                            state.pomoMinutes += minutes;
-                            state.pomoPoints += minutes * 2; // 2 Points per minute
-                            totalFocusMinutesCompleted += minutes;
-                            
-                            recalculatePoints();
-                            updateUI();
-                            updateTargetProgress();
-                            alert(`يعطيك الصحة! كملت جلسة ${minutes} دقيقة تركيز وحصلت على +${minutes * 2} نقطة! 🎯`);
-                        } else {
-                            alert('انتهت الاستراحة! هل أنت مستعد للعودة للتركيز؟ 💪');
-                        }
-
                         resetTimer();
+                        alert('انتهت الجلسة!');
                     }
                 }, 1000);
             }
@@ -838,54 +610,14 @@
             document.getElementById('timer-display').innerText = `${m} : ${s}`;
         }
 
-        // Recalculate Total Points and Badges
-        function recalculatePoints() {
-            state.totalPoints = state.meetPoints + state.pomoPoints;
-        }
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
 
-        // Update UI Elements
-        function updateUI() {
-            document.getElementById('meet-minutes-display').innerText = state.meetMinutes;
-            document.getElementById('meet-sessions-display').innerText = state.meetSessions;
-            document.getElementById('meet-points-display').innerText = state.meetPoints;
-
-            document.getElementById('total-points-display').innerText = state.totalPoints;
-            document.getElementById('pomo-points-calc').innerText = `${state.pomoPoints} نقطة`;
-            document.getElementById('meet-points-calc').innerText = `${state.meetPoints} نقطة`;
-
-            const title = document.getElementById('user-badge-title');
-            const nextRank = document.getElementById('next-rank-text');
-
-            const rank1 = document.getElementById('rank-card-1');
-            const rank2 = document.getElementById('rank-card-2');
-            const rank3 = document.getElementById('rank-card-3');
-            const rank4 = document.getElementById('rank-card-4');
-
-            if (state.totalPoints >= 800) {
-                title.innerText = 'قائد العائلة';
-                nextRank.innerText = 'وصلت للرتبة القصوى! أسطورة!';
-                activateRankCard(rank4);
-            } else if (state.totalPoints >= 400) {
-                title.innerText = 'مركز';
-                nextRank.innerText = `باقي ${800 - state.totalPoints} نقطة لرتبة قائد العائلة`;
-                activateRankCard(rank3);
-            } else if (state.totalPoints >= 150) {
-                title.innerText = 'مستعد';
-                nextRank.innerText = `باقي ${400 - state.totalPoints} نقطة لرتبة مركز`;
-                activateRankCard(rank2);
-            } else {
-                title.innerText = 'بداية قوية';
-                nextRank.innerText = `باقي ${150 - state.totalPoints} نقطة للرتبة التالية`;
-                activateRankCard(rank1);
-            }
-        }
-
-        function activateRankCard(card) {
-            [1, 2, 3, 4].forEach(i => {
-                const c = document.getElementById(`rank-card-${i}`);
-                c.className = 'bg-light-card dark:bg-dark-card p-4 rounded-2xl flex items-center gap-4 opacity-50 border border-transparent shadow-sm transition';
-            });
-            card.className = 'bg-light-card dark:bg-dark-card p-4 rounded-2xl flex items-center gap-4 border-2 border-brand-burgundy dark:border-brand-gold shadow-sm transition opacity-100';
+            document.getElementById('theme-icon').className = isDark 
+                ? 'fa-solid fa-moon text-brand-gold text-lg' 
+                : 'fa-solid fa-sun text-brand-burgundy text-lg';
         }
     </script>
 </body>
