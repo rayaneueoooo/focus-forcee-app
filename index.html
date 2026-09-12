@@ -1,1265 +1,685 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="dark">
+<html lang="ar" dir="rtl" data-theme="light">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Focus & Force - Léa's Story Edition</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    /* =========================================================
-       🎨 ثيمات الألوان المخصصة (Focus & Force Palette)
-       ========================================================= */
-    :root[data-theme="dark"] {
-      --bg-gradient: radial-gradient(circle at 50% 20%, #3b1119 0%, #1a060a 100%);
-      --bg-color: #1a060a;
-      --card-bg: rgba(59, 17, 25, 0.55);
-      --card-border: rgba(255, 255, 255, 0.12);
-      --primary-burgundy: #800020;
-      --burgundy-glow: rgba(128, 0, 32, 0.5);
-      --text-main: #fcefeF;
-      --text-muted: #c4aead;
-      --glass-taskbar: rgba(26, 6, 10, 0.85);
-      --accent-highlight: #e63946;
-    }
-
-    :root[data-theme="light"] {
-      --bg-gradient: radial-gradient(circle at 50% 20%, #fffdfa 0%, #f7f3eb 100%);
-      --bg-color: #f7f3eb;
-      --card-bg: rgba(255, 255, 255, 0.7);
-      --card-border: rgba(128, 0, 32, 0.15);
-      --primary-burgundy: #800020;
-      --burgundy-glow: rgba(128, 0, 32, 0.25);
-      --text-main: #2b181d;
-      --text-muted: #6e595f;
-      --glass-taskbar: rgba(253, 251, 247, 0.85);
-      --accent-highlight: #a31237;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      transition: background-color 0.4s ease, color 0.3s ease, border-color 0.3s ease;
-    }
-
-    body {
-      background: var(--bg-gradient);
-      background-attachment: fixed;
-      color: var(--text-main);
-      padding: 16px;
-      padding-bottom: 120px;
-      direction: rtl;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* 🎬 Intro Overlay */
-    #introOverlay {
-      position: fixed;
-      inset: 0;
-      background: var(--bg-color);
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      animation: fadeOutIntro 0.8s ease 2.2s forwards;
-      pointer-events: none;
-    }
-
-    .intro-logo {
-      font-size: 2.2rem;
-      font-weight: 900;
-      color: #fff;
-      text-shadow: 0 0 15px var(--burgundy-glow);
-      animation: scaleInIntro 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      text-align: center;
-      letter-spacing: 1px;
-    }
-
-    .intro-sub {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-top: 8px;
-      opacity: 0;
-      animation: fadeInIntro 0.8s ease 0.5s forwards;
-    }
-
-    @keyframes scaleInIntro {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    @keyframes fadeInIntro {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeOutIntro {
-      to { opacity: 0; visibility: hidden; }
-    }
-
-    /* الشريط العلوي */
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .brand-title {
-      font-weight: 900;
-      font-size: 1.3rem;
-      letter-spacing: 1px;
-      color: var(--text-main);
-      text-shadow: 0 2px 8px var(--burgundy-glow);
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .theme-toggle-btn {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-
-    /* البطاقات الزجاجية */
-    .glass-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(25px) saturate(180%);
-      -webkit-backdrop-filter: blur(25px) saturate(180%);
-      border: 1px solid var(--card-border);
-      border-radius: 28px;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .header-card {
-      text-align: center;
-    }
-
-    .header-card h2 {
-      color: #fff;
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .header-card p {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-
-    /* القصة */
-    .story-hero {
-      text-align: center;
-      padding: 10px 0 20px 0;
-      border-bottom: 1px solid var(--card-border);
-      margin-bottom: 20px;
-    }
-
-    .story-hero h1 {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 8px;
-      line-height: 1.5;
-    }
-
-    .story-hero p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .timeline-item {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 16px;
-    }
-
-    .timeline-year {
-      display: inline-block;
-      background: var(--primary-burgundy);
-      color: #fff;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 10px;
-      margin-bottom: 8px;
-      box-shadow: 0 4px 15px var(--burgundy-glow);
-    }
-
-    .timeline-title {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--text-main);
-    }
-
-    .timeline-desc {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-
-    .lea-signature {
-      background: linear-gradient(135deg, rgba(128, 0, 32, 0.3), rgba(0,0,0,0));
-      border: 1px solid var(--primary-burgundy);
-      border-radius: 22px;
-      padding: 18px;
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    .lea-signature h3 {
-      color: #fff;
-      font-size: 1.1rem;
-      margin-bottom: 8px;
-      font-weight: 800;
-    }
-
-    .lea-signature p {
-      font-size: 0.9rem;
-      line-height: 1.7;
-      color: var(--text-main);
-    }
-
-    /* الكويزات */
-    .quiz-filter-container {
-      margin-bottom: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .quiz-filter-container label {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .quiz-select {
-      width: 100%;
-      padding: 10px 14px;
-      border-radius: 14px;
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid var(--card-border);
-      color: var(--text-main);
-      font-size: 0.88rem;
-      outline: none;
-    }
-
-    .quiz-select option {
-      background: #3b1119;
-      color: #fff;
-    }
-
-    .quiz-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      font-size: 0.85rem;
-      color: #fff;
-      font-weight: bold;
-    }
-
-    .question-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-
-    .options-container {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .option-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 14px 16px;
-      color: var(--text-main);
-      font-size: 0.9rem;
-      text-align: right;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      line-height: 1.4;
-    }
-
-    .option-btn.correct {
-      background: rgba(46, 196, 182, 0.3) !important;
-      border-color: #2ec4b6 !important;
-      font-weight: bold;
-    }
-
-    .option-btn.wrong {
-      background: rgba(230, 57, 70, 0.3) !important;
-      border-color: #e63946 !important;
-    }
-
-    .explanation-box {
-      margin-top: 14px;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      border-right: 3px solid var(--primary-burgundy);
-      display: none;
-    }
-
-    .quiz-result-card {
-      text-align: center;
-      padding: 20px 10px;
-    }
-
-    .quiz-result-score {
-      font-size: 2.8rem;
-      font-weight: 900;
-      color: #fff;
-      margin: 14px 0;
-      text-shadow: 0 4px 15px var(--burgundy-glow);
-    }
-
-    .btn-primary {
-      background: var(--primary-burgundy);
-      color: #ffffff;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 18px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      box-shadow: 0 6px 25px var(--burgundy-glow);
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    /* 📚 المكتبة والملخصات */
-    .section-subtitle {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pdf-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-height: 380px;
-      overflow-y: auto;
-    }
-
-    .pdf-card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 14px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .pdf-info h4 {
-      font-size: 0.95rem;
-      color: var(--text-main);
-      margin-bottom: 4px;
-    }
-
-    .pdf-info span {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .pdf-actions {
-      display: flex;
-      gap: 6px;
-    }
-
-    .btn-action {
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-    }
-
-    .btn-view {
-      background: var(--primary-burgundy);
-      color: #fff;
-      box-shadow: 0 4px 12px var(--burgundy-glow);
-    }
-
-    /* المفكرة */
-    .notes-input-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .notes-input {
-      flex: 1;
-      padding: 12px 16px;
-      border-radius: 14px;
-      border: 1px solid var(--card-border);
-      background: rgba(0, 0, 0, 0.2);
-      color: var(--text-main);
-      outline: none;
-      font-size: 0.88rem;
-    }
-
-    .notes-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-height: 250px;
-      overflow-y: auto;
-    }
-
-    .note-item {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
-      padding: 12px 14px;
-      border-radius: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.88rem;
-    }
-
-    .note-date {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      display: block;
-      margin-top: 4px;
-    }
-
-    .note-delete {
-      color: var(--accent-highlight);
-      cursor: pointer;
-      font-weight: bold;
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      padding: 0 6px;
-    }
-
-    /* بومودورو */
-    .pomodoro-container {
-      text-align: center;
-      padding: 10px;
-    }
-
-    .pomodoro-timer-display {
-      font-size: 3.5rem;
-      font-weight: 900;
-      letter-spacing: 2px;
-      margin: 20px 0;
-      font-variant-numeric: tabular-nums;
-      color: #fff;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    }
-
-    .pomodoro-controls {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .pomodoro-btn {
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    .pomodoro-btn.active-control {
-      background: #fff;
-      color: #2b181d;
-    }
-
-    .pomodoro-settings {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      background: rgba(0, 0, 0, 0.25);
-      padding: 14px;
-      border-radius: 16px;
-      margin-bottom: 16px;
-      text-align: right;
-    }
-
-    .pomodoro-settings label {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.8);
-      font-weight: 600;
-    }
-
-    .pomodoro-settings select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #fff;
-      font-size: 0.9rem;
-      outline: none;
-    }
-
-    .pomodoro-settings select option {
-      background: #3b1119;
-      color: #fff;
-    }
-
-    /* 🎧 مشغل الصوت */
-    .custom-sound-section {
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px solid var(--card-border);
-      text-align: right;
-    }
-
-    .custom-sound-section h3 {
-      font-size: 1rem;
-      color: #fff;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .hidden-audio-player {
-      width: 0;
-      height: 0;
-      opacity: 0;
-      pointer-events: none;
-      position: absolute;
-    }
-
-    .audio-control-box {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 12px 16px;
-      border-radius: 16px;
-      border: 1px solid var(--card-border);
-      margin-top: 10px;
-    }
-
-    .audio-play-btn {
-      background: var(--primary-burgundy);
-      color: #fff;
-      border: none;
-      padding: 8px 18px;
-      border-radius: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
-
-    /* 💻 جلسات Google Meet */
-    .meet-card {
-      margin-top: 20px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--card-border);
-      border-radius: 20px;
-      padding: 16px;
-      text-align: right;
-    }
-
-    .meet-card h3 {
-      font-size: 1.05rem;
-      color: #fff;
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .meet-card p {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      line-height: 1.5;
-    }
-
-    .meet-btn {
-      width: 100%;
-      background: #00897B;
-      color: #fff;
-      border: none;
-      padding: 12px;
-      border-radius: 14px;
-      font-weight: bold;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 15px rgba(0, 137, 123, 0.3);
-    }
-
-    /* الشريط السفلي */
-    .taskbar-wrapper {
-      position: fixed;
-      bottom: 20px;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: center;
-      z-index: 999;
-      padding: 0 12px;
-    }
-
-    .liquid-taskbar {
-      background: var(--glass-taskbar);
-      backdrop-filter: blur(35px) saturate(200%);
-      -webkit-backdrop-filter: blur(35px) saturate(200%);
-      border: 1px solid var(--card-border);
-      border-radius: 32px;
-      padding: 6px 12px;
-      display: flex;
-      gap: 8px;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 16px;
-      border-radius: 22px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .nav-item .icon {
-      font-size: 1.2rem;
-      margin-bottom: 2px;
-    }
-
-    .nav-item .label {
-      font-size: 0.65rem;
-      font-weight: 700;
-    }
-
-    .nav-item.active {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    .nav-item.active .icon {
-      transform: translateY(-2px) scale(1.15);
-    }
-
-    .app-section {
-      display: none;
-      animation: iosFade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .app-section.active {
-      display: block;
-    }
-
-    @keyframes iosFade {
-      from { opacity: 0; transform: scale(0.97) translateY(8px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>focus&force - منصة النجاح للبكالوريا</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root[data-theme="light"] {
+            --bg-primary: #FAF7F2;
+            --bg-secondary: #F0EAE1;
+            --accent-burgundy: #800020;
+            --accent-hover: #5a0017;
+            --text-primary: #2D2B2A;
+            --text-secondary: #66605C;
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(128, 0, 32, 0.15);
+            --card-shadow: 0 8px 32px 0 rgba(128, 0, 32, 0.08);
+        }
+
+        :root[data-theme="dark"] {
+            --bg-primary: #121216;
+            --bg-secondary: #1E1E24;
+            --accent-burgundy: #D62828;
+            --accent-hover: #F77F00;
+            --text-primary: #F1FAEE;
+            --text-secondary: #A8DADC;
+            --glass-bg: rgba(30, 30, 36, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding-bottom: 90px;
+        }
+
+        /* Taskbar Liquid Glass */
+        .taskbar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 10px 25px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: var(--card-shadow);
+        }
+
+        .taskbar button {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .taskbar button:hover, .taskbar button.active {
+            background: var(--accent-burgundy);
+            color: #FFF;
+        }
+
+        /* Theme Toggle Container */
+        .header-actions {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-icon {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        /* Section Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* Intro Animation Story */
+        .intro-story {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+        }
+
+        .story-box {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-burgundy);
+            margin-bottom: 30px;
+            height: 80px;
+        }
+
+        .btn-main {
+            background: var(--accent-burgundy);
+            color: #FFF;
+            border: none;
+            padding: 12px 35px;
+            font-size: 1.1rem;
+            border-radius: 18px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .btn-main:hover {
+            transform: scale(1.05);
+            background: var(--accent-hover);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-control, select {
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .sub-branch-group {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(128, 0, 32, 0.05);
+            border-radius: 12px;
+        }
+
+        /* Countdown Widget */
+        .countdown-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--accent-burgundy);
+        }
+
+        .countdown-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .count-box {
+            background: var(--bg-secondary);
+            padding: 15px;
+            border-radius: 16px;
+            min-width: 80px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .count-box span {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-burgundy);
+        }
+
+        /* Pomodoro Timer */
+        .timer-display {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--accent-burgundy);
+            margin: 20px 0;
+            font-family: monospace;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .timer-inputs {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .timer-inputs input {
+            width: 70px;
+            text-align: center;
+        }
+
+        /* Library Subject Grid */
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .subject-card {
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            text-decoration: none;
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-burgundy);
+        }
+
+        .subject-card i {
+            font-size: 2rem;
+            color: var(--accent-burgundy);
+        }
+
+        /* Leaderboard Table */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .leaderboard-table th, .leaderboard-table td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .leaderboard-table th {
+            color: var(--accent-burgundy);
+        }
+
+        /* Meet Button */
+        .meet-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #00838F;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Intro Overlay -->
-  <div id="introOverlay">
-    <div class="intro-logo">FOCUS & FORCE 🎓✨</div>
-    <div class="intro-sub">رحلة شغف صُنعت بكل حب... 🤍</div>
-  </div>
-
-  <!-- الشريط العلوي -->
-  <div class="top-bar">
-    <div class="brand-title">FOCUS & FORCE</div>
+    <!-- Header / Theme Toggle -->
     <div class="header-actions">
-      <button class="theme-toggle-btn" onclick="toggleTheme()">
-        <span id="themeIcon">🌙</span>
-        <span id="themeText">الوضع الليلي</span>
-      </button>
+        <button class="btn-icon" id="themeToggle" title="تغيير الوضع"><i class="fas font-moon"></i> 🌓</button>
     </div>
-  </div>
 
-  <!-- 1️⃣ قسم القصة -->
-  <div id="section-story" class="app-section active">
-    <div class="glass-card">
-      <div class="story-hero">
-        <h1>من طالبة تبحث عن ملخصات... إلى مؤسسة عائلة "Focus & Force"</h1>
-        <p>قصة بدأت من معاناة... وتحوّلت إلى حلم يجمع آلاف الطلبة 🤍</p>
-      </div>
+    <div class="container">
 
-      <div class="timeline">
-        <div class="timeline-item">
-          <span class="timeline-year">2024</span>
-          <div class="timeline-title">🍃 بداية الحكاية والشرارة الأولى</div>
-          <div class="timeline-desc">كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث بين الصفحات عن مصادر صحيحة، ملخصات مفيدة، وقناة تكون لي سنداً حقيقياً. وفي لحظة صدق مع نفسي تساءلت: "علاش ما نصنعش أنا المكان اللي تمنيت نلقاه؟" ومن تلك الشرارة، بدأت الحكاية ✨.</div>
+        <!-- 1. Intro Animation Section -->
+        <section id="introSection" class="section active">
+            <div class="glass-card intro-story">
+                <div class="story-box" id="storyText">مرحباً بك في منصة focus&force...</div>
+                <button class="btn-main" id="nextStoryBtn">التالي</button>
+            </div>
+        </section>
+
+        <!-- 2. User Info & Branch Selection Section -->
+        <section id="profileSection" class="section">
+            <div class="glass-card">
+                <h2><i class="fas fa-user-edit"></i> إعداد البروفايل الشخصي</h2>
+                <form id="profileForm" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <label>الاسم:</label>
+                        <input type="text" id="firstName" class="form-control" placeholder="أدخل اسمك" required>
+                    </div>
+                    <div class="form-group">
+                        <label>اللقب:</label>
+                        <input type="text" id="lastName" class="form-control" placeholder="أدخل لقبك" required>
+                    </div>
+                    <div class="form-group">
+                        <label>الشعبة:</label>
+                        <select id="branchSelect" class="form-control" required onchange="handleBranchChange()">
+                            <option value="">اختر الشعبة...</option>
+                            <option value="se">علوم تجريبية</option>
+                            <option value="m">رياضيات</option>
+                            <option value="ge">تسيير واقتصاد</option>
+                            <option value="le">آداب ولغات</option>
+                            <option value="ph">آداب وفلسفة</option>
+                            <option value="tm">تقني رياضي</option>
+                        </select>
+                    </div>
+
+                    <!-- Sub-branch for Technical Math -->
+                    <div id="techMathSub" class="sub-branch-group">
+                        <label>اختر التخصص الهندسي:</label>
+                        <select id="subBranchSelect" class="form-control">
+                            <option value="gp">هندسة طرائق</option>
+                            <option value="ge">هندسة كهربائية</option>
+                            <option value="gm">هندسة ميكانيكية</option>
+                            <option value="gc">هندسة مدنية</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-main" style="margin-top: 15px;">دخول المنصة</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Main Dashboard View (Appears after login) -->
+        <div id="mainDashboard" style="display: none;">
+
+            <!-- 3. Countdown Section -->
+            <section id="countdownSection" class="glass-card">
+                <div class="countdown-title"><i class="fas fa-hourglass-half"></i> متبقي على بكالوريا 7 جوان 2027</div>
+                <div class="countdown-grid">
+                    <div class="count-box"><span id="days">00</span>أيام</div>
+                    <div class="count-box"><span id="hours">00</span>ساعات</div>
+                    <div class="count-box"><span id="minutes">00</span>دقائق</div>
+                    <div class="count-box"><span id="seconds">00</span>ثواني</div>
+                </div>
+            </section>
+
+            <!-- 4. Pomodoro & Meet Section -->
+            <section id="pomodoroSection" class="section">
+                <div class="glass-card">
+                    <h2><i class="fas fa-clock"></i> تقنية البومودورو (Focus & Force)</h2>
+                    <div class="timer-display" id="pomoTimer">25:00</div>
+                    <div class="timer-controls">
+                        <button class="btn-main" id="startPomo">إبدأ</button>
+                        <button class="btn-main" id="pausePomo" style="background:#555;">إيقاف</button>
+                        <button class="btn-main" id="resetPomo" style="background:#999;">إعادة ضبط</button>
+                    </div>
+
+                    <!-- Adjustable Time Controls -->
+                    <div class="timer-inputs">
+                        <label>تعديل الوقت:</label>
+                        <input type="number" id="customHours" class="form-control" placeholder="ساعات" min="0" value="0">
+                        <input type="number" id="customMinutes" class="form-control" placeholder="دقائق" min="1" max="59" value="25">
+                        <button class="btn-main" onclick="applyCustomTime()" style="padding: 8px 15px;">تطبيق</button>
+                    </div>
+
+                    <hr style="margin: 30px 0; border:0; border-top:1px solid var(--glass-border);">
+
+                    <h3><i class="fas fa-video"></i> جلسات الميت المباشرة</h3>
+                    <p style="margin: 10px 0; color: var(--text-secondary);">انضم إلى زملائك في غرفة الدراسة الجماعية عبر Google Meet</p>
+                    <a href="https://meet.google.com/krd-aesq-sgt" target="_blank" class="meet-link-btn">
+                        <i class="fab fa-google-pay"></i> دخول غرفة الدراسة المباشرة
+                    </a>
+                </div>
+            </section>
+
+            <!-- 5. DzExams Library Section -->
+            <section id="librarySection" class="section">
+                <div class="glass-card">
+                    <h2><i class="fas fa-book"></i> مكتبة المواضيع والدراوس (dzexams)</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 15px;" id="userBranchBadge">روابط مباشرة لمواد شعبتك</p>
+                    
+                    <div class="subject-grid" id="subjectGrid">
+                        <!-- Dynamic Subjects will load here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Leaderboard / Ranking Section -->
+            <section id="rankingSection" class="section">
+                <div class="glass-card">
+                    <h2><i class="fas fa-trophy"></i> سلم التصنيف والترتيب</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 15px;">يعتمد الترتيب على إجمالي دقائق التركيز في البومودورو وجلسات الميت</p>
+                    
+                    <table class="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>الترتيب</th>
+                                <th>الطالب</th>
+                                <th>الشعبة</th>
+                                <th>دقائق التركيز</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardBody">
+                            <tr>
+                                <td>🥇 1</td>
+                                <td>أحمد ب.</td>
+                                <td>تقني رياضي</td>
+                                <td>1420 دقيقة</td>
+                            </tr>
+                            <tr>
+                                <td>🥈 2</td>
+                                <td>سارة م.</td>
+                                <td>علوم تجريبية</td>
+                                <td>1280 دقيقة</td>
+                            </tr>
+                            <tr>
+                                <td>🥉 3</td>
+                                <td id="currentUserRankName">أنت</td>
+                                <td id="currentUserRankBranch">-</td>
+                                <td id="currentUserMinutes">0 دقيقة</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
         </div>
 
-        <div class="timeline-item">
-          <span class="timeline-year">2024</span>
-          <div class="timeline-title">🤍 حلم صغير... وطموح لا يحدّه شيء</div>
-          <div class="timeline-desc">بدأت القناة بمجهودي الفردي وبكثير من الحب. كل معلومة، كل ملخص، وكل خطوة... كان وراءها وقت، تعب، ورغبة صادقة من أعماق قلبي في مساعدة طالب آخر يعيش نفس شعوري.</div>
-        </div>
-
-        <div class="timeline-item">
-          <span class="timeline-year">2025</span>
-          <div class="timeline-title">🔥 الشرارة الحقيقية والتحدي</div>
-          <div class="timeline-desc">عندما قررت خوض تجربة البكالوريا للمرة الثانية، وسط كل الضغط والتعب والخوف... لم تكن القناة مجرد منصة ننشر فيها، بل كانت المتنفس الحقيقي لي والحافز لأكمل الطريق معاً 🤲🏻💗.</div>
-        </div>
-
-        <div class="timeline-item">
-          <span class="timeline-year">2026</span>
-          <div class="timeline-title">✨ الحلم يكبر والعائلة تتسع</div>
-          <div class="timeline-desc">سنوات الصبر جعلت Focus & Force تتحول إلى مساحة موثوقة تجمع الجميع. انضم إليّ مشرفون رائعون وبدأنا شراكات نجاح... هنا أدركت أن الحلم أصبح عائلة واحدة 👥🤍.</div>
-        </div>
-
-        <div class="timeline-item">
-          <span class="timeline-year">2027</span>
-          <div class="timeline-title">💗 عهد جديد بروح مختلفة</div>
-          <div class="timeline-desc">كل تجربة علمتني الكثير. **Léa 🩵** التي ترونها اليوم... لم تأتِ من عدم ولا صدفة، بل جاءت بعد سنوات من المحاولة، الصمود، والإيمان المطلق بالحلم 🌱.</div>
-        </div>
-      </div>
-
-      <div class="lea-signature">
-        <h3>رسالة من Léa 🩵</h3>
-        <p>Focus & Force مش مجرد منصة تعليمية... هي قطعة حقيقية من قلبي 💗💗، ورسالة نعيشها سوياً كل يوم. أنا هنا لأكون السند الذي تمنيتُ لو وجدته يوماً وأنا طالبة 🍓✨، ومع باقي الفريق... سنواصل إيقاد الشغف ونقود هذه العائلة دائماً نحو القمة.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 2️⃣ قسم الكويزات (المطور مع 50 سؤالاً) -->
-  <div id="section-quiz" class="app-section">
-    <div class="glass-card header-card">
-      <h2>🧩 الكويزات والأسئلة السريعة</h2>
-      <p>اختبر مراجعتك وجاهزيتك لشهادة البكالوريا باختبارات شاملة 📚✨</p>
     </div>
 
-    <!-- تصفية حسب المادة -->
-    <div class="glass-card" style="padding: 14px 20px;">
-      <div class="quiz-filter-container">
-        <label for="categorySelect">اختر المادة أو التخصص للاختبار:</label>
-        <select id="categorySelect" class="quiz-select" onchange="filterQuizCategory(this.value)">
-          <option value="ALL">جميع الأسئلة (50 سؤال) 🌟</option>
-          <option value="الفيزياء والكيمياء ⚡">الفيزياء والكيمياء ⚡</option>
-          <option value="العلوم الطبيعية 🧬">العلوم الطبيعية 🧬</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- حاوية عرض الأسئلة والنتائج -->
-    <div class="glass-card" id="quizBodyCard">
-      <div id="quizQuestionBox">
-        <div class="quiz-header">
-          <span id="subjectBadge">أسئلة البكالوريا 🎓</span>
-          <span id="questionProgress">1 / 50</span>
-        </div>
-        <div class="question-title" id="questionText">جاري تحميل السؤال...</div>
-        <div class="options-container" id="optionsContainer"></div>
-        <div class="explanation-box" id="explanationBox"></div>
-        <div style="display: flex; justify-content: flex-end; margin-top: 18px;">
-          <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>التالي ➔</button>
-        </div>
-      </div>
-
-      <!-- نتيجة الاختبار -->
-      <div id="quizResultBox" class="quiz-result-card" style="display: none;">
-        <h3 style="font-size: 1.3rem; color: #fff;">🎉 أحسنت! أكملت الاختبار</h3>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 6px;">إليك النتيجة النهائية لمراجعتك:</p>
-        <div class="quiz-result-score" id="resultScoreDisplay">0 / 0</div>
-        <p id="resultMessage" style="color: var(--text-main); font-weight: bold; margin-bottom: 20px;"></p>
-        <button class="btn-primary" onclick="restartQuiz()">إعادة الاختبار 🔄</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3️⃣ قسم المكتبة والمستندات -->
-  <div id="section-notes" class="app-section">
-    <div class="glass-card header-card">
-      <h2>📚 المكتبة والمستندات</h2>
-      <p>تصفح مواضيع البكالوريا، الدروس والملخصات والتمارين لجميع الشعب 📥✨</p>
-    </div>
-
-    <!-- 🎓 قسم امتحانات البكالوريا لكل الشعب -->
-    <div class="glass-card">
-      <div class="section-subtitle">
-        🎓 مواضيع وامتحانات البكالوريا (BAC) - جميع الشعب
-      </div>
-      <div class="pdf-list">
-        <div class="pdf-card">
-          <div class="pdf-info">
-            <h4>باكالوريات جميع الشعب</h4>
-            <span>مواضيع وتصحيحات البكالوريا الرسمية</span>
-          </div>
-          <div class="pdf-actions">
-            <button class="btn-action btn-view" onclick="openPdfViewer('https://www.dzexams.com/ar/bac')">عرض مواضيع BAC 🎓</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 📖 قسم دروس ملخصات تمارين -->
-    <div class="glass-card">
-      <div class="section-subtitle">
-        📖 دروس ملخصات تمارين
-      </div>
-      <div class="pdf-list">
-        <div class="pdf-card">
-          <div class="pdf-info">
-            <h4>دروس، ملخصات وتمارين جميع الشعب</h4>
-            <span>دروس وحوليات مخصصة لكل الشعب</span>
-          </div>
-          <div class="pdf-actions">
-            <button class="btn-action btn-view" onclick="openPdfViewer('https://www.dzexams.com/ar/3as')">فتح المكتبة 🔗</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- المفكرة السريعة -->
-    <div class="glass-card">
-      <h3 style="font-size: 1rem; margin-bottom: 12px; color: #fff;">📌 مفكرتك السريعة</h3>
-      <div class="notes-input-row">
-        <input type="text" class="notes-input" id="noteInput" placeholder="أضف فكرة أو ملاحظة جديدة...">
-        <button class="btn-primary" onclick="addNote()">إضافة ✍️</button>
-      </div>
-      <div class="notes-list" id="notesListContainer"></div>
-    </div>
-  </div>
-
-  <!-- 4️⃣ قسم بومودورو مع الصوت والمؤقت -->
-  <div id="section-pomodoro" class="app-section">
-    <div class="glass-card header-card">
-      <h2>🍅 مؤقت بومودورو</h2>
-      <p>ركز بعمق ونظم وقت دراستك باحترافية ⏱️✨</p>
-    </div>
-
-    <div class="glass-card pomodoro-container" id="pomodoroCard" style="background: rgba(128, 0, 32, 0.35);">
-      <div class="pomodoro-settings">
-        <label for="pomodoroTimeSelect">اختر مدة الجلسة:</label>
-        <select id="pomodoroTimeSelect" onchange="changePomodoroDuration(this.value)">
-          <option value="15">15 دقيقة (سريعة)</option>
-          <option value="25" selected>25 دقيقة (قياسية)</option>
-          <option value="45">45 دقيقة (تركيز عميق)</option>
-          <option value="60">60 دقيقة (ساعة كاملة)</option>
-        </select>
-      </div>
-
-      <div class="pomodoro-timer-display" id="pomodoroDisplay">25:00</div>
-
-      <div class="pomodoro-controls">
-        <button class="pomodoro-btn active-control" id="startPomoBtn" onclick="startPomodoro()">تشغيل 🎯</button>
-        <button class="pomodoro-btn" onclick="pausePomodoro()">إيقاف مؤقت ⏸️</button>
-        <button class="pomodoro-btn" onclick="resetPomodoro()">إعادة ضبط 🔄</button>
-      </div>
-
-      <!-- 🌧️🔥 خلفية صوتية للتركيز -->
-      <div class="custom-sound-section">
-        <h3>🌧️🔥 صوت الأمطار والنار للتركيز</h3>
-        <p style="font-size: 0.78rem; color: var(--text-muted);">خلفية صوتية مهدئة ومحفزة للتركيز:</p>
-
-        <div class="audio-control-box">
-          <span style="font-size: 0.85rem; color: #fff;">صوت المطر والنار للتركيز 🎧</span>
-          <button class="audio-play-btn" id="audioToggleBtn" onclick="toggleAudioBg()">تشغيل الصوت ▶️</button>
-        </div>
-
-        <iframe id="audioFrame" class="hidden-audio-player" src="" allow="autoplay"></iframe>
-      </div>
-
-      <!-- 💻 جلسات الدراسة المباشرة عبر Google Meet -->
-      <div class="meet-card">
-        <h3>💻 جلسات الدراسية الجماعية (Google Meet)</h3>
-        <p>انضم إلى جلسات المذاكرة المباشرة عبر Google Meet لرفع التحدي والتركيز مع باقي الأعضاء 🔥✨</p>
-        <button class="meet-btn" onclick="openMeetSession()">
-          <span>انضمام إلى جلسة Google Meet الآن 🚀</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- الشريط السفلي Nav -->
-  <div class="taskbar-wrapper">
-    <nav class="liquid-taskbar">
-      <div class="nav-item active" onclick="switchSection('story', this)">
-        <span class="icon">📖</span>
-        <span class="label">قصتنا</span>
-      </div>
-      <div class="nav-item" onclick="switchSection('quiz', this)">
-        <span class="icon">🧩</span>
-        <span class="label">الكويزات</span>
-      </div>
-      <div class="nav-item" onclick="switchSection('notes', this)">
-        <span class="icon">📚</span>
-        <span class="label">المكتبة</span>
-      </div>
-      <div class="nav-item" onclick="switchSection('pomodoro', this)">
-        <span class="icon">🍅</span>
-        <span class="label">بومودورو</span>
-      </div>
+    <!-- Taskbar Blur Liquid Glass -->
+    <nav class="taskbar" id="mainTaskbar" style="display: none;">
+        <button onclick="showSection('pomodoroSection')" class="active"><i class="fas fa-stopwatch"></i> بومودورو</button>
+        <button onclick="showSection('librarySection')"><i class="fas fa-book-open"></i> المكتبة</button>
+        <button onclick="showSection('rankingSection')"><i class="fas fa-chart-line"></i> التصنيف</button>
     </nav>
-  </div>
 
-  <script>
-    let tg = window.Telegram?.WebApp;
-    if (tg) {
-      tg.expand();
-      tg.ready();
-    }
+    <script>
+        // --- 1. Intro Animated Story Sequence ---
+        const storySteps = [
+            "مرحباً بك في رحلتك نحو بكالوريا 2027 🎓",
+            "منصة focus&force صُممت خصيصاً لتنظيم وقتك وزيادة إنتاجيتك.",
+            "استعد للبدء، أدخل معلوماتك وشعبتك للانطلاق!"
+        ];
+        let currentStoryIndex = 0;
 
-    function toggleTheme() {
-      const currentTheme = document.documentElement.getAttribute('data-theme');
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      
-      document.getElementById('themeIcon').innerText = newTheme === 'dark' ? '🌙' : '☀️';
-      document.getElementById('themeText').innerText = newTheme === 'dark' ? 'الوضع الليلي' : 'الوضع النهاري';
-    }
+        document.getElementById('nextStoryBtn').addEventListener('click', () => {
+            currentStoryIndex++;
+            if (currentStoryIndex < storySteps.length) {
+                document.getElementById('storyText').innerText = storySteps[currentStoryIndex];
+            } else {
+                document.getElementById('introSection').classList.remove('active');
+                document.getElementById('profileSection').classList.add('active');
+            }
+        });
 
-    function switchSection(secId, el) {
-      document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-      
-      document.getElementById(`section-${secId}`).classList.add('active');
-      el.classList.add('active');
-    }
-
-    /* =========================================================
-       🧩 الكويزات (تم إدراج 50 سؤالاً من الملف المرفق)
-       ========================================================= */
-    const rawData = [
-      { id: 1, q: "ما هي الصيغة العامة للأحماض الكربوكسيلية؟", options: ["C_n H_{2n+1} COOH", "C_n H_{2n} COOH", "C_n H_{2n+2} COOH", "C_n H_{2n-1} COOH"], correct: 0, exp: "الصيغة العامة للأحماض الكربوكسيلية هي C_n H_{2n+1} COOH أو تكتب مجملة على الشكل C_n H_{2n} O_2.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 2, q: "يكون الحمض ضعيفاً في المحلول المائي إذا كان تفاعله مع الماء:", options: ["غير تام (محدود)", "تام (كلي)", "سريع جداً ولحظي", "منعدم تماماً"], correct: 0, exp: "الحمض الضعيف هو الذي يتفكك جزئياً في الماء، ويكون تفاعله مع الماء غير تام (طوفينال أقل من 1).", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 3, q: "الحمض الأقوى بين عدة أحماض ضعيفة متساوية التركيز يملك:", options: ["ثابت حموضة Ka أكبر و pKa أقل", "ثابت حموضة Ka أقل و pKa أكبر", "ثابت حموضة Ka أكبر و pKa أكبر", "ثابت حموضة Ka أقل و pKa أقل"], correct: 0, exp: "قوة الحمض تزداد بزيادة ثابت الحموضة Ka ونقصان قيمة الـ pKa الموافقة له.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 4, q: "الأساس الأقوى بين عدة أسس ضعيفة متساوية التركيز يملك:", options: ["ثابت حموضة Ka أقل و pKa أكبر", "ثابت حموضة Ka أكبر و pKa أقل", "ثابت حموضة Ka أقل و pKa أقل", "ثابت حموضة Ka أكبر و pKa أكبر"], correct: 0, exp: "الأساس الأقوى هو الذي يملك قدرة أكبر على اكتساب بروتون، ويوافقه ثابت حموضة Ka أقل و pKa أكبر للثنائية.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 5, q: "حسب برونشتد، يعرف الأساس بأنه كل فرد كيميائي قادر على:", options: ["اكتساب بروتون H+ خلال تحول كيميائي", "فقدان بروتون H+ خلال تحول كيميائي", "اكتساب إلكترون أو أكثر خلال تحول كيميائي", "فقدان إلكترون أو أكثر خلال تحول كيميائي"], correct: 0, exp: "تعريف أساس برونشتد هو كل فرد كيميائي يكتسب بروتوناً H+ أو أكثر خلال تحول كيميائي.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 6, q: "حسب برونشتد، يعرف الحمض بأنه كل فرد كيميائي قادر على:", options: ["فقدان بروتون H+ خلال تحول كيميائي", "اكتساب بروتون H+ خلال تحول كيميائي", "فقدان إلكترون أو أكثر خلال تحول كيميائي", "اكتساب إلكترون أو أكثر خلال تحول كيميائي"], correct: 0, exp: "تعريف حمض برونشتد هو كل فرد كيميائي يفقد بروتوناً H+ أو أكثر خلال تحول كيميائي.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 7, q: "عند معايرة أساس ضعيف (مثل النشادر) بحمض قوي، يكون الوسط عند نقطة التكافؤ:", options: ["حمضياً (pH < 7)", "معتدلاً (pH = 7)", "أساسياً (pH > 7)", "غير محدد القيمة"], correct: 0, exp: "عند نقطة التكافؤ يميل الوسط إلى الأقوى وهو الحمض، فيكون الوسط حمضياً (pH < 7).", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 8, q: "ما هو الشرط الأساسي لاختيار الكاشف اللوني المناسب للمعايرة؟", options: ["أن يقع pH نقطة التكافؤ ضمن مجال تغيره اللوني", "أن يكون لونه مميزاً وواضحاً", "أن يتغير لونه عند نقطة نصف التكافؤ", "أن يكون كاشفاً حمضياً قوياً دائماً"], correct: 0, exp: "الكاشف اللوني المناسب للمعايرة هو الذي يشمل مجال تغيره اللوني قيمة الـ pH عند نقطة التكافؤ (pHe).", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 9, q: "يحسب التركيز المولي للمحلول التجاري (C0) بدلالة النقاوة والكثافة بالعلاقة:", options: ["C0 = (10 * P * d) / M", "C0 = (P * d) / (10 * M)", "C0 = (10 * P * M) / d", "C0 = (P * M) / (10 * d)"], correct: 0, exp: "العلاقة القانونية لحساب تركيز محلول تجاري هي C0 = (10 * P * d) / M حيث P النقاوة و d الكثافة و M الكتلة المولية.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 10, q: "ما هي معادلة تفاعل الأكسدة الإرجاعية بين معدن النحاس Cu وشوارد الفضة Ag+؟", options: ["Cu + 2Ag+ -> Cu2+ + 2Ag", "Cu + Ag+ -> Cu2+ + Ag", "2Cu + Ag+ -> 2Cu2+ + Ag", "Cu + 2Ag+ -> Cu+ + 2Ag"], correct: 0, exp: "يتفاعل النحاس بفقدان إلكترونين Cu -> Cu2+ + 2e- وتكتسب شاردتا فضة هذين الإلكترونين 2Ag+ + 2e- -> 2Ag، وتجمعان.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 11, q: "ما هو تعريف زمن نصف التفاعل (t1/2)؟", options: ["الزمن اللازم لبلوغ تقدم التفاعل نصف قيمته النهائية", "الزمن اللازم لانتهاء التفاعل التام والبطيء", "الزمن المستغرق لتفكك ربع كمية المتفاعلات الابتدائية", "الزمن اللازم لمضاعفة سرعة التفاعل الابتدائية"], correct: 0, exp: "زمن نصف التفاعل t1/2 هو الزمن اللازم لكي يبلغ تقدم التفاعل نصف قيمته النهائية (X(t1/2) = Xf/2).", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 12, q: "في تفاعل تام، إذا بقيت كمية من أحد المتفاعلات عند نهاية التفاعل، فإن المتفاعل الآخر:", options: ["هو المتفاعل المحد بالتأكيد", "هو متفاعل بوفرة أيضاً", "لا يؤثر على تقدم التفاعل", "تتضاعف كمية مادته النهائية"], correct: 0, exp: "بما أن التفاعل تام، فيجب أن ينتهي أحد المتفاعلات على الأقل. فإذا لم ينتهِ الأول، حتماً ينتهي الآخر وهو المحد.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 13, q: "الأنواع الكيميائية المسؤولة عن ناقلية المزيج التفاعلي هي:", options: ["الشوارد فقط", "الجزيئات المتعادلة كهربائياً", "المعادن الصلبة غير المنحلة", "الغازات المنطلقة من المزيج"], correct: 0, exp: "الناقلية في المحاليل المائية ناتجة فقط عن حركة الشوارد المتواجدة في المزيج التفاعلي.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 14, q: "يؤدي استعمال برادة المعدن (مسحوق) بدلاً من شريط متماسك له نفس الكتلة إلى:", options: ["زيادة سرعة التفاعل لزيادة مساحة سطح التلامس", "نقصان سرعة التفاعل لنقصان مساحة سطح التلامس", "عدم تغير سرعة التفاعل لأن الكتلة واحدة", "نقصان كمية النواتج النهائية المتشكلة"], correct: 0, exp: "زيادة مساحة سطح التلامس (برادة بدلاً من شريط) تزيد من عدد التصادمات الفعالة، مما يسرع التفاعل وينهيه في مدة أقل.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 15, q: "ينص القانون الأول لكبلر على أن مسار حركة كوكب حول الشمس هو مسار:", options: ["إهليليجي تمثل الشمس أحد محرقيه", "دائري منتظم تمثل الشمس مركزه", "حلزوني متسارع بانتظام نحو الشمس", "مستقيم متغير بانتظام في الفضاء"], correct: 0, exp: "القانون الأول لكبلر (قانون المدارات) ينص على أن الكواكب تدور في مدارات إهليليجية تمثل الشمس أحد محرقيه.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 16, q: "ما هو المرجع المناسب لدراسة حركة القمر الاصطناعي حول الأرض؟", options: ["المرجع الجيومركزي (المركزي الأرضي)", "المرجع الهيليومركزي (المركزي الشمسي)", "المرجع السطحي الأرضي", "المرجع العطالي المطلق"], correct: 0, exp: "المرجع الجيومركزي هو المرجع المزود بمعلم مركزه الأرض ومحاوره متجهة لثلاث نجوم ثابتة، وهو مناسب لحركة الأقمار.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 17, q: "قوة جذب الأرض للقمر الاصطناعي (F T/S) في المدار الدائري تمثل عيانياً:", options: ["قوة الثقل (P = m * g_h) على ذلك الارتفاع", "قوة الاحتكاك مع الهواء في المدار", "دافعة أرخميدس الناتجة عن الغلاف الجوي", "مجموع القوى الخارجية المغناطيسية"], correct: 0, exp: "قوة الجذب العام التي تؤثر بها الأرض على القمر الاصطناعي هي نفسها قوة الثقل P على ذلك الارتفاع (m * g_h).", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 18, q: "القوى المؤثرة على جسم يسقط سقوطاً حقيقياً في الهواء دون إهمال أي قوة هي:", options: ["الثقل، الاحتكاك مع الهواء، ودافعة أرخميدس", "الثقل والاحتكاك مع الهواء فقط", "الثقل ودافعة أرخميدس فقط", "الاحتكاك ودافعة أرخميدس فقط"], correct: 0, exp: "السقوط الشاقولي الحقيقي يتميز بخضوع الجسم للثقل P، الاحتكاك f، ودافعة أرخميدس Pi.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 19, q: "في غياب الاحتكاك، يكون تسارع جسم ينزلق وفق خط الميل الأعظم لمستو مائل بزاوية alpha هو:", options: ["a = g * sin(alpha)", "a = g * cos(alpha)", "a = g / sin(alpha)", "a = g"], correct: 0, exp: "بإسقاط قوة الثقل على المحور الموجه للحركة x'x نجد Px = m * g * sin(alpha) = m * a ومنه التسارع a = g * sin(alpha).", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 20, q: "تكون الحركة مستقيمة متغيرة بانتظام إذا كان مسار الحركة:", options: ["مستقيماً والتسارع ثابتاً وغير معدوم", "مستقيماً والتسارع معدوماً والسرعة ثابتة", "منحنياً والتسارع ثابتاً طيلة الحركة", "دائرياً والسرعة المماسية ثابتة القيمة"], correct: 0, exp: "الحركة المستقيمة المتغيرة بانتظام تتطلب مساراً مستقيماً وتسارعاً ثابتاً وغير معدوم (a = constant).", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 21, q: "القطب السالب في العمود الكهروكيميائي هو المسرى الذي:", options: ["تحدث عنده عملية الأكسدة (يفقد إلكترونات)", "تحدث عنده عملية الإرجاع (يكتسب إلكترونات)", "تتجمع عليه شوارد الهيدرونيوم", "تهبط إليه الإلكترونات من الدارة الخارجية"], correct: 0, exp: "القطب السالب (المصعد) هو القطب الذي تتحرر منه الإلكترونات ناتجة عن حدوث عملية أكسدة للمعدن.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 22, q: "تحسب كمية الكهرباء الأعظمية Q_max الناتجة عن اشتغال عمود بالعلاقة:", options: ["Q_max = z * x_max * F", "Q_max = z * x_max / F", "Q_max = x_max * F / z", "Q_max = z * F / x_max"], correct: 0, exp: "كمية الكهرباء الأعظمية تحسب بضرب شحنة مول من الإلكترونات F في عدد الإلكترونات المنتقلة (z * x_max).", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 23, q: "تنتقل الإلكترونات في الدارة الخارجية للعمود الكهربائي من:", options: ["القطب السالب إلى القطب الموجب", "القطب الموجب إلى القطب السالب", "المحلول الشاردي الأول إلى الثاني", "الجسر الملحي إلى المسرى الموجب"], correct: 0, exp: "تتحرر الإلكترونات عند القطب السالب (المصعد) وتنتقل عبر الأسلاك الخارجية نحو القطب الموجب (المهبط).", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 24, q: "تتميز ظاهرة النشاط الإشعاعي بأنها ظاهرة طبيعية وعشوائية وأيضاً:", options: ["تلقائية وحتمية", "اصطناعية ومفتعلة دائماً", "تتأثر بدرجة الحرارة والضغط", "تحدث بشكل كلي وسريع جداً"], correct: 0, exp: "النشاط الإشعاعي ظاهرة طبيعية، عشوائية، تلقائية وحتمية (تحدث عاجلاً أم آجلاً للنواة غير المستقرة).", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 25, q: "العبارة الرياضية لقانون كبلر الثالث الذي يربط بين دور الحركة ونصف قطر المدار هي:", options: ["T^2 / r^3 = K", "T^3 / r^2 = K", "T / r = K", "T^2 / r^2 = K"], correct: 0, exp: "قانون كبلر الثالث ينص على أن مربع الدور يتناسب طردياً مع مكعب البعد المتوسط (T^2 / r^3 = constant).", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 26, q: "يفسر إصدار الإشعاع غاما (gamma) المرافق لبعض التفككات الإشعاعية بـ:", options: ["تخلص النواة البنت المثارة من فائض الطاقة الكامنة لديها", "تحول نيترون إلى بروتون داخل النواة", "تحول بروتون إلى نيترون داخل النواة", "انبعاث نواة هيليوم ثقيلة من النواة الأم"], correct: 0, exp: "تنتج النواة البنت أحياناً في حالة إثارة (طاقة زائدة)، فتتخلص منها بإصدار فوتون ذو طاقة عالية وهو إشعاع غاما.", cat: "الفيزياء والكيمياء ⚡" },
-      { id: 27, q: "ما هو مقر ظاهرة التركيب الضوئي في خلايا النبات الأخضر؟", options: ["الصانعة الخضراء", "الميتوكوندري", "الريبوزومات الحرة", "الشبكة الهيولية المحببة"], correct: 0, exp: "الصانعة الخضراء (Chloroplast) هي العضية الخلوية المتخصصة في القيام بعملية التركيب الضوئي.", cat: "العلوم الطبيعية 🧬" },
-      { id: 28, q: "المعادلة الإجمالية لظاهرة التركيب الضوئي هي:", options: ["6CO_2 + 12H_2O -> C_6H_{12}O_6 + 6O_2 + 6H_2O", "6CO_2 + 6H_2O -> C_6H_{12}O_6 + 6O_2", "C_6H_{12}O_6 + 6O_2 -> 6CO_2 + 6H_2O", "6CO_2 + 12H_2O -> C_6H_{12}O_6 + 12O_2"], correct: 0, exp: "المعادلة الإجمالية للتركيب الضوئي تستهلك 6 CO2 و 12 H2O بوجود الضوء واليخضور لإنتاج جلوكوز و 6 O2 و 6 H2O.", cat: "العلوم الطبيعية 🧬" },
-      { id: 29, q: "البنية الحجيرية للصانعة الخضراء تتمثل في تقسيمها إلى حجرات هي:", options: ["الفراغ بين الغشائين، تجويف الحشوة، تجويف التيلاكويد", "الحشوة والريبوزومات الحرة فقط", "المادة الأساسية والأعراف التنفسية", "الغشاء الداخلي والغشاء الخارجي فقط"], correct: 0, exp: "تتميز الصانعة الخضراء ببنية حجيرية تشمل الفراغ بين الغشائين، تجويف الحشوة، وتجويف التيلاكويد.", cat: "العلوم الطبيعية 🧬" },
-      { id: 30, q: "مقر كل من المرحلة الكيموضوئية والمرحلة الكيموحيوية على الترتيب هو:", options: ["غشاء التيلاكويد وحشوة الصانعة الخضراء", "حشوة الصانعة الخضراء وغشاء التيلاكويد", "الغشاء الداخلي للميتوكوندري والحشوة", "الهيولة الأساسية والميتوكوندري"], correct: 0, exp: "تحدث المرحلة الكيموضوئية على مستوى غشاء التيلاكويد، بينما تحدث المرحلة الكيموحيوية في الحشوة (الستروما).", cat: "العلوم الطبيعية 🧬" },
-      { id: 31, q: "المستقبل الأخير للإلكترونات في سلسلة النقل الضوئي للمرحلة الكيموضوئية هو:", options: ["NADP+", "CO_2", "O_2", "ADP"], correct: 0, exp: "تنتقل الإلكترونات عبر النواقل لتصل في النهاية إلى مستقبلها الأخير NADP+ الذي يرجع إلى NADPH,H+.", cat: "العلوم الطبيعية 🧬" },
-      { id: 32, q: "تتفسفر جزيئات ADP إلى ATP عند عودة البروتونات (H+) عبر الكرية المذنبة من:", options: ["تجويف التيلاكويد إلى الحشوة", "الحشوة إلى تجويف التيلاكويد", "الفراغ بين الغشائين إلى الحشوة", "الغشاء الداخلي إلى الغشاء الخارجي"], correct: 0, exp: "تعود البروتونات المتراكمة في تجويف التيلاكويد إلى الحشوة عبر الكرية المذنبة (ATP synthase) منتجة طاقة لتركيب ATP.", cat: "العلوم الطبيعية 🧬" },
-      { id: 33, q: "ما هو عدد ذرات الكربون في مركب APG وفي مركب RuBP (الروتديب) على الترتيب؟", options: ["3 ذرات كربون و 5 ذرات كربون", "5 ذرات كربون و 3 ذرات كربون", "3 ذرات كربون و 3 ذرات كربون", "6 ذرات كربون و 5 ذرات كربون"], correct: 0, exp: "مركب APG (حمض فوسفو جليسيريك) ثلاثي الكربون (C3)، بينما مركب RuBP (ريبولوز ثنائي الفوسفات) خماسي الكربون (C5).", cat: "العلوم الطبيعية 🧬" },
-      { id: 34, q: "مراحل الأكسدة التنفسية للجلوكوز في خلايا حقيقيات النوى هي بالترتيب:", options: ["التحلل السكري، الخطوة التحضيرية، حلقة كريبس، الفسفرة التأكسدية", "التحلل السكري، حلقة كلفن، الفسفرة، التخمر", "الاستنساخ، الترجمة، التنشيط، الهدم الكلي", "التحلل السكري، حلقة كريبس، الفسفرة، التخمر الكحولي"], correct: 0, exp: "تبدأ عملية التنفس بالتحلل السكري في الهيولة، ثم الخطوة التحضيرية وحلقة كريبس في الحشوة، وتنتهي بالفسفرة التأكسدية.", cat: "العلوم الطبيعية 🧬" },
-      { id: 35, q: "أين يحدث تفاعل التحلل السكري (Glycolysis) داخل الخلية؟", options: ["الهيولة الأساسية (Hyaloplasm)", "حشوة الميتوكوندري (Matrix)", "الغشاء الداخلي للميتوكوندري", "الصانعة الخضراء"], correct: 0, exp: "التحلل السكري هو مرحلة مشتركة بين التنفس والتخمر ويحدث في الهيولة الأساسية بمعزل عن الأكسجين.", cat: "العلوم الطبيعية 🧬" },
-      { id: 36, q: "ما هو مقر كل من حلقة كريبس والفسفرة التأكسدية داخل الميتوكوندري على الترتيب؟", options: ["حشوة الميتوكوندري والغشاء الداخلي للميتوكوندري", "الغشاء الداخلي للميتوكوندري والحشوة", "الهيولة الأساسية والغشاء الخارجي", "حشوة الميتوكوندري والهيولة الأساسية"], correct: 0, exp: "تحدث حلقة كريبس في حشوة الميتوكوندري، بينما تحدث الفسفرة التأكسدية وسلسلة نقل الإلكترونات على الغشاء الداخلي.", cat: "العلوم الطبيعية 🧬" },
-      { id: 37, q: "يتم في الخطوة التحضيرية لحلقة كريبس تحويل حمض البيروفيك (C3) إلى:", options: ["أستيل مرافق الإنزيم أ (C2) مع تحرير CO2 و إرجاع NAD+ إلى NADH,H+", "حمض الليمون (C6) مع تركيب جزيئة ATP مباشرة", "حمض الغليسيريك مع تحرير جزيئة FADH2", "جلوكوز (C6) مع استهلاك الطاقة الحرارية"], correct: 0, exp: "تتضمن الخطوة التحضيرية نزع CO2 ونزع الهيدروجين من حمض البيروفيك (C3) لينتج أستيل مرافق الإنزيم أ (C2) و NADH,H+.", cat: "العلوم الطبيعية 🧬" },
-      { id: 38, q: "في بداية حلقة كريبس، يتحد أستيل مرافق الإنزيم أ (C2) مع حمض أوكسالوأستات (C4) ليعطي:", options: ["حمض الليمون (C6)", "حمض الغليسيريك (C3)", "حمض البيروفيك (C3)", "حمض الميثانويك"], correct: 0, exp: "يتحد الأستيل (C2) مع الأوكسالوأستات (C4) ليعطي حمض الليمون (Citric acid - C6) لتبدأ حلقة كريبس.", cat: "العلوم الطبيعية 🧬" },
-      { id: 39, q: "عند أكسدة النواقل المرجعة NADH,H+ و FADH2 في الفسفرة التأكسدية ينتج على الترتيب:", options: ["3 ATP و 2 ATP", "2 ATP و 3 ATP", "3 ATP و 3 ATP", "2 ATP و 2 ATP"], correct: 0, exp: "أكسدة 1 NADH,H+ تسمح بضخ بروتونات عبر 3 مضخات لينتج 3 ATP، بينما أكسدة 1 FADH2 تشغل مضختين فقط لينتج 2 ATP.", cat: "العلوم الطبيعية 🧬" },
-      { id: 40, q: "ما هي الحصيلة الطاقوية الإجمالية الناتجة عن الهدم الكلي لجزيء جلوكوز واحد في التنفس؟", options: ["38 ATP", "2 ATP", "34 ATP", "36 ATP"], correct: 0, exp: "ينتج عن الأكسدة التنفسية الكاملة لجزيء جلوكوز واحد 38 ATP (4 ATP بفسفرة مباشرة و 34 ATP بفسفرة تأكسدية).", cat: "العلوم الطبيعية 🧬" },
-      { id: 41, q: "ما هي الحصيلة الطاقوية الناتجة عن الهدم الجزئي للجلوكوز في التخمر الكحولي؟", options: ["2 ATP", "38 ATP", "34 ATP", "36 ATP"], correct: 0, exp: "في التخمر يتم هدم الجلوكوز جزئياً في غياب الأكسجين، وتقتصر الحصيلة الطاقوية على 2 ATP الناتجة عن التحلل السكري.", cat: "العلوم الطبيعية 🧬" },
-      { id: 42, q: "أين يتم تركيب البروتين في خلايا حقيقيات النوى؟", options: ["في الهيولة، وتحديداً على مستوى الشبكة الهيولية المحببة", "في النواة، وتحديداً على مستوى جزيئات الـ DNA", "في الميتوكوندري فقط بوجود الأكسجين", "في جهاز غولجي مباشرة بعد الامتصاص"], correct: 0, exp: "يتم تركيب البروتينات في الهيولة بدمج الأحماض الأمينية على مستوى الشبكة الهيولية المحببة (الريبوزومات).", cat: "العلوم الطبيعية 🧬" },
-      { id: 43, q: "ما هو الدور الأساسي لجزيء الـ mRNA في عملية تركيب البروتين؟", options: ["وسيط ينقل نسخة من المعلومة الوراثية من النواة إلى الهيولة", "دعامة وراثية ثابتة تحمل جميع المورثات في النواة", "موقع لتثبيت الأحماض الأمينية الحرة لتنشيطها", "إنزيم يربط الأحماض الأمينية ببعضها بروابط بيبتيدية"], correct: 0, exp: "الـ mRNA هو الحمض النووي الريبي الرسول الذي ينقل نسخة من المعلومة الوراثية من مورثات النواة إلى ريبوزومات الهيولة.", cat: "العلوم الطبيعية 🧬" },
-      { id: 44, q: "أين يتم اصطناع جزيء الـ mRNA في خلايا حقيقيات النوى؟", options: ["في النواة بعملية الاستنساخ ثم ينتقل إلى الهيولة", "في الهيولة ثم ينتقل بعد ذلك إلى النواة", "على مستوى الشبكة الهيولية المحببة مباشرة", "في الميتوكوندري خلال الفسفرة التأكسدية"], correct: 0, exp: "يصطنع الـ mRNA في النواة بعملية الاستنساخ انطلاقاً من السلسلة المستنسخة للـ DNA ثم يهاجر عبر الثقوب النووية إلى الهيولة.", cat: "العلوم الطبيعية 🧬" },
-      { id: 45, q: "ما هو الإنزيم المسؤول عن عملية الاستنساخ لتركيب الـ mRNA؟", options: ["الـ RNA بوليميراز (RNA polymerase)", "الـ DNA بوليميراز (DNA polymerase)", "إنزيم تنشيط الأحماض الأمينية", "الريبوزيم المفكك للروابط الهيدروجينية"], correct: 0, exp: "إنزيم الـ RNA بوليميراز هو المسؤول عن كسر الروابط الهيدروجينية وقراءة السلسلة المستنسخة لتركيب سلسلة نيوكليوتيدات الـ RNA.", cat: "العلوم الطبيعية 🧬" },
-      { id: 46, q: "مما تتكون الرامزة (الشفرة الوراثية) على مستوى جزيء الـ mRNA؟", options: ["من 3 نيوكليوتيدات متتابعة", "من نيوكليوتيدة واحدة فقط", "من نيوكليوتيدتين متتابعتين", "من 4 نيوكليوتيدات متتابعة"], correct: 0, exp: "الرامزة (Codon) تتكون من ثلاثية نيوكليوتيدات متتابعة على جزيء الـ mRNA، وتشفر لحمض أميني محدد أو تكون رامزة توقف.", cat: "العلوم الطبيعية 🧬" },
-      { id: 47, q: "ما هي رامزة الانطلاق في الـ mRNA وما هو الحمض الأميني الذي تشفر له؟", options: ["AUG وتشفر للميثيونين (Methionine)", "UUA وتشفر لليوسين (Leucine)", "UAA وهي رامزة توقف لا تشفر لشيء", "AUG وتشفر للبرولين (Proline)"], correct: 0, exp: "تبدأ الترجمة دائماً بقراءة رامزة الانطلاق AUG التي تشفر للحمض الأميني ميثيونين (تمثله كأول حمض أميني في السلسلة).", cat: "العلوم الطبيعية 🧬" },
-      { id: 48, q: "ما هي رامزات التوقف (Stop Codons) التي لا تشفر لأي حمض أميني؟", options: ["UAA, UAG, UGA", "UAA, UAG, UGG", "AUG, UUA, UGA", "UAA, UAG, AUG"], correct: 0, exp: "توجد ثلاث رامزات توقف في جدول الشفرة الوراثية هي UAA و UAG و UGA، وعند وصول الريبوسوم إليها تنتهي عملية الترجمة.", cat: "العلوم الطبيعية 🧬" },
-      { id: 49, q: "مما تتكون النيوكليوتيدة الريبية في جزيء الـ RNA؟", options: ["سكر ريبوز تام الأكسجين، حمض الفوسفوريك، وقاعدة أزوتية", "سكر ريبوز منقوص الأكسجين، حمض الفوسفوريك، وقاعدة أزوتية", "سكر ريبوز تام الأكسجين، حمض الفوسفوريك، وتيمين", "حمض الفوسفوريك وقاعدة أزوتية فقط دون سكر"], correct: 0, exp: "تتكون النيوكليوتيدة الريبية من سكر ريبوز تام الأكسجين (C5H10O5)، حمض الفوسفوريك (H3PO4)، وقاعدة أزوتية (A, U, C, G).", cat: "العلوم الطبيعية 🧬" },
-      { id: 50, q: "في وسط ذو pH أقل من pHi للحمض الأميني (وسط حامضي بالنسبة له)، كيف يسلك الحمض الأميني؟", options: ["يسلك سلوك أساس (يكتسب بروتون H+ وتصبح شحنته موجبة)", "يسلك سلوك حمض (يفقد بروتون H+ وتصبح شحنته سالبة)", "يسلك سلوك متعادل كهربائياً (لا يكتسب ولا يفقد)", "يسلك سلوك مؤكسد قوي ويفقد إلكترونات للوسط"], correct: 0, exp: "في الوسط الحامضي (pH < pHi) يتواجد فائض من البروتونات H+، فيسلك الحمض الأميني سلوك أساس باكتساب بروتون ليشحن بالموجب.", cat: "العلوم الطبيعية 🧬" }
-    ];
-
-    let currentQuestions = [...rawData];
-    let quizIndex = 0;
-    let quizAnswered = false;
-    let score = 0;
-
-    function filterQuizCategory(cat) {
-      if (cat === "ALL") {
-        currentQuestions = [...rawData];
-      } else {
-        currentQuestions = rawData.filter(item => item.cat === cat);
-      }
-      restartQuiz();
-    }
-
-    function renderQuestion() {
-      if (currentQuestions.length === 0) {
-        document.getElementById("questionText").innerText = "لا توجد أسئلة متوفرة في هذا القسم حالياً.";
-        document.getElementById("optionsContainer").innerHTML = "";
-        return;
-      }
-
-      const item = currentQuestions[quizIndex];
-      quizAnswered = false;
-      
-      document.getElementById("quizQuestionBox").style.display = "block";
-      document.getElementById("quizResultBox").style.display = "none";
-      document.getElementById("explanationBox").style.display = "none";
-      document.getElementById("subjectBadge").innerText = item.cat;
-      document.getElementById("questionProgress").innerText = `${quizIndex + 1} / ${currentQuestions.length}`;
-      document.getElementById("questionText").innerText = item.q;
-      document.getElementById("nextBtn").disabled = true;
-
-      const container = document.getElementById("optionsContainer");
-      container.innerHTML = "";
-
-      // تجهيز الخيارات وإعادة ترتيبها عشوائياً مع الحفاظ على تتبع الخيار الصحيح
-      const correctAnswerText = item.options[item.correct];
-      const opts = item.options.map((optText) => {
-        return { text: optText, isCorrect: optText === correctAnswerText };
-      }).sort(() => Math.random() - 0.5);
-
-      opts.forEach(o => {
-        const btn = document.createElement("div");
-        btn.className = "option-btn";
-        btn.innerHTML = `<span>${o.text}</span><span class="icon"></span>`;
-        btn.onclick = () => {
-          if (quizAnswered) return;
-          quizAnswered = true;
-          if (o.isCorrect) {
-            btn.classList.add("correct");
-            score++;
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
-          } else {
-            btn.classList.add("wrong");
-            Array.from(container.children).forEach(child => {
-              if (child.innerText.includes(correctAnswerText)) child.classList.add("correct");
-            });
-            if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
-          }
-
-          // إظهار الشرح إن وجد
-          if (item.exp) {
-            const expBox = document.getElementById("explanationBox");
-            expBox.innerHTML = `<strong>💡 الشرح والتوضيح:</strong> ${item.exp}`;
-            expBox.style.display = "block";
-          }
-
-          document.getElementById("nextBtn").disabled = false;
-        };
-        container.appendChild(btn);
-      });
-    }
-
-    function nextQuestion() {
-      if (quizIndex < currentQuestions.length - 1) { 
-        quizIndex++; 
-        renderQuestion(); 
-      } else {
-        showQuizResult();
-      }
-    }
-
-    function showQuizResult() {
-      document.getElementById("quizQuestionBox").style.display = "none";
-      document.getElementById("quizResultBox").style.display = "block";
-      
-      const total = currentQuestions.length;
-      document.getElementById("resultScoreDisplay").innerText = `${score} / ${total}`;
-      
-      const percentage = (score / total) * 100;
-      let msg = "";
-      if (percentage === 100) msg = "ممتاز جداً! إجاباتك كلها صحيحة 🌟👏";
-      else if (percentage >= 70) msg = "عمل رائع! مستواك ممتاز وبطل 🌿💪";
-      else if (percentage >= 50) msg = "نتيجة حسنة، واصل المراجعة والتركيز 👍✨";
-      else msg = "لا بأس، أعد الكرة وستحقق نتيجة أفضل حتماً 🤍🌱";
-      
-      document.getElementById("resultMessage").innerText = msg;
-    }
-
-    function restartQuiz() {
-      quizIndex = 0;
-      score = 0;
-      renderQuestion();
-    }
-
-    function openPdfViewer(url) {
-      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openLink) {
-        window.Telegram.WebApp.openLink(url);
-      } else {
-        window.open(url, '_blank');
-      }
-    }
-
-    /* المفكرة السريعة */
-    let notes = JSON.parse(localStorage.getItem('user_notes') || '[]');
-
-    function renderNotes() {
-      const container = document.getElementById("notesListContainer");
-      if (notes.length === 0) {
-        container.innerHTML = "<p style='text-align:center; color:var(--text-muted); font-size:0.8rem;'>لا توجد ملاحظات محفوظة.</p>";
-        return;
-      }
-      container.innerHTML = notes.map((note, i) => `
-        <div class="note-item">
-          <div>
-            <div>${note.text}</div>
-            <span class="note-date">${note.date}</span>
-          </div>
-          <button class="note-delete" onclick="deleteNote(${i})">✕</button>
-        </div>
-      `).join('');
-    }
-
-    function addNote() {
-      const input = document.getElementById("noteInput");
-      const val = input.value.trim();
-      if (!val) return;
-      notes.unshift({ text: val, date: new Date().toLocaleDateString('ar-DZ') });
-      localStorage.setItem('user_notes', JSON.stringify(notes));
-      input.value = "";
-      renderNotes();
-    }
-
-    function deleteNote(i) {
-      notes.splice(i, 1);
-      localStorage.setItem('user_notes', JSON.stringify(notes));
-      renderNotes();
-    }
-
-    /* مؤقت بومودورو */
-    let pomodoroDuration = 25 * 60;
-    let pomodoroTimeLeft = pomodoroDuration;
-    let pomodoroTimer = null;
-
-    function updatePomodoroDisplay() {
-      const m = Math.floor(pomodoroTimeLeft / 60).toString().padStart(2, '0');
-      const s = (pomodoroTimeLeft % 60).toString().padStart(2, '0');
-      document.getElementById("pomodoroDisplay").innerText = `${m}:${s}`;
-    }
-
-    function changePomodoroDuration(val) {
-      pausePomodoro();
-      pomodoroDuration = parseInt(val) * 60;
-      pomodoroTimeLeft = pomodoroDuration;
-      updatePomodoroDisplay();
-    }
-
-    function startPomodoro() {
-      if (pomodoroTimer) return;
-      document.getElementById("startPomoBtn").classList.add("active-control");
-      pomodoroTimer = setInterval(() => {
-        if (pomodoroTimeLeft > 0) {
-          pomodoroTimeLeft--;
-          updatePomodoroDisplay();
-        } else {
-          pausePomodoro();
-          alert("🎉 انتهى وقت الجلسة! خذ قسطاً من الراحة.");
+        // --- 2. Branch & Tech Math Handling ---
+        function handleBranchChange() {
+            const branch = document.getElementById('branchSelect').value;
+            const subBranchGroup = document.getElementById('techMathSub');
+            if (branch === 'tm') {
+                subBranchGroup.style.display = 'block';
+            } else {
+                subBranchGroup.style.display = 'none';
+            }
         }
-      }, 1000);
-    }
 
-    function pausePomodoro() {
-      clearInterval(pomodoroTimer);
-      pomodoroTimer = null;
-      document.getElementById("startPomoBtn").classList.remove("active-control");
-    }
+        // --- 3. Profile Setup Form Submit ---
+        let userData = {
+            firstName: '',
+            lastName: '',
+            branch: '',
+            subBranch: '',
+            focusMinutes: 0
+        };
 
-    function resetPomodoro() {
-      pausePomodoro();
-      pomodoroTimeLeft = pomodoroDuration;
-      updatePomodoroDisplay();
-    }
+        document.getElementById('profileForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            userData.firstName = document.getElementById('firstName').value;
+            userData.lastName = document.getElementById('lastName').value;
+            userData.branch = document.getElementById('branchSelect').value;
+            userData.subBranch = document.getElementById('subBranchSelect').value;
 
-    /* تشغيل وإيقاف الصوت المخفي مع قص أول 10 ثوانٍ (start=10) */
-    let isAudioPlaying = false;
-    function toggleAudioBg() {
-      const frame = document.getElementById('audioFrame');
-      const btn = document.getElementById('audioToggleBtn');
-      
-      if (!isAudioPlaying) {
-        frame.src = "https://www.youtube.com/embed/JrG0F5fVGKM?enablejsapi=1&autoplay=1&start=10";
-        btn.innerText = "إيقاف الصوت ⏸️";
-        isAudioPlaying = true;
-      } else {
-        frame.src = "";
-        btn.innerText = "تشغيل الصوت ▶️";
-        isAudioPlaying = false;
-      }
-    }
+            document.getElementById('profileSection').classList.remove('active');
+            document.getElementById('mainDashboard').style.display = 'block';
+            document.getElementById('mainTaskbar').style.display = 'flex';
 
-    /* فتح رابط Google Meet */
-    function openMeetSession() {
-      const meetUrl = "https://meet.google.com/krd-aesq-sgt";
-      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openLink) {
-        window.Telegram.WebApp.openLink(meetUrl);
-      } else {
-        window.open(meetUrl, '_blank');
-      }
-    }
+            document.getElementById('currentUserRankName').innerText = `${userData.firstName} ${userData.lastName}`;
+            document.getElementById('currentUserRankBranch').innerText = getBranchName(userData.branch);
 
-    document.addEventListener("DOMContentLoaded", () => {
-      renderQuestion();
-      renderNotes();
-    });
-  </script>
+            loadLibrarySubjects(userData.branch, userData.subBranch);
+            showSection('pomodoroSection');
+        });
+
+        function getBranchName(code) {
+            const names = {
+                'se': 'علوم تجريبية',
+                'm': 'رياضيات',
+                'ge': 'تسيير واقتصاد',
+                'le': 'آداب ولغات',
+                'ph': 'آداب وفلسفة',
+                'tm': 'تقني رياضي'
+            };
+            return names[code] || code;
+        }
+
+        // --- 4. Section Switching ---
+        function showSection(sectionId) {
+            document.querySelectorAll('.container > .section, #mainDashboard > .section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+
+            document.querySelectorAll('.taskbar button').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        // --- 5. Countdown Logic (June 7, 2027) ---
+        const targetDate = new Date('June 7, 2027 00:00:00').getTime();
+
+        setInterval(() => {
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference > 0) {
+                document.getElementById('days').innerText = Math.floor(difference / (1000 * 60 * 60 * 24));
+                document.getElementById('hours').innerText = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById('minutes').innerText = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('seconds').innerText = Math.floor((difference % (1000 * 60)) / 1000);
+            }
+        }, 1000);
+
+        // --- 6. Pomodoro Timer Logic ---
+        let pomoInterval;
+        let pomoTime = 25 * 60; // default 25 minutes
+
+        function updatePomoDisplay() {
+            const hrs = Math.floor(pomoTime / 3600);
+            const mins = Math.floor((pomoTime % 3600) / 60);
+            const secs = pomoTime % 60;
+            
+            if(hrs > 0) {
+                document.getElementById('pomoTimer').innerText = 
+                    `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            } else {
+                document.getElementById('pomoTimer').innerText = 
+                    `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+            }
+        }
+
+        document.getElementById('startPomo').addEventListener('click', () => {
+            clearInterval(pomoInterval);
+            pomoInterval = setInterval(() => {
+                if (pomoTime > 0) {
+                    pomoTime--;
+                    updatePomoDisplay();
+                } else {
+                    clearInterval(pomoInterval);
+                    alert("انتهت جلسة التركيز! أضفنا الوقت إلى رصيد نقاطك.");
+                    userData.focusMinutes += 25;
+                    document.getElementById('currentUserMinutes').innerText = `${userData.focusMinutes} دقيقة`;
+                }
+            }, 1000);
+        });
+
+        document.getElementById('pausePomo').addEventListener('click', () => {
+            clearInterval(pomoInterval);
+        });
+
+        document.getElementById('resetPomo').addEventListener('click', () => {
+            clearInterval(pomoInterval);
+            pomoTime = 25 * 60;
+            updatePomoDisplay();
+        });
+
+        function applyCustomTime() {
+            const h = parseInt(document.getElementById('customHours').value) || 0;
+            const m = parseInt(document.getElementById('customMinutes').value) || 0;
+            pomoTime = (h * 3600) + (m * 60);
+            updatePomoDisplay();
+        }
+
+        // --- 7. DzExams Direct Subject Mapping ---
+        function loadLibrarySubjects(branch, subBranch) {
+            const grid = document.getElementById('subjectGrid');
+            grid.innerHTML = '';
+
+            let subjects = [];
+
+            if (branch === 'tm') {
+                subjects = [
+                    { name: 'الرياضيات', icon: 'fa-calculator', link: `https://www.dzexams.com/ar/3as/tm/math` },
+                    { name: 'الفيزياء', icon: 'fa-atom', link: `https://www.dzexams.com/ar/3as/tm/phy` },
+                    { name: 'التخصص الهندسي', icon: 'fa-cogs', link: `https://www.dzexams.com/ar/3as/tm/${subBranch}` },
+                    { name: 'اللغة العربية', icon: 'fa-language', link: `https://www.dzexams.com/ar/3as/tm/ara` },
+                    { name: 'العلوم الإسلامية', icon: 'fa-mosque', link: `https://www.dzexams.com/ar/3as/tm/is` }
+                ];
+            } else if (branch === 'ge') {
+                subjects = [
+                    { name: 'التسيير المحاسبي والمالي', icon: 'fa-file-invoice-dollar', link: 'https://www.dzexams.com/ar/3as/ge/comptabilite' },
+                    { name: 'القانون', icon: 'fa-gavel', link: 'https://www.dzexams.com/ar/3as/ge/droit' },
+                    { name: 'الاقتصاد والمناجمت', icon: 'fa-chart-pie', link: 'https://www.dzexams.com/ar/3as/ge/eco' },
+                    { name: 'الرياضيات', icon: 'fa-calculator', link: 'https://www.dzexams.com/ar/3as/ge/math' }
+                ];
+            } else {
+                // Default General Subjects Links
+                subjects = [
+                    { name: 'الرياضيات', icon: 'fa-calculator', link: `https://www.dzexams.com/ar/3as/${branch}/math` },
+                    { name: 'العلوم الفيزيائية', icon: 'fa-atom', link: `https://www.dzexams.com/ar/3as/${branch}/phy` },
+                    { name: 'اللغة العربية', icon: 'fa-book-open', link: `https://www.dzexams.com/ar/3as/${branch}/ara` },
+                    { name: 'الفلسفة', icon: 'fa-brain', link: `https://www.dzexams.com/ar/3as/${branch}/phi` }
+                ];
+            }
+
+            subjects.forEach(sub => {
+                const card = document.createElement('a');
+                card.className = 'subject-card';
+                card.href = sub.link;
+                card.target = '_blank';
+                card.innerHTML = `<i class="fas ${sub.icon}"></i><span>${sub.name}</span>`;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- 8. Dark / Light Theme Toggle ---
+        const themeBtn = document.getElementById('themeToggle');
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+        });
+    </script>
 </body>
 </html>
