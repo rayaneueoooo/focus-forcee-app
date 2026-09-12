@@ -111,7 +111,7 @@
                 </p>
             </div>
 
-            <!-- User Registration Screen -->
+            <!-- User Registration Screen (Centered) -->
             <div id="slide-setup" class="story-slide flex flex-col items-center justify-center text-center space-y-5 w-full max-w-sm mx-auto">
                 <div class="space-y-1">
                     <h2 class="text-2xl font-black text-white">مرحباً بك في العائلة! 🎉</h2>
@@ -139,6 +139,7 @@
                         </select>
                     </div>
 
+                    <!-- Technical Sub-Branch Option -->
                     <div id="tech-subbranch-container" class="hidden transition-all duration-300 space-y-1">
                         <label class="block font-bold text-amber-300 text-center">تخصص التقني رياضي</label>
                         <select id="input-substream" class="w-full p-3 text-center rounded-xl bg-[#5C1A30] border border-amber-400/50 text-white outline-none focus:border-amber-400">
@@ -183,8 +184,9 @@
         <!-- Dynamic Main Content Area -->
         <main class="flex-1 pb-24 overflow-y-auto" id="main-content">
 
-            <!-- TAB 1: HOME -->
+            <!-- TAB 1: HOME (الرئيسية) WITH BAC COUNTDOWN -->
             <div id="tab-home" class="tab-content space-y-6">
+                <!-- BAC Countdown Hero Card -->
                 <div class="bg-light-card dark:bg-dark-card p-6 md:p-10 rounded-3xl space-y-6 shadow-sm border border-stone-200/50 dark:border-stone-800 text-center">
                     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-burgundy/10 dark:bg-brand-gold/10 text-brand-burgundy dark:text-brand-gold text-xs font-bold">
                         <i class="fa-solid fa-hourglass-half"></i>
@@ -193,6 +195,7 @@
 
                     <h2 class="text-xl md:text-3xl font-black">كل ثانية تصنع الفرق في معدلك 🎓</h2>
 
+                    <!-- Countdown Timer Grid -->
                     <div class="grid grid-cols-4 gap-3 max-w-2xl mx-auto pt-2">
                         <div class="bg-light-cardSoft dark:bg-dark-cardSoft p-4 md:p-6 rounded-2xl">
                             <span id="bac-days" class="block text-3xl md:text-5xl font-black text-brand-burgundy dark:text-brand-gold">00</span>
@@ -216,7 +219,7 @@
                 </div>
             </div>
 
-            <!-- TAB 2: STUDY ROOM -->
+            <!-- TAB 2: STUDY ROOM (غرفة الدراسة / الميت فقط) -->
             <div id="tab-study" class="tab-content space-y-4 hidden">
                 <div class="bg-light-card dark:bg-dark-card p-8 md:p-12 rounded-3xl text-center space-y-6 shadow-sm border border-stone-200/50 dark:border-stone-800 max-w-xl mx-auto my-6">
                     <div class="w-16 h-16 rounded-3xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto text-3xl">
@@ -233,14 +236,18 @@
                 </div>
             </div>
 
-            <!-- TAB 3: POMODORO TIMER -->
+            <!-- TAB 3: POMODORO TIMER (مؤقت التركيز - مطبق من الصورة) -->
             <div id="tab-timer" class="tab-content space-y-6 hidden">
+                
                 <div class="space-y-1 text-right">
                     <h2 class="text-2xl md:text-3xl font-black">مؤقت التركيز</h2>
                     <p class="text-xs text-light-subtext dark:text-dark-subtext">جلسة واحدة في كل مرة. عدّل الإيقاع حق يناسب يومك، لا العكس.</p>
                 </div>
 
+                <!-- 2-Column Grid Layout matching the Screenshot -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    
+                    <!-- LEFT SIDE CARD: Custom Duration Settings (إيقاعك الخاص) -->
                     <div class="bg-light-card dark:bg-dark-card p-6 rounded-3xl space-y-5 shadow-sm border border-stone-200/50 dark:border-stone-800">
                         <div class="flex items-center justify-between border-b border-stone-200/40 dark:border-stone-800 pb-4">
                             <div>
@@ -253,6 +260,7 @@
                         </div>
 
                         <div class="space-y-4 text-right">
+                            <!-- Focus Duration Input -->
                             <div class="space-y-1">
                                 <label class="text-xs font-bold">جلسة التركيز</label>
                                 <span class="text-[10px] text-light-subtext dark:text-dark-subtext block">العمل العميق</span>
@@ -262,6 +270,7 @@
                                 </div>
                             </div>
 
+                            <!-- Short Break Duration Input -->
                             <div class="space-y-1">
                                 <label class="text-xs font-bold">الاستراحة القصيرة</label>
                                 <span class="text-[10px] text-light-subtext dark:text-dark-subtext block">تنفس قليلاً</span>
@@ -271,6 +280,7 @@
                                 </div>
                             </div>
 
+                            <!-- Long Break Duration Input -->
                             <div class="space-y-1">
                                 <label class="text-xs font-bold">الاستراحة الطويلة</label>
                                 <span class="text-[10px] text-light-subtext dark:text-dark-subtext block">استعد طاقتك</span>
@@ -280,6 +290,7 @@
                                 </div>
                             </div>
 
+                            <!-- Save Button -->
                             <button onclick="saveTimerSettings()" class="w-full py-3.5 rounded-2xl border border-brand-burgundy/30 dark:border-brand-gold/30 text-brand-burgundy dark:text-brand-gold font-bold text-xs hover:bg-brand-burgundy hover:text-white dark:hover:bg-brand-gold dark:hover:text-dark-bg transition duration-300 flex items-center justify-center gap-2">
                                 <i class="fa-solid fa-check text-xs"></i>
                                 <span>حفظ الإعدادات</span>
@@ -287,13 +298,17 @@
                         </div>
                     </div>
 
+                    <!-- RIGHT SIDE CARD: Timer Interface -->
                     <div class="bg-light-card dark:bg-dark-card p-6 md:p-8 rounded-3xl text-center space-y-6 shadow-sm border border-stone-200/50 dark:border-stone-800 flex flex-col items-center justify-center">
+                        
+                        <!-- Mode Selector Pills -->
                         <div class="inline-flex p-1.5 bg-light-cardSoft dark:bg-dark-cardSoft rounded-full gap-1 text-xs font-bold">
                             <button onclick="setTimerMode('focus')" id="mode-btn-focus" class="px-5 py-2 rounded-full bg-brand-burgundy text-white transition duration-300">تركيز</button>
                             <button onclick="setTimerMode('shortBreak')" id="mode-btn-short" class="px-4 py-2 rounded-full text-light-subtext dark:text-dark-subtext hover:text-brand-burgundy dark:hover:text-brand-gold transition duration-300">استراحة قصيرة</button>
                             <button onclick="setTimerMode('longBreak')" id="mode-btn-long" class="px-4 py-2 rounded-full text-light-subtext dark:text-dark-subtext hover:text-brand-burgundy dark:hover:text-brand-gold transition duration-300">استراحة طويلة</button>
                         </div>
 
+                        <!-- Clock Circle -->
                         <div class="w-60 h-60 sm:w-64 sm:h-64 rounded-full border-[7px] border-amber-100 dark:border-amber-950/40 flex flex-col justify-center items-center relative shadow-inner">
                             <div class="text-5xl font-black tracking-tighter text-brand-burgundy dark:text-brand-gold font-mono" id="timer-display">
                                 25 : 00
@@ -301,6 +316,7 @@
                             <span id="timer-mode-label" class="text-xs font-bold text-light-subtext dark:text-dark-subtext mt-2">وقت التركيز</span>
                         </div>
 
+                        <!-- Controls -->
                         <div class="flex items-center justify-center gap-3">
                             <button onclick="resetTimer()" class="w-12 h-12 rounded-full border border-stone-200 dark:border-stone-700 flex items-center justify-center text-light-subtext dark:text-dark-subtext hover:bg-light-cardSoft dark:hover:bg-dark-cardSoft active:scale-95 transition">
                                 <i class="fa-solid fa-rotate-right text-base"></i>
@@ -310,11 +326,30 @@
                                 <span id="timer-btn-label">ابدأ الآن</span>
                             </button>
                         </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TAB 4: LEADERBOARD (التصنيف) -->
+            <div id="tab-leaderboard" class="tab-content space-y-4 hidden max-w-2xl mx-auto">
+                <div class="bg-light-card dark:bg-dark-card p-6 rounded-3xl space-y-4 shadow-sm border border-stone-200/50 dark:border-stone-800">
+                    <div class="flex justify-between items-start">
+                        <span class="px-3 py-1 bg-brand-goldLight dark:bg-amber-950/60 text-amber-900 dark:text-brand-gold text-xs font-bold rounded-full">ترتيبك الحالي</span>
+                        <div class="w-12 h-12 rounded-2xl bg-light-cardSoft dark:bg-dark-cardSoft flex items-center justify-center text-brand-burgundy dark:text-brand-gold text-xl">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <span id="user-display-fullname" class="text-xs text-light-subtext dark:text-dark-subtext font-medium">طالب البكالوريا</span>
+                        <span id="user-display-stream" class="block text-[10px] text-amber-600 dark:text-brand-gold font-bold">علوم تجريبية</span>
+                        <h2 class="text-3xl font-black mt-1">بداية قوية</h2>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 4: SETTINGS -->
+            <!-- TAB 5: SETTINGS (الإعدادات) -->
             <div id="tab-settings" class="tab-content space-y-4 hidden max-w-2xl mx-auto">
                 <div class="bg-light-card dark:bg-dark-card p-5 rounded-3xl flex justify-between items-center shadow-sm">
                     <div class="space-y-0.5">
@@ -329,7 +364,7 @@
 
         </main>
 
-        <!-- FLOATING BOTTOM NAVIGATION BAR -->
+        <!-- FLOATING BOTTOM NAVIGATION BAR (MATCHING SCREENSHOT) -->
         <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-light-card/90 dark:bg-dark-card/90 backdrop-blur-md rounded-full px-4 md:px-8 py-2.5 shadow-2xl border border-stone-200/60 dark:border-stone-800/80 flex items-center gap-2 md:gap-6 z-40">
             
             <!-- Home -->
@@ -350,6 +385,12 @@
                 <span class="text-xs font-bold">المؤقت</span>
             </button>
 
+            <!-- Leaderboard -->
+            <button onclick="switchTab('leaderboard')" id="nav-leaderboard" class="nav-btn flex items-center gap-2 px-3 py-2 rounded-full text-light-subtext dark:text-dark-subtext transition-all duration-300">
+                <i class="fa-solid fa-trophy text-sm"></i>
+                <span class="text-xs font-bold">التصنيف</span>
+            </button>
+
             <!-- Settings -->
             <button onclick="switchTab('settings')" id="nav-settings" class="nav-btn flex items-center gap-2 px-3 py-2 rounded-full text-light-subtext dark:text-dark-subtext transition-all duration-300">
                 <i class="fa-solid fa-gear text-sm"></i>
@@ -364,6 +405,7 @@
         let currentSlideIndex = 0;
         const totalSlides = 3;
 
+        // Pomodoro state
         let currentMode = 'focus';
         let modeTimes = {
             focus: 25 * 60,
@@ -379,6 +421,7 @@
             updateTimerDisplay();
         };
 
+        // Onboarding Slide Logic
         function nextStorySlide() {
             if (currentSlideIndex < totalSlides - 1) {
                 document.getElementById(`slide-${currentSlideIndex}`).classList.remove('active');
@@ -409,13 +452,19 @@
         function saveUserInfo() {
             const fn = document.getElementById('input-firstname').value.trim();
             const ln = document.getElementById('input-lastname').value.trim();
+            const stream = document.getElementById('input-stream').value;
+            const subStream = document.getElementById('input-substream').value;
 
             if (!fn || !ln) {
                 alert('يرجى كتابة الاسم واللقب لمتابعة الدخول.');
                 return;
             }
 
+            const fullStream = (stream === 'تقني رياضي') ? `تقني رياضي (${subStream})` : stream;
+
             document.getElementById('user-header-name').innerText = `أهلاً بك، ${fn}`;
+            document.getElementById('user-display-fullname').innerText = `${fn} ${ln}`;
+            document.getElementById('user-display-stream').innerText = fullStream;
 
             const overlay = document.getElementById('story-overlay');
             overlay.classList.add('opacity-0');
@@ -424,8 +473,9 @@
             }, 500);
         }
 
+        // BAC Countdown Timer Logic (June 2027 Target)
         function startBacCountdown() {
-            const bacDate = new Date('June 13, 2027 08:00:00').getTime();
+            const bacDate = new Date('June 15, 2027 08:00:00').getTime();
 
             setInterval(() => {
                 const now = new Date().getTime();
@@ -445,6 +495,7 @@
             }, 1000);
         }
 
+        // Navigation Switcher
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -455,6 +506,7 @@
                 'home': 'الرئيسية',
                 'study': 'غرفة الدراسة',
                 'timer': 'مؤقت التركيز',
+                'leaderboard': 'التصنيف',
                 'settings': 'الإعدادات'
             };
 
@@ -469,6 +521,7 @@
             }
         }
 
+        // Pomodoro Settings Save
         function saveTimerSettings() {
             const focusVal = parseInt(document.getElementById('setting-focus-min').value) || 25;
             const shortVal = parseInt(document.getElementById('setting-short-min').value) || 5;
@@ -482,6 +535,7 @@
             alert('تم حفظ إعدادات الوقت الجديدة بنجاح!');
         }
 
+        // Pomodoro Modes Logic
         function setTimerMode(mode) {
             if (isTimerRunning) {
                 clearInterval(timerInterval);
