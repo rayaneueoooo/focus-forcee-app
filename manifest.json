@@ -1,14 +1,24 @@
-"icons": [
-  {
-    "src": "./icon-192.png",
-    "sizes": "192x192",
-    "type": "image/png",
-    "purpose": "any"
-  },
-  {
-    "src": "./icon-512.png",
-    "sizes": "512x512",
-    "type": "image/png",
-    "purpose": "any"
-  }
-]
+{
+  "name": "FOCUS & FORCE - Study With Purpose",
+  "short_name": "Focus & Force",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#25131D",
+  "theme_color": "#731E3E",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
