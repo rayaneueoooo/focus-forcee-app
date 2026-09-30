@@ -1,12 +1,23 @@
 {
-  "background_color": "#25131d",
-  "dir": "ltr",
+  "name": "FOCUS & FORCE - study with purpose",
+  "short_name": "Focus&Force",
+  "start_url": "./index.html",
   "display": "standalone",
-  "name": "Focus &amp; Force",
-  "orientation": "any",
-  "scope": "/",
-  "short_name": "Focus&amp;Force",
-  "start_url": "/",
-  "theme_color": "#501426",
-  "description": "مساحة الطالب الجزائري المقبل على شهادة البكالوريا"
+  "background_color": "#25131D",
+  "theme_color": "#731E3E",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
