@@ -5,6 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOCUS & FORCE - study with purpose</title>
     
+    <!-- PWA Settings (تحويل الموقع إلى تطبيق) -->
+    <meta name="theme-color" content="#501426">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Focus&Force">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3588/3588658.png">
+
+    <!-- Web App Manifest (مُضمّن مباشرة عبر Data URI) -->
+    <link rel="manifest" href='data:application/manifest+json,{
+        "name": "FOCUS & FORCE",
+        "short_name": "Focus&Force",
+        "start_url": "./",
+        "display": "standalone",
+        "background_color": "#25131D",
+        "theme_color": "#501426",
+        "icons": [
+            {
+                "src": "https://cdn-icons-png.flaticon.com/512/3588/3588658.png",
+                "sizes": "192x192",
+                "type": "image/png"
+            },
+            {
+                "src": "https://cdn-icons-png.flaticon.com/512/3588/3588658.png",
+                "sizes": "512x512",
+                "type": "image/png"
+            }
+        ]
+    }'>
+
+    <!-- تسجيل الـ Service Worker لتجهيز التطبيق للعمل أوفلاين وتثبيته -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'focus-force-v1';
+                self.addEventListener('install', (e) => {
+                    self.skipWaiting();
+                });
+                self.addEventListener('activate', (e) => {
+                    e.waitUntil(clients.claim());
+                });
+                self.addEventListener('fetch', (e) => {
+                    e.respondWith(
+                        fetch(e.request).catch(() => caches.match(e.request))
+                    );
+                });
+            `;
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            navigator.serviceWorker.register(swUrl).catch(() => {});
+        }
+    </script>
+    
     <!-- الخطوط المحددة -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -474,290 +526,420 @@
         <!-- الإعدادات /settings -->
         <section id="pageSettings" class="space-y-6 hidden">
             <div>
-                <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">الإعدادات والقصة</h1>
-                <p class="text-xs opacity-70">تفاصيل صغيرة تجعل العودة إلى التركيز أسهل.</p>
+                <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">إعدادات المساحة</h1>
+                <p class="text-xs opacity-70">إدارة حسابك وتفضيلاتك الشخصية</p>
             </div>
 
-            <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
-                <h3 class="font-bold text-sm">قصة Focus & Force</h3>
-                <p class="text-xs opacity-70">استرجع بدايات القناة والرحلة الملهمة لتجديد الشغف.</p>
-                <button onclick="replayStory()" class="px-4 py-2.5 bg-[#E8C995] text-[#451C2B] text-xs font-bold rounded-xl hover:bg-[#F4DFBE] transition">إعادة عرض القصة 📖</button>
+            <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 space-y-4">
+                <h3 class="font-bold text-sm">تعديل البيانات الشخصية</h3>
+                <form onsubmit="updateProfileSettings(event)" class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-semibold mb-1">الاسم</label>
+                        <input type="text" id="setFirstName" required class="w-full p-2.5 rounded-xl bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 border border-[#E8C995]/40 text-xs outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1">اللقب</label>
+                        <input type="text" id="setLastName" required class="w-full p-2.5 rounded-xl bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 border border-[#E8C995]/40 text-xs outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold mb-1">الشعبة</label>
+                        <select id="setTrack" class="w-full p-2.5 rounded-xl bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 border border-[#E8C995]/40 text-xs outline-none">
+                            <option value="علوم تجريبية">علوم تجريبية</option>
+                            <option value="رياضيات">رياضيات</option>
+                            <option value="تسيير واقتصاد">تسيير واقتصاد</option>
+                            <option value="آداب وفلسفة">آداب وفلسفة</option>
+                            <option value="آداب ولغات">آداب ولغات</option>
+                            <option value="تقني رياضي">تقني رياضي</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="px-5 py-2.5 bg-[#731E3E] text-[#F5EDE0] text-xs font-bold rounded-xl hover:bg-[#501426] transition shadow">حفظ التغييرات</button>
+                </form>
             </div>
         </section>
+
     </main>
 
-    <!-- شريط التنقل السفلي الثابت (Navbar) -->
-    <nav class="fixed bottom-0 left-0 right-0 z-30 bg-[#FCF8F1]/90 dark:bg-[#501426]/90 backdrop-blur-md border-t border-[#E8C995]/30 px-2 py-2.5">
-        <div class="max-w-md mx-auto flex items-center justify-around text-[10px]">
-            <button onclick="navigateTo('/')" class="flex flex-col items-center gap-1 text-[#731E3E] dark:text-[#E8C995] font-bold transition">
-                <i data-lucide="home" class="w-5 h-5"></i>
-                <span>الرئيسية</span>
-            </button>
-            <button onclick="navigateTo('/library')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-                <i data-lucide="book-open" class="w-5 h-5"></i>
-                <span>المكتبة</span>
-            </button>
-            <button onclick="navigateTo('/study')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-                <i data-lucide="video" class="w-5 h-5"></i>
-                <span>Meet</span>
-            </button>
-            <button onclick="navigateTo('/pomodoro')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-                <i data-lucide="timer" class="w-5 h-5"></i>
-                <span>المؤقت</span>
-            </button>
-            <button onclick="navigateTo('/ranking')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-                <i data-lucide="trophy" class="w-5 h-5"></i>
-                <span>التصنيف</span>
-            </button>
-            <button onclick="navigateTo('/settings')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-                <i data-lucide="settings" class="w-5 h-5"></i>
-                <span>الإعدادات</span>
-            </button>
-        </div>
+    <!-- شريط التنقل السفلي (Bottom Navigation) -->
+    <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 bg-[#FCF8F1]/90 dark:bg-[#501426]/90 backdrop-blur-md px-4 py-2.5 rounded-3xl border border-[#E8C995]/40 shadow-2xl flex items-center gap-2 sm:gap-6">
+        <button onclick="navigateTo('/')" id="navHome" class="flex flex-col items-center gap-1 p-2 rounded-2xl transition text-[#731E3E] dark:text-[#E8C995]">
+            <i data-lucide="home" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold">الرئيسية</span>
+        </button>
+        <button onclick="navigateTo('/library')" id="navLibrary" class="flex flex-col items-center gap-1 p-2 rounded-2xl transition opacity-60 hover:opacity-100">
+            <i data-lucide="book-open" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold">المكتبة</span>
+        </button>
+        <button onclick="navigateTo('/study')" id="navStudy" class="flex flex-col items-center gap-1 p-2 rounded-2xl transition opacity-60 hover:opacity-100">
+            <i data-lucide="video" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold">Meet</span>
+        </button>
+        <button onclick="navigateTo('/pomodoro')" id="navPomodoro" class="flex flex-col items-center gap-1 p-2 rounded-2xl transition opacity-60 hover:opacity-100">
+            <i data-lucide="timer" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold">المؤقت</span>
+        </button>
+        <button onclick="navigateTo('/ranking')" id="navRanking" class="flex flex-col items-center gap-1 p-2 rounded-2xl transition opacity-60 hover:opacity-100">
+            <i data-lucide="trophy" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold">التصنيف</span>
+        </button>
+        <button onclick="navigateTo('/settings')" id="navSettings" class="flex flex-col items-center gap-1 p-2 rounded-2xl transition opacity-60 hover:opacity-100">
+            <i data-lucide="settings" class="w-5 h-5"></i>
+            <span class="text-[10px] font-bold">الإعدادات</span>
+        </button>
     </nav>
 
+    <!-- Script منطق التطبيق -->
     <script>
+        // تهيئة أيقونات Lucide
         lucide.createIcons();
 
-        // بيانات شرائح القصة
-        const slides = [
-            { year: '2024', badge: 'بداية القصة 🍃🌱', title: 'من طالبة تبحث عن ملخصات…', text: 'كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث بين الصفحات عن مصادر صحيحة...✨' },
-            { year: '2024', badge: 'حلم صغير... 🤍', title: 'كل معلومة كانت خطوة', text: 'بدأت القناة بمجهودي الفردي وبكثير من الحب. كل معلومة كانت خطوة...' },
-            { year: '2025', badge: 'الشرارة الحقيقية ❤️‍🔥', title: 'كبرنا مع بعضنا', text: 'عندما قررت خوض تجربة البكالوريا للمرة الثانية، وسط كل الضغط والتعب...' },
-            { year: '2026', badge: 'الحلم يكبر ✨', title: 'ما بقيناش وحدنا', text: 'سنوات الصبر والعمل المتواصل جعلت Focus & Force تتحول إلى عائلة تجمع الجميع...' },
-            { year: '2027', badge: 'عهد جديد 💗', title: 'كل محاولة صنعتنا', text: 'كل تجربة مرت بي علمتني الكثير، كل سقوط قوّاني...' },
-            { year: '∞', badge: 'عائلة نكبر معها', title: 'هي قطعة حقيقية من قلبي', text: 'رسالة نعيشها سوياً كل يوم. أنا هنا لأكون السند الذي تمنيتُ لو وجدته 🍓✨' }
+        // البيانات والقصة
+        const storySlides = [
+            {
+                year: "2024",
+                badge: "بداية القصة 🍃🌱",
+                title: "من طالبة تبحث عن ملخصات…",
+                text: "كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث عن مصدر ملخص يفهّمني بلا تعقيد، وبين التوتر والرغبة في النجاح، أدركت أن الطالب الجزائري يحتاج مساحة أعمق وأرقى."
+            },
+            {
+                year: "2025",
+                badge: "ولادة الفكرة 💡✨",
+                title: "إلى مجتمع يحمل شغف البكالوريا",
+                text: "تحولت الفكرة من مجرد ملخصات بسيطة إلى تطبيق متكامل ومساحة تجمع بين مؤقتات التركيز، الدراسة الجماعية عبر Google Meet، وملفات DzExams لتهيئة الطالب نفسياً وأكاديمياً."
+            },
+            {
+                year: "2026",
+                badge: "Focus & Force 🚀🎯",
+                title: "مساحتك الخاصة للوصول إلى هدفك",
+                text: "اليوم Focus & Force هي مساحتك. استغل كل دقيقة، اجمع نقاطك، ونافس زُملاءك في الطريق نحو شهادة البكالوريا بمُتعة والتزام."
+            }
         ];
 
-        let currentSlideIdx = 0;
-        let slideTimer = null;
+        let currentSlide = 0;
 
         function renderSlide() {
-            const s = slides[currentSlideIdx];
-            document.getElementById('slideYear').innerText = s.year;
-            document.getElementById('slideBadge').innerText = s.badge;
-            document.getElementById('slideTitle').innerText = s.title;
-            document.getElementById('slideText').innerText = s.text;
+            const slide = storySlides[currentSlide];
+            document.getElementById('slideYear').innerText = slide.year;
+            document.getElementById('slideBadge').innerText = slide.badge;
+            document.getElementById('slideTitle').innerText = slide.title;
+            document.getElementById('slideText').innerText = slide.text;
 
-            const isLast = currentSlideIdx === slides.length - 1;
-            document.getElementById('nextSlideBtn').innerText = isLast ? 'نبدأ رحلتي للبكالوريا' : 'تابع القصة';
+            const dotsContainer = document.getElementById('slideDots');
+            dotsContainer.innerHTML = '';
+            storySlides.forEach((_, idx) => {
+                const dot = document.createElement('div');
+                dot.className = `w-2.5 h-2.5 rounded-full transition-all ${idx === currentSlide ? 'bg-[#E8C995] w-6' : 'bg-[#E8C995]/30'}`;
+                dotsContainer.appendChild(dot);
+            });
 
-            const dots = document.getElementById('slideDots');
-            dots.innerHTML = slides.map((_, i) => `<div class="h-2 rounded-full transition-all ${i === currentSlideIdx ? 'w-8 bg-[#E8C995]' : 'w-2 bg-[#E8C995]/30'}"></div>`).join('');
+            const btn = document.getElementById('nextSlideBtn');
+            btn.innerText = (currentSlide === storySlides.length - 1) ? "ابدأ رحلتك الآن" : "تابع القصة";
         }
 
         function nextSlide() {
-            if (currentSlideIdx < slides.length - 1) {
-                currentSlideIdx++;
+            if (currentSlide < storySlides.length - 1) {
+                currentSlide++;
                 renderSlide();
             } else {
-                clearInterval(slideTimer);
                 document.getElementById('storyScreen').classList.add('hidden');
                 checkProfile();
             }
         }
 
-        // إحصائيات والملف الشخصي والبيانات المخزنة
-        let profile = JSON.parse(localStorage.getItem('focus-force-profile') || 'null');
-        
-        let pomodoroMinutes = parseInt(localStorage.getItem('pomodoroMinutes') || '0');
-        let meetMinutes = parseInt(localStorage.getItem('meetMinutes') || '0');
-        let pomodoroSessions = parseInt(localStorage.getItem('pomodoroSessions') || '0');
-        let meetSessions = parseInt(localStorage.getItem('meetSessions') || '0');
-        let pomodoroPoints = parseInt(localStorage.getItem('pomodoroPoints') || '0');
-        let meetPoints = parseInt(localStorage.getItem('meetPoints') || '0');
-        let totalPoints = parseInt(localStorage.getItem('totalPoints') || '0');
-        let studyHistory = JSON.parse(localStorage.getItem('studyHistory') || '[]');
-
+        // إدارة الملف الشخصي
         function checkProfile() {
+            const profile = JSON.parse(localStorage.getItem('ff_profile') || 'null');
             if (!profile) {
                 document.getElementById('profileScreen').classList.remove('hidden');
             } else {
-                updateUI();
+                showWelcome(profile);
             }
         }
 
         function toggleSpecialization() {
-            const val = document.getElementById('track').value;
-            document.getElementById('specContainer').classList.toggle('hidden', val !== 'تقني رياضي');
+            const track = document.getElementById('track').value;
+            const specContainer = document.getElementById('specContainer');
+            if (track === 'تقني رياضي') {
+                specContainer.classList.remove('hidden');
+            } else {
+                specContainer.classList.add('hidden');
+            }
         }
 
         function saveProfile(e) {
             e.preventDefault();
-            profile = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                track: document.getElementById('track').value,
-                specialization: document.getElementById('specialization').value
-            };
-            localStorage.setItem('focus-force-profile', JSON.stringify(profile));
-            document.getElementById('profileScreen').classList.add('hidden');
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const track = document.getElementById('track').value;
+            const spec = track === 'تقني رياضي' ? document.getElementById('specialization').value : '';
 
-            document.getElementById('welcomeName').innerText = `أهلا، ${profile.firstName} ${profile.lastName}`;
-            document.getElementById('welcomeText').innerText = `مساحتك حضرت. راح نرافقوك في ${profile.track}، خطوة بخطوة.`;
+            const profile = { firstName, lastName, track, spec };
+            localStorage.setItem('ff_profile', JSON.stringify(profile));
+            
+            document.getElementById('profileScreen').classList.add('hidden');
+            showWelcome(profile);
+        }
+
+        function showWelcome(profile) {
+            document.getElementById('welcomeName').innerText = `أهلاً، ${profile.firstName} ${profile.lastName} 👋`;
+            document.getElementById('welcomeText').innerText = `تم تهيئة مساحتك لشعبة (${profile.track}${profile.spec ? ' - ' + profile.spec : ''}). نتمنى لك رحلة موفقة للباك!`;
             document.getElementById('welcomeBanner').classList.remove('hidden');
+            
+            updateUIProfileData();
         }
 
         function closeWelcome() {
             document.getElementById('welcomeBanner').classList.add('hidden');
-            updateUI();
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toastNotification');
-            document.getElementById('toastMsg').innerText = msg;
-            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
-            }, 4000);
-        }
-
-        function saveStatsToStorage() {
-            localStorage.setItem('pomodoroMinutes', pomodoroMinutes);
-            localStorage.setItem('meetMinutes', meetMinutes);
-            localStorage.setItem('pomodoroSessions', pomodoroSessions);
-            localStorage.setItem('meetSessions', meetSessions);
-            localStorage.setItem('pomodoroPoints', pomodoroPoints);
-            localStorage.setItem('meetPoints', meetPoints);
-            localStorage.setItem('totalPoints', totalPoints);
-            localStorage.setItem('studyHistory', JSON.stringify(studyHistory));
-        }
-
-        function addHistoryItem(type, durationMins, ptsGained) {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('ar-DZ', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-            studyHistory.unshift({
-                type,
-                duration: durationMins,
-                points: ptsGained,
-                date: dateStr
-            });
-            saveStatsToStorage();
-        }
-
-        function updateUI() {
-            if (profile) {
+        function updateUIProfileData() {
+            const profile = JSON.parse(localStorage.getItem('ff_profile') || '{}');
+            if (profile.firstName) {
                 document.getElementById('homeGreeting').innerText = `أهلاً يا ${profile.firstName}، خلّينا ننجز شيئاً.`;
                 document.getElementById('rankStudentName').innerText = `${profile.firstName} ${profile.lastName}`;
+                document.getElementById('setFirstName').value = profile.firstName;
+                document.getElementById('setLastName').value = profile.lastName;
+                document.getElementById('setTrack').value = profile.track || 'علوم تجريبية';
             }
+        }
 
-            totalPoints = pomodoroPoints + meetPoints;
-            let rank = "بداية قوية";
-            let nextRankPts = 150;
+        function updateProfileSettings(e) {
+            e.preventDefault();
+            const firstName = document.getElementById('setFirstName').value.trim();
+            const lastName = document.getElementById('setLastName').value.trim();
+            const track = document.getElementById('setTrack').value;
 
-            if (totalPoints >= 800) {
-                rank = "قائد العائلة";
-                nextRankPts = 800;
-            } else if (totalPoints >= 400) {
-                rank = "مركز";
-                nextRankPts = 800;
-            } else if (totalPoints >= 150) {
-                rank = "مستعد";
-                nextRankPts = 400;
-            }
-
-            const totalTime = pomodoroMinutes + meetMinutes;
-            const totalSess = pomodoroSessions + meetSessions;
-
-            // تحديث بطاقات الصفحة الرئيسية
-            document.getElementById('userRank').innerText = rank;
-            document.getElementById('userPoints').innerText = `${totalPoints} نقطة`;
-            document.getElementById('userStudyTime').innerText = `إجمالي الدقائق الدراسية: ${totalTime} دقيقة`;
-
-            // تحديث صفحة التصنيف الشاملة
-            document.getElementById('rankTitleBadge').innerText = rank;
-            document.getElementById('rankTotalPts').innerText = totalPoints;
-            document.getElementById('rankTotalTime').innerText = `${totalTime} د`;
-            document.getElementById('rankTotalSessions').innerText = totalSess;
-
-            document.getElementById('pomoPtsDisplay').innerText = `${pomodoroPoints} نقطة`;
-            document.getElementById('pomoMinsDisplay').innerText = `${pomodoroMinutes} دقيقة`;
-            document.getElementById('pomoSessDisplay').innerText = `${pomodoroSessions} جلسة`;
-
-            document.getElementById('meetPtsDisplay').innerText = `${meetPoints} نقطة`;
-            document.getElementById('meetMinsDisplay').innerText = `${meetMinutes} دقيقة`;
-            document.getElementById('meetSessDisplay').innerText = `${meetSessions} جلسة`;
-
-            // شريط النسبة والمتبقي للرتبة القادمة
-            if (totalPoints >= 800) {
-                document.getElementById('rankNextText').innerText = "أعلى رتبة وصلت إليها 🎉";
-                document.getElementById('rankProgressPercent').innerText = "100%";
-                document.getElementById('rankProgressBar').style.width = "100%";
-            } else {
-                const ptsRemaining = nextRankPts - totalPoints;
-                const percent = Math.min(100, Math.floor((totalPoints / nextRankPts) * 100));
-                document.getElementById('rankNextText').innerText = `النقاط المتبقية للوصول إلى الرتبة التالية: ${ptsRemaining} نقطة`;
-                document.getElementById('rankProgressPercent').innerText = `${percent}%`;
-                document.getElementById('rankProgressBar').style.width = `${percent}%`;
-            }
-
-            // عرض سجل الجلسات
-            const listEl = document.getElementById('historyList');
-            if (studyHistory.length === 0) {
-                listEl.innerHTML = `<div class="text-center opacity-60 py-4">لا يوجد جلسات مسجلة بعد. ابدأ أول جلسة الآن!</div>`;
-            } else {
-                listEl.innerHTML = studyHistory.slice(0, 10).map(h => `
-                    <div class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-2xl border border-[#E8C995]/20 flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="${h.type === 'Pomodoro' ? 'timer' : 'video'}" class="w-4 h-4 ${h.type === 'Pomodoro' ? 'text-[#731E3E] dark:text-[#E8C995]' : 'text-[#6C9D78]'}"></i>
-                            <div>
-                                <span class="font-bold">${h.type}</span>
-                                <span class="block text-[10px] opacity-60">${h.date}</span>
-                            </div>
-                        </div>
-                        <div class="text-left font-mono">
-                            <span class="font-bold text-sm text-[#731E3E] dark:text-[#E8C995]">+${h.points} نقطة</span>
-                            <span class="block text-[10px] opacity-60">${h.duration} دقيقة</span>
-                        </div>
-                    </div>
-                `).join('');
-                lucide.createIcons();
-            }
+            const profile = { firstName, lastName, track, spec: '' };
+            localStorage.setItem('ff_profile', JSON.stringify(profile));
+            showToast("تم تحديث معلوماتك الشخصية بنجاح ✨");
+            updateUIProfileData();
         }
 
         // التوجيه والتنقل بين الصفحات
-        function navigateTo(path) {
-            document.querySelectorAll('#appPages > section').forEach(sec => sec.classList.add('hidden'));
-            if (path === '/') document.getElementById('pageHome').classList.remove('hidden');
-            if (path === '/library') document.getElementById('pageLibrary').classList.remove('hidden');
-            if (path === '/study') document.getElementById('pageStudy').classList.remove('hidden');
-            if (path === '/pomodoro') document.getElementById('pagePomodoro').classList.remove('hidden');
-            if (path === '/ranking') document.getElementById('pageRanking').classList.remove('hidden');
-            if (path === '/settings') document.getElementById('pageSettings').classList.remove('hidden');
+        function navigateTo(route) {
+            const pages = {
+                '/': 'pageHome',
+                '/library': 'pageLibrary',
+                '/study': 'pageStudy',
+                '/pomodoro': 'pagePomodoro',
+                '/ranking': 'pageRanking',
+                '/settings': 'pageSettings'
+            };
+
+            const navBtns = {
+                '/': 'navHome',
+                '/library': 'navLibrary',
+                '/study': 'navStudy',
+                '/pomodoro': 'navPomodoro',
+                '/ranking': 'navRanking',
+                '/settings': 'navSettings'
+            };
+
+            Object.values(pages).forEach(id => document.getElementById(id).classList.add('hidden'));
+            Object.values(navBtns).forEach(id => {
+                const btn = document.getElementById(id);
+                btn.classList.add('opacity-60');
+                btn.classList.remove('text-[#731E3E]', 'dark:text-[#E8C995]');
+            });
+
+            const activePage = pages[route] || 'pageHome';
+            const activeNav = navBtns[route] || 'navHome';
+
+            document.getElementById(activePage).classList.remove('hidden');
+            const targetNav = document.getElementById(activeNav);
+            targetNav.classList.remove('opacity-60');
+            targetNav.classList.add('text-[#731E3E]', 'dark:text-[#E8C995]');
+
+            if (route === '/ranking') {
+                updateRankingUI();
+            }
         }
 
-        // العد التنازلي للبكالوريا (07 يونيو 2027)
+        // المظهر الداكن
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        // العد التنازلي للباك 2027
         function updateCountdown() {
-            const target = new Date('June 7, 2027 00:00:00').getTime();
-            const now = new Date().getTime();
-            const diff = target - now;
+            const targetDate = new Date('2027-06-07T08:00:00');
+            const now = new Date();
+            const diff = targetDate - now;
 
             if (diff > 0) {
-                document.getElementById('cdDays').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-                document.getElementById('cdHours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                document.getElementById('cdMinutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                document.getElementById('cdSeconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+
+                document.getElementById('cdDays').innerText = days;
+                document.getElementById('cdHours').innerText = hours;
+                document.getElementById('cdMinutes').innerText = minutes;
+                document.getElementById('cdSeconds').innerText = seconds;
             }
         }
         setInterval(updateCountdown, 1000);
+        updateCountdown();
 
-        // منطق مؤقت Pomodoro وتخصيص الوقت
+        // نظام النقاط والبيانات
+        function getStats() {
+            return JSON.parse(localStorage.getItem('ff_stats') || JSON.stringify({
+                pomoPts: 0, pomoMins: 0, pomoSessions: 0,
+                meetPts: 0, meetMins: 0, meetSessions: 0,
+                history: []
+            }));
+        }
+
+        function saveStats(stats) {
+            localStorage.setItem('ff_stats', JSON.stringify(stats));
+            updateRankingUI();
+        }
+
+        function addStudySession(type, minutes, points) {
+            const stats = getStats();
+            if (type === 'pomo') {
+                stats.pomoMins += minutes;
+                stats.pomoPts += points;
+                stats.pomoSessions += 1;
+            } else if (type === 'meet') {
+                stats.meetMins += minutes;
+                stats.meetPts += points;
+                stats.meetSessions += 1;
+            }
+
+            const newEntry = {
+                type: type === 'pomo' ? 'جلسة Pomodoro' : 'جلسة Google Meet',
+                mins: minutes,
+                pts: points,
+                date: new Date().toLocaleDateString('ar-DZ') + ' ' + new Date().toLocaleTimeString('ar-DZ', {hour: '2-digit', minute:'2-digit'})
+            };
+
+            stats.history.unshift(newEntry);
+            if (stats.history.length > 10) stats.history.pop();
+
+            saveStats(stats);
+        }
+
+        function updateRankingUI() {
+            const stats = getStats();
+            const totalPts = stats.pomoPts + stats.meetPts;
+            const totalMins = stats.pomoMins + stats.meetMins;
+            const totalSessions = stats.pomoSessions + stats.meetSessions;
+
+            // تحديث البطاقات
+            document.getElementById('userPoints').innerText = `${totalPts} نقطة`;
+            document.getElementById('userStudyTime').innerText = `إجمالي الدقائق الدراسية: ${totalMins} دقيقة`;
+            
+            document.getElementById('rankTotalPts').innerText = totalPts;
+            document.getElementById('rankTotalTime').innerText = `${totalMins} د`;
+            document.getElementById('rankTotalSessions').innerText = totalSessions;
+
+            document.getElementById('pomoPtsDisplay').innerText = `${stats.pomoPts} نقطة`;
+            document.getElementById('pomoMinsDisplay').innerText = `${stats.pomoMins} دقيقة`;
+            document.getElementById('pomoSessDisplay').innerText = `${stats.pomoSessions} جلسة`;
+
+            document.getElementById('meetPtsDisplay').innerText = `${stats.meetPts} نقطة`;
+            document.getElementById('meetMinsDisplay').innerText = `${stats.meetMins} دقيقة`;
+            document.getElementById('meetSessDisplay').innerText = `${stats.meetSessions} جلسة`;
+
+            // الرتب والشريط
+            let rankName = "بداية قوية";
+            let nextThreshold = 150;
+
+            if (totalPts >= 1000) {
+                rankName = "أسطورة البكالوريا 🏆";
+                nextThreshold = 2000;
+            } else if (totalPts >= 500) {
+                rankName = "مكافح متميز ⚡";
+                nextThreshold = 1000;
+            } else if (totalPts >= 150) {
+                rankName = "طالب مجتهد 🌟";
+                nextThreshold = 500;
+            }
+
+            document.getElementById('userRank').innerText = rankName;
+            document.getElementById('rankTitleBadge').innerText = rankName;
+
+            const remaining = Math.max(0, nextThreshold - totalPts);
+            const progress = Math.min(100, Math.floor((totalPts / nextThreshold) * 100));
+
+            document.getElementById('rankNextText').innerText = remaining > 0 ? `متبقي ${remaining} نقطة للوصول للرتبة التالية` : "وصلت للرتبة العُليا!";
+            document.getElementById('rankProgressPercent').innerText = `${progress}%`;
+            document.getElementById('rankProgressBar').style.width = `${progress}%`;
+
+            // السجل
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            if (stats.history.length === 0) {
+                historyList.innerHTML = `<p class="opacity-60 text-center py-2">لا يوجد جلسات مسجلة بعد. ابدأ أول جلسة الآن!</p>`;
+            } else {
+                stats.history.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = "flex justify-between items-center p-2.5 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/20";
+                    row.innerHTML = `
+                        <div>
+                            <span class="font-bold block">${item.type} (${item.mins} دقيقة)</span>
+                            <span class="text-[10px] opacity-60">${item.date}</span>
+                        </div>
+                        <span class="font-mono font-bold text-[#6C9D78]">+${item.pts} نقطة</span>
+                    `;
+                    historyList.appendChild(row);
+                });
+            }
+        }
+
+        // جلسة Meet
+        let meetTimer = null;
+        let meetSeconds = 0;
+
+        function startMeetSession() {
+            document.getElementById('btnStartMeet').classList.add('hidden');
+            document.getElementById('btnEndMeet').classList.remove('hidden');
+            document.getElementById('meetActiveBar').classList.remove('hidden');
+
+            meetSeconds = 0;
+            meetTimer = setInterval(() => {
+                meetSeconds++;
+                const m = String(Math.floor(meetSeconds / 60)).padStart(2, '0');
+                const s = String(meetSeconds % 60).padStart(2, '0');
+                document.getElementById('meetTimerVal').innerText = `${m}:${s}`;
+            }, 1000);
+
+            showToast("بدأت جلسة Meet. واصل تركيزك!");
+        }
+
+        function endMeetSession() {
+            clearInterval(meetTimer);
+            document.getElementById('btnStartMeet').classList.remove('hidden');
+            document.getElementById('btnEndMeet').classList.add('hidden');
+            document.getElementById('meetActiveBar').classList.add('hidden');
+
+            const minutesEarned = Math.floor(meetSeconds / 60);
+            if (minutesEarned >= 1) {
+                const points = minutesEarned * 1;
+                addStudySession('meet', minutesEarned, points);
+                showToast(`أحسنت! أنهيت ${minutesEarned} دقيقة وحصلت على ${points} نقطة 🎉`);
+            } else {
+                showToast("الجلسة كانت أقل من دقيقة واحدة، لم يتم إضافة نقاط.");
+            }
+        }
+
+        // مؤقت Pomodoro
         let pomoMode = 'focus';
         let customTimes = { focus: 25, short: 5, long: 15 };
-        let pomoMinutes = 25;
-        let pomoSeconds = 0;
-        let pomoTotalDurationSeconds = 25 * 60;
-        let pomoIsRunning = false;
-        let pomoInterval = null;
+        let pomoTimeLeft = 25 * 60;
+        let pomoTotalTime = 25 * 60;
+        let pomoTimer = null;
+        let isPomoRunning = false;
 
         function setPomoMode(mode) {
             pomoMode = mode;
-            document.getElementById('modeFocusBtn').className = `flex-1 py-2 text-xs font-bold rounded-xl transition ${mode === 'focus' ? 'bg-[#731E3E] text-[#F5EDE0]' : 'opacity-70'}`;
-            document.getElementById('modeShortBtn').className = `flex-1 py-2 text-xs font-bold rounded-xl transition ${mode === 'short' ? 'bg-[#731E3E] text-[#F5EDE0]' : 'opacity-70'}`;
-            document.getElementById('modeLongBtn').className = `flex-1 py-2 text-xs font-bold rounded-xl transition ${mode === 'long' ? 'bg-[#731E3E] text-[#F5EDE0]' : 'opacity-70'}`;
+            document.getElementById('modeFocusBtn').className = mode === 'focus' ? "flex-1 py-2 text-xs font-bold rounded-xl transition bg-[#731E3E] text-[#F5EDE0]" : "flex-1 py-2 text-xs font-bold rounded-xl opacity-70 transition";
+            document.getElementById('modeShortBtn').className = mode === 'short' ? "flex-1 py-2 text-xs font-bold rounded-xl transition bg-[#731E3E] text-[#F5EDE0]" : "flex-1 py-2 text-xs font-bold rounded-xl opacity-70 transition";
+            document.getElementById('modeLongBtn').className = mode === 'long' ? "flex-1 py-2 text-xs font-bold rounded-xl transition bg-[#731E3E] text-[#F5EDE0]" : "flex-1 py-2 text-xs font-bold rounded-xl opacity-70 transition";
 
             const titles = { focus: 'جلسة تركيز', short: 'استراحة قصيرة', long: 'استراحة طويلة' };
             document.getElementById('pomoModeTitle').innerText = titles[mode];
+
             resetPomodoro();
         }
 
@@ -769,11 +951,58 @@
         }
 
         function addMinutes(mins) {
-            let totalMins = pomoMinutes + mins;
-            if (totalMins < 1) totalMins = 1;
-            pomoMinutes = totalMins;
-            pomoTotalDurationSeconds = pomoMinutes * 60 + pomoSeconds;
-            updateTimerDisplay();
+            pomoTimeLeft = Math.max(60, pomoTimeLeft + mins * 60);
+            pomoTotalTime = Math.max(pomoTimeLeft, pomoTotalTime);
+            updatePomoDisplay();
+        }
+
+        function resetPomodoro() {
+            clearInterval(pomoTimer);
+            isPomoRunning = false;
+            document.getElementById('pomoStartBtnText').innerText = "ابدأ الآن";
+
+            pomoTimeLeft = customTimes[pomoMode] * 60;
+            pomoTotalTime = pomoTimeLeft;
+            updatePomoDisplay();
+        }
+
+        function togglePomodoro() {
+            if (isPomoRunning) {
+                clearInterval(pomoTimer);
+                isPomoRunning = false;
+                document.getElementById('pomoStartBtnText').innerText = "استئناف";
+            } else {
+                isPomoRunning = true;
+                document.getElementById('pomoStartBtnText').innerText = "إيقاف مؤقت";
+                pomoTimer = setInterval(() => {
+                    if (pomoTimeLeft > 0) {
+                        pomoTimeLeft--;
+                        updatePomoDisplay();
+                    } else {
+                        clearInterval(pomoTimer);
+                        isPomoRunning = false;
+                        document.getElementById('pomoStartBtnText').innerText = "ابدأ الآن";
+
+                        if (pomoMode === 'focus') {
+                            const minutesEarned = customTimes.focus;
+                            const points = minutesEarned * 2;
+                            addStudySession('pomo', minutesEarned, points);
+                            showToast(`رائع جداً! اكملت جلسة التركيز وحصلت على ${points} نقطة 🔥`);
+                        } else {
+                            showToast("انتهت الاستراحة! جاهز للعودة للدراسة؟ 📚");
+                        }
+                    }
+                }, 1000);
+            }
+        }
+
+        function updatePomoDisplay() {
+            const m = String(Math.floor(pomoTimeLeft / 60)).padStart(2, '0');
+            const s = String(pomoTimeLeft % 60).padStart(2, '0');
+            document.getElementById('pomoTime').innerText = `${m}:${s}`;
+
+            const percent = ((pomoTotalTime - pomoTimeLeft) / pomoTotalTime) * 100;
+            document.getElementById('pomoCircle').style.setProperty('--pomo-progress', `${percent}%`);
         }
 
         function toggleCustomizer() {
@@ -781,136 +1010,24 @@
             panel.classList.toggle('hidden');
         }
 
-        function updateTimerDisplay() {
-            document.getElementById('pomoTime').innerText = `${String(pomoMinutes).padStart(2, '0')}:${String(pomoSeconds).padStart(2, '0')}`;
-            const currentSecs = pomoMinutes * 60 + pomoSeconds;
-            const progressPct = pomoTotalDurationSeconds > 0 ? ((pomoTotalDurationSeconds - currentSecs) / pomoTotalDurationSeconds) * 100 : 0;
-            document.getElementById('pomoCircle').style.setProperty('--pomo-progress', `${progressPct}%`);
+        // الإشعارات المنبثقة
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+                toast.classList.remove('opacity-100', 'translate-y-0');
+            }, 3500);
         }
 
-        function togglePomodoro() {
-            const btnText = document.getElementById('pomoStartBtnText');
-            if (pomoIsRunning) {
-                clearInterval(pomoInterval);
-                pomoIsRunning = false;
-                btnText.innerText = "تابع الجلسة";
-            } else {
-                pomoIsRunning = true;
-                btnText.innerText = "إيقاف مؤقت";
-                pomoInterval = setInterval(() => {
-                    if (pomoSeconds === 0) {
-                        if (pomoMinutes === 0) {
-                            clearInterval(pomoInterval);
-                            pomoIsRunning = false;
-                            
-                            if (pomoMode === 'focus') {
-                                const duration = customTimes.focus;
-                                const ptsGained = duration * 2;
-                                
-                                pomodoroMinutes += duration;
-                                pomodoroSessions += 1;
-                                pomodoroPoints += ptsGained;
-                                totalPoints += ptsGained;
-
-                                addHistoryItem('Pomodoro', duration, ptsGained);
-                                showToast(`أحسنت! كملت جلسة Pomodoro وربحت ${ptsGained} نقطة.`);
-                                updateUI();
-                            } else {
-                                showToast("انتهت الاستراحة، حان وقت العودة للتركيز!");
-                            }
-
-                            resetPomodoro();
-                            return;
-                        }
-                        pomoMinutes--;
-                        pomoSeconds = 59;
-                    } else {
-                        pomoSeconds--;
-                    }
-                    updateTimerDisplay();
-                }, 1000);
-            }
-        }
-
-        function resetPomodoro() {
-            clearInterval(pomoInterval);
-            pomoIsRunning = false;
-            pomoMinutes = customTimes[pomoMode];
-            pomoSeconds = 0;
-            pomoTotalDurationSeconds = pomoMinutes * 60;
-            updateTimerDisplay();
-            document.getElementById('pomoStartBtnText').innerText = "ابدأ الآن";
-        }
-
-        // جلسات Google Meet
-        let meetStartTime = null;
-        let meetTimerInterval = null;
-
-        function startMeetSession() {
-            if (meetStartTime) return;
-            meetStartTime = new Date();
-            document.getElementById('btnStartMeet').classList.add('hidden');
-            document.getElementById('btnEndMeet').classList.remove('hidden');
-            document.getElementById('meetActiveBar').classList.remove('hidden');
-
-            meetTimerInterval = setInterval(() => {
-                const diffSecs = Math.floor((new Date() - meetStartTime) / 1000);
-                const m = Math.floor(diffSecs / 60);
-                const s = diffSecs % 60;
-                document.getElementById('meetTimerVal').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-            }, 1000);
-        }
-
-        function endMeetSession() {
-            if (!meetStartTime) return;
-            const endTime = new Date();
-            const durationMins = Math.floor((endTime - meetStartTime) / (1000 * 60));
-
-            clearInterval(meetTimerInterval);
-            meetStartTime = null;
-
-            document.getElementById('btnStartMeet').classList.remove('hidden');
-            document.getElementById('btnEndMeet').classList.add('hidden');
-            document.getElementById('meetActiveBar').classList.add('hidden');
-            document.getElementById('meetTimerVal').innerText = "00:00";
-
-            if (durationMins < 1) {
-                showToast("الجلسة كانت أقل من دقيقة واحدة، لم تُسجل النقاط.");
-                return;
-            }
-
-            const ptsGained = durationMins * 1;
-            meetMinutes += durationMins;
-            meetSessions += 1;
-            meetPoints += ptsGained;
-            totalPoints += ptsGained;
-
-            addHistoryItem('Meet', durationMins, ptsGained);
-            showToast(`سجلت ${durationMins} دقيقة Meet وربحت ${ptsGained} نقطة.`);
-            updateUI();
-        }
-
-        // الوضع الليلي وإعادة القصة
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-        }
-
-        function replayStory() {
-            currentSlideIdx = 0;
+        // إعداد البداية عند فتح التطبيق
+        window.addEventListener('load', () => {
             renderSlide();
-            document.getElementById('storyScreen').classList.remove('hidden');
-        }
-
-        // التهيئة الابتدائية عند الفتح
-        renderSlide();
-        slideTimer = setInterval(() => {
-            if (currentSlideIdx < slides.length - 1) {
-                currentSlideIdx++;
-                renderSlide();
-            }
-        }, 5200);
-
-        updateUI();
+            updateRankingUI();
+        });
     </script>
 </body>
 </html>
