@@ -5,17 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOCUS & FORCE - study with purpose</title>
     
-    <!-- إعدادات التطبيق للهواتف والآيفون والكمبيوتر (PWA) -->
-    <meta name="theme-color" content="#501426">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Focus & Force">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3426/3426653.png">
-
-    <!-- Web App Manifest (Data URL لتشغيل المانيفست في ملف واحد بدون سيرفر خارجي) -->
-    <link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22FOCUS%20%26%20FORCE%22%2C%22short_name%22%3A%22Focus%20%26%20Force%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2325131D%22%2C%22theme_color%22%3A%22%23501426%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F3426%2F3426653.png%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fpng%22%7D%5D%7D">
-    
     <!-- الخطوط المحددة -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,7 +88,7 @@
             <span id="slideYear" class="font-mono text-[#E8C995] text-lg mb-2 inline-block bg-[#E8C995]/10 px-4 py-1 rounded-full">2024</span>
             <div id="slideBadge" class="bg-[#E8C995]/15 text-[#E8C995] px-4 py-1.5 rounded-full text-xs font-medium mb-4 inline-block">بداية القصة 🍃🌱</div>
             <h2 id="slideTitle" class="text-2xl md:text-3xl font-bold mb-4 text-[#FCF8F1]">من طالبة تبحث عن ملخصات…</h2>
-            <p id="slideText" class="text-[#F5EDE0]/90 text-sm md:text-base leading-relaxed font-light">كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب والبحث عن المصادر الموثوقة...</p>
+            <p id="slideText" class="text-[#F5EDE0]/90 text-sm md:text-base leading-relaxed font-light">كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب...</p>
         </div>
 
         <div class="max-w-xl mx-auto w-full flex flex-col items-center pb-6 gap-6">
@@ -351,7 +340,7 @@
             </div>
 
             <!-- لوحة التخصيص والمرونة (Customizer Panel) -->
-            <div id="customizerPanel" class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-4 max-w-md mx-auto hidden">
+            <div id="customizerPanel" class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-4 max-w-md mx-auto">
                 <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-2">
                     <h3 class="font-bold text-sm flex items-center gap-1.5 text-[#731E3E] dark:text-[#E8C995]">
                         <i data-lucide="settings-2" class="w-4 h-4"></i> إعدادات التخصيص
@@ -376,294 +365,415 @@
                         <span class="text-[9px] opacity-60">دقيقة</span>
                     </div>
                 </div>
+
+                <div class="flex items-center justify-between pt-1">
+                    <span class="text-xs opacity-70">أزرار تعديل سريعة للجلسة الحالية:</span>
+                    <div class="flex gap-1.5">
+                        <button onclick="addMinutes(-5)" class="px-2.5 py-1 bg-[#F5EDE0] dark:bg-[#25131D] text-xs font-mono font-bold rounded-lg border border-[#E8C995]/40 hover:bg-[#E8C995]/30">-5د</button>
+                        <button onclick="addMinutes(5)" class="px-2.5 py-1 bg-[#F5EDE0] dark:bg-[#25131D] text-xs font-mono font-bold rounded-lg border border-[#E8C995]/40 hover:bg-[#E8C995]/30">+5د</button>
+                    </div>
+                </div>
             </div>
         </section>
 
+        <!-- التصنيف /ranking -->
+        <section id="pageRanking" class="space-y-6 hidden">
+            <div>
+                <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">تصنيف Focus & Force</h1>
+                <p class="text-xs opacity-70">مقارنة أداء الطالب بين جلسات Pomodoro ودراسة Meet.</p>
+            </div>
+
+            <!-- بطاقة رئيسية للتصنيف -->
+            <div class="bg-[#501426] text-[#F5EDE0] p-6 rounded-3xl border border-[#E8C995]/30 shadow-xl space-y-4">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-xs text-[#E8C995] font-bold">تصنيف Focus & Force</span>
+                        <h2 id="rankStudentName" class="text-2xl font-bold mt-1 text-[#FCF8F1]">الطالب</h2>
+                    </div>
+                    <span id="rankTitleBadge" class="bg-[#E8C995] text-[#451C2B] font-bold text-xs px-3 py-1.5 rounded-full">بداية قوية</span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center font-mono pt-2 border-t border-[#E8C995]/20">
+                    <div class="bg-[#25131D]/60 p-2 rounded-xl border border-[#E8C995]/20">
+                        <span id="rankTotalPts" class="block text-lg font-bold text-[#E8C995]">0</span>
+                        <span class="text-[10px] opacity-70 font-sans">مجموع النقاط</span>
+                    </div>
+                    <div class="bg-[#25131D]/60 p-2 rounded-xl border border-[#E8C995]/20">
+                        <span id="rankTotalTime" class="block text-lg font-bold text-[#E8C995]">0 د</span>
+                        <span class="text-[10px] opacity-70 font-sans">وقت الدراسة</span>
+                    </div>
+                    <div class="bg-[#25131D]/60 p-2 rounded-xl border border-[#E8C995]/20">
+                        <span id="rankTotalSessions" class="block text-lg font-bold text-[#E8C995]">0</span>
+                        <span class="text-[10px] opacity-70 font-sans">عدد الجلسات</span>
+                    </div>
+                </div>
+
+                <!-- شريط التقدم للرتبة التالية -->
+                <div class="space-y-1.5 pt-2">
+                    <div class="flex justify-between text-xs font-medium">
+                        <span id="rankNextText" class="text-[#E8C995]">متبقي 150 نقطة للوصول إلى الرتبة التالية</span>
+                        <span id="rankProgressPercent" class="font-mono">0%</span>
+                    </div>
+                    <div class="w-full h-3 bg-[#25131D] rounded-full overflow-hidden p-0.5 border border-[#E8C995]/30">
+                        <div id="rankProgressBar" class="h-full bg-[#E8C995] rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- مقارنة مرئية بين Pomodoro و Meet -->
+            <div class="space-y-3">
+                <h3 class="font-bold text-sm">مقارنة مصدر النقاط ودقائق الدراسة</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Pomodoro Card -->
+                    <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-[#731E3E] dark:text-[#E8C995] flex items-center gap-1">
+                                <i data-lucide="timer" class="w-4 h-4"></i> جلسات Pomodoro
+                            </span>
+                            <span id="pomoPtsDisplay" class="font-mono text-sm font-bold text-[#731E3E] dark:text-[#E8C995]">0 نقطة</span>
+                        </div>
+                        <div class="text-xs space-y-1.5 opacity-80">
+                            <div class="flex justify-between"><span>الدقائق الكلية:</span><span id="pomoMinsDisplay" class="font-mono font-bold">0 دقيقة</span></div>
+                            <div class="flex justify-between"><span>عدد الجلسات:</span><span id="pomoSessDisplay" class="font-mono font-bold">0 جلسة</span></div>
+                            <div class="flex justify-between items-center pt-1 border-t border-[#E8C995]/20">
+                                <span>مصدر النقاط:</span>
+                                <span class="text-[10px] bg-[#E8C995]/20 px-2 py-0.5 rounded-md font-bold">2 نقاط لكل دقيقة</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Meet Card -->
+                    <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-[#6C9D78] flex items-center gap-1">
+                                <i data-lucide="video" class="w-4 h-4"></i> جلسات Google Meet
+                            </span>
+                            <span id="meetPtsDisplay" class="font-mono text-sm font-bold text-[#6C9D78]">0 نقطة</span>
+                        </div>
+                        <div class="text-xs space-y-1.5 opacity-80">
+                            <div class="flex justify-between"><span>الدقائق الكلية:</span><span id="meetMinsDisplay" class="font-mono font-bold">0 دقيقة</span></div>
+                            <div class="flex justify-between"><span>عدد الجلسات:</span><span id="meetSessDisplay" class="font-mono font-bold">0 جلسة</span></div>
+                            <div class="flex justify-between items-center pt-1 border-t border-[#E8C995]/20">
+                                <span>مصدر النقاط:</span>
+                                <span class="text-[10px] bg-[#6C9D78]/20 px-2 py-0.5 rounded-md font-bold text-[#6C9D78]">1 نقطة لكل دقيقة</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- سجل آخر جلسات الدراسة -->
+            <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 space-y-4">
+                <h3 class="font-bold text-sm">سجل آخر جلسات الدراسة</h3>
+                <div id="historyList" class="space-y-2 text-xs">
+                    <!-- يتم إدراج السجل ديناميكياً -->
+                </div>
+            </div>
+        </section>
+
+        <!-- الإعدادات /settings -->
+        <section id="pageSettings" class="space-y-6 hidden">
+            <div>
+                <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">الإعدادات والقصة</h1>
+                <p class="text-xs opacity-70">تفاصيل صغيرة تجعل العودة إلى التركيز أسهل.</p>
+            </div>
+
+            <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
+                <h3 class="font-bold text-sm">قصة Focus & Force</h3>
+                <p class="text-xs opacity-70">استرجع بدايات القناة والرحلة الملهمة لتجديد الشغف.</p>
+                <button onclick="replayStory()" class="px-4 py-2.5 bg-[#E8C995] text-[#451C2B] text-xs font-bold rounded-xl hover:bg-[#F4DFBE] transition">إعادة عرض القصة 📖</button>
+            </div>
+        </section>
     </main>
 
-    <!-- شريط التنقل السفلي -->
-    <nav class="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 bg-[#FCF8F1]/90 dark:bg-[#501426]/90 backdrop-blur-md border border-[#E8C995]/40 rounded-3xl px-6 py-3 shadow-2xl flex items-center gap-6 text-xs font-semibold">
-        <button id="navHome" onclick="navigateTo('/')" class="flex flex-col items-center gap-1 text-[#731E3E] dark:text-[#E8C995]">
-            <i data-lucide="home" class="w-5 h-5"></i>
-            <span>الرئيسية</span>
-        </button>
-        <button id="navLibrary" onclick="navigateTo('/library')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-            <i data-lucide="book-open" class="w-5 h-5"></i>
-            <span>المكتبة</span>
-        </button>
-        <button id="navPomodoro" onclick="navigateTo('/pomodoro')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-            <i data-lucide="timer" class="w-5 h-5"></i>
-            <span>المؤقت</span>
-        </button>
-        <button id="navStudy" onclick="navigateTo('/study')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-            <i data-lucide="video" class="w-5 h-5"></i>
-            <span>Meet</span>
-        </button>
+    <!-- شريط التنقل السفلي الثابت (Navbar) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-30 bg-[#FCF8F1]/90 dark:bg-[#501426]/90 backdrop-blur-md border-t border-[#E8C995]/30 px-2 py-2.5">
+        <div class="max-w-md mx-auto flex items-center justify-around text-[10px]">
+            <button onclick="navigateTo('/')" class="flex flex-col items-center gap-1 text-[#731E3E] dark:text-[#E8C995] font-bold transition">
+                <i data-lucide="home" class="w-5 h-5"></i>
+                <span>الرئيسية</span>
+            </button>
+            <button onclick="navigateTo('/library')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+                <i data-lucide="book-open" class="w-5 h-5"></i>
+                <span>المكتبة</span>
+            </button>
+            <button onclick="navigateTo('/study')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+                <i data-lucide="video" class="w-5 h-5"></i>
+                <span>Meet</span>
+            </button>
+            <button onclick="navigateTo('/pomodoro')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+                <i data-lucide="timer" class="w-5 h-5"></i>
+                <span>المؤقت</span>
+            </button>
+            <button onclick="navigateTo('/ranking')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+                <i data-lucide="trophy" class="w-5 h-5"></i>
+                <span>التصنيف</span>
+            </button>
+            <button onclick="navigateTo('/settings')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+                <i data-lucide="settings" class="w-5 h-5"></i>
+                <span>الإعدادات</span>
+            </button>
+        </div>
     </nav>
 
-    <!-- البرمجيات والدوال JavaScript -->
     <script>
-        // 1. البيانات والقصة
-        const storySlides = [
-            {
-                year: "2024",
-                badge: "بداية القصة 🍃🌱",
-                title: "من طالبة تبحث عن ملخصات…",
-                text: "كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب والبحث عن المصادر الموثوقة وسط تشتت كبير."
-            },
-            {
-                year: "2025",
-                badge: "التطور والنمو 🚀",
-                title: "إلى صناعة مجتمع دراسي مخصص…",
-                text: "قررت إنشاء مساحة تجمع بين الانضباط والهدوء، لتوفير بيئة دراسية متكاملة لكل طالب بكالوريا."
-            },
-            {
-                year: "2026 - 2027",
-                badge: "الهدف والغاية 🎓✨",
-                title: "FOCUS & FORCE بين يديك الآن",
-                text: "هدفنا أن نرافقك خطوة بخطوة نحو النجاح والتميز بأفضل الوسائل والأدوات الذكية."
-            }
+        lucide.createIcons();
+
+        // بيانات شرائح القصة
+        const slides = [
+            { year: '2024', badge: 'بداية القصة 🍃🌱', title: 'من طالبة تبحث عن ملخصات…', text: 'كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث بين الصفحات عن مصادر صحيحة...✨' },
+            { year: '2024', badge: 'حلم صغير... 🤍', title: 'كل معلومة كانت خطوة', text: 'بدأت القناة بمجهودي الفردي وبكثير من الحب. كل معلومة كانت خطوة...' },
+            { year: '2025', badge: 'الشرارة الحقيقية ❤️‍🔥', title: 'كبرنا مع بعضنا', text: 'عندما قررت خوض تجربة البكالوريا للمرة الثانية، وسط كل الضغط والتعب...' },
+            { year: '2026', badge: 'الحلم يكبر ✨', title: 'ما بقيناش وحدنا', text: 'سنوات الصبر والعمل المتواصل جعلت Focus & Force تتحول إلى عائلة تجمع الجميع...' },
+            { year: '2027', badge: 'عهد جديد 💗', title: 'كل محاولة صنعتنا', text: 'كل تجربة مرت بي علمتني الكثير، كل سقوط قوّاني...' },
+            { year: '∞', badge: 'عائلة نكبر معها', title: 'هي قطعة حقيقية من قلبي', text: 'رسالة نعيشها سوياً كل يوم. أنا هنا لأكون السند الذي تمنيتُ لو وجدته 🍓✨' }
         ];
 
-        let currentSlide = 0;
-        let userProfile = JSON.parse(localStorage.getItem('ff_user_profile')) || null;
-        let userStats = JSON.parse(localStorage.getItem('ff_user_stats')) || { points: 0, minutes: 0 };
+        let currentSlideIdx = 0;
+        let slideTimer = null;
 
-        // 2. إدارة السلايدات
         function renderSlide() {
-            const slide = storySlides[currentSlide];
-            document.getElementById('slideYear').innerText = slide.year;
-            document.getElementById('slideBadge').innerText = slide.badge;
-            document.getElementById('slideTitle').innerText = slide.title;
-            document.getElementById('slideText').innerText = slide.text;
+            const s = slides[currentSlideIdx];
+            document.getElementById('slideYear').innerText = s.year;
+            document.getElementById('slideBadge').innerText = s.badge;
+            document.getElementById('slideTitle').innerText = s.title;
+            document.getElementById('slideText').innerText = s.text;
 
-            const dotsContainer = document.getElementById('slideDots');
-            dotsContainer.innerHTML = '';
-            storySlides.forEach((_, idx) => {
-                const dot = document.createElement('div');
-                dot.className = `w-2.5 h-2.5 rounded-full transition-all ${idx === currentSlide ? 'bg-[#E8C995] w-6' : 'bg-[#E8C995]/30'}`;
-                dotsContainer.appendChild(dot);
-            });
+            const isLast = currentSlideIdx === slides.length - 1;
+            document.getElementById('nextSlideBtn').innerText = isLast ? 'نبدأ رحلتي للبكالوريا' : 'تابع القصة';
 
-            const nextBtn = document.getElementById('nextSlideBtn');
-            if (currentSlide === storySlides.length - 1) {
-                nextBtn.innerText = "ابدأ رحلتك الآن";
-            } else {
-                nextBtn.innerText = "تابع القصة";
-            }
+            const dots = document.getElementById('slideDots');
+            dots.innerHTML = slides.map((_, i) => `<div class="h-2 rounded-full transition-all ${i === currentSlideIdx ? 'w-8 bg-[#E8C995]' : 'w-2 bg-[#E8C995]/30'}"></div>`).join('');
         }
 
         function nextSlide() {
-            if (currentSlide < storySlides.length - 1) {
-                currentSlide++;
+            if (currentSlideIdx < slides.length - 1) {
+                currentSlideIdx++;
                 renderSlide();
             } else {
+                clearInterval(slideTimer);
                 document.getElementById('storyScreen').classList.add('hidden');
-                if (!userProfile) {
-                    document.getElementById('profileScreen').classList.remove('hidden');
-                } else {
-                    showWelcomeBanner();
-                }
+                checkProfile();
             }
         }
 
-        // 3. إدارة الملف الشخصي
-        function toggleSpecialization() {
-            const track = document.getElementById('track').value;
-            const specContainer = document.getElementById('specContainer');
-            if (track === 'تقني رياضي') {
-                specContainer.classList.remove('hidden');
+        // إحصائيات والملف الشخصي والبيانات المخزنة
+        let profile = JSON.parse(localStorage.getItem('focus-force-profile') || 'null');
+        
+        let pomodoroMinutes = parseInt(localStorage.getItem('pomodoroMinutes') || '0');
+        let meetMinutes = parseInt(localStorage.getItem('meetMinutes') || '0');
+        let pomodoroSessions = parseInt(localStorage.getItem('pomodoroSessions') || '0');
+        let meetSessions = parseInt(localStorage.getItem('meetSessions') || '0');
+        let pomodoroPoints = parseInt(localStorage.getItem('pomodoroPoints') || '0');
+        let meetPoints = parseInt(localStorage.getItem('meetPoints') || '0');
+        let totalPoints = parseInt(localStorage.getItem('totalPoints') || '0');
+        let studyHistory = JSON.parse(localStorage.getItem('studyHistory') || '[]');
+
+        function checkProfile() {
+            if (!profile) {
+                document.getElementById('profileScreen').classList.remove('hidden');
             } else {
-                specContainer.classList.add('hidden');
+                updateUI();
             }
+        }
+
+        function toggleSpecialization() {
+            const val = document.getElementById('track').value;
+            document.getElementById('specContainer').classList.toggle('hidden', val !== 'تقني رياضي');
         }
 
         function saveProfile(e) {
             e.preventDefault();
-            const firstName = document.getElementById('firstName').value.trim();
-            const lastName = document.getElementById('lastName').value.trim();
-            const track = document.getElementById('track').value;
-            const specialization = track === 'تقني رياضي' ? document.getElementById('specialization').value : '';
-
-            userProfile = { firstName, lastName, track, specialization };
-            localStorage.setItem('ff_user_profile', JSON.stringify(userProfile));
-
+            profile = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                track: document.getElementById('track').value,
+                specialization: document.getElementById('specialization').value
+            };
+            localStorage.setItem('focus-force-profile', JSON.stringify(profile));
             document.getElementById('profileScreen').classList.add('hidden');
-            showWelcomeBanner();
-        }
 
-        function showWelcomeBanner() {
-            if (!userProfile) return;
-            document.getElementById('welcomeName').innerText = `أهلاً، ${userProfile.firstName} ${userProfile.lastName}`;
-            document.getElementById('welcomeText').innerText = `تم إعداد مساحتك بنجاح لشعبة ${userProfile.track} ${userProfile.specialization ? '(' + userProfile.specialization + ')' : ''}. نتمنى لك رحلة موفقة!`;
+            document.getElementById('welcomeName').innerText = `أهلا، ${profile.firstName} ${profile.lastName}`;
+            document.getElementById('welcomeText').innerText = `مساحتك حضرت. راح نرافقوك في ${profile.track}، خطوة بخطوة.`;
             document.getElementById('welcomeBanner').classList.remove('hidden');
-            updateUI();
         }
 
         function closeWelcome() {
             document.getElementById('welcomeBanner').classList.add('hidden');
-        }
-
-        // 4. نظام النقاط والرتب والتحديث
-        function addPoints(pts, mins) {
-            userStats.points += pts;
-            userStats.minutes += mins;
-            localStorage.setItem('ff_user_stats', JSON.stringify(userStats));
             updateUI();
-            showToast(`أحسنت! أضفت ${pts} نقطة إلى رصيدك 🎉`);
         }
 
-        function getRank(points) {
-            if (points < 50) return "بداية قوية 🌿";
-            if (points < 200) return "طالب مجتهد 📚";
-            if (points < 500) return "محارب البكالوريا ⚔️";
-            return "أسطورة FOCUS & FORCE 👑";
-        }
-
-        function updateUI() {
-            if (userProfile) {
-                document.getElementById('homeGreeting').innerText = `أهلاً يا ${userProfile.firstName}، خلّينا ننجز شيئاً.`;
-            }
-            document.getElementById('userPoints').innerText = `${userStats.points} نقطة`;
-            document.getElementById('userStudyTime').innerText = `إجمالي الدقائق الدراسية: ${userStats.minutes} دقيقة`;
-            document.getElementById('userRank').innerText = getRank(userStats.points);
-        }
-
-        // 5. التنبيهات (Toast Notification)
         function showToast(msg) {
             const toast = document.getElementById('toastNotification');
             document.getElementById('toastMsg').innerText = msg;
             toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
-            toast.classList.add('opacity-100', 'translate-y-0');
-
             setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
                 toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
-            }, 3500);
+            }, 4000);
         }
 
-        // 6. التنقل بين الصفحات (Navigation)
-        function navigateTo(path) {
-            const pages = {
-                '/': 'pageHome',
-                '/library': 'pageLibrary',
-                '/pomodoro': 'pagePomodoro',
-                '/study': 'pageStudy'
-            };
+        function saveStatsToStorage() {
+            localStorage.setItem('pomodoroMinutes', pomodoroMinutes);
+            localStorage.setItem('meetMinutes', meetMinutes);
+            localStorage.setItem('pomodoroSessions', pomodoroSessions);
+            localStorage.setItem('meetSessions', meetSessions);
+            localStorage.setItem('pomodoroPoints', pomodoroPoints);
+            localStorage.setItem('meetPoints', meetPoints);
+            localStorage.setItem('totalPoints', totalPoints);
+            localStorage.setItem('studyHistory', JSON.stringify(studyHistory));
+        }
 
-            const navs = {
-                '/': 'navHome',
-                '/library': 'navLibrary',
-                '/pomodoro': 'navPomodoro',
-                '/study': 'navStudy'
-            };
-
-            Object.values(pages).forEach(pId => document.getElementById(pId).classList.add('hidden'));
-            Object.values(navs).forEach(nId => {
-                const el = document.getElementById(nId);
-                el.classList.remove('text-[#731E3E]', 'dark:text-[#E8C995]');
-                el.classList.add('opacity-60');
+        function addHistoryItem(type, durationMins, ptsGained) {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('ar-DZ', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+            studyHistory.unshift({
+                type,
+                duration: durationMins,
+                points: ptsGained,
+                date: dateStr
             });
-
-            const activePage = pages[path] || 'pageHome';
-            const activeNav = navs[path] || 'navHome';
-
-            document.getElementById(activePage).classList.remove('hidden');
-            const activeNavEl = document.getElementById(activeNav);
-            activeNavEl.classList.remove('opacity-60');
-            activeNavEl.classList.add('text-[#731E3E]', 'dark:text-[#E8C995]');
+            saveStatsToStorage();
         }
 
-        // 7. العداد التنازلي للبكالوريا
-        function startBacCountdown() {
-            const targetDate = new Date('June 7, 2027 08:00:00').getTime();
+        function updateUI() {
+            if (profile) {
+                document.getElementById('homeGreeting').innerText = `أهلاً يا ${profile.firstName}، خلّينا ننجز شيئاً.`;
+                document.getElementById('rankStudentName').innerText = `${profile.firstName} ${profile.lastName}`;
+            }
 
-            setInterval(() => {
-                const now = new Date().getTime();
-                const diff = targetDate - now;
+            totalPoints = pomodoroPoints + meetPoints;
+            let rank = "بداية قوية";
+            let nextRankPts = 150;
 
-                if (diff > 0) {
-                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            if (totalPoints >= 800) {
+                rank = "قائد العائلة";
+                nextRankPts = 800;
+            } else if (totalPoints >= 400) {
+                rank = "مركز";
+                nextRankPts = 800;
+            } else if (totalPoints >= 150) {
+                rank = "مستعد";
+                nextRankPts = 400;
+            }
 
-                    document.getElementById('cdDays').innerText = days;
-                    document.getElementById('cdHours').innerText = hours;
-                    document.getElementById('cdMinutes').innerText = minutes;
-                    document.getElementById('cdSeconds').innerText = seconds;
-                }
-            }, 1000);
+            const totalTime = pomodoroMinutes + meetMinutes;
+            const totalSess = pomodoroSessions + meetSessions;
+
+            // تحديث بطاقات الصفحة الرئيسية
+            document.getElementById('userRank').innerText = rank;
+            document.getElementById('userPoints').innerText = `${totalPoints} نقطة`;
+            document.getElementById('userStudyTime').innerText = `إجمالي الدقائق الدراسية: ${totalTime} دقيقة`;
+
+            // تحديث صفحة التصنيف الشاملة
+            document.getElementById('rankTitleBadge').innerText = rank;
+            document.getElementById('rankTotalPts').innerText = totalPoints;
+            document.getElementById('rankTotalTime').innerText = `${totalTime} د`;
+            document.getElementById('rankTotalSessions').innerText = totalSess;
+
+            document.getElementById('pomoPtsDisplay').innerText = `${pomodoroPoints} نقطة`;
+            document.getElementById('pomoMinsDisplay').innerText = `${pomodoroMinutes} دقيقة`;
+            document.getElementById('pomoSessDisplay').innerText = `${pomodoroSessions} جلسة`;
+
+            document.getElementById('meetPtsDisplay').innerText = `${meetPoints} نقطة`;
+            document.getElementById('meetMinsDisplay').innerText = `${meetMinutes} دقيقة`;
+            document.getElementById('meetSessDisplay').innerText = `${meetSessions} جلسة`;
+
+            // شريط النسبة والمتبقي للرتبة القادمة
+            if (totalPoints >= 800) {
+                document.getElementById('rankNextText').innerText = "أعلى رتبة وصلت إليها 🎉";
+                document.getElementById('rankProgressPercent').innerText = "100%";
+                document.getElementById('rankProgressBar').style.width = "100%";
+            } else {
+                const ptsRemaining = nextRankPts - totalPoints;
+                const percent = Math.min(100, Math.floor((totalPoints / nextRankPts) * 100));
+                document.getElementById('rankNextText').innerText = `النقاط المتبقية للوصول إلى الرتبة التالية: ${ptsRemaining} نقطة`;
+                document.getElementById('rankProgressPercent').innerText = `${percent}%`;
+                document.getElementById('rankProgressBar').style.width = `${percent}%`;
+            }
+
+            // عرض سجل الجلسات
+            const listEl = document.getElementById('historyList');
+            if (studyHistory.length === 0) {
+                listEl.innerHTML = `<div class="text-center opacity-60 py-4">لا يوجد جلسات مسجلة بعد. ابدأ أول جلسة الآن!</div>`;
+            } else {
+                listEl.innerHTML = studyHistory.slice(0, 10).map(h => `
+                    <div class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-2xl border border-[#E8C995]/20 flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="${h.type === 'Pomodoro' ? 'timer' : 'video'}" class="w-4 h-4 ${h.type === 'Pomodoro' ? 'text-[#731E3E] dark:text-[#E8C995]' : 'text-[#6C9D78]'}"></i>
+                            <div>
+                                <span class="font-bold">${h.type}</span>
+                                <span class="block text-[10px] opacity-60">${h.date}</span>
+                            </div>
+                        </div>
+                        <div class="text-left font-mono">
+                            <span class="font-bold text-sm text-[#731E3E] dark:text-[#E8C995]">+${h.points} نقطة</span>
+                            <span class="block text-[10px] opacity-60">${h.duration} دقيقة</span>
+                        </div>
+                    </div>
+                `).join('');
+                lucide.createIcons();
+            }
         }
 
-        // 8. مؤقت Pomodoro وتخصيص الأوقات
-        let pomoTimes = { focus: 25, short: 5, long: 15 };
-        let currentPomoMode = 'focus';
-        let pomoTimeLeft = pomoTimes.focus * 60;
-        let pomoTimer = null;
-        let isPomoRunning = false;
+        // التوجيه والتنقل بين الصفحات
+        function navigateTo(path) {
+            document.querySelectorAll('#appPages > section').forEach(sec => sec.classList.add('hidden'));
+            if (path === '/') document.getElementById('pageHome').classList.remove('hidden');
+            if (path === '/library') document.getElementById('pageLibrary').classList.remove('hidden');
+            if (path === '/study') document.getElementById('pageStudy').classList.remove('hidden');
+            if (path === '/pomodoro') document.getElementById('pagePomodoro').classList.remove('hidden');
+            if (path === '/ranking') document.getElementById('pageRanking').classList.remove('hidden');
+            if (path === '/settings') document.getElementById('pageSettings').classList.remove('hidden');
+        }
+
+        // العد التنازلي للبكالوريا (07 يونيو 2027)
+        function updateCountdown() {
+            const target = new Date('June 7, 2027 00:00:00').getTime();
+            const now = new Date().getTime();
+            const diff = target - now;
+
+            if (diff > 0) {
+                document.getElementById('cdDays').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+                document.getElementById('cdHours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById('cdMinutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('cdSeconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+            }
+        }
+        setInterval(updateCountdown, 1000);
+
+        // منطق مؤقت Pomodoro وتخصيص الوقت
+        let pomoMode = 'focus';
+        let customTimes = { focus: 25, short: 5, long: 15 };
+        let pomoMinutes = 25;
+        let pomoSeconds = 0;
+        let pomoTotalDurationSeconds = 25 * 60;
+        let pomoIsRunning = false;
+        let pomoInterval = null;
 
         function setPomoMode(mode) {
-            currentPomoMode = mode;
-            pomoTimeLeft = pomoTimes[mode] * 60;
-            isPomoRunning = false;
-            clearInterval(pomoTimer);
+            pomoMode = mode;
+            document.getElementById('modeFocusBtn').className = `flex-1 py-2 text-xs font-bold rounded-xl transition ${mode === 'focus' ? 'bg-[#731E3E] text-[#F5EDE0]' : 'opacity-70'}`;
+            document.getElementById('modeShortBtn').className = `flex-1 py-2 text-xs font-bold rounded-xl transition ${mode === 'short' ? 'bg-[#731E3E] text-[#F5EDE0]' : 'opacity-70'}`;
+            document.getElementById('modeLongBtn').className = `flex-1 py-2 text-xs font-bold rounded-xl transition ${mode === 'long' ? 'bg-[#731E3E] text-[#F5EDE0]' : 'opacity-70'}`;
 
             const titles = { focus: 'جلسة تركيز', short: 'استراحة قصيرة', long: 'استراحة طويلة' };
             document.getElementById('pomoModeTitle').innerText = titles[mode];
-
-            const btns = { focus: 'modeFocusBtn', short: 'modeShortBtn', long: 'modeLongBtn' };
-            Object.values(btns).forEach(bId => {
-                const el = document.getElementById(bId);
-                el.className = "flex-1 py-2 text-xs font-bold rounded-xl opacity-70 transition";
-            });
-            document.getElementById(btns[mode]).className = "flex-1 py-2 text-xs font-bold rounded-xl transition bg-[#731E3E] text-[#F5EDE0]";
-
-            updatePomoDisplay();
+            resetPomodoro();
         }
 
-        function updatePomoDisplay() {
-            const mins = Math.floor(pomoTimeLeft / 60);
-            const secs = pomoTimeLeft % 60;
-            document.getElementById('pomoTime').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-
-            const total = pomoTimes[currentPomoMode] * 60;
-            const pct = ((total - pomoTimeLeft) / total) * 100;
-            document.getElementById('pomoCircle').style.setProperty('--pomo-progress', `${pct}%`);
-
-            document.getElementById('pomoStartBtnText').innerText = isPomoRunning ? "إيقاف مؤقت" : "ابدأ الآن";
+        function updateCustomTimes() {
+            customTimes.focus = parseInt(document.getElementById('customFocusInput').value) || 25;
+            customTimes.short = parseInt(document.getElementById('customShortInput').value) || 5;
+            customTimes.long = parseInt(document.getElementById('customLongInput').value) || 15;
+            resetPomodoro();
         }
 
-        function togglePomodoro() {
-            if (isPomoRunning) {
-                clearInterval(pomoTimer);
-                isPomoRunning = false;
-            } else {
-                isPomoRunning = true;
-                pomoTimer = setInterval(() => {
-                    if (pomoTimeLeft > 0) {
-                        pomoTimeLeft--;
-                        updatePomoDisplay();
-                    } else {
-                        clearInterval(pomoTimer);
-                        isPomoRunning = false;
-                        if (currentPomoMode === 'focus') {
-                            addPoints(pomoTimes.focus * 2, pomoTimes.focus);
-                        } else {
-                            showToast("انتهت الاستراحة! حان وقت العودة للتركيز.");
-                        }
-                        resetPomodoro();
-                    }
-                }, 1000);
-            }
-            updatePomoDisplay();
-        }
-
-        function resetPomodoro() {
-            clearInterval(pomoTimer);
-            isPomoRunning = false;
-            pomoTimeLeft = pomoTimes[currentPomoMode] * 60;
-            updatePomoDisplay();
+        function addMinutes(mins) {
+            let totalMins = pomoMinutes + mins;
+            if (totalMins < 1) totalMins = 1;
+            pomoMinutes = totalMins;
+            pomoTotalDurationSeconds = pomoMinutes * 60 + pomoSeconds;
+            updateTimerDisplay();
         }
 
         function toggleCustomizer() {
@@ -671,84 +781,136 @@
             panel.classList.toggle('hidden');
         }
 
-        function updateCustomTimes() {
-            const focusVal = parseInt(document.getElementById('customFocusInput').value) || 25;
-            const shortVal = parseInt(document.getElementById('customShortInput').value) || 5;
-            const longVal = parseInt(document.getElementById('customLongInput').value) || 15;
-
-            pomoTimes = { focus: focusVal, short: shortVal, long: longVal };
-            resetPomodoro();
+        function updateTimerDisplay() {
+            document.getElementById('pomoTime').innerText = `${String(pomoMinutes).padStart(2, '0')}:${String(pomoSeconds).padStart(2, '0')}`;
+            const currentSecs = pomoMinutes * 60 + pomoSeconds;
+            const progressPct = pomoTotalDurationSeconds > 0 ? ((pomoTotalDurationSeconds - currentSecs) / pomoTotalDurationSeconds) * 100 : 0;
+            document.getElementById('pomoCircle').style.setProperty('--pomo-progress', `${progressPct}%`);
         }
 
-        // 9. جلسات Meet الدراسية
-        let meetTimer = null;
-        let meetSeconds = 0;
+        function togglePomodoro() {
+            const btnText = document.getElementById('pomoStartBtnText');
+            if (pomoIsRunning) {
+                clearInterval(pomoInterval);
+                pomoIsRunning = false;
+                btnText.innerText = "تابع الجلسة";
+            } else {
+                pomoIsRunning = true;
+                btnText.innerText = "إيقاف مؤقت";
+                pomoInterval = setInterval(() => {
+                    if (pomoSeconds === 0) {
+                        if (pomoMinutes === 0) {
+                            clearInterval(pomoInterval);
+                            pomoIsRunning = false;
+                            
+                            if (pomoMode === 'focus') {
+                                const duration = customTimes.focus;
+                                const ptsGained = duration * 2;
+                                
+                                pomodoroMinutes += duration;
+                                pomodoroSessions += 1;
+                                pomodoroPoints += ptsGained;
+                                totalPoints += ptsGained;
+
+                                addHistoryItem('Pomodoro', duration, ptsGained);
+                                showToast(`أحسنت! كملت جلسة Pomodoro وربحت ${ptsGained} نقطة.`);
+                                updateUI();
+                            } else {
+                                showToast("انتهت الاستراحة، حان وقت العودة للتركيز!");
+                            }
+
+                            resetPomodoro();
+                            return;
+                        }
+                        pomoMinutes--;
+                        pomoSeconds = 59;
+                    } else {
+                        pomoSeconds--;
+                    }
+                    updateTimerDisplay();
+                }, 1000);
+            }
+        }
+
+        function resetPomodoro() {
+            clearInterval(pomoInterval);
+            pomoIsRunning = false;
+            pomoMinutes = customTimes[pomoMode];
+            pomoSeconds = 0;
+            pomoTotalDurationSeconds = pomoMinutes * 60;
+            updateTimerDisplay();
+            document.getElementById('pomoStartBtnText').innerText = "ابدأ الآن";
+        }
+
+        // جلسات Google Meet
+        let meetStartTime = null;
+        let meetTimerInterval = null;
 
         function startMeetSession() {
+            if (meetStartTime) return;
+            meetStartTime = new Date();
             document.getElementById('btnStartMeet').classList.add('hidden');
             document.getElementById('btnEndMeet').classList.remove('hidden');
             document.getElementById('meetActiveBar').classList.remove('hidden');
 
-            meetSeconds = 0;
-            meetTimer = setInterval(() => {
-                meetSeconds++;
-                const mins = Math.floor(meetSeconds / 60);
-                const secs = meetSeconds % 60;
-                document.getElementById('meetTimerVal').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            meetTimerInterval = setInterval(() => {
+                const diffSecs = Math.floor((new Date() - meetStartTime) / 1000);
+                const m = Math.floor(diffSecs / 60);
+                const s = diffSecs % 60;
+                document.getElementById('meetTimerVal').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
             }, 1000);
         }
 
         function endMeetSession() {
-            clearInterval(meetTimer);
-            const totalMinutes = Math.floor(meetSeconds / 60);
+            if (!meetStartTime) return;
+            const endTime = new Date();
+            const durationMins = Math.floor((endTime - meetStartTime) / (1000 * 60));
 
-            if (totalMinutes > 0) {
-                addPoints(totalMinutes, totalMinutes);
-            } else {
-                showToast("الجلسة كانت أقل من دقيقة، لم يتم إضافة نقاط.");
-            }
+            clearInterval(meetTimerInterval);
+            meetStartTime = null;
 
             document.getElementById('btnStartMeet').classList.remove('hidden');
             document.getElementById('btnEndMeet').classList.add('hidden');
             document.getElementById('meetActiveBar').classList.add('hidden');
+            document.getElementById('meetTimerVal').innerText = "00:00";
+
+            if (durationMins < 1) {
+                showToast("الجلسة كانت أقل من دقيقة واحدة، لم تُسجل النقاط.");
+                return;
+            }
+
+            const ptsGained = durationMins * 1;
+            meetMinutes += durationMins;
+            meetSessions += 1;
+            meetPoints += ptsGained;
+            totalPoints += ptsGained;
+
+            addHistoryItem('Meet', durationMins, ptsGained);
+            showToast(`سجلت ${durationMins} دقيقة Meet وربحت ${ptsGained} نقطة.`);
+            updateUI();
         }
 
-        // 10. الوضع الليلي (Dark Mode)
+        // الوضع الليلي وإعادة القصة
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
         }
 
-        // 11. تسجيل الـ Service Worker لجعل التطبيق جاهز للتثبيت والعمل أوفلاين (PWA)
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                const swCode = `
-                    const CACHE_NAME = 'ff-v1';
-                    self.addEventListener('install', e => e.waitUntil(self.skipWaiting()));
-                    self.addEventListener('activate', e => e.waitUntil(self.clients.claim()));
-                    self.addEventListener('fetch', e => {
-                        e.respondWith(
-                            fetch(e.request).catch(() => caches.match(e.request))
-                        );
-                    });
-                `;
-                const blob = new Blob([swCode], { type: 'text/javascript' });
-                const blobUrl = URL.createObjectURL(blob);
-                navigator.serviceWorker.register(blobUrl).catch(() => {});
-            });
+        function replayStory() {
+            currentSlideIdx = 0;
+            renderSlide();
+            document.getElementById('storyScreen').classList.remove('hidden');
         }
 
-        // تهيئة التطبيق عند الفتح
-        window.onload = function() {
-            renderSlide();
-            startBacCountdown();
-            lucide.createIcons();
-            
-            // تخطي القصة تلقائياً إذا كان المستخدم قد أعد ملفه الشخصي سابقاً
-            if (userProfile) {
-                document.getElementById('storyScreen').classList.add('hidden');
-                updateUI();
+        // التهيئة الابتدائية عند الفتح
+        renderSlide();
+        slideTimer = setInterval(() => {
+            if (currentSlideIdx < slides.length - 1) {
+                currentSlideIdx++;
+                renderSlide();
             }
-        };
+        }, 5200);
+
+        updateUI();
     </script>
 </body>
 </html>
