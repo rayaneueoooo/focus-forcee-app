@@ -1,0 +1,12 @@
+{
+  "background_color": "#25131d",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Focus &amp; Force",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Focus&amp;Force",
+  "start_url": "/",
+  "theme_color": "#501426",
+  "description": "مساحة الطالب الجزائري المقبل على شهادة البكالوريا"
+}
