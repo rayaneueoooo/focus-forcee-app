@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#731E3E">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="./icon.png">
     <title>FOCUS & FORCE - study with purpose</title>
     
     <!-- الخطوط المحددة -->
@@ -68,6 +74,16 @@
     </style>
 </head>
 <body class="min-h-screen pb-28 pt-6 px-4 max-w-4xl mx-auto transition-colors duration-300">
+
+
+    <!-- PWA Install Button - added without changing the existing design -->
+    <div id="pwaInstallWrap" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 hidden">
+        <button id="pwaInstallBtn"
+            class="flex items-center gap-2 px-5 py-3 bg-[#731E3E] text-[#F5EDE0] font-bold rounded-2xl shadow-2xl border border-[#E8C995]/40 text-xs hover:bg-[#501426] transition">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span>تثبيت Focus & Force</span>
+        </button>
+    </div>
 
     <!-- Toast Notification (إشعار التنبيه) -->
     <div id="toastNotification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-[#731E3E] text-[#F5EDE0] px-6 py-3 rounded-2xl border border-[#E8C995] shadow-2xl transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-4 text-xs font-bold flex items-center gap-2">
@@ -912,5 +928,48 @@
 
         updateUI();
     </script>
+
+    <!-- PWA install logic -->
+    <script>
+        let deferredInstallPrompt = null;
+
+        window.addEventListener('beforeinstallprompt', (event) => {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+            const wrap = document.getElementById('pwaInstallWrap');
+            if (wrap) wrap.classList.remove('hidden');
+            if (window.lucide) lucide.createIcons();
+        });
+
+        document.addEventListener('click', async (event) => {
+            const button = event.target.closest('#pwaInstallBtn');
+            if (!button || !deferredInstallPrompt) return;
+
+            deferredInstallPrompt.prompt();
+            const choice = await deferredInstallPrompt.userChoice;
+
+            if (choice.outcome === 'accepted') {
+                deferredInstallPrompt = null;
+                document.getElementById('pwaInstallWrap')?.classList.add('hidden');
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            deferredInstallPrompt = null;
+            document.getElementById('pwaInstallWrap')?.classList.add('hidden');
+            if (typeof showToast === 'function') {
+                showToast('تم تثبيت Focus & Force بنجاح 📲');
+            }
+        });
+
+        // Register the Service Worker for PWA support.
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .catch((error) => console.error('PWA Service Worker registration failed:', error));
+            });
+        }
+    </script>
+
 </body>
 </html>
