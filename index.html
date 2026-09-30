@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOCUS & FORCE - study with purpose</title>
     
+    <!-- إعدادات التطبيق للهواتف والحاسوب -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Focus & Force">
+    <link rel="apple-touch-icon" href="icon.png">
+    
     <!-- الخطوط المحددة -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -518,55 +526,43 @@
             document.getElementById('userRank').innerText = getRank(userStats.points);
         }
 
-        // 5. التنبيهات (Toast Notification)
-        function showToast(msg) {
-            const toast = document.getElementById('toastNotification');
-            document.getElementById('toastMsg').innerText = msg;
-            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
-            toast.classList.add('opacity-100', 'translate-y-0');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
-                toast.classList.remove('opacity-100', 'translate-y-0');
-            }, 3500);
-        }
-
-        // 6. التنقل بين الصفحات
+        // 5. نظام التنقل
         function navigateTo(path) {
             const pages = {
                 '/': 'pageHome',
                 '/library': 'pageLibrary',
-                '/study': 'pageStudy',
-                '/pomodoro': 'pagePomodoro'
+                '/pomodoro': 'pagePomodoro',
+                '/study': 'pageStudy'
             };
+
+            Object.values(pages).forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+
+            const activePageId = pages[path] || 'pageHome';
+            document.getElementById(activePageId).classList.remove('hidden');
 
             const navBtns = {
                 '/': 'navHome',
                 '/library': 'navLibrary',
-                '/study': 'navStudy',
-                '/pomodoro': 'navPomodoro'
+                '/pomodoro': 'navPomodoro',
+                '/study': 'navStudy'
             };
 
-            Object.values(pages).forEach(id => document.getElementById(id).classList.add('hidden'));
-            const activePage = pages[path] || 'pageHome';
-            document.getElementById(activePage).classList.remove('hidden');
-
-            // تحديث تصميم الأزرار في الشريط السفلي
-            ['navHome', 'navLibrary', 'navStudy', 'navPomodoro'].forEach(btnId => {
+            Object.entries(navBtns).forEach(([p, btnId]) => {
                 const btn = document.getElementById(btnId);
-                btn.classList.add('opacity-60');
-                btn.classList.remove('text-[#731E3E]', 'dark:text-[#E8C995]');
+                if (p === path) {
+                    btn.className = "flex flex-col items-center gap-1 text-[#731E3E] dark:text-[#E8C995]";
+                } else {
+                    btn.className = "flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition";
+                }
             });
-
-            const activeNav = document.getElementById(navBtns[path] || 'navHome');
-            if (activeNav) {
-                activeNav.classList.remove('opacity-60');
-                activeNav.classList.add('text-[#731E3E]', 'dark:text-[#E8C995]');
-            }
         }
 
-        // 7. العد التنازلي للبكالوريا
+        // 6. العد التنازلي للبكالوريا
         function startCountdown() {
-            const targetDate = new Date('2027-06-07T08:00:00').getTime();
+            const targetDate = new Date("June 7, 2027 08:00:00").getTime();
+
             setInterval(() => {
                 const now = new Date().getTime();
                 const diff = targetDate - now;
@@ -585,32 +581,39 @@
             }, 1000);
         }
 
-        // 8. مؤقت Pomodoro
-        let pomoTimes = { focus: 25, short: 5, long: 15 };
-        let currentPomoMode = 'focus';
+        // 7. منطق Pomodoro
+        let pomoMode = 'focus';
+        let pomoDuration = 25 * 60;
         let pomoTimeLeft = 25 * 60;
         let pomoTimer = null;
         let isPomoRunning = false;
 
+        const customTimes = {
+            focus: 25,
+            short: 5,
+            long: 15
+        };
+
         function setPomoMode(mode) {
-            currentPomoMode = mode;
-            pomoTimeLeft = pomoTimes[mode] * 60;
-            resetPomodoro();
+            if (isPomoRunning) resetPomodoro();
+            pomoMode = mode;
 
-            const titles = { focus: 'جلسة تركيز', short: 'استراحة قصيرة', long: 'استراحة طويلة' };
-            document.getElementById('pomoModeTitle').innerText = titles[mode];
+            document.getElementById('modeFocusBtn').className = mode === 'focus' ? "flex-1 py-2 text-xs font-bold rounded-xl transition bg-[#731E3E] text-[#F5EDE0]" : "flex-1 py-2 text-xs font-bold rounded-xl opacity-70 transition";
+            document.getElementById('modeShortBtn').className = mode === 'short' ? "flex-1 py-2 text-xs font-bold rounded-xl transition bg-[#731E3E] text-[#F5EDE0]" : "flex-1 py-2 text-xs font-bold rounded-xl opacity-70 transition";
+            document.getElementById('modeLongBtn').className = mode === 'long' ? "flex-1 py-2 text-xs font-bold rounded-xl transition bg-[#731E3E] text-[#F5EDE0]" : "flex-1 py-2 text-xs font-bold rounded-xl opacity-70 transition";
 
-            ['modeFocusBtn', 'modeShortBtn', 'modeLongBtn'].forEach(id => {
-                const btn = document.getElementById(id);
-                btn.classList.add('opacity-70');
-                btn.classList.remove('bg-[#731E3E]', 'text-[#F5EDE0]');
-            });
+            if (mode === 'focus') {
+                document.getElementById('pomoModeTitle').innerText = "جلسة تركيز";
+                pomoDuration = customTimes.focus * 60;
+            } else if (mode === 'short') {
+                document.getElementById('pomoModeTitle').innerText = "استراحة قصيرة";
+                pomoDuration = customTimes.short * 60;
+            } else {
+                document.getElementById('pomoModeTitle').innerText = "استراحة طويلة";
+                pomoDuration = customTimes.long * 60;
+            }
 
-            const activeBtnMap = { focus: 'modeFocusBtn', short: 'modeShortBtn', long: 'modeLongBtn' };
-            const activeBtn = document.getElementById(activeBtnMap[mode]);
-            activeBtn.classList.remove('opacity-70');
-            activeBtn.classList.add('bg-[#731E3E]', 'text-[#F5EDE0]');
-
+            pomoTimeLeft = pomoDuration;
             updatePomoDisplay();
         }
 
@@ -622,6 +625,7 @@
             } else {
                 isPomoRunning = true;
                 document.getElementById('pomoStartBtnText').innerText = "إيقاف مؤقت";
+
                 pomoTimer = setInterval(() => {
                     if (pomoTimeLeft > 0) {
                         pomoTimeLeft--;
@@ -630,15 +634,15 @@
                         clearInterval(pomoTimer);
                         isPomoRunning = false;
                         document.getElementById('pomoStartBtnText').innerText = "ابدأ الآن";
-                        
-                        // احتساب النقاط عند اكتمال جلسة التركيز
-                        if (currentPomoMode === 'focus') {
-                            const mins = pomoTimes.focus;
-                            addPoints(mins * 2, mins);
+
+                        if (pomoMode === 'focus') {
+                            const completedMins = customTimes.focus;
+                            addPoints(completedMins * 2, completedMins);
+                            showToast("رائع! أكملت جلسة التركيز بنجاح 🎯");
                         } else {
-                            showToast("انتهت الاستراحة! استعد للجلسة القادمة 🎯");
+                            showToast("انتهت الاستراحة! حان وقت العودة للعمل 💪");
                         }
-                        setPomoMode(currentPomoMode);
+                        resetPomodoro();
                     }
                 }, 1000);
             }
@@ -647,7 +651,7 @@
         function resetPomodoro() {
             clearInterval(pomoTimer);
             isPomoRunning = false;
-            pomoTimeLeft = pomoTimes[currentPomoMode] * 60;
+            pomoTimeLeft = pomoDuration;
             document.getElementById('pomoStartBtnText').innerText = "ابدأ الآن";
             updatePomoDisplay();
         }
@@ -656,73 +660,85 @@
             const mins = Math.floor(pomoTimeLeft / 60);
             const secs = pomoTimeLeft % 60;
             document.getElementById('pomoTime').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            
-            const totalSecs = pomoTimes[currentPomoMode] * 60;
-            const progress = ((totalSecs - pomoTimeLeft) / totalSecs) * 100;
+
+            const progress = ((pomoDuration - pomoTimeLeft) / pomoDuration) * 100;
             document.getElementById('pomoCircle').style.setProperty('--pomo-progress', `${progress}%`);
         }
 
         function toggleCustomizer() {
-            document.getElementById('customizerPanel').classList.toggle('hidden');
+            const panel = document.getElementById('customizerPanel');
+            panel.classList.toggle('hidden');
         }
 
         function updateCustomTimes() {
-            pomoTimes.focus = parseInt(document.getElementById('customFocusInput').value) || 25;
-            pomoTimes.short = parseInt(document.getElementById('customShortInput').value) || 5;
-            pomoTimes.long = parseInt(document.getElementById('customLongInput').value) || 15;
-            setPomoMode(currentPomoMode);
+            customTimes.focus = parseInt(document.getElementById('customFocusInput').value) || 25;
+            customTimes.short = parseInt(document.getElementById('customShortInput').value) || 5;
+            customTimes.long = parseInt(document.getElementById('customLongInput').value) || 15;
+            setPomoMode(pomoMode);
         }
 
-        // 9. جلسة Google Meet
+        // 8. منطق جلسات Meet
+        let meetStartTime = null;
         let meetTimer = null;
-        let meetSeconds = 0;
 
         function startMeetSession() {
+            meetStartTime = new Date();
             document.getElementById('btnStartMeet').classList.add('hidden');
             document.getElementById('btnEndMeet').classList.remove('hidden');
             document.getElementById('meetActiveBar').classList.remove('hidden');
 
-            meetSeconds = 0;
             meetTimer = setInterval(() => {
-                meetSeconds++;
-                const mins = Math.floor(meetSeconds / 60);
-                const secs = meetSeconds % 60;
+                const now = new Date();
+                const elapsedSecs = Math.floor((now - meetStartTime) / 1000);
+                const mins = Math.floor(elapsedSecs / 60);
+                const secs = elapsedSecs % 60;
                 document.getElementById('meetTimerVal').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
             }, 1000);
 
-            showToast("بدأت جلسة الدراسة عبر Meet! بالتوفيق 📖");
+            showToast("بدأت جلسة Meet الان! بالتوفيق 📖");
         }
 
         function endMeetSession() {
+            if (!meetStartTime) return;
+            const now = new Date();
+            const elapsedMins = Math.floor((now - meetStartTime) / (1000 * 60));
+
             clearInterval(meetTimer);
             document.getElementById('btnStartMeet').classList.remove('hidden');
             document.getElementById('btnEndMeet').classList.add('hidden');
             document.getElementById('meetActiveBar').classList.add('hidden');
 
-            const totalMins = Math.floor(meetSeconds / 60);
-            if (totalMins > 0) {
-                addPoints(totalMins, totalMins);
+            if (elapsedMins > 0) {
+                addPoints(elapsedMins, elapsedMins);
             } else {
                 showToast("الجلسة كانت قصيرة جداً (أقل من دقيقة)، لم يتم إضافة نقاط.");
             }
+            meetStartTime = null;
         }
 
-        // 10. الوضع الليلي
+        // 9. الوضع المظلم والأدوات العامة
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
         }
 
-        // التهيئة عند التحميل
-        window.onload = () => {
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+            }, 3500);
+        }
+
+        // التهيئة الابتدائية عند الفتح
+        window.onload = function() {
             lucide.createIcons();
             renderSlide();
             startCountdown();
             updateUI();
-
-            // إخفاء القصة إذا شوهدت سابقاً وكان الملف موجوداً
-            if (userProfile) {
-                document.getElementById('storyScreen').classList.add('hidden');
-            }
         };
     </script>
 </body>
