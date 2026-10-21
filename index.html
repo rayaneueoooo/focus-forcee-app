@@ -1,975 +1,2390 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#731E3E">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="./manifest.json">
-    <link rel="apple-touch-icon" href="./icon.png">
-    <title>FOCUS & FORCE - study with purpose</title>
-    
-    <!-- الخطوط المحددة -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS عبر CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#731E3E">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icon.png">
+  <title>FOCUS & FORCE - study with purpose</title>
 
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-cream': '#F5EDE0',
-                        'dark-burgundy': '#451C2B',
-                        'deep-burgundy': '#501426',
-                        'brand-burgundy': '#731E3E',
-                        'warm-gold': '#E8C995',
-                        'cream-btn': '#F4DFBE',
-                        'soft-green': '#6C9D78',
-                        'ivory-card': '#FCF8F1',
-                        'night-bg': '#25131D',
-                    },
-                    fontFamily: {
-                        sans: ['IBM Plex Sans Arabic', 'sans-serif'],
-                        heading: ['Manrope', 'sans-serif'],
-                        mono: ['DM Mono', 'monospace'],
-                    }
-                }
-            }
+  <!-- الخطوط الرسمية -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS عبر CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- بنك الكويزات الشامل للبكالوريا -->
+  <script src="./quizzes.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'primary-cream': '#F5EDE0',
+            'dark-burgundy': '#451C2B',
+            'deep-burgundy': '#501426',
+            'brand-burgundy': '#731E3E',
+            'warm-gold': '#E8C995',
+            'cream-btn': '#F4DFBE',
+            'soft-green': '#6C9D78',
+            'ivory-card': '#FCF8F1',
+            'night-bg': '#25131D',
+          },
+          fontFamily: {
+            sans: ['IBM Plex Sans Arabic', 'sans-serif'],
+            heading: ['Manrope', 'sans-serif'],
+            mono: ['DM Mono', 'monospace'],
+          }
         }
-    </script>
-    
-    <style>
-        body {
-            font-family: 'IBM Plex Sans Arabic', sans-serif;
-            background-color: #F5EDE0;
-            color: #451C2B;
-            user-select: none;
-        }
-        .dark body {
-            background-color: #25131D;
-            color: #F5EDE0;
-        }
-        .timer-circle {
-            background: conic-gradient(#731E3E var(--pomo-progress, 0%), #E8C995 0);
-        }
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.05);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #E8C995;
-            border-radius: 10px;
-        }
-    </style>
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background-color: #F5EDE0;
+      color: #451C2B;
+      user-select: none;
+    }
+
+    .dark body {
+      background-color: #25131D;
+      color: #F5EDE0;
+    }
+
+    .timer-circle {
+      background: conic-gradient(#731E3E var(--pomo-progress, 0%), #E8C995 0);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #E8C995;
+      border-radius: 10px;
+    }
+
+    .nav-btn.active {
+      color: #731E3E;
+      opacity: 1;
+    }
+
+    .dark .nav-btn.active {
+      color: #E8C995;
+      opacity: 1;
+    }
+
+    .shimmer-gold {
+      background: linear-gradient(90deg, rgba(232, 201, 149, 0.1) 0%, rgba(232, 201, 149, 0.4) 50%, rgba(232, 201, 149, 0.1) 100%);
+      background-size: 200% 100%;
+      animation: shimmer 2.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+  </style>
 </head>
-<body class="min-h-screen pb-28 pt-6 px-4 max-w-4xl mx-auto transition-colors duration-300">
 
+<body class="min-h-screen pb-28 pt-5 px-3 sm:px-4 max-w-4xl mx-auto transition-colors duration-300">
 
-    <!-- PWA Install Button - added without changing the existing design -->
-    <div id="pwaInstallWrap" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 hidden">
-        <button id="pwaInstallBtn"
-            class="flex items-center gap-2 px-5 py-3 bg-[#731E3E] text-[#F5EDE0] font-bold rounded-2xl shadow-2xl border border-[#E8C995]/40 text-xs hover:bg-[#501426] transition">
-            <i data-lucide="download" class="w-4 h-4"></i>
-            <span>تثبيت Focus & Force</span>
-        </button>
+  <!-- PWA Install Button -->
+  <div id="pwaInstallWrap" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-40 hidden">
+    <button id="pwaInstallBtn"
+      class="flex items-center gap-2 px-5 py-3 bg-[#731E3E] text-[#F5EDE0] font-bold rounded-2xl shadow-2xl border border-[#E8C995]/40 text-xs hover:bg-[#501426] transition">
+      <i data-lucide="download" class="w-4 h-4"></i>
+      <span>تثبيت Focus & Force</span>
+    </button>
+  </div>
+
+  <!-- Toast Notification (إشعار التنبيه) -->
+  <div id="toastNotification"
+    class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-[#731E3E] text-[#F5EDE0] px-6 py-3 rounded-2xl border border-[#E8C995] shadow-2xl transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-4 text-xs font-bold flex items-center gap-2">
+    <i data-lucide="sparkles" class="w-4 h-4 text-[#E8C995]"></i>
+    <span id="toastMsg"></span>
+  </div>
+
+  <!-- 1. شاشة القصة (Story Screen) -->
+  <div id="storyScreen"
+    class="fixed inset-0 z-50 bg-[#501426] text-[#F5EDE0] flex flex-col justify-between p-6 overflow-y-auto">
+    <div class="absolute top-10 right-10 w-64 h-64 bg-[#E8C995]/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="flex flex-col items-center pt-4 text-center">
+      <div
+        class="w-12 h-12 rounded-xl bg-[#E8C995]/20 border border-[#E8C995]/30 flex items-center justify-center text-[#E8C995] font-heading font-bold text-xl mb-2">
+        F.</div>
+      <span class="font-heading font-extrabold tracking-widest text-sm text-[#E8C995]">FOCUS & FORCE</span>
+      <p class="text-xs text-[#F5EDE0]/70 mt-1">مساحة الطالب الجزائري المقبل على شهادة البكالوريا</p>
     </div>
 
-    <!-- Toast Notification (إشعار التنبيه) -->
-    <div id="toastNotification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-[#731E3E] text-[#F5EDE0] px-6 py-3 rounded-2xl border border-[#E8C995] shadow-2xl transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-4 text-xs font-bold flex items-center gap-2">
-        <i data-lucide="sparkles" class="w-4 h-4 text-[#E8C995]"></i>
-        <span id="toastMsg"></span>
+    <div class="max-w-xl mx-auto text-center py-8 my-auto">
+      <span id="slideYear"
+        class="font-mono text-[#E8C995] text-lg mb-2 inline-block bg-[#E8C995]/10 px-4 py-1 rounded-full">2024</span>
+      <div id="slideBadge"
+        class="bg-[#E8C995]/15 text-[#E8C995] px-4 py-1.5 rounded-full text-xs font-medium mb-4 inline-block">بداية
+        القصة 🍃🌱</div>
+      <h2 id="slideTitle" class="text-2xl md:text-3xl font-bold mb-4 text-[#FCF8F1]">من طالبة تبحث عن ملخصات…</h2>
+      <p id="slideText" class="text-[#F5EDE0]/90 text-sm md:text-base leading-relaxed font-light">كل شيء بدأ لما كنت
+        مجرد طالبة تخوض غمار التعب...</p>
     </div>
 
-    <!-- 1. شاشة القصة (Story Screen) -->
-    <div id="storyScreen" class="fixed inset-0 z-50 bg-[#501426] text-[#F5EDE0] flex flex-col justify-between p-6 overflow-y-auto">
-        <div class="absolute top-10 right-10 w-64 h-64 bg-[#E8C995]/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="flex flex-col items-center pt-4 text-center">
-            <div class="w-12 h-12 rounded-xl bg-[#E8C995]/20 border border-[#E8C995]/30 flex items-center justify-center text-[#E8C995] font-heading font-bold text-xl mb-2">F.</div>
-            <span class="font-heading font-extrabold tracking-widest text-sm text-[#E8C995]">FOCUS & FORCE</span>
-            <p class="text-xs text-[#F5EDE0]/70 mt-1">مساحة الطالب الجزائري المقبل على شهادة البكالوريا</p>
-        </div>
-
-        <div class="max-w-xl mx-auto text-center py-8 my-auto">
-            <span id="slideYear" class="font-mono text-[#E8C995] text-lg mb-2 inline-block bg-[#E8C995]/10 px-4 py-1 rounded-full">2024</span>
-            <div id="slideBadge" class="bg-[#E8C995]/15 text-[#E8C995] px-4 py-1.5 rounded-full text-xs font-medium mb-4 inline-block">بداية القصة 🍃🌱</div>
-            <h2 id="slideTitle" class="text-2xl md:text-3xl font-bold mb-4 text-[#FCF8F1]">من طالبة تبحث عن ملخصات…</h2>
-            <p id="slideText" class="text-[#F5EDE0]/90 text-sm md:text-base leading-relaxed font-light">كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب...</p>
-        </div>
-
-        <div class="max-w-xl mx-auto w-full flex flex-col items-center pb-6 gap-6">
-            <div id="slideDots" class="flex items-center gap-2"></div>
-            <button id="nextSlideBtn" onclick="nextSlide()" class="w-full sm:w-auto px-8 py-3 bg-[#E8C995] text-[#451C2B] font-bold rounded-2xl hover:bg-[#F4DFBE] transition shadow-lg text-sm">
-                تابع القصة
-            </button>
-        </div>
+    <div class="max-w-xl mx-auto w-full flex flex-col items-center pb-6 gap-6">
+      <div id="slideDots" class="flex items-center gap-2"></div>
+      <button id="nextSlideBtn" onclick="nextSlide()"
+        class="w-full sm:w-auto px-8 py-3 bg-[#E8C995] text-[#451C2B] font-bold rounded-2xl hover:bg-[#F4DFBE] transition shadow-lg text-sm">
+        تابع القصة
+      </button>
     </div>
+  </div>
 
-    <!-- 2. شاشة التعريف (Profile Setup) -->
-    <div id="profileScreen" class="fixed inset-0 z-40 bg-[#25131D]/90 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-[#FCF8F1] dark:bg-[#501426] p-8 rounded-3xl border border-[#E8C995]/30 shadow-2xl text-[#451C2B] dark:text-[#F5EDE0]">
-            <h2 class="text-2xl font-bold mb-2 text-center">خلّينا نتعرّف عليك</h2>
-            <p class="text-xs text-center opacity-70 mb-6">باش نهيّئلك مساحة تناسبك، عطينا اسمك ولقبك وشعبتك الدراسية.</p>
+  <!-- 2. شاشة التعريف (Profile Setup) -->
+  <div id="profileScreen"
+    class="fixed inset-0 z-40 bg-[#25131D]/90 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div
+      class="max-w-md w-full bg-[#FCF8F1] dark:bg-[#501426] p-8 rounded-3xl border border-[#E8C995]/30 shadow-2xl text-[#451C2B] dark:text-[#F5EDE0]">
+      <h2 class="text-2xl font-bold mb-2 text-center">خلّينا نتعرّف عليك</h2>
+      <p class="text-xs text-center opacity-70 mb-6">باش نهيّئلك مساحة تناسبك، عطينا اسمك ولقبك وشعبتك الدراسية.</p>
 
-            <form onsubmit="saveProfile(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold mb-1">الاسم</label>
-                    <input type="text" id="firstName" required placeholder="اسمك" class="w-full p-3 rounded-xl bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 border border-[#E8C995]/40 text-sm outline-none focus:border-[#731E3E]">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold mb-1">اللقب</label>
-                    <input type="text" id="lastName" required placeholder="لقبك" class="w-full p-3 rounded-xl bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 border border-[#E8C995]/40 text-sm outline-none focus:border-[#731E3E]">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold mb-1">الشعبة</label>
-                    <select id="track" onchange="toggleSpecialization()" class="w-full p-3 rounded-xl bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 border border-[#E8C995]/40 text-sm outline-none focus:border-[#731E3E]">
-                        <option value="علوم تجريبية">علوم تجريبية</option>
-                        <option value="رياضيات">رياضيات</option>
-                        <option value="تسيير واقتصاد">تسيير واقتصاد</option>
-                        <option value="آداب وفلسفة">آداب وفلسفة</option>
-                        <option value="آداب ولغات">آداب ولغات</option>
-                        <option value="تقني رياضي">تقني رياضي</option>
-                    </select>
-                </div>
-                <div id="specContainer" class="hidden">
-                    <label class="block text-xs font-semibold mb-1">تخصص تقني رياضي</label>
-                    <select id="specialization" class="w-full p-3 rounded-xl bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 border border-[#E8C995]/40 text-sm outline-none">
-                        <option value="هندسة طرائق">هندسة طرائق</option>
-                        <option value="هندسة مدنية">هندسة مدنية</option>
-                        <option value="هندسة كهربائية">هندسة كهربائية</option>
-                        <option value="هندسة ميكانيكية">هندسة ميكانيكية</option>
-                    </select>
-                </div>
-                <button type="submit" class="w-full py-3.5 bg-[#731E3E] text-[#F5EDE0] font-bold rounded-xl hover:bg-[#501426] transition shadow-md mt-4 text-sm">كمل لمساحتك</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- 3. شاشة الترحيب السريع (Welcome Banner) -->
-    <div id="welcomeBanner" class="fixed inset-0 z-40 bg-[#501426]/95 text-[#F5EDE0] hidden flex items-center justify-center p-6 backdrop-blur-md text-center">
-        <div class="max-w-md w-full space-y-4 bg-[#25131D] p-8 rounded-3xl border border-[#E8C995]/30">
-            <span class="text-[#E8C995] font-medium text-xs">مرحبا بك في العائلة</span>
-            <h2 id="welcomeName" class="text-2xl font-bold text-[#FCF8F1]">أهلا، </h2>
-            <p id="welcomeText" class="text-xs text-[#F5EDE0]/80 leading-relaxed">مساحتك حضرت...</p>
-            <button onclick="closeWelcome()" class="px-8 py-3 bg-[#E8C995] text-[#451C2B] font-bold rounded-2xl hover:bg-[#F4DFBE] transition shadow-lg text-sm">ادخل لمساحتك</button>
-        </div>
-    </div>
-
-    <!-- Header التطبيق الرئيسي -->
-    <header class="flex items-center justify-between mb-6">
+      <form onsubmit="saveProfile(event)" class="space-y-4">
         <div>
-            <span class="font-heading font-extrabold text-[#731E3E] dark:text-[#E8C995] tracking-widest text-lg">FOCUS & FORCE</span>
-            <span class="block text-[10px] opacity-60 font-mono">study with purpose</span>
+          <label class="block text-xs font-semibold mb-1">الاسم</label>
+          <input type="text" id="firstName" required placeholder="اسمك"
+            class="w-full p-3 rounded-xl bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 border border-[#E8C995]/40 text-sm outline-none focus:border-[#731E3E]">
         </div>
-        <button onclick="toggleDarkMode()" class="p-2.5 rounded-2xl bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 shadow-sm transition hover:scale-105">
-            <i data-lucide="moon" class="w-4 h-4 dark:hidden text-[#731E3E]"></i>
-            <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-[#E8C995]"></i>
+        <div>
+          <label class="block text-xs font-semibold mb-1">اللقب</label>
+          <input type="text" id="lastName" required placeholder="لقبك"
+            class="w-full p-3 rounded-xl bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 border border-[#E8C995]/40 text-sm outline-none focus:border-[#731E3E]">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold mb-1">الشعبة</label>
+          <select id="track" onchange="toggleSpecialization()"
+            class="w-full p-3 rounded-xl bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 border border-[#E8C995]/40 text-sm outline-none focus:border-[#731E3E]">
+            <option value="علوم تجريبية">علوم تجريبية</option>
+            <option value="رياضيات">رياضيات</option>
+            <option value="تسيير واقتصاد">تسيير واقتصاد</option>
+            <option value="آداب وفلسفة">آداب وفلسفة</option>
+            <option value="آداب ولغات">آداب ولغات</option>
+            <option value="تقني رياضي">تقني رياضي</option>
+          </select>
+        </div>
+        <div id="specContainer" class="hidden">
+          <label class="block text-xs font-semibold mb-1">تخصص تقني رياضي</label>
+          <select id="specialization"
+            class="w-full p-3 rounded-xl bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 border border-[#E8C995]/40 text-sm outline-none">
+            <option value="هندسة طرائق">هندسة طرائق</option>
+            <option value="هندسة مدنية">هندسة مدنية</option>
+            <option value="هندسة كهربائية">هندسة كهربائية</option>
+            <option value="هندسة ميكانيكية">هندسة ميكانيكية</option>
+          </select>
+        </div>
+        <button type="submit"
+          class="w-full py-3.5 bg-[#731E3E] text-[#F5EDE0] font-bold rounded-xl hover:bg-[#501426] transition shadow-md mt-4 text-sm">كمل
+          لمساحتك</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 3. شاشة الترحيب السريع (Welcome Banner) -->
+  <div id="welcomeBanner"
+    class="fixed inset-0 z-40 bg-[#501426]/95 text-[#F5EDE0] hidden flex items-center justify-center p-6 backdrop-blur-md text-center">
+    <div class="max-w-md w-full space-y-4 bg-[#25131D] p-8 rounded-3xl border border-[#E8C995]/30">
+      <span class="text-[#E8C995] font-medium text-xs">مرحبا بك في العائلة</span>
+      <h2 id="welcomeName" class="text-2xl font-bold text-[#FCF8F1]">أهلا، </h2>
+      <p id="welcomeText" class="text-xs text-[#F5EDE0]/80 leading-relaxed">مساحتك حضرت...</p>
+      <button onclick="closeWelcome()"
+        class="px-8 py-3 bg-[#E8C995] text-[#451C2B] font-bold rounded-2xl hover:bg-[#F4DFBE] transition shadow-lg text-sm">ادخل
+        لمساحتك</button>
+    </div>
+  </div>
+
+  <!-- Header التطبيق الرئيسي مع أزرار التحكم السريعة -->
+  <header class="flex items-center justify-between mb-6">
+    <div class="cursor-pointer" onclick="navigateTo('/')">
+      <span class="font-heading font-extrabold text-[#731E3E] dark:text-[#E8C995] tracking-widest text-lg">FOCUS &
+        FORCE</span>
+      <span class="block text-[10px] opacity-60 font-mono">study with purpose</span>
+    </div>
+
+    <!-- شريط الأدوات العلوية السريعة -->
+    <div class="flex items-center gap-2">
+      <!-- زر أصوات التركيز البيئية -->
+      <button onclick="toggleAmbientModal()" title="أصوات التركيز البيئية" id="ambientTopBtn"
+        class="p-2.5 rounded-2xl bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 shadow-sm transition hover:scale-105 flex items-center justify-center text-[#731E3E] dark:text-[#E8C995]">
+        <i data-lucide="headphones" class="w-4 h-4"></i>
+      </button>
+
+      <!-- زر المؤثرات الصوتية -->
+      <button onclick="toggleSoundFx()" title="تشغيل/كتم صوت النقاط" id="soundFxBtn"
+        class="p-2.5 rounded-2xl bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 shadow-sm transition hover:scale-105 text-[#731E3E] dark:text-[#E8C995]">
+        <i data-lucide="volume-2" class="w-4 h-4" id="soundFxIcon"></i>
+      </button>
+
+      <!-- زر الوضع الليلي -->
+      <button onclick="toggleDarkMode()" title="الوضع الليلي"
+        class="p-2.5 rounded-2xl bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 shadow-sm transition hover:scale-105">
+        <i data-lucide="moon" class="w-4 h-4 dark:hidden text-[#731E3E]"></i>
+        <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-[#E8C995]"></i>
+      </button>
+
+      <!-- زر الإعدادات -->
+      <button onclick="navigateTo('/settings')" title="الإعدادات"
+        class="p-2.5 rounded-2xl bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 shadow-sm transition hover:scale-105 text-[#731E3E] dark:text-[#E8C995]">
+        <i data-lucide="settings" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- نافذة أصوات التركيز البيئية (Ambient Focus Audio Modal) -->
+  <div id="ambientModal"
+    class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div
+      class="bg-[#FCF8F1] dark:bg-[#501426] max-w-sm w-full p-6 rounded-3xl border border-[#E8C995]/40 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-3">
+        <div class="flex items-center gap-2 text-[#731E3E] dark:text-[#E8C995]">
+          <i data-lucide="headphones" class="w-5 h-5"></i>
+          <h3 class="font-bold text-sm">أصوات التركيز البيئية</h3>
+        </div>
+        <button onclick="toggleAmbientModal()" class="text-xs opacity-60 hover:opacity-100 p-1">✕ إغلاق</button>
+      </div>
+
+      <p class="text-xs opacity-75 leading-relaxed">أصوات مهدئة مولدة برمجياً بدون إنترنت لمساعدتك على الانغماس التام في
+        المذاكرة.</p>
+
+      <!-- خيارات الأصوات -->
+      <div class="grid grid-cols-2 gap-2 text-xs font-semibold">
+        <button onclick="toggleAmbientSound('rain')" id="ambBtn-rain"
+          class="p-3 rounded-2xl border border-[#E8C995]/30 bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 flex items-center gap-2 hover:border-[#731E3E] transition">
+          <i data-lucide="cloud-rain" class="w-4 h-4 text-blue-400"></i>
+          <span>مطر هادئ</span>
         </button>
-    </header>
+        <button onclick="toggleAmbientSound('waves')" id="ambBtn-waves"
+          class="p-3 rounded-2xl border border-[#E8C995]/30 bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 flex items-center gap-2 hover:border-[#731E3E] transition">
+          <i data-lucide="waves" class="w-4 h-4 text-teal-400"></i>
+          <span>أمواج البحر</span>
+        </button>
+        <button onclick="toggleAmbientSound('noise')" id="ambBtn-noise"
+          class="p-3 rounded-2xl border border-[#E8C995]/30 bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 flex items-center gap-2 hover:border-[#731E3E] transition">
+          <i data-lucide="wind" class="w-4 h-4 text-amber-400"></i>
+          <span>نويز التركيز</span>
+        </button>
+        <button onclick="toggleAmbientSound('alpha')" id="ambBtn-alpha"
+          class="p-3 rounded-2xl border border-[#E8C995]/30 bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 flex items-center gap-2 hover:border-[#731E3E] transition">
+          <i data-lucide="activity" class="w-4 h-4 text-purple-400"></i>
+          <span>موجات ألفا 10Hz</span>
+        </button>
+      </div>
 
-    <!-- الأقسام الرئيسية -->
-    <main id="appPages">
-        
-        <!-- الرئيسية / -->
-        <section id="pageHome" class="space-y-6">
-            <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 shadow-sm space-y-3">
-                <h1 id="homeGreeting" class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">أهلاً يا طالبنا، خلّينا ننجز شيئاً.</h1>
-                <p class="text-xs opacity-80 leading-relaxed">لا تحتاج إلى يوم مثالي. تحتاج فقط إلى جلسة واحدة تبدأ بها. اختر ما يناسب طاقتك الآن.</p>
-                <div class="flex flex-wrap gap-3 pt-2">
-                    <button onclick="navigateTo('/pomodoro')" class="flex items-center gap-2 px-4 py-2.5 bg-[#731E3E] text-[#F5EDE0] font-semibold rounded-xl text-xs hover:bg-[#501426] transition shadow">
-                        <i data-lucide="timer" class="w-4 h-4"></i> ابدأ جلسة تركيز
-                    </button>
-                    <button onclick="navigateTo('/study')" class="flex items-center gap-2 px-4 py-2.5 bg-[#E8C995] text-[#451C2B] font-semibold rounded-xl text-xs hover:bg-[#F4DFBE] transition shadow">
-                        <i data-lucide="video" class="w-4 h-4"></i> غرفة الدراسة عبر Meet
-                    </button>
-                </div>
-            </div>
-
-            <!-- بطاقة العد التنازلي -->
-            <div class="bg-[#501426] text-[#F5EDE0] p-6 rounded-3xl border border-[#E8C995]/30 shadow-md text-center">
-                <h3 class="font-bold text-lg text-[#E8C995]">العد التنازلي للبكالوريا</h3>
-                <p class="text-xs opacity-70 mb-4">حتى 07 جوان 2027</p>
-                <div class="grid grid-cols-4 gap-2 font-mono">
-                    <div class="bg-[#25131D]/60 p-2.5 rounded-2xl border border-[#E8C995]/20">
-                        <span id="cdDays" class="text-xl md:text-2xl font-bold text-[#E8C995]">0</span>
-                        <span class="block text-[10px] opacity-60">أيام</span>
-                    </div>
-                    <div class="bg-[#25131D]/60 p-2.5 rounded-2xl border border-[#E8C995]/20">
-                        <span id="cdHours" class="text-xl md:text-2xl font-bold text-[#E8C995]">0</span>
-                        <span class="block text-[10px] opacity-60">ساعات</span>
-                    </div>
-                    <div class="bg-[#25131D]/60 p-2.5 rounded-2xl border border-[#E8C995]/20">
-                        <span id="cdMinutes" class="text-xl md:text-2xl font-bold text-[#E8C995]">0</span>
-                        <span class="block text-[10px] opacity-60">دقائق</span>
-                    </div>
-                    <div class="bg-[#25131D]/60 p-2.5 rounded-2xl border border-[#E8C995]/20">
-                        <span id="cdSeconds" class="text-xl md:text-2xl font-bold text-[#E8C995]">0</span>
-                        <span class="block text-[10px] opacity-60">ثواني</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- بطاقة ملخص التصنيف والنشاط -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-2">
-                    <span class="text-xs opacity-60 font-semibold">تصنيفك الحالي</span>
-                    <div class="flex justify-between items-baseline">
-                        <h4 id="userRank" class="text-lg font-bold text-[#731E3E] dark:text-[#E8C995]">بداية قوية</h4>
-                        <span id="userPoints" class="font-mono text-sm font-bold">0 نقطة</span>
-                    </div>
-                    <p id="userStudyTime" class="text-xs opacity-70">إجمالي الدقائق الدراسية: 0 دقيقة</p>
-                </div>
-                <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-2">
-                    <span class="text-xs opacity-60 font-semibold">غرفة الدراسة الجماعية</span>
-                    <h4 class="font-bold text-sm">نذاكر معاً؟</h4>
-                    <button onclick="navigateTo('/study')" class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#6C9D78] text-white text-xs font-bold rounded-xl mt-2 hover:opacity-90 transition">
-                        <i data-lucide="video" class="w-4 h-4"></i> انضم عبر Google Meet
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- المكتبة /library -->
-        <section id="pageLibrary" class="space-y-6 hidden">
-            <div>
-                <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">المكتبة</h1>
-                <p class="text-xs opacity-70">أشياء تستحق وقتك. مرتبة، مختصرة، ومكتوبة من طالب لطالب.</p>
-            </div>
-            
-            <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 space-y-4">
-                <h3 class="font-bold text-sm text-[#731E3E] dark:text-[#E8C995]">ملفات البكالوريا والسنة الثالثة ثانوي من DzExams</h3>
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-                    <a href="https://www.dzexams.com/ar/bac/mathematiques" target="_blank" rel="noreferrer" class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
-                        <span>الرياضيات (BAC)</span>
-                        <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
-                    </a>
-                    <a href="https://www.dzexams.com/ar/bac/physique" target="_blank" rel="noreferrer" class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
-                        <span>الفيزياء (BAC)</span>
-                        <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
-                    </a>
-                    <a href="https://www.dzexams.com/ar/bac/sciences-naturelles" target="_blank" rel="noreferrer" class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
-                        <span>العلوم (BAC)</span>
-                        <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
-                    </a>
-                    <a href="https://www.dzexams.com/ar/bac/philosophie" target="_blank" rel="noreferrer" class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
-                        <span>الفلسفة (BAC)</span>
-                        <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
-                    </a>
-                    <a href="https://www.dzexams.com/ar/bac/arabe" target="_blank" rel="noreferrer" class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
-                        <span>اللغة العربية (BAC)</span>
-                        <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
-                    </a>
-                    <a href="https://www.dzexams.com/ar/bac" target="_blank" rel="noreferrer" class="p-3 bg-[#E8C995] text-[#451C2B] font-bold rounded-xl text-center flex items-center justify-center gap-1 hover:bg-[#F4DFBE] transition">
-                        <span>كل الملفات ↗</span>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- غرفة الدراسة عبر Meet /study -->
-        <section id="pageStudy" class="space-y-6 hidden">
-            <div>
-                <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">غرفة الدراسة الجماعية</h1>
-                <p class="text-xs opacity-70">الدراسة عبر Google Meet. كل دقيقة دراسة تمنحك نقطة واحدة.</p>
-            </div>
-
-            <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 space-y-4">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-[#6C9D78] animate-pulse"></span>
-                    <span class="text-xs font-semibold text-[#6C9D78]">الغرفة متاحة للجميع</span>
-                </div>
-                <h3 class="font-bold text-lg">جلسة الدراسة التفاعلية عبر Google Meet</h3>
-                <p class="text-xs opacity-80 leading-relaxed">لربح النقاط، انقر على "ابدأ الدراسة عبر Meet" ثم أنهِ الجلسة عند الانتهاء. (الضغط على زر الرابط المباشر وحده لا يمنح أي نقاط).</p>
-                
-                <div class="flex flex-wrap gap-3 pt-2">
-                    <a href="https://meet.google.com/krd-aesq-sgt" target="_blank" rel="noreferrer" class="px-5 py-2.5 bg-[#6C9D78] text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow-sm hover:opacity-90">
-                        <i data-lucide="external-link" class="w-4 h-4"></i> فتح Google Meet
-                    </a>
-
-                    <button id="btnStartMeet" onclick="startMeetSession()" class="px-5 py-2.5 bg-[#731E3E] text-[#F5EDE0] font-bold rounded-xl text-xs flex items-center gap-2 shadow-md hover:bg-[#501426]">
-                        <i data-lucide="play" class="w-4 h-4"></i> ابدأ الدراسة عبر Meet
-                    </button>
-
-                    <button id="btnEndMeet" onclick="endMeetSession()" class="px-5 py-2.5 bg-red-800 text-white font-bold rounded-xl text-xs hidden flex items-center gap-2 shadow-md hover:bg-red-900">
-                        <i data-lucide="square" class="w-4 h-4"></i> إنهاء جلسة Meet
-                    </button>
-                </div>
-
-                <div id="meetActiveBar" class="hidden p-3 bg-[#E8C995]/20 border border-[#E8C995]/40 rounded-2xl flex items-center justify-between text-xs font-mono mt-3">
-                    <span class="flex items-center gap-2 text-[#731E3E] dark:text-[#E8C995] font-bold">
-                        <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                        جلسة Meet جارية الآن...
-                    </span>
-                    <span id="meetTimerVal" class="font-bold text-base">00:00</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- المؤقت /pomodoro -->
-        <section id="pagePomodoro" class="space-y-6 hidden">
-            <div>
-                <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">مؤقت التركيز المخصص</h1>
-                <p class="text-xs opacity-70">جلسة واحدة في كل مرة. كل دقيقة مكتملة في Pomodoro تمنحك نقطتان.</p>
-            </div>
-
-            <!-- أزرار الوضع السريع -->
-            <div class="flex justify-center gap-2 p-1.5 bg-[#FCF8F1] dark:bg-[#501426] rounded-2xl border border-[#E8C995]/30 max-w-sm mx-auto">
-                <button id="modeFocusBtn" onclick="setPomoMode('focus')" class="flex-1 py-2 text-xs font-bold rounded-xl transition bg-[#731E3E] text-[#F5EDE0]">تركيز</button>
-                <button id="modeShortBtn" onclick="setPomoMode('short')" class="flex-1 py-2 text-xs font-bold rounded-xl opacity-70 transition">استراحة قصيرة</button>
-                <button id="modeLongBtn" onclick="setPomoMode('long')" class="flex-1 py-2 text-xs font-bold rounded-xl opacity-70 transition">استراحة طويلة</button>
-            </div>
-
-            <!-- دائرة المؤقت -->
-            <div class="flex flex-col items-center justify-center my-4">
-                <div id="pomoCircle" class="w-64 h-64 rounded-full p-3 flex items-center justify-center transition-all duration-300 shadow-xl timer-circle">
-                    <div class="w-full h-full bg-[#FCF8F1] dark:bg-[#25131D] rounded-full flex flex-col items-center justify-center relative">
-                        <span id="pomoModeTitle" class="text-xs text-[#731E3E] dark:text-[#E8C995] font-semibold mb-1">جلسة تركيز</span>
-                        <span id="pomoTime" class="font-mono text-5xl font-bold">25:00</span>
-                        
-                        <button onclick="toggleCustomizer()" class="mt-3 text-[11px] bg-[#E8C995]/20 hover:bg-[#E8C995]/40 text-[#731E3E] dark:text-[#E8C995] px-3 py-1 rounded-full border border-[#E8C995]/40 transition flex items-center gap-1">
-                            <i data-lucide="sliders" class="w-3 h-3"></i>
-                            <span>تخصيص الوقت</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- أزرار التحكم -->
-                <div class="flex items-center gap-4 mt-6">
-                    <button id="pomoStartBtn" onclick="togglePomodoro()" class="px-8 py-3 bg-[#731E3E] text-[#F5EDE0] font-bold rounded-2xl text-sm shadow-md transition hover:bg-[#501426] flex items-center gap-2">
-                        <i data-lucide="play" class="w-4 h-4"></i>
-                        <span id="pomoStartBtnText">ابدأ الآن</span>
-                    </button>
-                    <button onclick="resetPomodoro()" class="p-3 bg-[#FCF8F1] dark:bg-[#501426] rounded-2xl border border-[#E8C995]/30 hover:scale-105 transition">
-                        <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- لوحة التخصيص والمرونة (Customizer Panel) -->
-            <div id="customizerPanel" class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-4 max-w-md mx-auto">
-                <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-2">
-                    <h3 class="font-bold text-sm flex items-center gap-1.5 text-[#731E3E] dark:text-[#E8C995]">
-                        <i data-lucide="settings-2" class="w-4 h-4"></i> إعدادات التخصيص
-                    </h3>
-                    <span class="text-[10px] opacity-60">تعديل الدقائق</span>
-                </div>
-
-                <div class="grid grid-cols-3 gap-3 text-center">
-                    <div>
-                        <label class="block text-[11px] font-semibold mb-1">جلسة التركيز</label>
-                        <input type="number" id="customFocusInput" min="1" max="180" value="25" onchange="updateCustomTimes()" class="w-full text-center p-2 rounded-xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/40 text-sm font-mono outline-none">
-                        <span class="text-[9px] opacity-60">دقيقة</span>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold mb-1">استراحة قصيرة</label>
-                        <input type="number" id="customShortInput" min="1" max="60" value="5" onchange="updateCustomTimes()" class="w-full text-center p-2 rounded-xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/40 text-sm font-mono outline-none">
-                        <span class="text-[9px] opacity-60">دقيقة</span>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold mb-1">استراحة طويلة</label>
-                        <input type="number" id="customLongInput" min="1" max="120" value="15" onchange="updateCustomTimes()" class="w-full text-center p-2 rounded-xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/40 text-sm font-mono outline-none">
-                        <span class="text-[9px] opacity-60">دقيقة</span>
-                    </div>
-                </div>
-
-                <div class="flex items-center justify-between pt-1">
-                    <span class="text-xs opacity-70">أزرار تعديل سريعة للجلسة الحالية:</span>
-                    <div class="flex gap-1.5">
-                        <button onclick="addMinutes(-5)" class="px-2.5 py-1 bg-[#F5EDE0] dark:bg-[#25131D] text-xs font-mono font-bold rounded-lg border border-[#E8C995]/40 hover:bg-[#E8C995]/30">-5د</button>
-                        <button onclick="addMinutes(5)" class="px-2.5 py-1 bg-[#F5EDE0] dark:bg-[#25131D] text-xs font-mono font-bold rounded-lg border border-[#E8C995]/40 hover:bg-[#E8C995]/30">+5د</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- التصنيف /ranking -->
-        <section id="pageRanking" class="space-y-6 hidden">
-            <div>
-                <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">تصنيف Focus & Force</h1>
-                <p class="text-xs opacity-70">مقارنة أداء الطالب بين جلسات Pomodoro ودراسة Meet.</p>
-            </div>
-
-            <!-- بطاقة رئيسية للتصنيف -->
-            <div class="bg-[#501426] text-[#F5EDE0] p-6 rounded-3xl border border-[#E8C995]/30 shadow-xl space-y-4">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <span class="text-xs text-[#E8C995] font-bold">تصنيف Focus & Force</span>
-                        <h2 id="rankStudentName" class="text-2xl font-bold mt-1 text-[#FCF8F1]">الطالب</h2>
-                    </div>
-                    <span id="rankTitleBadge" class="bg-[#E8C995] text-[#451C2B] font-bold text-xs px-3 py-1.5 rounded-full">بداية قوية</span>
-                </div>
-
-                <div class="grid grid-cols-3 gap-2 text-center font-mono pt-2 border-t border-[#E8C995]/20">
-                    <div class="bg-[#25131D]/60 p-2 rounded-xl border border-[#E8C995]/20">
-                        <span id="rankTotalPts" class="block text-lg font-bold text-[#E8C995]">0</span>
-                        <span class="text-[10px] opacity-70 font-sans">مجموع النقاط</span>
-                    </div>
-                    <div class="bg-[#25131D]/60 p-2 rounded-xl border border-[#E8C995]/20">
-                        <span id="rankTotalTime" class="block text-lg font-bold text-[#E8C995]">0 د</span>
-                        <span class="text-[10px] opacity-70 font-sans">وقت الدراسة</span>
-                    </div>
-                    <div class="bg-[#25131D]/60 p-2 rounded-xl border border-[#E8C995]/20">
-                        <span id="rankTotalSessions" class="block text-lg font-bold text-[#E8C995]">0</span>
-                        <span class="text-[10px] opacity-70 font-sans">عدد الجلسات</span>
-                    </div>
-                </div>
-
-                <!-- شريط التقدم للرتبة التالية -->
-                <div class="space-y-1.5 pt-2">
-                    <div class="flex justify-between text-xs font-medium">
-                        <span id="rankNextText" class="text-[#E8C995]">متبقي 150 نقطة للوصول إلى الرتبة التالية</span>
-                        <span id="rankProgressPercent" class="font-mono">0%</span>
-                    </div>
-                    <div class="w-full h-3 bg-[#25131D] rounded-full overflow-hidden p-0.5 border border-[#E8C995]/30">
-                        <div id="rankProgressBar" class="h-full bg-[#E8C995] rounded-full transition-all duration-500" style="width: 0%"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- مقارنة مرئية بين Pomodoro و Meet -->
-            <div class="space-y-3">
-                <h3 class="font-bold text-sm">مقارنة مصدر النقاط ودقائق الدراسة</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Pomodoro Card -->
-                    <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-bold text-[#731E3E] dark:text-[#E8C995] flex items-center gap-1">
-                                <i data-lucide="timer" class="w-4 h-4"></i> جلسات Pomodoro
-                            </span>
-                            <span id="pomoPtsDisplay" class="font-mono text-sm font-bold text-[#731E3E] dark:text-[#E8C995]">0 نقطة</span>
-                        </div>
-                        <div class="text-xs space-y-1.5 opacity-80">
-                            <div class="flex justify-between"><span>الدقائق الكلية:</span><span id="pomoMinsDisplay" class="font-mono font-bold">0 دقيقة</span></div>
-                            <div class="flex justify-between"><span>عدد الجلسات:</span><span id="pomoSessDisplay" class="font-mono font-bold">0 جلسة</span></div>
-                            <div class="flex justify-between items-center pt-1 border-t border-[#E8C995]/20">
-                                <span>مصدر النقاط:</span>
-                                <span class="text-[10px] bg-[#E8C995]/20 px-2 py-0.5 rounded-md font-bold">2 نقاط لكل دقيقة</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Meet Card -->
-                    <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-bold text-[#6C9D78] flex items-center gap-1">
-                                <i data-lucide="video" class="w-4 h-4"></i> جلسات Google Meet
-                            </span>
-                            <span id="meetPtsDisplay" class="font-mono text-sm font-bold text-[#6C9D78]">0 نقطة</span>
-                        </div>
-                        <div class="text-xs space-y-1.5 opacity-80">
-                            <div class="flex justify-between"><span>الدقائق الكلية:</span><span id="meetMinsDisplay" class="font-mono font-bold">0 دقيقة</span></div>
-                            <div class="flex justify-between"><span>عدد الجلسات:</span><span id="meetSessDisplay" class="font-mono font-bold">0 جلسة</span></div>
-                            <div class="flex justify-between items-center pt-1 border-t border-[#E8C995]/20">
-                                <span>مصدر النقاط:</span>
-                                <span class="text-[10px] bg-[#6C9D78]/20 px-2 py-0.5 rounded-md font-bold text-[#6C9D78]">1 نقطة لكل دقيقة</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- سجل آخر جلسات الدراسة -->
-            <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 space-y-4">
-                <h3 class="font-bold text-sm">سجل آخر جلسات الدراسة</h3>
-                <div id="historyList" class="space-y-2 text-xs">
-                    <!-- يتم إدراج السجل ديناميكياً -->
-                </div>
-            </div>
-        </section>
-
-        <!-- الإعدادات /settings -->
-        <section id="pageSettings" class="space-y-6 hidden">
-            <div>
-                <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">الإعدادات والقصة</h1>
-                <p class="text-xs opacity-70">تفاصيل صغيرة تجعل العودة إلى التركيز أسهل.</p>
-            </div>
-
-            <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
-                <h3 class="font-bold text-sm">قصة Focus & Force</h3>
-                <p class="text-xs opacity-70">استرجع بدايات القناة والرحلة الملهمة لتجديد الشغف.</p>
-                <button onclick="replayStory()" class="px-4 py-2.5 bg-[#E8C995] text-[#451C2B] text-xs font-bold rounded-xl hover:bg-[#F4DFBE] transition">إعادة عرض القصة 📖</button>
-            </div>
-        </section>
-    </main>
-
-    <!-- شريط التنقل السفلي الثابت (Navbar) -->
-    <nav class="fixed bottom-0 left-0 right-0 z-30 bg-[#FCF8F1]/90 dark:bg-[#501426]/90 backdrop-blur-md border-t border-[#E8C995]/30 px-2 py-2.5">
-        <div class="max-w-md mx-auto flex items-center justify-around text-[10px]">
-            <button onclick="navigateTo('/')" class="flex flex-col items-center gap-1 text-[#731E3E] dark:text-[#E8C995] font-bold transition">
-                <i data-lucide="home" class="w-5 h-5"></i>
-                <span>الرئيسية</span>
-            </button>
-            <button onclick="navigateTo('/library')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-                <i data-lucide="book-open" class="w-5 h-5"></i>
-                <span>المكتبة</span>
-            </button>
-            <button onclick="navigateTo('/study')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-                <i data-lucide="video" class="w-5 h-5"></i>
-                <span>Meet</span>
-            </button>
-            <button onclick="navigateTo('/pomodoro')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-                <i data-lucide="timer" class="w-5 h-5"></i>
-                <span>المؤقت</span>
-            </button>
-            <button onclick="navigateTo('/ranking')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-                <i data-lucide="trophy" class="w-5 h-5"></i>
-                <span>التصنيف</span>
-            </button>
-            <button onclick="navigateTo('/settings')" class="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-                <i data-lucide="settings" class="w-5 h-5"></i>
-                <span>الإعدادات</span>
-            </button>
+      <!-- التحكم في مستوى الصوت -->
+      <div class="space-y-1 pt-2">
+        <div class="flex justify-between text-[11px] opacity-70">
+          <span>مستوى الصوت</span>
+          <span id="ambVolDisplay" class="font-mono">50%</span>
         </div>
-    </nav>
+        <input type="range" id="ambientVolume" min="0" max="100" value="50" oninput="changeAmbientVolume(this.value)"
+          class="w-full accent-[#731E3E] dark:accent-[#E8C995] cursor-pointer">
+      </div>
 
-    <script>
-        lucide.createIcons();
+      <div class="flex items-center justify-between pt-2">
+        <span id="ambientStatusText" class="text-xs font-bold text-gray-500">متوقف حالياً</span>
+        <button onclick="stopAmbientSound()"
+          class="px-4 py-2 bg-red-800/80 hover:bg-red-800 text-white text-xs font-bold rounded-xl transition">
+          إيقاف الصوت
+        </button>
+      </div>
+    </div>
+  </div>
 
-        // بيانات شرائح القصة
-        const slides = [
-            { year: '2024', badge: 'بداية القصة 🍃🌱', title: 'من طالبة تبحث عن ملخصات…', text: 'كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث بين الصفحات عن مصادر صحيحة...✨' },
-            { year: '2024', badge: 'حلم صغير... 🤍', title: 'كل معلومة كانت خطوة', text: 'بدأت القناة بمجهودي الفردي وبكثير من الحب. كل معلومة كانت خطوة...' },
-            { year: '2025', badge: 'الشرارة الحقيقية ❤️‍🔥', title: 'كبرنا مع بعضنا', text: 'عندما قررت خوض تجربة البكالوريا للمرة الثانية، وسط كل الضغط والتعب...' },
-            { year: '2026', badge: 'الحلم يكبر ✨', title: 'ما بقيناش وحدنا', text: 'سنوات الصبر والعمل المتواصل جعلت Focus & Force تتحول إلى عائلة تجمع الجميع...' },
-            { year: '2027', badge: 'عهد جديد 💗', title: 'كل محاولة صنعتنا', text: 'كل تجربة مرت بي علمتني الكثير، كل سقوط قوّاني...' },
-            { year: '∞', badge: 'عائلة نكبر معها', title: 'هي قطعة حقيقية من قلبي', text: 'رسالة نعيشها سوياً كل يوم. أنا هنا لأكون السند الذي تمنيتُ لو وجدته 🍓✨' }
-        ];
+  <!-- الأقسام الرئيسية للويب آب -->
+  <main id="appPages">
 
-        let currentSlideIdx = 0;
-        let slideTimer = null;
+    <!-- 1. الرئيسية / -->
+    <section id="pageHome" class="space-y-5">
+      <!-- بطاقة الترحيب والدافع اليومي -->
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 shadow-sm space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h1 id="homeGreeting" class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">أهلاً يا طالبنا، خلّينا
+            ننجز شيئاً.</h1>
+          <span id="homeTrackBadge"
+            class="text-[11px] bg-[#E8C995]/25 text-[#451C2B] dark:text-[#E8C995] px-3 py-1 rounded-full font-bold">علوم
+            تجريبية</span>
+        </div>
+        <p class="text-xs opacity-80 leading-relaxed">لا تحتاج إلى يوم مثالي. تحتاج فقط إلى جلسة واحدة تبدأ بها. خذ
+          قرارك وابدأ رحلة التميز الآن.</p>
 
-        function renderSlide() {
-            const s = slides[currentSlideIdx];
-            document.getElementById('slideYear').innerText = s.year;
-            document.getElementById('slideBadge').innerText = s.badge;
-            document.getElementById('slideTitle').innerText = s.title;
-            document.getElementById('slideText').innerText = s.text;
+        <!-- أزرار الإجراءات السريعة -->
+        <div class="flex flex-wrap gap-2.5 pt-2">
+          <button onclick="navigateTo('/pomodoro')"
+            class="flex items-center gap-2 px-4 py-2.5 bg-[#731E3E] text-[#F5EDE0] font-semibold rounded-xl text-xs hover:bg-[#501426] transition shadow">
+            <i data-lucide="timer" class="w-4 h-4"></i> ابدأ جلسة تركيز
+          </button>
+          <button onclick="navigateTo('/quizzes')"
+            class="flex items-center gap-2 px-4 py-2.5 bg-[#E8C995] text-[#451C2B] font-semibold rounded-xl text-xs hover:bg-[#F4DFBE] transition shadow">
+            <i data-lucide="help-circle" class="w-4 h-4"></i> كويزات البكالوريا 🧩
+          </button>
+          <button onclick="navigateTo('/decisions')"
+            class="flex items-center gap-2 px-4 py-2.5 bg-[#501426] dark:bg-[#25131D] text-[#E8C995] border border-[#E8C995]/40 font-semibold rounded-xl text-xs hover:bg-[#731E3E] transition shadow">
+            <i data-lucide="target" class="w-4 h-4"></i> القرارات النهائية 🎯
+          </button>
+        </div>
+      </div>
 
-            const isLast = currentSlideIdx === slides.length - 1;
-            document.getElementById('nextSlideBtn').innerText = isLast ? 'نبدأ رحلتي للبكالوريا' : 'تابع القصة';
+      <!-- بطاقة نصيحة المتفوق اليومية -->
+      <div
+        class="bg-gradient-to-r from-[#FCF8F1] to-[#F5EDE0] dark:from-[#501426] dark:to-[#25131D] p-4 sm:p-5 rounded-3xl border border-[#E8C995]/40 shadow-sm flex items-start gap-3">
+        <div class="p-2.5 bg-[#E8C995]/20 rounded-2xl text-[#731E3E] dark:text-[#E8C995] shrink-0 mt-0.5">
+          <i data-lucide="lightbulb" class="w-5 h-5"></i>
+        </div>
+        <div class="flex-1 space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold text-[#731E3E] dark:text-[#E8C995]">نصيحة المتفوق اليومية</span>
+            <button onclick="refreshProTip()"
+              class="text-[10px] text-opacity-70 hover:opacity-100 flex items-center gap-1 font-bold">
+              <span>نصيحة جديدة</span>
+              <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+            </button>
+          </div>
+          <p id="proTipText" class="text-xs leading-relaxed opacity-90 font-medium">نصيحة المتفوقين: ليس العبرة بعدد
+            التمارين التي تحلها، بل بعدد الأفكار الجديدة التي تكتشفها وتفهمها جيداً 💡</p>
+        </div>
+      </div>
 
-            const dots = document.getElementById('slideDots');
-            dots.innerHTML = slides.map((_, i) => `<div class="h-2 rounded-full transition-all ${i === currentSlideIdx ? 'w-8 bg-[#E8C995]' : 'w-2 bg-[#E8C995]/30'}"></div>`).join('');
-        }
+      <!-- بطاقة العد التنازلي للبكالوريا -->
+      <div class="bg-[#501426] text-[#F5EDE0] p-6 rounded-3xl border border-[#E8C995]/30 shadow-md text-center">
+        <h3 class="font-bold text-lg text-[#E8C995]">العد التنازلي للبكالوريا</h3>
+        <p class="text-xs opacity-70 mb-4">حتى 07 جوان 2027</p>
+        <div class="grid grid-cols-4 gap-2 font-mono">
+          <div class="bg-[#25131D]/60 p-2.5 rounded-2xl border border-[#E8C995]/20">
+            <span id="cdDays" class="text-xl md:text-2xl font-bold text-[#E8C995]">0</span>
+            <span class="block text-[10px] opacity-60">أيام</span>
+          </div>
+          <div class="bg-[#25131D]/60 p-2.5 rounded-2xl border border-[#E8C995]/20">
+            <span id="cdHours" class="text-xl md:text-2xl font-bold text-[#E8C995]">0</span>
+            <span class="block text-[10px] opacity-60">ساعات</span>
+          </div>
+          <div class="bg-[#25131D]/60 p-2.5 rounded-2xl border border-[#E8C995]/20">
+            <span id="cdMinutes" class="text-xl md:text-2xl font-bold text-[#E8C995]">0</span>
+            <span class="block text-[10px] opacity-60">دقائق</span>
+          </div>
+          <div class="bg-[#25131D]/60 p-2.5 rounded-2xl border border-[#E8C995]/20">
+            <span id="cdSeconds" class="text-xl md:text-2xl font-bold text-[#E8C995]">0</span>
+            <span class="block text-[10px] opacity-60">ثواني</span>
+          </div>
+        </div>
+      </div>
 
-        function nextSlide() {
-            if (currentSlideIdx < slides.length - 1) {
-                currentSlideIdx++;
-                renderSlide();
-            } else {
-                clearInterval(slideTimer);
-                document.getElementById('storyScreen').classList.add('hidden');
-                checkProfile();
-            }
-        }
+      <!-- قائمة مهام المراجعة والروتين اليومي الذكية -->
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 sm:p-6 rounded-3xl border border-[#E8C995]/30 space-y-4">
+        <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-3">
+          <div class="flex items-center gap-2">
+            <i data-lucide="check-square" class="w-5 h-5 text-[#731E3E] dark:text-[#E8C995]"></i>
+            <h3 class="font-bold text-sm">مهام المراجعة اليومية (+15 نقطة لكل مهمة)</h3>
+          </div>
+          <span id="dailyTasksProgress"
+            class="text-[11px] font-mono font-bold bg-[#E8C995]/20 px-2.5 py-1 rounded-full">0/3 مكتملة</span>
+        </div>
 
-        // إحصائيات والملف الشخصي والبيانات المخزنة
-        let profile = JSON.parse(localStorage.getItem('focus-force-profile') || 'null');
-        
-        let pomodoroMinutes = parseInt(localStorage.getItem('pomodoroMinutes') || '0');
-        let meetMinutes = parseInt(localStorage.getItem('meetMinutes') || '0');
-        let pomodoroSessions = parseInt(localStorage.getItem('pomodoroSessions') || '0');
-        let meetSessions = parseInt(localStorage.getItem('meetSessions') || '0');
-        let pomodoroPoints = parseInt(localStorage.getItem('pomodoroPoints') || '0');
-        let meetPoints = parseInt(localStorage.getItem('meetPoints') || '0');
-        let totalPoints = parseInt(localStorage.getItem('totalPoints') || '0');
-        let studyHistory = JSON.parse(localStorage.getItem('studyHistory') || '[]');
+        <!-- شريط تقدم إنجاز المهام -->
+        <div class="w-full h-2 bg-[#25131D]/20 dark:bg-[#25131D] rounded-full overflow-hidden">
+          <div id="tasksProgressBar" class="h-full bg-[#6C9D78] rounded-full transition-all duration-300"
+            style="width: 0%"></div>
+        </div>
 
-        function checkProfile() {
-            if (!profile) {
-                document.getElementById('profileScreen').classList.remove('hidden');
-            } else {
-                updateUI();
-            }
-        }
+        <!-- نموذج إضافة مهمة جديدة -->
+        <form onsubmit="addDailyTask(event)" class="flex gap-2">
+          <input type="text" id="newTaskInput" placeholder="أضف هدف مراجعة (مثال: حل موضوع فيزياء 2023)..." required
+            class="flex-1 p-2.5 rounded-xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/40 text-xs outline-none focus:border-[#731E3E]">
+          <select id="newTaskPriority"
+            class="p-2.5 rounded-xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/40 text-xs outline-none">
+            <option value="urgent">عاجل 🔥</option>
+            <option value="important" selected>مهم ⚡</option>
+            <option value="normal">عادي 🍃</option>
+          </select>
+          <button type="submit"
+            class="px-4 py-2.5 bg-[#731E3E] text-[#F5EDE0] text-xs font-bold rounded-xl hover:bg-[#501426] transition">
+            إضافة
+          </button>
+        </form>
 
-        function toggleSpecialization() {
-            const val = document.getElementById('track').value;
-            document.getElementById('specContainer').classList.toggle('hidden', val !== 'تقني رياضي');
-        }
+        <!-- قائمة المهام المسجلة -->
+        <div id="dailyTasksList" class="space-y-2 text-xs">
+          <!-- تدرج المهام ديناميكياً -->
+        </div>
+      </div>
 
-        function saveProfile(e) {
-            e.preventDefault();
-            profile = {
-                firstName: document.getElementById('firstName').value,
-                lastName: document.getElementById('lastName').value,
-                track: document.getElementById('track').value,
-                specialization: document.getElementById('specialization').value
-            };
-            localStorage.setItem('focus-force-profile', JSON.stringify(profile));
-            document.getElementById('profileScreen').classList.add('hidden');
+      <!-- بطاقة ملخص التصنيف والنشاط -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-2">
+          <span class="text-xs opacity-60 font-semibold">تصنيفك الحالي</span>
+          <div class="flex justify-between items-baseline">
+            <h4 id="userRank" class="text-lg font-bold text-[#731E3E] dark:text-[#E8C995]">بداية قوية</h4>
+            <span id="userPoints" class="font-mono text-sm font-bold">0 نقطة</span>
+          </div>
+          <p id="userStudyTime" class="text-xs opacity-70">إجمالي الدقائق الدراسية: 0 دقيقة</p>
+        </div>
+        <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-2">
+          <span class="text-xs opacity-60 font-semibold">غرفة الدراسة الجماعية</span>
+          <h4 class="font-bold text-sm">نذاكر معاً عبر Meet؟</h4>
+          <button onclick="navigateTo('/study')"
+            class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#6C9D78] text-white text-xs font-bold rounded-xl mt-2 hover:opacity-90 transition">
+            <i data-lucide="video" class="w-4 h-4"></i> انضم لغرفة Google Meet
+          </button>
+        </div>
+      </div>
+    </section>
 
-            document.getElementById('welcomeName').innerText = `أهلا، ${profile.firstName} ${profile.lastName}`;
-            document.getElementById('welcomeText').innerText = `مساحتك حضرت. راح نرافقوك في ${profile.track}، خطوة بخطوة.`;
-            document.getElementById('welcomeBanner').classList.remove('hidden');
-        }
+    <!-- 2. كويزات البكالوريا التفاعلية /quizzes -->
+    <section id="pageQuizzes" class="space-y-5 hidden">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">كويزات وتحديات البكالوريا</h1>
+          <p class="text-xs opacity-70">اختبر معلوماتك ومنهجيتك في أسئلة تحاكي البكالوريا الرسمية. كل إجابة صحيحة تمنحك
+            +10 نقاط!</p>
+        </div>
+        <div
+          class="bg-[#E8C995]/20 px-3 py-1.5 rounded-2xl border border-[#E8C995]/30 flex items-center gap-1.5 text-xs font-mono font-bold text-[#731E3E] dark:text-[#E8C995]">
+          <i data-lucide="award" class="w-4 h-4"></i>
+          <span id="quizStreakCount">0 نقاط كويز</span>
+        </div>
+      </div>
 
-        function closeWelcome() {
-            document.getElementById('welcomeBanner').classList.add('hidden');
-            updateUI();
-        }
+      <!-- أزرار تصفية المواد -->
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none text-xs font-semibold">
+        <button onclick="filterQuizzes('الكل')" id="quizFilter-all"
+          class="quiz-filter-btn px-3.5 py-1.5 rounded-full bg-[#731E3E] text-[#F5EDE0] whitespace-nowrap transition">الكل</button>
+        <button onclick="filterQuizzes('الرياضيات')" id="quizFilter-math"
+          class="quiz-filter-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 whitespace-nowrap transition">الرياضيات</button>
+        <button onclick="filterQuizzes('العلوم الطبيعية')" id="quizFilter-sci"
+          class="quiz-filter-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 whitespace-nowrap transition">العلوم
+          الطبيعية</button>
+        <button onclick="filterQuizzes('الفيزياء')" id="quizFilter-phys"
+          class="quiz-filter-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 whitespace-nowrap transition">الفيزياء</button>
+        <button onclick="filterQuizzes('الفلسفة')" id="quizFilter-phil"
+          class="quiz-filter-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 whitespace-nowrap transition">الفلسفة</button>
+        <button onclick="filterQuizzes('العلوم الإسلامية')" id="quizFilter-isl"
+          class="quiz-filter-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 whitespace-nowrap transition">العلوم
+          الإسلامية</button>
+        <button onclick="filterQuizzes('اللغة العربية')" id="quizFilter-arb"
+          class="quiz-filter-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 whitespace-nowrap transition">اللغة
+          العربية</button>
+        <button onclick="filterQuizzes('منهجية وتخطيط')" id="quizFilter-meth"
+          class="quiz-filter-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 whitespace-nowrap transition">منهجية
+          BAC</button>
+      </div>
 
-        function showToast(msg) {
-            const toast = document.getElementById('toastNotification');
-            document.getElementById('toastMsg').innerText = msg;
-            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
-            }, 4000);
-        }
+      <!-- واجهة السؤال النشط -->
+      <div id="quizCardContainer"
+        class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 shadow-md space-y-4">
+        <!-- يتم إدراج السؤال ديناميكياً عبر JS -->
+      </div>
+    </section>
 
-        function saveStatsToStorage() {
-            localStorage.setItem('pomodoroMinutes', pomodoroMinutes);
-            localStorage.setItem('meetMinutes', meetMinutes);
-            localStorage.setItem('pomodoroSessions', pomodoroSessions);
-            localStorage.setItem('meetSessions', meetSessions);
-            localStorage.setItem('pomodoroPoints', pomodoroPoints);
-            localStorage.setItem('meetPoints', meetPoints);
-            localStorage.setItem('totalPoints', totalPoints);
-            localStorage.setItem('studyHistory', JSON.stringify(studyHistory));
-        }
+    <!-- 3. لوحة القرارات النهائية للبكالوريا ومحاكي المعدل /decisions -->
+    <section id="pageDecisions" class="space-y-6 hidden">
+      <div>
+        <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">لوحة القرارات النهائية للبكالوريا</h1>
+        <p class="text-xs opacity-70">محاكي المعدل الرسمي بالمعاملات الجزائرية + توجيه التخصصات الجامعية + ميثاق قراراتك
+          المصيرية.</p>
+      </div>
 
-        function addHistoryItem(type, durationMins, ptsGained) {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('ar-DZ', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-            studyHistory.unshift({
-                type,
-                duration: durationMins,
-                points: ptsGained,
-                date: dateStr
-            });
-            saveStatsToStorage();
-        }
+      <!-- 1. محاكي المعدل الرسمي والقرارات التقديرية -->
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 shadow-lg space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8C995]/20 pb-3">
+          <div>
+            <h3 class="font-bold text-base text-[#731E3E] dark:text-[#E8C995] flex items-center gap-2">
+              <i data-lucide="calculator" class="w-5 h-5"></i>
+              حاسبة المعدل التقديري الرسمية
+            </h3>
+            <span class="text-[11px] opacity-70">تعتمد على المعاملات المعتمدة لوزارة التربية الوطنية الجزائرية</span>
+          </div>
 
-        function updateUI() {
-            if (profile) {
-                document.getElementById('homeGreeting').innerText = `أهلاً يا ${profile.firstName}، خلّينا ننجز شيئاً.`;
-                document.getElementById('rankStudentName').innerText = `${profile.firstName} ${profile.lastName}`;
-            }
+          <div class="flex items-center gap-2">
+            <label class="text-xs font-semibold opacity-80">الشعبة:</label>
+            <select id="decisionTrackSelect" onchange="renderDecisionCalculator()"
+              class="p-2 rounded-xl bg-[#F5EDE0] dark:bg-[#25131D] border border-[#E8C995]/40 text-xs font-bold outline-none">
+              <option value="علوم تجريبية">علوم تجريبية</option>
+              <option value="رياضيات">رياضيات</option>
+              <option value="تقني رياضي">تقني رياضي</option>
+              <option value="تسيير واقتصاد">تسيير واقتصاد</option>
+              <option value="آداب وفلسفة">آداب وفلسفة</option>
+              <option value="آداب ولغات">آداب ولغات</option>
+            </select>
+          </div>
+        </div>
 
-            totalPoints = pomodoroPoints + meetPoints;
-            let rank = "بداية قوية";
-            let nextRankPts = 150;
+        <!-- بطاقة النتيجة الحية للمعدل التقديري -->
+        <div
+          class="p-5 bg-gradient-to-br from-[#731E3E] to-[#501426] text-[#F5EDE0] rounded-2xl border border-[#E8C995]/40 flex flex-wrap items-center justify-between gap-4 shadow-md">
+          <div class="space-y-1">
+            <span class="text-xs text-[#E8C995] font-semibold">معدلك التقديري في البكالوريا:</span>
+            <div class="flex items-baseline gap-2">
+              <span id="predictedAvgDisplay"
+                class="font-mono text-3xl sm:text-4xl font-extrabold text-[#E8C995]">14.50</span>
+              <span class="text-xs opacity-75">/ 20</span>
+              <span id="predictedAppreciation"
+                class="text-xs font-bold bg-[#E8C995]/20 px-3 py-1 rounded-full text-[#FCF8F1]">جيد 🥇</span>
+            </div>
+            <p id="decisionInsights" class="text-[11px] opacity-80">أعلى مادة داعمة: العلوم الطبيعية (معامل 6)</p>
+          </div>
 
-            if (totalPoints >= 800) {
-                rank = "قائد العائلة";
-                nextRankPts = 800;
-            } else if (totalPoints >= 400) {
-                rank = "مركز";
-                nextRankPts = 800;
-            } else if (totalPoints >= 150) {
-                rank = "مستعد";
-                nextRankPts = 400;
-            }
+          <div class="text-left font-mono text-xs space-y-1 bg-[#25131D]/60 p-3 rounded-xl border border-[#E8C995]/20">
+            <div>مجموع النقاط: <span id="totalWeightedScore" class="font-bold text-[#E8C995]">435.0</span></div>
+            <div>مجموع المعاملات: <span id="totalCoefficients" class="font-bold text-[#E8C995]">30</span></div>
+          </div>
+        </div>
 
-            const totalTime = pomodoroMinutes + meetMinutes;
-            const totalSess = pomodoroSessions + meetSessions;
+        <!-- جدول إدخال علامات المواد بالمعاملات الرسمية -->
+        <div class="space-y-2">
+          <span class="text-xs font-bold opacity-80 block">ضع علاماتك المتوقعة (من 0 إلى 20):</span>
+          <div id="subjectsGradeGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+            <!-- يتم تعبئة المواد ديناميكياً بحسب الشعبة -->
+          </div>
+        </div>
+      </div>
 
-            // تحديث بطاقات الصفحة الرئيسية
-            document.getElementById('userRank').innerText = rank;
-            document.getElementById('userPoints').innerText = `${totalPoints} نقطة`;
-            document.getElementById('userStudyTime').innerText = `إجمالي الدقائق الدراسية: ${totalTime} دقيقة`;
+      <!-- 2. محاكي التوجيه الجامعي وقرارات المستقبل -->
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 space-y-4">
+        <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-3">
+          <div class="flex items-center gap-2">
+            <i data-lucide="compass" class="w-5 h-5 text-[#731E3E] dark:text-[#E8C995]"></i>
+            <h3 class="font-bold text-sm">قرارات التوجيه الجامعي المتاحة وفق معدلك الحالي</h3>
+          </div>
+          <span class="text-[11px] opacity-60">عتبات القبول التقريبية</span>
+        </div>
 
-            // تحديث صفحة التصنيف الشاملة
-            document.getElementById('rankTitleBadge').innerText = rank;
-            document.getElementById('rankTotalPts').innerText = totalPoints;
-            document.getElementById('rankTotalTime').innerText = `${totalTime} د`;
-            document.getElementById('rankTotalSessions').innerText = totalSess;
+        <div id="universityDecisionsList" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <!-- يتم عرض التخصصات الجامعية ومدى إمكانية الالتحاق بها -->
+        </div>
+      </div>
 
-            document.getElementById('pomoPtsDisplay').innerText = `${pomodoroPoints} نقطة`;
-            document.getElementById('pomoMinsDisplay').innerText = `${pomodoroMinutes} دقيقة`;
-            document.getElementById('pomoSessDisplay').innerText = `${pomodoroSessions} جلسة`;
+      <!-- 3. ميثاق القرارات المصيرية للمذاكرة -->
+      <div class="bg-[#501426] text-[#F5EDE0] p-6 rounded-3xl border border-[#E8C995]/40 shadow-xl space-y-4">
+        <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-3">
+          <div class="flex items-center gap-2 text-[#E8C995]">
+            <i data-lucide="shield-check" class="w-5 h-5"></i>
+            <h3 class="font-bold text-base">ميثاق القرارات النهائية للمذاكرة</h3>
+          </div>
+          <span class="text-[10px] bg-[#E8C995]/20 px-2.5 py-1 rounded-full text-[#E8C995] font-bold">+20 نقطة عند
+            التثبيت</span>
+        </div>
 
-            document.getElementById('meetPtsDisplay').innerText = `${meetPoints} نقطة`;
-            document.getElementById('meetMinsDisplay').innerText = `${meetMinutes} دقيقة`;
-            document.getElementById('meetSessDisplay').innerText = `${meetSessions} جلسة`;
+        <p class="text-xs opacity-85 leading-relaxed">القرارات الحاسمة التي تلتزم بها تصنع الفارق بين طالب يتردد وطالب
+          يحصد معدل الامتياز. دوّن قراراتك الثلاثة النهائية:</p>
 
-            // شريط النسبة والمتبقي للرتبة القادمة
-            if (totalPoints >= 800) {
-                document.getElementById('rankNextText').innerText = "أعلى رتبة وصلت إليها 🎉";
-                document.getElementById('rankProgressPercent').innerText = "100%";
-                document.getElementById('rankProgressBar').style.width = "100%";
-            } else {
-                const ptsRemaining = nextRankPts - totalPoints;
-                const percent = Math.min(100, Math.floor((totalPoints / nextRankPts) * 100));
-                document.getElementById('rankNextText').innerText = `النقاط المتبقية للوصول إلى الرتبة التالية: ${ptsRemaining} نقطة`;
-                document.getElementById('rankProgressPercent').innerText = `${percent}%`;
-                document.getElementById('rankProgressBar').style.width = `${percent}%`;
-            }
+        <div class="space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold mb-1 text-[#E8C995]">القرار الأول: الهدف الرئيسي في مادتك الأساسية</label>
+            <input type="text" id="finalDecision1" placeholder="مثال: حل 10 مواضيع بكالوريا رسمية وفهم منهجية التمارين"
+              class="w-full p-3 rounded-xl bg-[#25131D]/70 border border-[#E8C995]/40 text-sm outline-none focus:border-[#E8C995] text-[#F5EDE0]">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1 text-[#E8C995]">القرار الثاني: خطة الحفظ والمواد الثانوية /
+              الفلسفة</label>
+            <input type="text" id="finalDecision2"
+              placeholder="مثال: حفظ وفهم مقالات الفلسفة ومصطلحات التاريخ والجغرافيا أسبوعياً"
+              class="w-full p-3 rounded-xl bg-[#25131D]/70 border border-[#E8C995]/40 text-sm outline-none focus:border-[#E8C995] text-[#F5EDE0]">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1 text-[#E8C995]">القرار الثالث: الانضباط الذاتي ونمط النوم</label>
+            <input type="text" id="finalDecision3"
+              placeholder="مثال: النوم عند 11:00 ليلاً، والاستيقاظ لصلاة الفجر، والابتعاد عن الهاتف أثناء الحصص"
+              class="w-full p-3 rounded-xl bg-[#25131D]/70 border border-[#E8C995]/40 text-sm outline-none focus:border-[#E8C995] text-[#F5EDE0]">
+          </div>
+        </div>
 
-            // عرض سجل الجلسات
-            const listEl = document.getElementById('historyList');
-            if (studyHistory.length === 0) {
-                listEl.innerHTML = `<div class="text-center opacity-60 py-4">لا يوجد جلسات مسجلة بعد. ابدأ أول جلسة الآن!</div>`;
-            } else {
-                listEl.innerHTML = studyHistory.slice(0, 10).map(h => `
-                    <div class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-2xl border border-[#E8C995]/20 flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="${h.type === 'Pomodoro' ? 'timer' : 'video'}" class="w-4 h-4 ${h.type === 'Pomodoro' ? 'text-[#731E3E] dark:text-[#E8C995]' : 'text-[#6C9D78]'}"></i>
-                            <div>
-                                <span class="font-bold">${h.type}</span>
-                                <span class="block text-[10px] opacity-60">${h.date}</span>
-                            </div>
-                        </div>
-                        <div class="text-left font-mono">
-                            <span class="font-bold text-sm text-[#731E3E] dark:text-[#E8C995]">+${h.points} نقطة</span>
-                            <span class="block text-[10px] opacity-60">${h.duration} دقيقة</span>
-                        </div>
-                    </div>
-                `).join('');
-                lucide.createIcons();
-            }
-        }
+        <button onclick="saveFinalDecisions()"
+          class="w-full py-3 bg-[#E8C995] text-[#451C2B] font-bold rounded-2xl hover:bg-[#F4DFBE] transition shadow-lg text-xs mt-2 flex items-center justify-center gap-2">
+          <i data-lucide="check-circle" class="w-4 h-4"></i>
+          <span>تثبيت وإعلان قراراتي النهائية للبكالوريا</span>
+        </button>
+      </div>
+    </section>
 
-        // التوجيه والتنقل بين الصفحات
-        function navigateTo(path) {
-            document.querySelectorAll('#appPages > section').forEach(sec => sec.classList.add('hidden'));
-            if (path === '/') document.getElementById('pageHome').classList.remove('hidden');
-            if (path === '/library') document.getElementById('pageLibrary').classList.remove('hidden');
-            if (path === '/study') document.getElementById('pageStudy').classList.remove('hidden');
-            if (path === '/pomodoro') document.getElementById('pagePomodoro').classList.remove('hidden');
-            if (path === '/ranking') document.getElementById('pageRanking').classList.remove('hidden');
-            if (path === '/settings') document.getElementById('pageSettings').classList.remove('hidden');
-        }
+    <!-- 4. المؤقت /pomodoro -->
+    <section id="pagePomodoro" class="space-y-6 hidden">
+      <div>
+        <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">مؤقت التركيز المخصص</h1>
+        <p class="text-xs opacity-70">جلسة واحدة في كل مرة. كل دقيقة مكتملة في Pomodoro تمنحك نقطتان.</p>
+      </div>
 
-        // العد التنازلي للبكالوريا (07 يونيو 2027)
-        function updateCountdown() {
-            const target = new Date('June 7, 2027 00:00:00').getTime();
-            const now = new Date().getTime();
-            const diff = target - now;
+      <!-- أزرار الوضع السريع -->
+      <div
+        class="flex justify-center gap-2 p-1.5 bg-[#FCF8F1] dark:bg-[#501426] rounded-2xl border border-[#E8C995]/30 max-w-sm mx-auto">
+        <button id="modeFocusBtn" onclick="setPomoMode('focus')"
+          class="flex-1 py-2 text-xs font-bold rounded-xl transition bg-[#731E3E] text-[#F5EDE0]">تركيز</button>
+        <button id="modeShortBtn" onclick="setPomoMode('short')"
+          class="flex-1 py-2 text-xs font-bold rounded-xl opacity-70 transition">استراحة قصيرة</button>
+        <button id="modeLongBtn" onclick="setPomoMode('long')"
+          class="flex-1 py-2 text-xs font-bold rounded-xl opacity-70 transition">استراحة طويلة</button>
+      </div>
 
-            if (diff > 0) {
-                document.getElementById('cdDays').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-                document.getElementById('cdHours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                document.getElementById('cdMinutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                document.getElementById('cdSeconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
-            }
-        }
-        setInterval(updateCountdown, 1000);
+      <!-- دائرة المؤقت -->
+      <div class="flex flex-col items-center justify-center my-4">
+        <div id="pomoCircle"
+          class="w-64 h-64 rounded-full p-3 flex items-center justify-center transition-all duration-300 shadow-xl timer-circle">
+          <div
+            class="w-full h-full bg-[#FCF8F1] dark:bg-[#25131D] rounded-full flex flex-col items-center justify-center relative">
+            <span id="pomoModeTitle" class="text-xs text-[#731E3E] dark:text-[#E8C995] font-semibold mb-1">جلسة
+              تركيز</span>
+            <span id="pomoTime" class="font-mono text-5xl font-bold">25:00</span>
 
-        // منطق مؤقت Pomodoro وتخصيص الوقت
-        let pomoMode = 'focus';
-        let customTimes = { focus: 25, short: 5, long: 15 };
-        let pomoMinutes = 25;
-        let pomoSeconds = 0;
-        let pomoTotalDurationSeconds = 25 * 60;
-        let pomoIsRunning = false;
-        let pomoInterval = null;
+            <button onclick="toggleCustomizer()"
+              class="mt-3 text-[11px] bg-[#E8C995]/20 hover:bg-[#E8C995]/40 text-[#731E3E] dark:text-[#E8C995] px-3 py-1 rounded-full border border-[#E8C995]/40 transition flex items-center gap-1">
+              <i data-lucide="sliders" class="w-3 h-3"></i>
+              <span>تخصيص الوقت</span>
+            </button>
+          </div>
+        </div>
 
-        function setPomoMode(mode) {
-            pomoMode = mode;
-            document.getElementById('modeFocusBtn').className = `flex-1 py-2 text-xs font-bold rounded-xl transition ${mode === 'focus' ? 'bg-[#731E3E] text-[#F5EDE0]' : 'opacity-70'}`;
-            document.getElementById('modeShortBtn').className = `flex-1 py-2 text-xs font-bold rounded-xl transition ${mode === 'short' ? 'bg-[#731E3E] text-[#F5EDE0]' : 'opacity-70'}`;
-            document.getElementById('modeLongBtn').className = `flex-1 py-2 text-xs font-bold rounded-xl transition ${mode === 'long' ? 'bg-[#731E3E] text-[#F5EDE0]' : 'opacity-70'}`;
+        <!-- أزرار التحكم -->
+        <div class="flex items-center gap-4 mt-6">
+          <button id="pomoStartBtn" onclick="togglePomodoro()"
+            class="px-8 py-3 bg-[#731E3E] text-[#F5EDE0] font-bold rounded-2xl text-sm shadow-md transition hover:bg-[#501426] flex items-center gap-2">
+            <i data-lucide="play" class="w-4 h-4"></i>
+            <span id="pomoStartBtnText">ابدأ الآن</span>
+          </button>
+          <button onclick="resetPomodoro()"
+            class="p-3 bg-[#FCF8F1] dark:bg-[#501426] rounded-2xl border border-[#E8C995]/30 hover:scale-105 transition"
+            title="إعادة ضبط">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          </button>
+          <button onclick="toggleAmbientModal()"
+            class="p-3 bg-[#FCF8F1] dark:bg-[#501426] rounded-2xl border border-[#E8C995]/30 hover:scale-105 transition text-[#731E3E] dark:text-[#E8C995]"
+            title="أصوات التركيز البيئية">
+            <i data-lucide="headphones" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
 
-            const titles = { focus: 'جلسة تركيز', short: 'استراحة قصيرة', long: 'استراحة طويلة' };
-            document.getElementById('pomoModeTitle').innerText = titles[mode];
-            resetPomodoro();
-        }
+      <!-- لوحة التخصيص والمرونة (Customizer Panel) -->
+      <div id="customizerPanel"
+        class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-4 max-w-md mx-auto hidden">
+        <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-2">
+          <h3 class="font-bold text-sm flex items-center gap-1.5 text-[#731E3E] dark:text-[#E8C995]">
+            <i data-lucide="settings-2" class="w-4 h-4"></i> إعدادات التخصيص
+          </h3>
+          <span class="text-[10px] opacity-60">تعديل الدقائق</span>
+        </div>
 
-        function updateCustomTimes() {
-            customTimes.focus = parseInt(document.getElementById('customFocusInput').value) || 25;
-            customTimes.short = parseInt(document.getElementById('customShortInput').value) || 5;
-            customTimes.long = parseInt(document.getElementById('customLongInput').value) || 15;
-            resetPomodoro();
-        }
+        <div class="grid grid-cols-3 gap-3 text-center">
+          <div>
+            <label class="block text-[11px] font-semibold mb-1">جلسة التركيز</label>
+            <input type="number" id="customFocusInput" min="1" max="180" value="25" onchange="updateCustomTimes()"
+              class="w-full text-center p-2 rounded-xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/40 text-sm font-mono outline-none">
+            <span class="text-[9px] opacity-60">دقيقة</span>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold mb-1">استراحة قصيرة</label>
+            <input type="number" id="customShortInput" min="1" max="60" value="5" onchange="updateCustomTimes()"
+              class="w-full text-center p-2 rounded-xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/40 text-sm font-mono outline-none">
+            <span class="text-[9px] opacity-60">دقيقة</span>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold mb-1">استراحة طويلة</label>
+            <input type="number" id="customLongInput" min="1" max="120" value="15" onchange="updateCustomTimes()"
+              class="w-full text-center p-2 rounded-xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/40 text-sm font-mono outline-none">
+            <span class="text-[9px] opacity-60">دقيقة</span>
+          </div>
+        </div>
 
-        function addMinutes(mins) {
-            let totalMins = pomoMinutes + mins;
-            if (totalMins < 1) totalMins = 1;
-            pomoMinutes = totalMins;
-            pomoTotalDurationSeconds = pomoMinutes * 60 + pomoSeconds;
-            updateTimerDisplay();
-        }
+        <div class="flex items-center justify-between pt-1">
+          <span class="text-xs opacity-70">أزرار تعديل سريعة للجلسة الحالية:</span>
+          <div class="flex gap-1.5">
+            <button onclick="addMinutes(-5)"
+              class="px-2.5 py-1 bg-[#F5EDE0] dark:bg-[#25131D] text-xs font-mono font-bold rounded-lg border border-[#E8C995]/40 hover:bg-[#E8C995]/30">-5د</button>
+            <button onclick="addMinutes(5)"
+              class="px-2.5 py-1 bg-[#F5EDE0] dark:bg-[#25131D] text-xs font-mono font-bold rounded-lg border border-[#E8C995]/40 hover:bg-[#E8C995]/30">+5د</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        function toggleCustomizer() {
-            const panel = document.getElementById('customizerPanel');
-            panel.classList.toggle('hidden');
-        }
+    <!-- 5. غرفة الدراسة عبر Meet /study -->
+    <section id="pageStudy" class="space-y-6 hidden">
+      <div>
+        <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">غرفة الدراسة الجماعية</h1>
+        <p class="text-xs opacity-70">الدراسة عبر Google Meet. كل دقيقة دراسة تمنحك نقطة واحدة.</p>
+      </div>
 
-        function updateTimerDisplay() {
-            document.getElementById('pomoTime').innerText = `${String(pomoMinutes).padStart(2, '0')}:${String(pomoSeconds).padStart(2, '0')}`;
-            const currentSecs = pomoMinutes * 60 + pomoSeconds;
-            const progressPct = pomoTotalDurationSeconds > 0 ? ((pomoTotalDurationSeconds - currentSecs) / pomoTotalDurationSeconds) * 100 : 0;
-            document.getElementById('pomoCircle').style.setProperty('--pomo-progress', `${progressPct}%`);
-        }
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 space-y-4">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#6C9D78] animate-pulse"></span>
+          <span class="text-xs font-semibold text-[#6C9D78]">الغرفة متاحة للجميع</span>
+        </div>
+        <h3 class="font-bold text-lg">جلسة الدراسة التفاعلية عبر Google Meet</h3>
+        <p class="text-xs opacity-80 leading-relaxed">لربح النقاط، انقر على "ابدأ الدراسة عبر Meet" ثم أنهِ الجلسة عند
+          الانتهاء. (الضغط على زر الرابط المباشر وحده لا يمنح أي نقاط).</p>
 
-        function togglePomodoro() {
-            const btnText = document.getElementById('pomoStartBtnText');
-            if (pomoIsRunning) {
-                clearInterval(pomoInterval);
-                pomoIsRunning = false;
-                btnText.innerText = "تابع الجلسة";
-            } else {
-                pomoIsRunning = true;
-                btnText.innerText = "إيقاف مؤقت";
-                pomoInterval = setInterval(() => {
-                    if (pomoSeconds === 0) {
-                        if (pomoMinutes === 0) {
-                            clearInterval(pomoInterval);
-                            pomoIsRunning = false;
-                            
-                            if (pomoMode === 'focus') {
-                                const duration = customTimes.focus;
-                                const ptsGained = duration * 2;
-                                
-                                pomodoroMinutes += duration;
-                                pomodoroSessions += 1;
-                                pomodoroPoints += ptsGained;
-                                totalPoints += ptsGained;
+        <div class="flex flex-wrap gap-3 pt-2">
+          <a href="https://meet.google.com/krd-aesq-sgt" target="_blank" rel="noreferrer"
+            class="px-5 py-2.5 bg-[#6C9D78] text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow-sm hover:opacity-90">
+            <i data-lucide="external-link" class="w-4 h-4"></i> فتح Google Meet
+          </a>
 
-                                addHistoryItem('Pomodoro', duration, ptsGained);
-                                showToast(`أحسنت! كملت جلسة Pomodoro وربحت ${ptsGained} نقطة.`);
-                                updateUI();
-                            } else {
-                                showToast("انتهت الاستراحة، حان وقت العودة للتركيز!");
-                            }
+          <button id="btnStartMeet" onclick="startMeetSession()"
+            class="px-5 py-2.5 bg-[#731E3E] text-[#F5EDE0] font-bold rounded-xl text-xs flex items-center gap-2 shadow-md hover:bg-[#501426]">
+            <i data-lucide="play" class="w-4 h-4"></i> ابدأ الدراسة عبر Meet
+          </button>
 
-                            resetPomodoro();
-                            return;
-                        }
-                        pomoMinutes--;
-                        pomoSeconds = 59;
-                    } else {
-                        pomoSeconds--;
-                    }
-                    updateTimerDisplay();
-                }, 1000);
-            }
-        }
+          <button id="btnEndMeet" onclick="endMeetSession()"
+            class="px-5 py-2.5 bg-red-800 text-white font-bold rounded-xl text-xs hidden flex items-center gap-2 shadow-md hover:bg-red-900">
+            <i data-lucide="square" class="w-4 h-4"></i> إنهاء جلسة Meet
+          </button>
+        </div>
 
-        function resetPomodoro() {
-            clearInterval(pomoInterval);
-            pomoIsRunning = false;
-            pomoMinutes = customTimes[pomoMode];
-            pomoSeconds = 0;
-            pomoTotalDurationSeconds = pomoMinutes * 60;
-            updateTimerDisplay();
-            document.getElementById('pomoStartBtnText').innerText = "ابدأ الآن";
-        }
+        <div id="meetActiveBar"
+          class="hidden p-3 bg-[#E8C995]/20 border border-[#E8C995]/40 rounded-2xl flex items-center justify-between text-xs font-mono mt-3">
+          <span class="flex items-center gap-2 text-[#731E3E] dark:text-[#E8C995] font-bold">
+            <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+            جلسة Meet جارية الآن...
+          </span>
+          <span id="meetTimerVal" class="font-bold text-base">00:00</span>
+        </div>
+      </div>
+    </section>
 
-        // جلسات Google Meet
-        let meetStartTime = null;
-        let meetTimerInterval = null;
+    <!-- 6. المكتبة /library -->
+    <section id="pageLibrary" class="space-y-6 hidden">
+      <div>
+        <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">المكتبة ومستودع البكالوريا</h1>
+        <p class="text-xs opacity-70">أشياء تستحق وقتك. مرتبة، مختصرة، ومكتوبة من طالب لطالب.</p>
+      </div>
 
-        function startMeetSession() {
-            if (meetStartTime) return;
-            meetStartTime = new Date();
-            document.getElementById('btnStartMeet').classList.add('hidden');
-            document.getElementById('btnEndMeet').classList.remove('hidden');
-            document.getElementById('meetActiveBar').classList.remove('hidden');
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 space-y-4">
+        <h3 class="font-bold text-sm text-[#731E3E] dark:text-[#E8C995]">ملفات البكالوريا والسنة الثالثة ثانوي من
+          DzExams</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
+          <a href="https://www.dzexams.com/ar/bac/mathematiques" target="_blank" rel="noreferrer"
+            class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
+            <span>الرياضيات (BAC)</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
+          </a>
+          <a href="https://www.dzexams.com/ar/bac/physique" target="_blank" rel="noreferrer"
+            class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
+            <span>الفيزياء (BAC)</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
+          </a>
+          <a href="https://www.dzexams.com/ar/bac/sciences-naturelles" target="_blank" rel="noreferrer"
+            class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
+            <span>العلوم (BAC)</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
+          </a>
+          <a href="https://www.dzexams.com/ar/bac/philosophie" target="_blank" rel="noreferrer"
+            class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
+            <span>الفلسفة (BAC)</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
+          </a>
+          <a href="https://www.dzexams.com/ar/bac/arabe" target="_blank" rel="noreferrer"
+            class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
+            <span>اللغة العربية (BAC)</span>
+            <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
+          </a>
+          <a href="https://www.dzexams.com/ar/bac" target="_blank" rel="noreferrer"
+            class="p-3 bg-[#E8C995] text-[#451C2B] font-bold rounded-xl text-center flex items-center justify-center gap-1 hover:bg-[#F4DFBE] transition">
+            <span>كل الملفات ↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
 
-            meetTimerInterval = setInterval(() => {
-                const diffSecs = Math.floor((new Date() - meetStartTime) / 1000);
-                const m = Math.floor(diffSecs / 60);
-                const s = diffSecs % 60;
-                document.getElementById('meetTimerVal').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-            }, 1000);
-        }
+    <!-- 7. التصنيف وجدار الأوسمة /ranking -->
+    <section id="pageRanking" class="space-y-6 hidden">
+      <div>
+        <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">تصنيف Focus & Force</h1>
+        <p class="text-xs opacity-70">إحصائياتك الشاملة، رتبتك، وسجل إنجازاتك في البكالوريا.</p>
+      </div>
 
-        function endMeetSession() {
-            if (!meetStartTime) return;
-            const endTime = new Date();
-            const durationMins = Math.floor((endTime - meetStartTime) / (1000 * 60));
+      <!-- بطاقة رئيسية للتصنيف -->
+      <div class="bg-[#501426] text-[#F5EDE0] p-6 rounded-3xl border border-[#E8C995]/30 shadow-xl space-y-4">
+        <div class="flex justify-between items-start">
+          <div>
+            <span class="text-xs text-[#E8C995] font-bold">تصنيف Focus & Force</span>
+            <h2 id="rankStudentName" class="text-2xl font-bold mt-1 text-[#FCF8F1]">الطالب</h2>
+          </div>
+          <span id="rankTitleBadge" class="bg-[#E8C995] text-[#451C2B] font-bold text-xs px-3 py-1.5 rounded-full">بداية
+            قوية</span>
+        </div>
 
-            clearInterval(meetTimerInterval);
-            meetStartTime = null;
+        <div class="grid grid-cols-3 gap-2 text-center font-mono pt-2 border-t border-[#E8C995]/20">
+          <div class="bg-[#25131D]/60 p-2 rounded-xl border border-[#E8C995]/20">
+            <span id="rankTotalPts" class="block text-lg font-bold text-[#E8C995]">0</span>
+            <span class="text-[10px] opacity-70 font-sans">مجموع النقاط</span>
+          </div>
+          <div class="bg-[#25131D]/60 p-2 rounded-xl border border-[#E8C995]/20">
+            <span id="rankTotalTime" class="block text-lg font-bold text-[#E8C995]">0 د</span>
+            <span class="text-[10px] opacity-70 font-sans">وقت الدراسة</span>
+          </div>
+          <div class="bg-[#25131D]/60 p-2 rounded-xl border border-[#E8C995]/20">
+            <span id="rankTotalSessions" class="block text-lg font-bold text-[#E8C995]">0</span>
+            <span class="text-[10px] opacity-70 font-sans">عدد الجلسات</span>
+          </div>
+        </div>
 
-            document.getElementById('btnStartMeet').classList.remove('hidden');
-            document.getElementById('btnEndMeet').classList.add('hidden');
-            document.getElementById('meetActiveBar').classList.add('hidden');
-            document.getElementById('meetTimerVal').innerText = "00:00";
+        <!-- شريط التقدم للرتبة التالية -->
+        <div class="space-y-1.5 pt-2">
+          <div class="flex justify-between text-xs font-medium">
+            <span id="rankNextText" class="text-[#E8C995]">متبقي 150 نقطة للوصول إلى الرتبة التالية</span>
+            <span id="rankProgressPercent" class="font-mono">0%</span>
+          </div>
+          <div class="w-full h-3 bg-[#25131D] rounded-full overflow-hidden p-0.5 border border-[#E8C995]/30">
+            <div id="rankProgressBar" class="h-full bg-[#E8C995] rounded-full transition-all duration-500"
+              style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
 
-            if (durationMins < 1) {
-                showToast("الجلسة كانت أقل من دقيقة واحدة، لم تُسجل النقاط.");
-                return;
-            }
+      <!-- جدار الأوسمة والإنجازات (Hall of Achievements) -->
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 space-y-4">
+        <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-2">
+          <h3 class="font-bold text-sm flex items-center gap-2 text-[#731E3E] dark:text-[#E8C995]">
+            <i data-lucide="medal" class="w-4 h-4"></i>
+            جدار الأوسمة والإنجازات
+          </h3>
+          <span id="achievementsCount"
+            class="text-xs font-mono font-bold bg-[#E8C995]/20 px-2.5 py-0.5 rounded-full">0/6</span>
+        </div>
 
-            const ptsGained = durationMins * 1;
-            meetMinutes += durationMins;
-            meetSessions += 1;
-            meetPoints += ptsGained;
-            totalPoints += ptsGained;
+        <div id="achievementsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 text-xs">
+          <!-- يتم إدراج الأوسمة ديناميكياً -->
+        </div>
+      </div>
 
-            addHistoryItem('Meet', durationMins, ptsGained);
-            showToast(`سجلت ${durationMins} دقيقة Meet وربحت ${ptsGained} نقطة.`);
-            updateUI();
-        }
+      <!-- مقارنة مرئية بين مصادر النقاط -->
+      <div class="space-y-3">
+        <h3 class="font-bold text-sm">مقارنة مصدر النقاط ودقائق الدراسة</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Pomodoro Card -->
+          <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold text-[#731E3E] dark:text-[#E8C995] flex items-center gap-1">
+                <i data-lucide="timer" class="w-4 h-4"></i> جلسات Pomodoro
+              </span>
+              <span id="pomoPtsDisplay" class="font-mono text-sm font-bold text-[#731E3E] dark:text-[#E8C995]">0
+                نقطة</span>
+            </div>
+            <div class="text-xs space-y-1.5 opacity-80">
+              <div class="flex justify-between"><span>الدقائق الكلية:</span><span id="pomoMinsDisplay"
+                  class="font-mono font-bold">0 دقيقة</span></div>
+              <div class="flex justify-between"><span>عدد الجلسات:</span><span id="pomoSessDisplay"
+                  class="font-mono font-bold">0 جلسة</span></div>
+              <div class="flex justify-between items-center pt-1 border-t border-[#E8C995]/20">
+                <span>مصدر النقاط:</span>
+                <span class="text-[10px] bg-[#E8C995]/20 px-2 py-0.5 rounded-md font-bold">2 نقاط لكل دقيقة</span>
+              </div>
+            </div>
+          </div>
 
-        // الوضع الليلي وإعادة القصة
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-        }
+          <!-- Meet Card -->
+          <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-xs font-bold text-[#6C9D78] flex items-center gap-1">
+                <i data-lucide="video" class="w-4 h-4"></i> جلسات Google Meet
+              </span>
+              <span id="meetPtsDisplay" class="font-mono text-sm font-bold text-[#6C9D78]">0 نقطة</span>
+            </div>
+            <div class="text-xs space-y-1.5 opacity-80">
+              <div class="flex justify-between"><span>الدقائق الكلية:</span><span id="meetMinsDisplay"
+                  class="font-mono font-bold">0 دقيقة</span></div>
+              <div class="flex justify-between"><span>عدد الجلسات:</span><span id="meetSessDisplay"
+                  class="font-mono font-bold">0 جلسة</span></div>
+              <div class="flex justify-between items-center pt-1 border-t border-[#E8C995]/20">
+                <span>مصدر النقاط:</span>
+                <span class="text-[10px] bg-[#6C9D78]/20 px-2 py-0.5 rounded-md font-bold text-[#6C9D78]">1 نقطة لكل
+                  دقيقة</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        function replayStory() {
-            currentSlideIdx = 0;
-            renderSlide();
-            document.getElementById('storyScreen').classList.remove('hidden');
-        }
+      <!-- سجل آخر جلسات الدراسة -->
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 space-y-4">
+        <h3 class="font-bold text-sm">سجل آخر الأنشطة والجلسات</h3>
+        <div id="historyList" class="space-y-2 text-xs">
+          <!-- يتم إدراج السجل ديناميكياً -->
+        </div>
+      </div>
+    </section>
 
-        // التهيئة الابتدائية عند الفتح
+    <!-- 8. الإعدادات والقصة /settings -->
+    <section id="pageSettings" class="space-y-6 hidden">
+      <div>
+        <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">الإعدادات والملف الشخصي</h1>
+        <p class="text-xs opacity-70">إدارة تفضيلاتك واسترجاع قصة Focus & Force الملهمة.</p>
+      </div>
+
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-4">
+        <h3 class="font-bold text-sm">الملف الشخصي والشعبة</h3>
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl">
+            <span class="opacity-60 block text-[10px]">الاسم الكامل</span>
+            <span id="settingsFullName" class="font-bold">--</span>
+          </div>
+          <div class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl">
+            <span class="opacity-60 block text-[10px]">الشعبة الدراسية</span>
+            <span id="settingsTrack" class="font-bold">--</span>
+          </div>
+        </div>
+
+        <button onclick="editProfileModal()"
+          class="px-4 py-2 bg-[#731E3E] text-[#F5EDE0] text-xs font-bold rounded-xl hover:bg-[#501426] transition">
+          تعديل الشعبة والاسم
+        </button>
+      </div>
+
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
+        <h3 class="font-bold text-sm">قصة Focus & Force</h3>
+        <p class="text-xs opacity-70">استرجع بدايات القناة والرحلة الملهمة لتجديد الشغف.</p>
+        <button onclick="replayStory()"
+          class="px-4 py-2.5 bg-[#E8C995] text-[#451C2B] text-xs font-bold rounded-xl hover:bg-[#F4DFBE] transition">
+          إعادة عرض القصة 📖
+        </button>
+      </div>
+
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
+        <h3 class="font-bold text-sm text-red-600 dark:text-red-400">إعادة ضبط البيانات</h3>
+        <p class="text-xs opacity-70">تصفير النقاط وسجل الجلسات للبدء من جديد.</p>
+        <button onclick="confirmResetData()"
+          class="px-4 py-2 bg-red-800 text-white text-xs font-bold rounded-xl hover:bg-red-900 transition">
+          تصفير السجل والنقاط
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- شريط التنقل السفلي الثابت (Navbar) المطور -->
+  <nav
+    class="fixed bottom-0 left-0 right-0 z-30 bg-[#FCF8F1]/95 dark:bg-[#501426]/95 backdrop-blur-md border-t border-[#E8C995]/30 px-2 py-2">
+    <div class="max-w-lg mx-auto flex items-center justify-around text-[10px]">
+      <button onclick="navigateTo('/')" id="navItem-home"
+        class="nav-btn flex flex-col items-center gap-1 active transition">
+        <i data-lucide="home" class="w-5 h-5"></i>
+        <span>الرئيسية</span>
+      </button>
+
+      <button onclick="navigateTo('/quizzes')" id="navItem-quizzes"
+        class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+        <i data-lucide="help-circle" class="w-5 h-5"></i>
+        <span>الكويزات</span>
+      </button>
+
+      <button onclick="navigateTo('/decisions')" id="navItem-decisions"
+        class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+        <i data-lucide="target" class="w-5 h-5"></i>
+        <span>القرارات</span>
+      </button>
+
+      <button onclick="navigateTo('/pomodoro')" id="navItem-pomodoro"
+        class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+        <i data-lucide="timer" class="w-5 h-5"></i>
+        <span>المؤقت</span>
+      </button>
+
+      <button onclick="navigateTo('/library')" id="navItem-library"
+        class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+        <i data-lucide="book-open" class="w-5 h-5"></i>
+        <span>المكتبة</span>
+      </button>
+
+      <button onclick="navigateTo('/ranking')" id="navItem-ranking"
+        class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+        <i data-lucide="trophy" class="w-5 h-5"></i>
+        <span>التصنيف</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- كود الجافاسكربت الرئيسي الموحد مع جميع الإضافات -->
+  <script>
+    // --------------------------------------------------------------------------
+    // 1. بيانات شرائح القصة
+    // --------------------------------------------------------------------------
+    const slides = [
+      { year: '2024', badge: 'بداية القصة 🍃🌱', title: 'من طالبة تبحث عن ملخصات…', text: 'كل شيء بدأ لما كنت مجرد طالبة تخوض غمار التعب، أبحث بين الصفحات عن مصادر صحيحة...✨' },
+      { year: '2024', badge: 'حلم صغير... 🤍', title: 'كل معلومة كانت خطوة', text: 'بدأت القناة بمجهودي الفردي وبكثير من الحب. كل معلومة كانت خطوة...' },
+      { year: '2025', badge: 'الشرارة الحقيقية ❤️‍🔥', title: 'كبرنا مع بعضنا', text: 'عندما قررت خوض تجربة البكالوريا للمرة الثانية، وسط كل الضغط والتعب...' },
+      { year: '2026', badge: 'الحلم يكبر ✨', title: 'ما بقيناش وحدنا', text: 'سنوات الصبر والعمل المتواصل جعلت Focus & Force تتحول إلى عائلة تجمع الجميع...' },
+      { year: '2027', badge: 'عهد جديد 💗', title: 'كل محاولة صنعتنا', text: 'كل تجربة مرت بي علمتني الكثير، كل سقوط قوّاني...' },
+      { year: '∞', badge: 'عائلة نكبر معها', title: 'هي قطعة حقيقية من قلبي', text: 'رسالة نعيشها سوياً كل يوم. أنا هنا لأكون السند الذي تمنيتُ لو وجدته 🍓✨' }
+    ];
+
+    let currentSlideIdx = 0;
+    let slideTimer = null;
+
+    function renderSlide() {
+      const s = slides[currentSlideIdx];
+      document.getElementById('slideYear').innerText = s.year;
+      document.getElementById('slideBadge').innerText = s.badge;
+      document.getElementById('slideTitle').innerText = s.title;
+      document.getElementById('slideText').innerText = s.text;
+
+      const isLast = currentSlideIdx === slides.length - 1;
+      document.getElementById('nextSlideBtn').innerText = isLast ? 'نبدأ رحلتي للبكالوريا' : 'تابع القصة';
+
+      const dots = document.getElementById('slideDots');
+      dots.innerHTML = slides.map((_, i) => `<div class="h-2 rounded-full transition-all ${i === currentSlideIdx ? 'w-8 bg-[#E8C995]' : 'w-2 bg-[#E8C995]/30'}"></div>`).join('');
+    }
+
+    function nextSlide() {
+      if (currentSlideIdx < slides.length - 1) {
+        currentSlideIdx++;
         renderSlide();
-        slideTimer = setInterval(() => {
-            if (currentSlideIdx < slides.length - 1) {
-                currentSlideIdx++;
-                renderSlide();
-            }
-        }, 5200);
+      } else {
+        clearInterval(slideTimer);
+        document.getElementById('storyScreen').classList.add('hidden');
+        checkProfile();
+      }
+    }
 
+    // --------------------------------------------------------------------------
+    // 2. حالة المستخدم والبيانات المخزنة
+    // --------------------------------------------------------------------------
+    let profile = JSON.parse(localStorage.getItem('focus-force-profile') || 'null');
+    let pomodoroMinutes = parseInt(localStorage.getItem('pomodoroMinutes') || '0');
+    let meetMinutes = parseInt(localStorage.getItem('meetMinutes') || '0');
+    let pomodoroSessions = parseInt(localStorage.getItem('pomodoroSessions') || '0');
+    let meetSessions = parseInt(localStorage.getItem('meetSessions') || '0');
+    let pomodoroPoints = parseInt(localStorage.getItem('pomodoroPoints') || '0');
+    let meetPoints = parseInt(localStorage.getItem('meetPoints') || '0');
+    let quizPoints = parseInt(localStorage.getItem('quizPoints') || '0');
+    let totalPoints = parseInt(localStorage.getItem('totalPoints') || '0');
+    let studyHistory = JSON.parse(localStorage.getItem('studyHistory') || '[]');
+    let dailyTasks = JSON.parse(localStorage.getItem('bac-daily-tasks') || '[]');
+    let soundFxEnabled = localStorage.getItem('soundFxEnabled') !== 'false';
+
+    if (dailyTasks.length === 0) {
+      dailyTasks = [
+        { id: 1, text: "حل مسألة شاملة في الدوال العددية", priority: "urgent", done: false },
+        { id: 2, text: "مراجعة مخطط وحدة تركيب البروتين", priority: "important", done: false },
+        { id: 3, text: "كتابة خطة مقالة فلسفية بالمنهجية الجدلية", priority: "normal", done: false }
+      ];
+      localStorage.setItem('bac-daily-tasks', JSON.stringify(dailyTasks));
+    }
+
+    function checkProfile() {
+      if (!profile) {
+        document.getElementById('profileScreen').classList.remove('hidden');
+      } else {
         updateUI();
-    </script>
+      }
+    }
 
-    <!-- PWA install logic -->
-    <script>
-        let deferredInstallPrompt = null;
+    function toggleSpecialization() {
+      const val = document.getElementById('track').value;
+      document.getElementById('specContainer').classList.toggle('hidden', val !== 'تقني رياضي');
+    }
 
-        window.addEventListener('beforeinstallprompt', (event) => {
-            event.preventDefault();
-            deferredInstallPrompt = event;
-            const wrap = document.getElementById('pwaInstallWrap');
-            if (wrap) wrap.classList.remove('hidden');
-            if (window.lucide) lucide.createIcons();
+    function saveProfile(e) {
+      e.preventDefault();
+      profile = {
+        firstName: document.getElementById('firstName').value.trim(),
+        lastName: document.getElementById('lastName').value.trim(),
+        track: document.getElementById('track').value,
+        specialization: document.getElementById('specialization').value
+      };
+      localStorage.setItem('focus-force-profile', JSON.stringify(profile));
+      document.getElementById('profileScreen').classList.add('hidden');
+
+      document.getElementById('welcomeName').innerText = `أهلا، ${profile.firstName} ${profile.lastName}`;
+      document.getElementById('welcomeText').innerText = `مساحتك حضرت. راح نرافقوك في ${profile.track}، خطوة بخطوة.`;
+      document.getElementById('welcomeBanner').classList.remove('hidden');
+    }
+
+    function closeWelcome() {
+      document.getElementById('welcomeBanner').classList.add('hidden');
+      updateUI();
+    }
+
+    function editProfileModal() {
+      if (profile) {
+        document.getElementById('firstName').value = profile.firstName || '';
+        document.getElementById('lastName').value = profile.lastName || '';
+        document.getElementById('track').value = profile.track || 'علوم تجريبية';
+        toggleSpecialization();
+      }
+      document.getElementById('profileScreen').classList.remove('hidden');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+      }, 4000);
+    }
+
+    function saveStatsToStorage() {
+      localStorage.setItem('pomodoroMinutes', pomodoroMinutes);
+      localStorage.setItem('meetMinutes', meetMinutes);
+      localStorage.setItem('pomodoroSessions', pomodoroSessions);
+      localStorage.setItem('meetSessions', meetSessions);
+      localStorage.setItem('pomodoroPoints', pomodoroPoints);
+      localStorage.setItem('meetPoints', meetPoints);
+      localStorage.setItem('quizPoints', quizPoints);
+      localStorage.setItem('totalPoints', totalPoints);
+      localStorage.setItem('studyHistory', JSON.stringify(studyHistory));
+    }
+
+    function addHistoryItem(type, durationMins, ptsGained) {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('ar-DZ', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      studyHistory.unshift({
+        type,
+        duration: durationMins,
+        points: ptsGained,
+        date: dateStr
+      });
+      saveStatsToStorage();
+    }
+
+    // --------------------------------------------------------------------------
+    // 3. نظام الصوتيات والمؤثرات البيئية (Web Audio API Synthesizer)
+    // --------------------------------------------------------------------------
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) audioCtx = new AudioContextClass();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playTone(freqs, duration = 0.4, type = 'sine') {
+      if (!soundFxEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        freqs.forEach((f, idx) => {
+          osc.frequency.setValueAtTime(f, now + idx * 0.1);
         });
 
-        document.addEventListener('click', async (event) => {
-            const button = event.target.closest('#pwaInstallBtn');
-            if (!button || !deferredInstallPrompt) return;
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        osc.start(now);
+        osc.stop(now + duration);
+      } catch (e) {
+        console.warn("Audio play issue", e);
+      }
+    }
 
-            deferredInstallPrompt.prompt();
-            const choice = await deferredInstallPrompt.userChoice;
+    function playSuccessChime() {
+      playTone([523.25, 659.25, 783.99], 0.45, 'sine'); // C5, E5, G5
+    }
 
-            if (choice.outcome === 'accepted') {
-                deferredInstallPrompt = null;
-                document.getElementById('pwaInstallWrap')?.classList.add('hidden');
-            }
-        });
+    function playFailChime() {
+      playTone([320, 240], 0.35, 'triangle');
+    }
 
-        window.addEventListener('appinstalled', () => {
-            deferredInstallPrompt = null;
-            document.getElementById('pwaInstallWrap')?.classList.add('hidden');
-            if (typeof showToast === 'function') {
-                showToast('تم تثبيت Focus & Force بنجاح 📲');
-            }
-        });
+    function toggleSoundFx() {
+      soundFxEnabled = !soundFxEnabled;
+      localStorage.setItem('soundFxEnabled', soundFxEnabled);
+      const icon = document.getElementById('soundFxIcon');
+      if (soundFxEnabled) {
+        icon.setAttribute('data-lucide', 'volume-2');
+        showToast("تم تفعيل المؤثرات الصوتية 🔔");
+        playSuccessChime();
+      } else {
+        icon.setAttribute('data-lucide', 'volume-x');
+        showToast("تم كتم المؤثرات الصوتية 🔕");
+      }
+      lucide.createIcons();
+    }
 
-        // Register the Service Worker for PWA support.
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .catch((error) => console.error('PWA Service Worker registration failed:', error));
-            });
+    // أصوات التركيز البيئية (Ambient Focus Generator)
+    let ambientSourceNode = null;
+    let ambientGainNode = null;
+    let currentAmbientMode = null;
+    let isAmbientRunning = false;
+
+    function toggleAmbientModal() {
+      const modal = document.getElementById('ambientModal');
+      modal.classList.toggle('hidden');
+    }
+
+    function changeAmbientVolume(val) {
+      document.getElementById('ambVolDisplay').innerText = `${val}%`;
+      if (ambientGainNode) {
+        const ctx = getAudioContext();
+        if (ctx) {
+          ambientGainNode.gain.setValueAtTime((val / 100) * 0.25, ctx.currentTime);
         }
-    </script>
+      }
+    }
+
+    function createNoiseBuffer(ctx, duration = 3) {
+      const bufferSize = ctx.sampleRate * duration;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const output = buffer.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        output[i] = (b0 + b1 + b2) * 0.15;
+      }
+      return buffer;
+    }
+
+    function toggleAmbientSound(mode) {
+      if (isAmbientRunning && currentAmbientMode === mode) {
+        stopAmbientSound();
+        return;
+      }
+
+      stopAmbientSound();
+      const ctx = getAudioContext();
+      if (!ctx) return;
+
+      currentAmbientMode = mode;
+      isAmbientRunning = true;
+
+      ambientGainNode = ctx.createGain();
+      const vol = (document.getElementById('ambientVolume')?.value || 50) / 100;
+      ambientGainNode.gain.setValueAtTime(vol * 0.22, ctx.currentTime);
+      ambientGainNode.connect(ctx.destination);
+
+      if (mode === 'rain' || mode === 'noise') {
+        const buffer = createNoiseBuffer(ctx, 3);
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        noise.loop = true;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = mode === 'rain' ? 'lowpass' : 'bandpass';
+        filter.frequency.setValueAtTime(mode === 'rain' ? 800 : 500, ctx.currentTime);
+
+        noise.connect(filter);
+        filter.connect(ambientGainNode);
+        noise.start();
+        ambientSourceNode = noise;
+      } else if (mode === 'waves') {
+        const buffer = createNoiseBuffer(ctx, 4);
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        noise.loop = true;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(300, ctx.currentTime);
+
+        const lfo = ctx.createOscillator();
+        lfo.type = 'sine';
+        lfo.frequency.setValueAtTime(0.12, ctx.currentTime); // Wave swell every 8s
+
+        const lfoGain = ctx.createGain();
+        lfoGain.gain.setValueAtTime(450, ctx.currentTime);
+
+        lfo.connect(lfoGain);
+        lfoGain.connect(filter.frequency);
+
+        noise.connect(filter);
+        filter.connect(ambientGainNode);
+
+        noise.start();
+        lfo.start();
+        ambientSourceNode = { stop: () => { noise.stop(); lfo.stop(); } };
+      } else if (mode === 'alpha') {
+        // Binaural 10Hz beat (200Hz + 210Hz)
+        const osc1 = ctx.createOscillator();
+        const osc2 = ctx.createOscillator();
+        osc1.frequency.setValueAtTime(200, ctx.currentTime);
+        osc2.frequency.setValueAtTime(210, ctx.currentTime);
+        osc1.type = 'sine';
+        osc2.type = 'sine';
+
+        osc1.connect(ambientGainNode);
+        osc2.connect(ambientGainNode);
+
+        osc1.start();
+        osc2.start();
+        ambientSourceNode = { stop: () => { osc1.stop(); osc2.stop(); } };
+      }
+
+      updateAmbientButtonsUI();
+      showToast(`بدأ تشغيل صوت التركيز: ${getAmbientTitle(mode)} 🎧`);
+    }
+
+    function getAmbientTitle(mode) {
+      if (mode === 'rain') return 'مطر هادئ 🌧️';
+      if (mode === 'waves') return 'أمواج البحر 🌊';
+      if (mode === 'noise') return 'نويز التركيز 🍃';
+      if (mode === 'alpha') return 'موجات ألفا 10Hz 🧠';
+      return 'صوت التركيز';
+    }
+
+    function stopAmbientSound() {
+      if (ambientSourceNode) {
+        try {
+          ambientSourceNode.stop();
+        } catch (e) { }
+        ambientSourceNode = null;
+      }
+      isAmbientRunning = false;
+      currentAmbientMode = null;
+      updateAmbientButtonsUI();
+    }
+
+    function updateAmbientButtonsUI() {
+      ['rain', 'waves', 'noise', 'alpha'].forEach(m => {
+        const btn = document.getElementById(`ambBtn-${m}`);
+        if (!btn) return;
+        if (isAmbientRunning && currentAmbientMode === m) {
+          btn.classList.add('border-[#731E3E]', 'bg-[#E8C995]/30', 'dark:bg-[#E8C995]/20', 'font-bold');
+        } else {
+          btn.classList.remove('border-[#731E3E]', 'bg-[#E8C995]/30', 'dark:bg-[#E8C995]/20', 'font-bold');
+        }
+      });
+
+      const statusEl = document.getElementById('ambientStatusText');
+      if (statusEl) {
+        if (isAmbientRunning) {
+          statusEl.innerText = `قيد التشغيل: ${getAmbientTitle(currentAmbientMode)}`;
+          statusEl.className = "text-xs font-bold text-[#6C9D78]";
+        } else {
+          statusEl.innerText = "متوقف حالياً";
+          statusEl.className = "text-xs font-bold text-gray-500";
+        }
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // 4. نصائح المتفوقين اليومية
+    // --------------------------------------------------------------------------
+    const BAC_PRO_TIPS = [
+      "نصيحة المتفوقين: ليس العبرة بعدد التمارين التي تحلها، بل بعدد الأفكار الجديدة التي تكتشفها وتفهمها جيداً 💡",
+      "في مادة الفلسفة: حفظ المقالة كاملاً خطأ شائع! احفظ الأطروحات، الحجج، وأقوال الفلاسفة وتمرّن على صياغة أسلوبك الخاص ✍️",
+      "في العلوم والفيزياء: المنهجية هي مفتاح العلامة الكاملة. استغل التحليل (الوثيقة تمثل.. حيث نلاحظ.. مما يدل..) والاستنتاج بدقة 🧬",
+      "في الرياضيات: لا تكتفِ بالنظر إلى الحل النموذجي. خذ ورقة بيضاء وحل المسألة بيدك من البداية حتى النهاية 📐",
+      "خلال الامتحان: أول 20 دقيقة مخصصة للاختيار بين الموضوعين، لا تتسرع في الحكم على الموضوع من أول سؤال ⏱️",
+      "التركيز والراحة: النوم الكافي يثبّت 40% من المعلومات المكتسبة في الذاكرة طويلة المدى. لا تهمل صحتك 🌱"
+    ];
+
+    function refreshProTip() {
+      const current = document.getElementById('proTipText').innerText;
+      let nextTip = current;
+      while (nextTip === current) {
+        nextTip = BAC_PRO_TIPS[Math.floor(Math.random() * BAC_PRO_TIPS.length)];
+      }
+      document.getElementById('proTipText').innerText = nextTip;
+      playSuccessChime();
+    }
+
+    // --------------------------------------------------------------------------
+    // 5. مهام المراجعة والروتين اليومي
+    // --------------------------------------------------------------------------
+    function renderDailyTasks() {
+      const listEl = document.getElementById('dailyTasksList');
+      if (!listEl) return;
+
+      const completedCount = dailyTasks.filter(t => t.done).length;
+      const total = dailyTasks.length;
+      const pct = total > 0 ? Math.round((completedCount / total) * 100) : 0;
+
+      document.getElementById('dailyTasksProgress').innerText = `${completedCount}/${total} مكتملة`;
+      document.getElementById('tasksProgressBar').style.width = `${pct}%`;
+
+      if (dailyTasks.length === 0) {
+        listEl.innerHTML = `<div class="text-center opacity-60 py-3">لا توجد مهام مسجلة اليوم. أضف هدفاً لتبدأ!</div>`;
+        return;
+      }
+
+      const priorityBadge = {
+        urgent: '<span class="text-[9px] bg-red-800/20 text-red-600 dark:text-red-400 font-bold px-2 py-0.5 rounded-full">عاجل 🔥</span>',
+        important: '<span class="text-[9px] bg-amber-800/20 text-amber-600 dark:text-amber-400 font-bold px-2 py-0.5 rounded-full">مهم ⚡</span>',
+        normal: '<span class="text-[9px] bg-emerald-800/20 text-emerald-600 dark:text-emerald-400 font-bold px-2 py-0.5 rounded-full">عادي 🍃</span>'
+      };
+
+      listEl.innerHTML = dailyTasks.map((t, idx) => `
+        <div class="p-2.5 bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 rounded-xl border border-[#E8C995]/20 flex items-center justify-between gap-2 transition hover:border-[#E8C995]/50">
+          <div class="flex items-center gap-2.5 flex-1 min-w-0">
+            <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTaskDone(${t.id})"
+              class="w-4 h-4 accent-[#731E3E] rounded cursor-pointer">
+            <span class="${t.done ? 'line-through opacity-50' : 'font-semibold'} truncate">${t.text}</span>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            ${priorityBadge[t.priority] || ''}
+            <button onclick="focusOnTask('${t.text.replace(/'/g, "\\'")}')" title="ابدأ بومودورو لهذه المهمة"
+              class="p-1 rounded-lg bg-[#E8C995]/20 text-[#731E3E] dark:text-[#E8C995] hover:bg-[#E8C995]/40 transition">
+              <i data-lucide="play" class="w-3.5 h-3.5"></i>
+            </button>
+            <button onclick="deleteDailyTask(${t.id})" title="حذف المهمة"
+              class="p-1 rounded-lg hover:bg-red-500/10 text-red-500 transition">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function addDailyTask(e) {
+      e.preventDefault();
+      const input = document.getElementById('newTaskInput');
+      const priority = document.getElementById('newTaskPriority').value;
+      const text = input.value.trim();
+      if (!text) return;
+
+      const newTask = {
+        id: Date.now(),
+        text,
+        priority,
+        done: false
+      };
+      dailyTasks.unshift(newTask);
+      localStorage.setItem('bac-daily-tasks', JSON.stringify(dailyTasks));
+      input.value = '';
+      renderDailyTasks();
+      showToast("تمت إضافة المهمة إلى قائمة أهدافك بنجاح ✨");
+    }
+
+    function toggleTaskDone(id) {
+      const task = dailyTasks.find(t => t.id === id);
+      if (!task) return;
+      task.done = !task.done;
+      if (task.done) {
+        totalPoints += 15;
+        saveStatsToStorage();
+        let tasksDoneCount = parseInt(localStorage.getItem('tasks_completed_count') || '0') + 1;
+        localStorage.setItem('tasks_completed_count', tasksDoneCount);
+        playSuccessChime();
+        showToast("أحسنت إنجاز المهمة! ربحت +15 نقطة 🌟");
+      }
+      localStorage.setItem('bac-daily-tasks', JSON.stringify(dailyTasks));
+      renderDailyTasks();
+      updateUI();
+    }
+
+    function deleteDailyTask(id) {
+      dailyTasks = dailyTasks.filter(t => t.id !== id);
+      localStorage.setItem('bac-daily-tasks', JSON.stringify(dailyTasks));
+      renderDailyTasks();
+    }
+
+    function focusOnTask(taskName) {
+      navigateTo('/pomodoro');
+      document.getElementById('pomoModeTitle').innerText = `تركيز: ${taskName}`;
+      showToast(`تم ضبط جلسة Pomodoro للمهمة: ${taskName} ⏱️`);
+    }
+
+    // --------------------------------------------------------------------------
+    // 6. كويزات البكالوريا التفاعلية (BAC Quizzes Engine)
+    // --------------------------------------------------------------------------
+    let activeQuizFilter = 'الكل';
+    let filteredQuizzesList = [];
+    let currentQuizItemIndex = 0;
+    let quizSelectedAnswer = null;
+    let quizScoreCorrect = 0;
+
+    function getQuizzesData() {
+      if (window.BAC_QUIZZES_DATA && Array.isArray(window.BAC_QUIZZES_DATA)) {
+        return window.BAC_QUIZZES_DATA;
+      }
+      return [
+        {
+          id: "def-1",
+          subject: "منهجية وتخطيط",
+          badge: "منهجية BAC",
+          icon: "target",
+          title: "تقنية البومودورو أثناء المذاكرة",
+          question: "ما هي الطريقة القياسية لتقنية Pomodoro أثناء المذاكرة للبكالوريا؟",
+          options: ["25 دقيقة تركيز + 5 دقائق راحة", "60 دقيقة تركيز بدون أي راحة", "15 دقيقة دراسة و15 دقيقة هاتف", "المذاكرة حتى الإرهاق التام"],
+          correct: 0,
+          explanation: "تقنية البومودورو تمنح عقلك أقصى تركيز لمدة 25 دقيقة متبوعة براحة 5 دقائق لإعادة شحن الذاكرة العاملة وتفادي الإرهاق الذهني."
+        }
+      ];
+    }
+
+    function filterQuizzes(subject) {
+      activeQuizFilter = subject;
+      document.querySelectorAll('.quiz-filter-btn').forEach(b => {
+        b.className = "quiz-filter-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 whitespace-nowrap transition";
+      });
+
+      const btnMap = {
+        'الكل': 'quizFilter-all',
+        'الرياضيات': 'quizFilter-math',
+        'العلوم الطبيعية': 'quizFilter-sci',
+        'الفيزياء': 'quizFilter-phys',
+        'الفلسفة': 'quizFilter-phil',
+        'العلوم الإسلامية': 'quizFilter-isl',
+        'اللغة العربية': 'quizFilter-arb',
+        'منهجية وتخطيط': 'quizFilter-meth'
+      };
+      const activeBtn = document.getElementById(btnMap[subject]);
+      if (activeBtn) {
+        activeBtn.className = "quiz-filter-btn px-3.5 py-1.5 rounded-full bg-[#731E3E] text-[#F5EDE0] whitespace-nowrap transition font-bold";
+      }
+
+      const all = getQuizzesData();
+      if (subject === 'الكل') {
+        filteredQuizzesList = all;
+      } else {
+        filteredQuizzesList = all.filter(q => q.subject === subject);
+      }
+
+      currentQuizItemIndex = 0;
+      quizScoreCorrect = 0;
+      quizSelectedAnswer = null;
+      renderCurrentQuiz();
+    }
+
+    function renderCurrentQuiz() {
+      const container = document.getElementById('quizCardContainer');
+      if (!container) return;
+
+      if (!filteredQuizzesList || filteredQuizzesList.length === 0) {
+        filteredQuizzesList = getQuizzesData();
+      }
+
+      if (currentQuizItemIndex >= filteredQuizzesList.length) {
+        // بطاقة ملخص النتيجة
+        const total = filteredQuizzesList.length;
+        const pct = Math.round((quizScoreCorrect / total) * 100);
+        container.innerHTML = `
+          <div class="text-center py-6 space-y-4">
+            <div class="text-5xl">${pct >= 60 ? '🏆' : '🌱'}</div>
+            <h2 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">أكملت أسئلة ${activeQuizFilter}!</h2>
+            <div class="font-mono text-3xl font-extrabold text-[#731E3E] dark:text-[#E8C995]">${quizScoreCorrect} / ${total}</div>
+            <p class="text-xs opacity-80 max-w-sm mx-auto leading-relaxed">
+              ${pct >= 60 ? 'أداء رائع ومستوى تحضير قوي جداً! استمر بنفس العزيمة للوصول لمعدل أحلامك 🌟' : 'خطوة ممتازة لمعرفة مواضع التطوير. التكرار والتصحيح هما طريق المتفوقين 🌱'}
+            </p>
+            <div class="flex justify-center gap-3 pt-2">
+              <button onclick="filterQuizzes('${activeQuizFilter}')"
+                class="px-5 py-2.5 bg-[#731E3E] text-[#F5EDE0] text-xs font-bold rounded-xl hover:bg-[#501426] transition">
+                إعادة المحاولة 🔄
+              </button>
+              <button onclick="filterQuizzes('الكل')"
+                class="px-5 py-2.5 bg-[#E8C995] text-[#451C2B] text-xs font-bold rounded-xl hover:bg-[#F4DFBE] transition">
+                كافة المواد ↗
+              </button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const q = filteredQuizzesList[currentQuizItemIndex];
+      container.innerHTML = `
+        <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold bg-[#E8C995]/25 text-[#731E3E] dark:text-[#E8C995] px-2.5 py-1 rounded-full">${q.badge || q.subject}</span>
+            <span class="text-xs opacity-70 font-mono">سؤال ${currentQuizItemIndex + 1} من ${filteredQuizzesList.length}</span>
+          </div>
+          <span class="text-[11px] font-mono font-bold text-emerald-600 dark:text-emerald-400">+10 نقاط للإجابة الصحيحة</span>
+        </div>
+
+        <div class="space-y-2">
+          <h3 class="font-bold text-sm sm:text-base text-[#451C2B] dark:text-[#FCF8F1] leading-relaxed">${q.question}</h3>
+        </div>
+
+        <div class="space-y-2 pt-1" id="quizOptionsWrap">
+          ${q.options.map((opt, i) => `
+            <button onclick="answerQuizQuestion(${i})" id="quizOptionBtn-${i}"
+              class="w-full text-right p-3 rounded-2xl border border-[#E8C995]/30 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 hover:border-[#731E3E] transition flex items-center justify-between text-xs">
+              <span class="font-medium">${opt}</span>
+              <span class="w-6 h-6 rounded-full border border-[#E8C995]/50 flex items-center justify-center font-mono text-[10px] shrink-0 mr-2">${['أ', 'ب', 'ج', 'د'][i]}</span>
+            </button>
+          `).join('')}
+        </div>
+
+        <div id="quizExplanationBox" class="hidden p-4 rounded-2xl bg-[#E8C995]/15 border border-[#E8C995]/40 text-xs space-y-1 mt-3">
+          <div class="flex items-center gap-1.5 font-bold text-[#731E3E] dark:text-[#E8C995]">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>المنهجية وتصحيح البكالوريا:</span>
+          </div>
+          <p id="quizExplanationText" class="opacity-90 leading-relaxed"></p>
+        </div>
+
+        <div id="quizNextBtnWrap" class="hidden pt-2">
+          <button onclick="nextQuizQuestion()"
+            class="w-full py-3 bg-[#731E3E] text-[#F5EDE0] text-xs font-bold rounded-xl hover:bg-[#501426] transition shadow-md flex items-center justify-center gap-1.5">
+            <span>السؤال التالي</span>
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          </button>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function answerQuizQuestion(selectedIdx) {
+      if (quizSelectedAnswer !== null) return; // تم الرد بالفعل
+      quizSelectedAnswer = selectedIdx;
+
+      const q = filteredQuizzesList[currentQuizItemIndex];
+      const isCorrect = selectedIdx === q.correct;
+
+      // تلوين الأزرار
+      q.options.forEach((_, i) => {
+        const btn = document.getElementById(`quizOptionBtn-${i}`);
+        if (!btn) return;
+        btn.disabled = true;
+        if (i === q.correct) {
+          btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600', 'font-bold');
+        } else if (i === selectedIdx && !isCorrect) {
+          btn.classList.add('bg-red-700', 'text-white', 'border-red-700');
+        } else {
+          btn.classList.add('opacity-40');
+        }
+      });
+
+      if (isCorrect) {
+        quizScoreCorrect++;
+        quizPoints += 10;
+        totalPoints += 10;
+        saveStatsToStorage();
+        let totalCorrect = parseInt(localStorage.getItem('quiz_correct_count') || '0') + 1;
+        localStorage.setItem('quiz_correct_count', totalCorrect);
+        playSuccessChime();
+        showToast("إجابة صحيحة وفق المنهجية الرسمية! +10 نقاط 🎉");
+      } else {
+        playFailChime();
+        showToast("إجابة غير صحيحة، راجع الشرح المنهجي في الأسفل 💡");
+      }
+
+      document.getElementById('quizStreakCount').innerText = `${quizPoints} نقاط كويز`;
+
+      // إظهار الشرح وزر التالي
+      const expBox = document.getElementById('quizExplanationBox');
+      const expText = document.getElementById('quizExplanationText');
+      if (expBox && expText) {
+        expText.innerText = q.explanation;
+        expBox.classList.remove('hidden');
+      }
+
+      const nextWrap = document.getElementById('quizNextBtnWrap');
+      if (nextWrap) nextWrap.classList.remove('hidden');
+
+      lucide.createIcons();
+      updateUI();
+    }
+
+    function nextQuizQuestion() {
+      quizSelectedAnswer = null;
+      currentQuizItemIndex++;
+      renderCurrentQuiz();
+    }
+
+    // --------------------------------------------------------------------------
+    // 7. لوحة القرارات النهائية للبكالوريا (BAC Decision Finals Hub)
+    // --------------------------------------------------------------------------
+    const BAC_TRACKS_COEFFICIENTS = {
+      "علوم تجريبية": [
+        { name: "العلوم الطبيعية والحياة", coef: 6, defaultGrade: 15 },
+        { name: "العلوم الفيزيائية", coef: 5, defaultGrade: 15 },
+        { name: "الرياضيات", coef: 5, defaultGrade: 14.5 },
+        { name: "اللغة العربية وآدابها", coef: 3, defaultGrade: 14 },
+        { name: "الفلسفة", coef: 2, defaultGrade: 13 },
+        { name: "اللغة الفرنسية", coef: 2, defaultGrade: 14 },
+        { name: "اللغة الإنجليزية", coef: 2, defaultGrade: 16 },
+        { name: "التاريخ والجغرافيا", coef: 2, defaultGrade: 15 },
+        { name: "العلوم الإسلامية", coef: 2, defaultGrade: 17 },
+        { name: "التربية البدنية", coef: 1, defaultGrade: 18 }
+      ],
+      "رياضيات": [
+        { name: "الرياضيات", coef: 7, defaultGrade: 16 },
+        { name: "العلوم الفيزيائية", coef: 6, defaultGrade: 15 },
+        { name: "العلوم الطبيعية", coef: 2, defaultGrade: 14 },
+        { name: "اللغة العربية وآدابها", coef: 3, defaultGrade: 14 },
+        { name: "الفلسفة", coef: 2, defaultGrade: 13 },
+        { name: "اللغة الفرنسية", coef: 2, defaultGrade: 14 },
+        { name: "اللغة الإنجليزية", coef: 2, defaultGrade: 16 },
+        { name: "التاريخ والجغرافيا", coef: 2, defaultGrade: 15 },
+        { name: "العلوم الإسلامية", coef: 2, defaultGrade: 17 },
+        { name: "التربية البدنية", coef: 1, defaultGrade: 18 }
+      ],
+      "تقني رياضي": [
+        { name: "التكنولوجيا (الهندسة)", coef: 6, defaultGrade: 16 },
+        { name: "الرياضيات", coef: 6, defaultGrade: 15 },
+        { name: "العلوم الفيزيائية", coef: 6, defaultGrade: 14 },
+        { name: "اللغة العربية وآدابها", coef: 3, defaultGrade: 13 },
+        { name: "التاريخ والجغرافيا", coef: 2, defaultGrade: 14 },
+        { name: "الفلسفة", coef: 2, defaultGrade: 12 },
+        { name: "اللغة الفرنسية", coef: 2, defaultGrade: 13 },
+        { name: "اللغة الإنجليزية", coef: 2, defaultGrade: 15 },
+        { name: "العلوم الإسلامية", coef: 2, defaultGrade: 16 },
+        { name: "التربية البدنية", coef: 1, defaultGrade: 18 }
+      ],
+      "تسيير واقتصاد": [
+        { name: "التسيير المالي والمحاسبي", coef: 6, defaultGrade: 15 },
+        { name: "الاقتصاد والمناجمنت", coef: 5, defaultGrade: 14 },
+        { name: "الرياضيات", coef: 5, defaultGrade: 13 },
+        { name: "التاريخ والجغرافيا", coef: 4, defaultGrade: 15 },
+        { name: "اللغة العربية وآدابها", coef: 3, defaultGrade: 14 },
+        { name: "القانون", coef: 2, defaultGrade: 14 },
+        { name: "الفلسفة", coef: 2, defaultGrade: 12 },
+        { name: "اللغة الفرنسية", coef: 2, defaultGrade: 13 },
+        { name: "اللغة الإنجليزية", coef: 2, defaultGrade: 15 },
+        { name: "العلوم الإسلامية", coef: 2, defaultGrade: 17 },
+        { name: "التربية البدنية", coef: 1, defaultGrade: 18 }
+      ],
+      "آداب وفلسفة": [
+        { name: "الفلسفة", coef: 6, defaultGrade: 14 },
+        { name: "اللغة العربية وآدابها", coef: 6, defaultGrade: 15 },
+        { name: "التاريخ والجغرافيا", coef: 4, defaultGrade: 16 },
+        { name: "اللغة الفرنسية", coef: 3, defaultGrade: 13 },
+        { name: "اللغة الإنجليزية", coef: 3, defaultGrade: 14 },
+        { name: "الرياضيات", coef: 2, defaultGrade: 13 },
+        { name: "العلوم الإسلامية", coef: 2, defaultGrade: 17 },
+        { name: "التربية البدنية", coef: 1, defaultGrade: 18 }
+      ],
+      "آداب ولغات": [
+        { name: "اللغة الأجنبية 3 (ألمانية/إسبانية/إيطالية)", coef: 5, defaultGrade: 16 },
+        { name: "اللغة العربية وآدابها", coef: 5, defaultGrade: 15 },
+        { name: "اللغة الفرنسية", coef: 5, defaultGrade: 14 },
+        { name: "اللغة الإنجليزية", coef: 5, defaultGrade: 15 },
+        { name: "الفلسفة", coef: 2, defaultGrade: 13 },
+        { name: "التاريخ والجغرافيا", coef: 2, defaultGrade: 15 },
+        { name: "العلوم الإسلامية", coef: 2, defaultGrade: 17 },
+        { name: "الرياضيات", coef: 2, defaultGrade: 13 },
+        { name: "التربية البدنية", coef: 1, defaultGrade: 18 }
+      ]
+    };
+
+    const UNIVERSITY_BRANCHES = [
+      { name: "العلوم الطبية (طب، صيدلة، طب أسنان)", minAvg: 16.20, tracks: ["علوم تجريبية", "رياضيات", "تقني رياضي"], icon: "stethoscope" },
+      { name: "المدرسة العليا للإعلام الآلي والذكاء الاصطناعي (ESI / ENSIA)", minAvg: 16.80, tracks: ["رياضيات", "علوم تجريبية", "تقني رياضي"], icon: "cpu" },
+      { name: "المدرسة الوطنية المتعددة التقنيات (ENP - بوليتكنيك)", minAvg: 15.60, tracks: ["رياضيات", "تقني رياضي", "علوم تجريبية"], icon: "layers" },
+      { name: "المدارس العليا للأساتذة (ENS - تعليم ثانوي ومتوسط)", minAvg: 14.60, tracks: ["جميع الشعب"], icon: "graduation-cap" },
+      { name: "الهندسة المعمارية والعمران (Architecture)", minAvg: 13.80, tracks: ["رياضيات", "تقني رياضي", "علوم تجريبية"], icon: "building-2" },
+      { name: "المدارس العليا للتجارة والتسيير (ENC / ESC / HEC)", minAvg: 13.50, tracks: ["تسيير واقتصاد", "رياضيات", "علوم تجريبية"], icon: "trending-up" },
+      { name: "العلوم والتقنيات والتكنولوجيا (ST / SM)", minAvg: 11.00, tracks: ["علوم تجريبية", "رياضيات", "تقني رياضي"], icon: "cog" },
+      { name: "الحقوق والعلوم السياسية والإدارية", minAvg: 10.50, tracks: ["جميع الشعب"], icon: "scale" },
+      { name: "اللغات الأجنبية والترجمة الفورية", minAvg: 11.80, tracks: ["آداب ولغات", "آداب وفلسفة", "جميع الشعب"], icon: "globe" },
+      { name: "العلوم الاقتصادية وعلوم التسيير", minAvg: 10.80, tracks: ["جميع الشعب"], icon: "coins" }
+    ];
+
+    function renderDecisionCalculator() {
+      const select = document.getElementById('decisionTrackSelect');
+      const track = select.value;
+      const subjects = BAC_TRACKS_COEFFICIENTS[track] || BAC_TRACKS_COEFFICIENTS["علوم تجريبية"];
+      const grid = document.getElementById('subjectsGradeGrid');
+
+      grid.innerHTML = subjects.map((s, idx) => `
+        <div class="p-2.5 bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 rounded-xl border border-[#E8C995]/30 flex items-center justify-between gap-2">
+          <div class="min-w-0">
+            <span class="font-bold block truncate">${s.name}</span>
+            <span class="text-[10px] opacity-70">المعامل: <strong class="text-[#731E3E] dark:text-[#E8C995] font-mono">${s.coef}</strong></span>
+          </div>
+          <div class="flex items-center gap-1 shrink-0">
+            <input type="number" step="0.25" min="0" max="20" id="gradeInput-${idx}" value="${s.defaultGrade}" oninput="calculatePredictedAverage()"
+              class="w-16 text-center font-mono font-bold p-1.5 rounded-lg bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/40 text-xs outline-none focus:border-[#731E3E]">
+            <span class="text-[10px] opacity-60">/20</span>
+          </div>
+        </div>
+      `).join('');
+
+      calculatePredictedAverage();
+      loadSavedDecisions();
+    }
+
+    function calculatePredictedAverage() {
+      const select = document.getElementById('decisionTrackSelect');
+      const track = select.value;
+      const subjects = BAC_TRACKS_COEFFICIENTS[track] || BAC_TRACKS_COEFFICIENTS["علوم تجريبية"];
+
+      let totalScore = 0;
+      let totalCoef = 0;
+      let highestSubject = null;
+      let highestWeightedPoints = -1;
+
+      subjects.forEach((s, idx) => {
+        const input = document.getElementById(`gradeInput-${idx}`);
+        let grade = parseFloat(input?.value);
+        if (isNaN(grade) || grade < 0) grade = 0;
+        if (grade > 20) grade = 20;
+
+        const weighted = grade * s.coef;
+        totalScore += weighted;
+        totalCoef += s.coef;
+
+        if (weighted > highestWeightedPoints) {
+          highestWeightedPoints = weighted;
+          highestSubject = s;
+        }
+      });
+
+      const avg = totalCoef > 0 ? (totalScore / totalCoef) : 0;
+      const avgRounded = avg.toFixed(2);
+
+      document.getElementById('predictedAvgDisplay').innerText = avgRounded;
+      document.getElementById('totalWeightedScore').innerText = totalScore.toFixed(1);
+      document.getElementById('totalCoefficients').innerText = totalCoef;
+
+      const apprecEl = document.getElementById('predictedAppreciation');
+      if (avg >= 18) {
+        apprecEl.innerText = "ممتاز 🌟";
+        apprecEl.className = "text-xs font-bold bg-amber-400/30 text-amber-300 px-3 py-1 rounded-full";
+      } else if (avg >= 16) {
+        apprecEl.innerText = "جيد جداً 💎";
+        apprecEl.className = "text-xs font-bold bg-emerald-400/30 text-emerald-300 px-3 py-1 rounded-full";
+      } else if (avg >= 14) {
+        apprecEl.innerText = "جيد 🥇";
+        apprecEl.className = "text-xs font-bold bg-blue-400/30 text-blue-300 px-3 py-1 rounded-full";
+      } else if (avg >= 12) {
+        apprecEl.innerText = "قريب من الجيد 🥈";
+        apprecEl.className = "text-xs font-bold bg-purple-400/30 text-purple-300 px-3 py-1 rounded-full";
+      } else if (avg >= 10) {
+        apprecEl.innerText = "مقبول 🥉";
+        apprecEl.className = "text-xs font-bold bg-teal-400/30 text-teal-300 px-3 py-1 rounded-full";
+      } else {
+        apprecEl.innerText = "دون المعدل ⚠️";
+        apprecEl.className = "text-xs font-bold bg-red-400/30 text-red-300 px-3 py-1 rounded-full";
+      }
+
+      if (highestSubject) {
+        document.getElementById('decisionInsights').innerText = `أعلى ركيزة داعمة لمعدلك: ${highestSubject.name} (معامل ${highestSubject.coef}) برصيد ${highestWeightedPoints.toFixed(1)} نقطة.`;
+      }
+
+      localStorage.setItem('bac_decision_simulated', 'true');
+      renderUniversityDecisions(avg, track);
+    }
+
+    function renderUniversityDecisions(avg, track) {
+      const listEl = document.getElementById('universityDecisionsList');
+      if (!listEl) return;
+
+      const relevant = UNIVERSITY_BRANCHES.filter(b => b.tracks.includes("جميع الشعب") || b.tracks.includes(track));
+
+      listEl.innerHTML = relevant.map(b => {
+        const diff = (avg - b.minAvg).toFixed(2);
+        let badge = '';
+        if (diff >= 0) {
+          badge = `<span class="bg-emerald-600/20 text-emerald-700 dark:text-emerald-300 font-bold px-2.5 py-0.5 rounded-full text-[10px]">متاح بفرص عالية ✅</span>`;
+        } else if (Math.abs(diff) <= 1.2) {
+          badge = `<span class="bg-amber-600/20 text-amber-700 dark:text-amber-300 font-bold px-2.5 py-0.5 rounded-full text-[10px]">فرصة قريبة (+${Math.abs(diff)} فقط) ⚡</span>`;
+        } else {
+          badge = `<span class="bg-red-800/20 text-red-600 dark:text-red-400 font-bold px-2.5 py-0.5 rounded-full text-[10px]">يحتاج رفع المعدل بـ ${Math.abs(diff)} 🎯</span>`;
+        }
+
+        return `
+          <div class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-2xl border border-[#E8C995]/20 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div class="w-8 h-8 rounded-xl bg-[#E8C995]/20 text-[#731E3E] dark:text-[#E8C995] flex items-center justify-center shrink-0">
+                <i data-lucide="${b.icon || 'book'}" class="w-4 h-4"></i>
+              </div>
+              <div class="min-w-0">
+                <span class="font-bold block truncate">${b.name}</span>
+                <span class="text-[10px] opacity-60">عتبة تقديرية: <strong>${b.minAvg}</strong></span>
+              </div>
+            </div>
+            <div class="shrink-0 text-left">
+              ${badge}
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function saveFinalDecisions() {
+      const d1 = document.getElementById('finalDecision1').value.trim();
+      const d2 = document.getElementById('finalDecision2').value.trim();
+      const d3 = document.getElementById('finalDecision3').value.trim();
+
+      const decisionsObj = { d1, d2, d3, date: new Date().toLocaleDateString('ar-DZ') };
+      localStorage.setItem('bac_final_decisions_charter', JSON.stringify(decisionsObj));
+
+      totalPoints += 20;
+      saveStatsToStorage();
+      playSuccessChime();
+      showToast("تم تثبيت قراراتك النهائية بنجاح! +20 نقطة تميز 🎯");
+      updateUI();
+    }
+
+    function loadSavedDecisions() {
+      const saved = JSON.parse(localStorage.getItem('bac_final_decisions_charter') || 'null');
+      if (saved) {
+        if (saved.d1) document.getElementById('finalDecision1').value = saved.d1;
+        if (saved.d2) document.getElementById('finalDecision2').value = saved.d2;
+        if (saved.d3) document.getElementById('finalDecision3').value = saved.d3;
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // 8. جدار الأوسمة والإنجازات (Achievements & Badges)
+    // --------------------------------------------------------------------------
+    const ACHIEVEMENTS_LIST = [
+      { id: 'first_session', title: 'الانطلاقة الأولى', desc: 'إتمام أول جلسة بومودورو أو دراسة', icon: 'zap', check: () => (pomodoroSessions + meetSessions) >= 1 },
+      { id: 'quiz_master', title: 'عقلية المتفوق', desc: 'إجابة 3 أسئلة كويز صحيحة', icon: 'brain', check: () => (parseInt(localStorage.getItem('quiz_correct_count') || '0')) >= 3 },
+      { id: 'marathon', title: 'ماراثون التركيز', desc: 'إتمام أكثر من 60 دقيقة دراسة', icon: 'hourglass', check: () => (pomodoroMinutes + meetMinutes) >= 60 },
+      { id: 'decision_maker', title: 'صانع القرارات', desc: 'حساب المعدل التقديري وتحديد تخصصك', icon: 'target', check: () => localStorage.getItem('bac_decision_simulated') === 'true' },
+      { id: 'task_slayer', title: 'منجز المهام', desc: 'إنجاز 3 مهام دراسية يومية', icon: 'check-circle-2', check: () => (parseInt(localStorage.getItem('tasks_completed_count') || '0')) >= 3 },
+      { id: 'legend', title: 'أسطورة العائلة', desc: 'الوصول إلى 500 نقطة فما فوق', icon: 'crown', check: () => totalPoints >= 500 }
+    ];
+
+    function renderAchievements() {
+      const grid = document.getElementById('achievementsGrid');
+      if (!grid) return;
+
+      let unlockedCount = 0;
+      grid.innerHTML = ACHIEVEMENTS_LIST.map(a => {
+        const isUnlocked = a.check();
+        if (isUnlocked) unlockedCount++;
+
+        return `
+          <div class="p-3 rounded-2xl border ${isUnlocked ? 'bg-[#E8C995]/20 border-[#E8C995] text-[#731E3E] dark:text-[#E8C995]' : 'bg-[#F5EDE0]/30 dark:bg-[#25131D]/30 border-gray-400/20 opacity-50'} flex flex-col items-center text-center space-y-1.5 transition hover:scale-105">
+            <div class="w-9 h-9 rounded-xl ${isUnlocked ? 'bg-[#731E3E] text-[#E8C995]' : 'bg-gray-400/20 text-gray-400'} flex items-center justify-center">
+              <i data-lucide="${a.icon}" class="w-5 h-5"></i>
+            </div>
+            <span class="font-bold text-xs">${a.title}</span>
+            <span class="text-[9px] opacity-70 leading-tight">${a.desc}</span>
+            <span class="text-[9px] font-bold ${isUnlocked ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400'}">${isUnlocked ? 'مكتسب ✨' : 'مغلق 🔒'}</span>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('achievementsCount').innerText = `${unlockedCount}/${ACHIEVEMENTS_LIST.length}`;
+      lucide.createIcons();
+    }
+
+    // --------------------------------------------------------------------------
+    // 9. التوجيه وتحديث الواجهة الشاملة
+    // --------------------------------------------------------------------------
+    function updateUI() {
+      if (profile) {
+        document.getElementById('homeGreeting').innerText = `أهلاً يا ${profile.firstName}، خلّينا ننجز شيئاً.`;
+        document.getElementById('rankStudentName').innerText = `${profile.firstName} ${profile.lastName}`;
+        document.getElementById('homeTrackBadge').innerText = profile.track || 'علوم تجريبية';
+
+        const setFullName = document.getElementById('settingsFullName');
+        if (setFullName) setFullName.innerText = `${profile.firstName} ${profile.lastName}`;
+        const setTrack = document.getElementById('settingsTrack');
+        if (setTrack) setTrack.innerText = `${profile.track} ${profile.specialization ? '(' + profile.specialization + ')' : ''}`;
+
+        const decisionSelect = document.getElementById('decisionTrackSelect');
+        if (decisionSelect && profile.track && decisionSelect.value !== profile.track) {
+          decisionSelect.value = profile.track;
+        }
+      }
+
+      totalPoints = pomodoroPoints + meetPoints + quizPoints;
+      let rank = "بداية قوية";
+      let nextRankPts = 150;
+
+      if (totalPoints >= 800) {
+        rank = "قائد العائلة";
+        nextRankPts = 800;
+      } else if (totalPoints >= 400) {
+        rank = "مركز";
+        nextRankPts = 800;
+      } else if (totalPoints >= 150) {
+        rank = "مستعد";
+        nextRankPts = 400;
+      }
+
+      const totalTime = pomodoroMinutes + meetMinutes;
+      const totalSess = pomodoroSessions + meetSessions;
+
+      // تحديث الرئيسية
+      document.getElementById('userRank').innerText = rank;
+      document.getElementById('userPoints').innerText = `${totalPoints} نقطة`;
+      document.getElementById('userStudyTime').innerText = `إجمالي الدقائق الدراسية: ${totalTime} دقيقة`;
+
+      // تحديث التصنيف
+      document.getElementById('rankTitleBadge').innerText = rank;
+      document.getElementById('rankTotalPts').innerText = totalPoints;
+      document.getElementById('rankTotalTime').innerText = `${totalTime} د`;
+      document.getElementById('rankTotalSessions').innerText = totalSess;
+
+      document.getElementById('pomoPtsDisplay').innerText = `${pomodoroPoints} نقطة`;
+      document.getElementById('pomoMinsDisplay').innerText = `${pomodoroMinutes} دقيقة`;
+      document.getElementById('pomoSessDisplay').innerText = `${pomodoroSessions} جلسة`;
+
+      document.getElementById('meetPtsDisplay').innerText = `${meetPoints} نقطة`;
+      document.getElementById('meetMinsDisplay').innerText = `${meetMinutes} دقيقة`;
+      document.getElementById('meetSessDisplay').innerText = `${meetSessions} جلسة`;
+
+      // شريط التقدم
+      if (totalPoints >= 800) {
+        document.getElementById('rankNextText').innerText = "أعلى رتبة وصلت إليها 🎉";
+        document.getElementById('rankProgressPercent').innerText = "100%";
+        document.getElementById('rankProgressBar').style.width = "100%";
+      } else {
+        const ptsRemaining = nextRankPts - totalPoints;
+        const percent = Math.min(100, Math.floor((totalPoints / nextRankPts) * 100));
+        document.getElementById('rankNextText').innerText = `النقاط المتبقية للوصول إلى الرتبة التالية: ${ptsRemaining} نقطة`;
+        document.getElementById('rankProgressPercent').innerText = `${percent}%`;
+        document.getElementById('rankProgressBar').style.width = `${percent}%`;
+      }
+
+      // عرض السجل
+      const listEl = document.getElementById('historyList');
+      if (studyHistory.length === 0) {
+        listEl.innerHTML = `<div class="text-center opacity-60 py-4">لا توجد جلسات مسجلة بعد. ابدأ أول جلسة الآن!</div>`;
+      } else {
+        listEl.innerHTML = studyHistory.slice(0, 10).map(h => `
+          <div class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-2xl border border-[#E8C995]/20 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+              <i data-lucide="${h.type === 'Pomodoro' ? 'timer' : 'video'}" class="w-4 h-4 ${h.type === 'Pomodoro' ? 'text-[#731E3E] dark:text-[#E8C995]' : 'text-[#6C9D78]'}"></i>
+              <div>
+                <span class="font-bold">${h.type}</span>
+                <span class="block text-[10px] opacity-60">${h.date}</span>
+              </div>
+            </div>
+            <div class="text-left font-mono">
+              <span class="font-bold text-sm text-[#731E3E] dark:text-[#E8C995]">+${h.points} نقطة</span>
+              <span class="block text-[10px] opacity-60">${h.duration} دقيقة</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      renderDailyTasks();
+      renderAchievements();
+      lucide.createIcons();
+    }
+
+    function navigateTo(path) {
+      document.querySelectorAll('#appPages > section').forEach(sec => sec.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.remove('active');
+        b.classList.add('opacity-60');
+      });
+
+      if (path === '/') {
+        document.getElementById('pageHome').classList.remove('hidden');
+        document.getElementById('navItem-home')?.classList.add('active');
+        document.getElementById('navItem-home')?.classList.remove('opacity-60');
+      } else if (path === '/quizzes') {
+        document.getElementById('pageQuizzes').classList.remove('hidden');
+        document.getElementById('navItem-quizzes')?.classList.add('active');
+        document.getElementById('navItem-quizzes')?.classList.remove('opacity-60');
+        filterQuizzes(activeQuizFilter);
+      } else if (path === '/decisions') {
+        document.getElementById('pageDecisions').classList.remove('hidden');
+        document.getElementById('navItem-decisions')?.classList.add('active');
+        document.getElementById('navItem-decisions')?.classList.remove('opacity-60');
+        renderDecisionCalculator();
+      } else if (path === '/library') {
+        document.getElementById('pageLibrary').classList.remove('hidden');
+        document.getElementById('navItem-library')?.classList.add('active');
+        document.getElementById('navItem-library')?.classList.remove('opacity-60');
+      } else if (path === '/study') {
+        document.getElementById('pageStudy').classList.remove('hidden');
+      } else if (path === '/pomodoro') {
+        document.getElementById('pagePomodoro').classList.remove('hidden');
+        document.getElementById('navItem-pomodoro')?.classList.add('active');
+        document.getElementById('navItem-pomodoro')?.classList.remove('opacity-60');
+      } else if (path === '/ranking') {
+        document.getElementById('pageRanking').classList.remove('hidden');
+        document.getElementById('navItem-ranking')?.classList.add('active');
+        document.getElementById('navItem-ranking')?.classList.remove('opacity-60');
+        renderAchievements();
+      } else if (path === '/settings') {
+        document.getElementById('pageSettings').classList.remove('hidden');
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      lucide.createIcons();
+    }
+
+    // --------------------------------------------------------------------------
+    // 10. مؤقت Pomodoro وتخصيص الوقت
+    // --------------------------------------------------------------------------
+    let pomoMode = 'focus';
+    let customTimes = { focus: 25, short: 5, long: 15 };
+    let pomoMinutes = 25;
+    let pomoSeconds = 0;
+    let pomoTotalDurationSeconds = 25 * 60;
+    let pomoIsRunning = false;
+    let pomoInterval = null;
+
+    function setPomoMode(mode) {
+      pomoMode = mode;
+      document.getElementById('modeFocusBtn').className = `flex-1 py-2 text-xs font-bold rounded-xl transition ${mode === 'focus' ? 'bg-[#731E3E] text-[#F5EDE0]' : 'opacity-70'}`;
+      document.getElementById('modeShortBtn').className = `flex-1 py-2 text-xs font-bold rounded-xl transition ${mode === 'short' ? 'bg-[#731E3E] text-[#F5EDE0]' : 'opacity-70'}`;
+      document.getElementById('modeLongBtn').className = `flex-1 py-2 text-xs font-bold rounded-xl transition ${mode === 'long' ? 'bg-[#731E3E] text-[#F5EDE0]' : 'opacity-70'}`;
+
+      const titles = { focus: 'جلسة تركيز', short: 'استراحة قصيرة', long: 'استراحة طويلة' };
+      document.getElementById('pomoModeTitle').innerText = titles[mode];
+      resetPomodoro();
+    }
+
+    function updateCustomTimes() {
+      customTimes.focus = parseInt(document.getElementById('customFocusInput').value) || 25;
+      customTimes.short = parseInt(document.getElementById('customShortInput').value) || 5;
+      customTimes.long = parseInt(document.getElementById('customLongInput').value) || 15;
+      resetPomodoro();
+    }
+
+    function addMinutes(mins) {
+      let totalMins = pomoMinutes + mins;
+      if (totalMins < 1) totalMins = 1;
+      pomoMinutes = totalMins;
+      pomoTotalDurationSeconds = pomoMinutes * 60 + pomoSeconds;
+      updateTimerDisplay();
+    }
+
+    function toggleCustomizer() {
+      const panel = document.getElementById('customizerPanel');
+      panel.classList.toggle('hidden');
+    }
+
+    function updateTimerDisplay() {
+      document.getElementById('pomoTime').innerText = `${String(pomoMinutes).padStart(2, '0')}:${String(pomoSeconds).padStart(2, '0')}`;
+      const currentSecs = pomoMinutes * 60 + pomoSeconds;
+      const progressPct = pomoTotalDurationSeconds > 0 ? ((pomoTotalDurationSeconds - currentSecs) / pomoTotalDurationSeconds) * 100 : 0;
+      document.getElementById('pomoCircle').style.setProperty('--pomo-progress', `${progressPct}%`);
+    }
+
+    function togglePomodoro() {
+      const btnText = document.getElementById('pomoStartBtnText');
+      if (pomoIsRunning) {
+        clearInterval(pomoInterval);
+        pomoIsRunning = false;
+        btnText.innerText = "تابع الجلسة";
+      } else {
+        pomoIsRunning = true;
+        btnText.innerText = "إيقاف مؤقت";
+        pomoInterval = setInterval(() => {
+          if (pomoSeconds === 0) {
+            if (pomoMinutes === 0) {
+              clearInterval(pomoInterval);
+              pomoIsRunning = false;
+
+              if (pomoMode === 'focus') {
+                const duration = customTimes.focus;
+                const ptsGained = duration * 2;
+
+                pomodoroMinutes += duration;
+                pomodoroSessions += 1;
+                pomodoroPoints += ptsGained;
+                totalPoints += ptsGained;
+
+                addHistoryItem('Pomodoro', duration, ptsGained);
+                playSuccessChime();
+                showToast(`أحسنت! كملت جلسة Pomodoro وربحت ${ptsGained} نقطة.`);
+                updateUI();
+              } else {
+                playSuccessChime();
+                showToast("انتهت الاستراحة، حان وقت العودة للتركيز!");
+              }
+
+              resetPomodoro();
+              return;
+            }
+            pomoMinutes--;
+            pomoSeconds = 59;
+          } else {
+            pomoSeconds--;
+          }
+          updateTimerDisplay();
+        }, 1000);
+      }
+    }
+
+    function resetPomodoro() {
+      clearInterval(pomoInterval);
+      pomoIsRunning = false;
+      pomoMinutes = customTimes[pomoMode];
+      pomoSeconds = 0;
+      pomoTotalDurationSeconds = pomoMinutes * 60;
+      updateTimerDisplay();
+      document.getElementById('pomoStartBtnText').innerText = "ابدأ الآن";
+    }
+
+    // --------------------------------------------------------------------------
+    // 11. جلسات Google Meet
+    // --------------------------------------------------------------------------
+    let meetStartTime = null;
+    let meetTimerInterval = null;
+
+    function startMeetSession() {
+      if (meetStartTime) return;
+      meetStartTime = new Date();
+      document.getElementById('btnStartMeet').classList.add('hidden');
+      document.getElementById('btnEndMeet').classList.remove('hidden');
+      document.getElementById('meetActiveBar').classList.remove('hidden');
+
+      meetTimerInterval = setInterval(() => {
+        const diffSecs = Math.floor((new Date() - meetStartTime) / 1000);
+        const m = Math.floor(diffSecs / 60);
+        const s = diffSecs % 60;
+        document.getElementById('meetTimerVal').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function endMeetSession() {
+      if (!meetStartTime) return;
+      const endTime = new Date();
+      const durationMins = Math.floor((endTime - meetStartTime) / (1000 * 60));
+
+      clearInterval(meetTimerInterval);
+      meetStartTime = null;
+
+      document.getElementById('btnStartMeet').classList.remove('hidden');
+      document.getElementById('btnEndMeet').classList.add('hidden');
+      document.getElementById('meetActiveBar').classList.add('hidden');
+      document.getElementById('meetTimerVal').innerText = "00:00";
+
+      if (durationMins < 1) {
+        showToast("الجلسة كانت أقل من دقيقة واحدة، لم تُسجل النقاط.");
+        return;
+      }
+
+      const ptsGained = durationMins * 1;
+      meetMinutes += durationMins;
+      meetSessions += 1;
+      meetPoints += ptsGained;
+      totalPoints += ptsGained;
+
+      addHistoryItem('Meet', durationMins, ptsGained);
+      playSuccessChime();
+      showToast(`سجلت ${durationMins} دقيقة Meet وربحت ${ptsGained} نقطة.`);
+      updateUI();
+    }
+
+    // --------------------------------------------------------------------------
+    // 12. العد التنازلي للبكالوريا (07 جوان 2027)
+    // --------------------------------------------------------------------------
+    function updateCountdown() {
+      const target = new Date('June 7, 2027 00:00:00').getTime();
+      const now = new Date().getTime();
+      const diff = target - now;
+
+      if (diff > 0) {
+        document.getElementById('cdDays').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+        document.getElementById('cdHours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById('cdMinutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById('cdSeconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+      }
+    }
+    setInterval(updateCountdown, 1000);
+
+    // --------------------------------------------------------------------------
+    // 13. خيارات الوضع الليلي وتصفير البيانات
+    // --------------------------------------------------------------------------
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    }
+
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+
+    function replayStory() {
+      currentSlideIdx = 0;
+      renderSlide();
+      document.getElementById('storyScreen').classList.remove('hidden');
+    }
+
+    function confirmResetData() {
+      if (confirm("هل أنت متأكد من تصفير سجل الجلسات والنقاط؟ لا يمكن التراجع عن هذا الإجراء.")) {
+        pomodoroMinutes = 0;
+        meetMinutes = 0;
+        pomodoroSessions = 0;
+        meetSessions = 0;
+        pomodoroPoints = 0;
+        meetPoints = 0;
+        quizPoints = 0;
+        totalPoints = 0;
+        studyHistory = [];
+        saveStatsToStorage();
+        updateUI();
+        showToast("تمت إعادة ضبط البيانات بنجاح.");
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    // 14. التهيئة الابتدائية عند الفتح
+    // --------------------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+      renderSlide();
+      slideTimer = setInterval(() => {
+        if (currentSlideIdx < slides.length - 1) {
+          currentSlideIdx++;
+          renderSlide();
+        }
+      }, 5200);
+
+      updateCountdown();
+      checkProfile();
+      updateUI();
+      lucide.createIcons();
+    });
+  </script>
+
+  <!-- PWA Service Worker & Install Logic -->
+  <script>
+    let deferredInstallPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      const wrap = document.getElementById('pwaInstallWrap');
+      if (wrap) wrap.classList.remove('hidden');
+      if (window.lucide) lucide.createIcons();
+    });
+
+    document.addEventListener('click', async (event) => {
+      const button = event.target.closest('#pwaInstallBtn');
+      if (!button || !deferredInstallPrompt) return;
+
+      deferredInstallPrompt.prompt();
+      const choice = await deferredInstallPrompt.userChoice;
+
+      if (choice.outcome === 'accepted') {
+        deferredInstallPrompt = null;
+        document.getElementById('pwaInstallWrap')?.classList.add('hidden');
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      document.getElementById('pwaInstallWrap')?.classList.add('hidden');
+      if (typeof showToast === 'function') {
+        showToast('تم تثبيت Focus & Force بنجاح 📲');
+      }
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .catch((error) => console.error('PWA Service Worker registration failed:', error));
+      });
+    }
+  </script>
 
 </body>
+
 </html>
