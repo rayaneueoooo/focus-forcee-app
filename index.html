@@ -26,6 +26,8 @@
 
   <!-- بنك الكويزات الشامل للبكالوريا -->
   <script src="./quizzes.js"></script>
+  <!-- مركز الأدوات الذكية الشاملة للبكالوريا (The Master Hub) -->
+  <script src="./tools_hub.js"></script>
 
   <script>
     tailwind.config = {
@@ -320,6 +322,25 @@
     </div>
   </div>
 
+  <!-- نافذة الأدوات الذكية الشاملة (Master Tool Modal) -->
+  <div id="masterToolModal"
+    class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-5">
+    <div
+      class="bg-[#FCF8F1] dark:bg-[#321323] border-2 border-[#E8C995]/50 text-[#451C2B] dark:text-[#F5EDE0] max-w-2xl w-full p-5 sm:p-7 rounded-3xl shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto relative animate-in fade-in zoom-in-95 duration-200">
+      <!-- زر الإغلاق العلوي -->
+      <button onclick="closeToolModal()"
+        class="absolute top-4 left-4 p-2 rounded-full bg-[#E8C995]/20 hover:bg-[#E8C995]/40 text-[#731E3E] dark:text-[#E8C995] border border-[#E8C995]/40 transition shadow z-10"
+        title="إغلاق">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <!-- محتوى الأداة الديناميكي -->
+      <div id="masterToolModalContent" class="pt-2">
+        <!-- يتم ملؤه عبر tools_hub.js -->
+      </div>
+    </div>
+  </div>
+
   <!-- الأقسام الرئيسية للويب آب -->
   <main id="appPages">
 
@@ -351,6 +372,59 @@
             class="flex items-center gap-2 px-4 py-2.5 bg-[#501426] dark:bg-[#25131D] text-[#E8C995] border border-[#E8C995]/40 font-semibold rounded-xl text-xs hover:bg-[#731E3E] transition shadow">
             <i data-lucide="target" class="w-4 h-4"></i> القرارات النهائية 🎯
           </button>
+        </div>
+      </div>
+
+      <!-- مساحة محطات المراجعة والتفوق الأكاديمي (The BAC Mastery Arsenal) -->
+      <div id="masteryArsenalSection"
+        class="bg-[#FCF8F1] dark:bg-[#501426] p-5 sm:p-7 rounded-3xl border border-[#E8C995]/35 shadow-sm space-y-5">
+        <!-- رأس القسم الأنيق المتناسق مع FOCUS & FORCE -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E8C995]/25 pb-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span
+                class="px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 text-[#731E3E] dark:text-[#E8C995] border border-[#E8C995]/40 flex items-center gap-1.5 shadow-sm">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>ترسانة البكالوريا الذكية</span>
+              </span>
+              <span class="text-[10px] opacity-60 font-mono">18 أداة متخصصة</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-bold text-[#731E3E] dark:text-[#E8C995] tracking-tight">
+              محطات المراجعة والتفوق الأكاديمي
+            </h2>
+            <p class="text-xs opacity-75 leading-relaxed">
+              أدوات متطورة ومصممة خصيصاً لمرافقتك نحو معدل الامتياز في شهادة البكالوريا.
+            </p>
+          </div>
+
+          <!-- تصفية الأقسام الذكية (Filter Tabs) -->
+          <div class="flex flex-wrap items-center gap-1.5 text-xs font-semibold">
+            <button onclick="filterArsenalCategory('all')" id="arsenalTab-all"
+              class="arsenal-tab-btn px-3.5 py-1.5 rounded-full bg-[#731E3E] text-[#F5EDE0] shadow transition">
+              الكل (18)
+            </button>
+            <button onclick="filterArsenalCategory('exams')" id="arsenalTab-exams"
+              class="arsenal-tab-btn px-3.5 py-1.5 rounded-full bg-[#F5EDE0]/70 dark:bg-[#25131D]/70 border border-[#E8C995]/30 text-opacity-80 hover:border-[#731E3E] transition">
+              الامتحانات والتركيز ⏱️
+            </button>
+            <button onclick="filterArsenalCategory('memory')" id="arsenalTab-memory"
+              class="arsenal-tab-btn px-3.5 py-1.5 rounded-full bg-[#F5EDE0]/70 dark:bg-[#25131D]/70 border border-[#E8C995]/30 text-opacity-80 hover:border-[#731E3E] transition">
+              الحفظ والذاكرة 🧠
+            </button>
+            <button onclick="filterArsenalCategory('ai')" id="arsenalTab-ai"
+              class="arsenal-tab-btn px-3.5 py-1.5 rounded-full bg-[#F5EDE0]/70 dark:bg-[#25131D]/70 border border-[#E8C995]/30 text-opacity-80 hover:border-[#731E3E] transition">
+              الذكاء والتوجيه 🤖
+            </button>
+            <button onclick="filterArsenalCategory('momentum')" id="arsenalTab-momentum"
+              class="arsenal-tab-btn px-3.5 py-1.5 rounded-full bg-[#F5EDE0]/70 dark:bg-[#25131D]/70 border border-[#E8C995]/30 text-opacity-80 hover:border-[#731E3E] transition">
+              التحفيز والمكافآت 🏆
+            </button>
+          </div>
+        </div>
+
+        <!-- شبكة Bento Grid المتنوعة للأدوات -->
+        <div id="arsenalCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          <!-- يتم إدراج البطاقات الغنية بتصميم Bento الفريد -->
         </div>
       </div>
 
@@ -455,6 +529,75 @@
             <i data-lucide="video" class="w-4 h-4"></i> انضم لغرفة Google Meet
           </button>
         </div>
+      </div>
+    </section>
+
+    <!-- 1b. صفحة الترسانة المستقلة /arsenal -->
+    <section id="pageArsenal" class="space-y-5 hidden">
+      <!-- رأس الصفحة -->
+      <div class="bg-gradient-to-br from-[#731E3E] to-[#501426] p-6 rounded-3xl shadow-lg text-[#FCF8F1] space-y-2">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-2xl bg-[#E8C995]/20 border border-[#E8C995]/40 flex items-center justify-center">
+            <i data-lucide="zap" class="w-6 h-6 text-[#E8C995]"></i>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold tracking-tight">ترسانة التفوق الأكاديمي</h1>
+            <p class="text-xs opacity-75">18 أداة ذكية لجميع المواد وجميع الشعب</p>
+          </div>
+        </div>
+        <!-- شريط الشعب السريع -->
+        <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none pt-2">
+          <span class="text-[10px] opacity-60 whitespace-nowrap font-semibold">شعبتك:</span>
+          <button onclick="setArsenalTrack('علوم تجريبية')" id="trackBtn-sci"
+            class="track-btn whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 border border-[#E8C995]/40 hover:bg-[#E8C995]/40 transition text-[#FCF8F1]">
+            🔬 علوم تجريبية
+          </button>
+          <button onclick="setArsenalTrack('رياضيات')" id="trackBtn-math"
+            class="track-btn whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 border border-[#E8C995]/40 hover:bg-[#E8C995]/40 transition text-[#FCF8F1]">
+            📐 رياضيات
+          </button>
+          <button onclick="setArsenalTrack('آداب وفلسفة')" id="trackBtn-lit"
+            class="track-btn whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 border border-[#E8C995]/40 hover:bg-[#E8C995]/40 transition text-[#FCF8F1]">
+            📜 آداب وفلسفة
+          </button>
+          <button onclick="setArsenalTrack('آداب ولغات')" id="trackBtn-lang"
+            class="track-btn whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 border border-[#E8C995]/40 hover:bg-[#E8C995]/40 transition text-[#FCF8F1]">
+            🌐 آداب ولغات
+          </button>
+          <button onclick="setArsenalTrack('تسيير واقتصاد')" id="trackBtn-eco"
+            class="track-btn whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 border border-[#E8C995]/40 hover:bg-[#E8C995]/40 transition text-[#FCF8F1]">
+            📊 تسيير واقتصاد
+          </button>
+          <button onclick="setArsenalTrack('تقني رياضي')" id="trackBtn-tech"
+            class="track-btn whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 border border-[#E8C995]/40 hover:bg-[#E8C995]/40 transition text-[#FCF8F1]">
+            ⚙️ تقني رياضي
+          </button>
+        </div>
+      </div>
+
+      <!-- بطاقة الشعبة المختارة + المواد -->
+      <div id="arsenalTrackInfo"
+        class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 shadow-sm space-y-4">
+        <!-- يُملأ ديناميكياً بـ renderArsenalTrackPanel() -->
+      </div>
+
+      <!-- تصفية الأدوات حسب الفئة -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-semibold">
+        <button onclick="filterArsenalCategory('all')" id="arsenalTab2-all"
+          class="arsenal-tab2-btn px-3.5 py-1.5 rounded-full bg-[#731E3E] text-[#F5EDE0] shadow whitespace-nowrap transition">الكل</button>
+        <button onclick="filterArsenalCategory('exams')" id="arsenalTab2-exams"
+          class="arsenal-tab2-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#25131D] border border-[#E8C995]/30 whitespace-nowrap hover:border-[#731E3E] transition">⏱️ امتحانات</button>
+        <button onclick="filterArsenalCategory('memory')" id="arsenalTab2-memory"
+          class="arsenal-tab2-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#25131D] border border-[#E8C995]/30 whitespace-nowrap hover:border-[#731E3E] transition">🧠 حفظ وذاكرة</button>
+        <button onclick="filterArsenalCategory('ai')" id="arsenalTab2-ai"
+          class="arsenal-tab2-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#25131D] border border-[#E8C995]/30 whitespace-nowrap hover:border-[#731E3E] transition">🤖 ذكاء وتوجيه</button>
+        <button onclick="filterArsenalCategory('momentum')" id="arsenalTab2-momentum"
+          class="arsenal-tab2-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#25131D] border border-[#E8C995]/30 whitespace-nowrap hover:border-[#731E3E] transition">🏆 تحفيز ومكافآت</button>
+      </div>
+
+      <!-- شبكة الأدوات -->
+      <div id="arsenalCardsGrid2"
+        class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3">
       </div>
     </section>
 
@@ -1009,6 +1152,14 @@
         class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
         <i data-lucide="book-open" class="w-5 h-5"></i>
         <span>المكتبة</span>
+      </button>
+
+      <!-- زر الترسانة في شريط التنقل -->
+      <button onclick="navigateTo('/arsenal')" id="navItem-arsenal"
+        class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition relative">
+        <span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#E8C995] animate-pulse"></span>
+        <i data-lucide="zap" class="w-5 h-5"></i>
+        <span>الترسانة</span>
       </button>
 
       <button onclick="navigateTo('/ranking')" id="navItem-ranking"
@@ -2083,6 +2234,7 @@
         document.getElementById('pageHome').classList.remove('hidden');
         document.getElementById('navItem-home')?.classList.add('active');
         document.getElementById('navItem-home')?.classList.remove('opacity-60');
+        if (typeof renderMasterHubGrid === 'function') renderMasterHubGrid();
       } else if (path === '/quizzes') {
         document.getElementById('pageQuizzes').classList.remove('hidden');
         document.getElementById('navItem-quizzes')?.classList.add('active');
@@ -2110,6 +2262,11 @@
         renderAchievements();
       } else if (path === '/settings') {
         document.getElementById('pageSettings').classList.remove('hidden');
+      } else if (path === '/arsenal') {
+        document.getElementById('pageArsenal').classList.remove('hidden');
+        document.getElementById('navItem-arsenal')?.classList.add('active');
+        document.getElementById('navItem-arsenal')?.classList.remove('opacity-60');
+        if (typeof renderArsenalPageFull === 'function') renderArsenalPageFull();
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
