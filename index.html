@@ -26,10 +26,17 @@
 
   <!-- بنك الكويزات الشامل للبكالوريا -->
   <script src="./quizzes.js"></script>
-  <!-- مركز الأدوات الذكية الشاملة للبكالوريا (The Master Hub) -->
-  <script src="./tools_hub.js"></script>
-
   <script>
+    // تهيئة فورية لنمط الألوان والوضع الليلي لمنع أي وميض
+    (function () {
+      try {
+        const savedTheme = localStorage.getItem('focus-force-theme') || 'baby_pink';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        const isDark = localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (isDark) document.documentElement.classList.add('dark');
+      } catch (e) { }
+    })();
+
     tailwind.config = {
       darkMode: 'class',
       theme: {
@@ -56,11 +63,184 @@
   </script>
 
   <style>
+    /* ==============================================================
+       1. متغيرات الأنماط والألوان (Baby Pink, Lavender, Cream + Classic)
+       ============================================================== */
+    :root {
+      --theme-primary: #D63384;
+      --theme-dark: #371220;
+      --theme-accent: #FFC8DD;
+      --theme-bg: #FFF5F8;
+      --theme-card: #FFFFFF;
+      --theme-text: #371220;
+      --theme-border: #FFDDE8;
+    }
+
+    /* 1) Baby Pink 🎀 (#FFC8DD — اللون الرئيسي) - وضع نهاري */
+    [data-theme="baby_pink"] {
+      --theme-primary: #D63384;
+      --theme-dark: #371220;
+      --theme-accent: #FFC8DD;
+      --theme-bg: #FFF5F8;
+      --theme-card: #FFFFFF;
+      --theme-text: #371220;
+      --theme-border: #FFDDE8;
+    }
+
+    /* 1) Baby Pink 🎀 - وضع ليلي (Dark Mode) */
+    html.dark[data-theme="baby_pink"],
+    .dark [data-theme="baby_pink"] {
+      --theme-primary: #FF85B3;
+      --theme-dark: #14080F;
+      --theme-accent: #FFC8DD;
+      --theme-bg: #180D14;
+      --theme-card: #251420;
+      --theme-text: #FFF0F5;
+      --theme-border: #4D233C;
+    }
+
+    /* 2) Lavender 💜 (#D8C4FF — بنفسجي ناعم) - وضع نهاري */
+    [data-theme="lavender"] {
+      --theme-primary: #7C3AED;
+      --theme-dark: #1F1235;
+      --theme-accent: #D8C4FF;
+      --theme-bg: #FAF8FF;
+      --theme-card: #FFFFFF;
+      --theme-text: #1F1235;
+      --theme-border: #E8DEFF;
+    }
+
+    /* 2) Lavender 💜 - وضع ليلي (Dark Mode) */
+    html.dark[data-theme="lavender"],
+    .dark [data-theme="lavender"] {
+      --theme-primary: #C4B5FD;
+      --theme-dark: #0E0917;
+      --theme-accent: #D8C4FF;
+      --theme-bg: #150F24;
+      --theme-card: #221838;
+      --theme-text: #F5F3FF;
+      --theme-border: #3F2E64;
+    }
+
+    /* 3) Cream 🤍 (#FFF5E6 — كريمي أنيق دافئ ترابي) - وضع نهاري */
+    [data-theme="cream"] {
+      --theme-primary: #A36829;
+      --theme-dark: #2D1D0F;
+      --theme-accent: #FFF5E6;
+      --theme-bg: #FFF5E6;
+      --theme-card: #FFFFFF;
+      --theme-text: #2D1D0F;
+      --theme-border: #F3E0C6;
+    }
+
+    /* 3) Cream 🤍 - وضع ليلي (Dark Mode) */
+    html.dark[data-theme="cream"],
+    .dark [data-theme="cream"] {
+      --theme-primary: #E8B97E;
+      --theme-dark: #120E0A;
+      --theme-accent: #FFF5E6;
+      --theme-bg: #191410;
+      --theme-card: #272019;
+      --theme-text: #FFFDF9;
+      --theme-border: #443528;
+    }
+
+    /* 4) عنابي Focus & Force الأصلي - وضع نهاري */
+    [data-theme="classic"] {
+      --theme-primary: #731E3E;
+      --theme-dark: #451C2B;
+      --theme-accent: #E8C995;
+      --theme-bg: #F5EDE0;
+      --theme-card: #FCF8F1;
+      --theme-text: #451C2B;
+      --theme-border: rgba(232, 201, 149, 0.35);
+    }
+
+    /* 4) عنابي Focus & Force الأصلي - وضع ليلي */
+    html.dark[data-theme="classic"],
+    .dark [data-theme="classic"] {
+      --theme-primary: #E8C995;
+      --theme-dark: #25131D;
+      --theme-accent: #E8C995;
+      --theme-bg: #25131D;
+      --theme-card: #501426;
+      --theme-text: #FCF8F1;
+      --theme-border: rgba(232, 201, 149, 0.35);
+    }
+
+    /* تطبيق ألوان السمة الديناميكية */
     body {
       font-family: 'IBM Plex Sans Arabic', sans-serif;
-      background-color: #F5EDE0;
-      color: #451C2B;
       user-select: none;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    html[data-theme] body {
+      background-color: var(--theme-bg) !important;
+      color: var(--theme-text) !important;
+    }
+
+    html[data-theme]:not([data-theme="classic"]) .bg-\[\#FCF8F1\],
+    html[data-theme]:not([data-theme="classic"]) .bg-\[\#501426\],
+    html[data-theme]:not([data-theme="classic"]) .bg-\[\#25131D\],
+    html[data-theme]:not([data-theme="classic"]) nav,
+    html[data-theme]:not([data-theme="classic"]) header button {
+      background-color: var(--theme-card) !important;
+      color: var(--theme-text) !important;
+      border-color: var(--theme-border) !important;
+    }
+
+    html[data-theme]:not([data-theme="classic"]) .bg-\[\#F5EDE0\]\/50,
+    html[data-theme]:not([data-theme="classic"]) .bg-\[\#F5EDE0\]\/60,
+    html[data-theme]:not([data-theme="classic"]) .dark .bg-\[\#25131D\]\/50,
+    html[data-theme]:not([data-theme="classic"]) .dark .bg-\[\#25131D\]\/60 {
+      background-color: rgba(125, 125, 125, 0.08) !important;
+      color: var(--theme-text) !important;
+      border-color: var(--theme-border) !important;
+    }
+
+    html[data-theme]:not([data-theme="classic"]) .text-\[\#731E3E\],
+    html[data-theme]:not([data-theme="classic"]) .dark .text-\[\#E8C995\],
+    html[data-theme]:not([data-theme="classic"]) .nav-btn.active,
+    html[data-theme]:not([data-theme="classic"]) .dark .nav-btn.active {
+      color: var(--theme-primary) !important;
+    }
+
+    html[data-theme]:not([data-theme="classic"]) .text-\[\#E8C995\],
+    html[data-theme]:not([data-theme="classic"]) .text-\[\#FCF8F1\] {
+      color: var(--theme-accent) !important;
+    }
+
+    html[data-theme]:not([data-theme="classic"]) .text-\[\#451C2B\] {
+      color: var(--theme-text) !important;
+    }
+
+    html[data-theme]:not([data-theme="classic"]) .bg-\[\#731E3E\] {
+      background-color: var(--theme-primary) !important;
+      color: #FFFFFF !important;
+    }
+
+    html[data-theme]:not([data-theme="classic"]) .bg-\[\#E8C995\] {
+      background-color: var(--theme-accent) !important;
+      color: #111827 !important;
+    }
+
+    html[data-theme]:not([data-theme="classic"]) .border-\[\#E8C995\],
+    html[data-theme]:not([data-theme="classic"]) .border-\[\#E8C995\]\/30,
+    html[data-theme]:not([data-theme="classic"]) .border-\[\#E8C995\]\/40 {
+      border-color: var(--theme-border) !important;
+    }
+
+    html[data-theme] input,
+    html[data-theme] select,
+    html[data-theme] textarea {
+      background-color: var(--theme-card) !important;
+      color: var(--theme-text) !important;
+      border-color: var(--theme-border) !important;
+    }
+
+    html[data-theme]:not([data-theme="classic"]) ::-webkit-scrollbar-thumb {
+      background: var(--theme-primary) !important;
     }
 
     .dark body {
@@ -69,7 +249,7 @@
     }
 
     .timer-circle {
-      background: conic-gradient(#731E3E var(--pomo-progress, 0%), #E8C995 0);
+      background: conic-gradient(var(--theme-primary, #731E3E) var(--pomo-progress, 0%), var(--theme-accent, #E8C995) 0);
     }
 
     ::-webkit-scrollbar {
@@ -110,6 +290,89 @@
       100% {
         background-position: 200% 0;
       }
+    }
+
+    /* تأثيرات خاصة بركن الدعم النفسي و Study With Me */
+    @keyframes breathe478 {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+
+      21% {
+        transform: scale(1.4);
+        opacity: 1;
+      }
+
+      /* شهيق 4 ثواني (4/19 ≈ 21%) */
+      58% {
+        transform: scale(1.4);
+        opacity: 0.95;
+      }
+
+      /* حبس النفس 7 ثواني (11/19 ≈ 58%) */
+      95% {
+        transform: scale(1);
+        opacity: 0.75;
+      }
+
+      /* زفير 8 ثواني */
+    }
+
+    .breathing-circle-active {
+      animation: breathe478 19s ease-in-out infinite;
+    }
+
+    @keyframes steamRise {
+      0% {
+        transform: translateY(0) scaleX(1);
+        opacity: 0;
+      }
+
+      50% {
+        transform: translateY(-8px) scaleX(1.15);
+        opacity: 0.8;
+      }
+
+      100% {
+        transform: translateY(-16px) scaleX(1.3);
+        opacity: 0;
+      }
+    }
+
+    .animate-steam {
+      animation: steamRise 2.5s ease-out infinite;
+    }
+
+    @keyframes softPulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(214, 51, 132, 0.4);
+      }
+
+      50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 0 10px rgba(214, 51, 132, 0);
+      }
+    }
+
+    .pulse-rescue {
+      animation: softPulse 2.8s infinite;
+    }
+
+    .journey-timeline-line {
+      position: absolute;
+      top: 24px;
+      bottom: 24px;
+      right: 23px;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--theme-primary, #731E3E), var(--theme-accent, #E8C995));
+      border-radius: 9999px;
+      z-index: 0;
     }
   </style>
 </head>
@@ -235,6 +498,12 @@
 
     <!-- شريط الأدوات العلوية السريعة -->
     <div class="flex items-center gap-2">
+      <!-- زر اختيار نظام الألوان (Baby Pink, Lavender, Cream) -->
+      <button onclick="openThemeModal()" title="تغيير نظام الألوان" id="themePickerBtn"
+        class="p-2.5 rounded-2xl bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 shadow-sm transition hover:scale-105 flex items-center justify-center text-[#731E3E] dark:text-[#E8C995]">
+        <i data-lucide="palette" class="w-4 h-4"></i>
+      </button>
+
       <!-- زر أصوات التركيز البيئية -->
       <button onclick="toggleAmbientModal()" title="أصوات التركيز البيئية" id="ambientTopBtn"
         class="p-2.5 rounded-2xl bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/30 shadow-sm transition hover:scale-105 flex items-center justify-center text-[#731E3E] dark:text-[#E8C995]">
@@ -322,21 +591,99 @@
     </div>
   </div>
 
-  <!-- نافذة الأدوات الذكية الشاملة (Master Tool Modal) -->
-  <div id="masterToolModal"
+  <!-- نافذة اختيار نظام الألوان والسمات (Theme Modal) -->
+  <div id="themeModal"
+    class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-5">
+    <div
+      class="bg-[#FCF8F1] dark:bg-[#501426] max-w-xl w-full p-5 sm:p-6 rounded-3xl border border-[#E8C995]/40 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-3">
+        <div class="flex items-center gap-2 text-[#731E3E] dark:text-[#E8C995]">
+          <i data-lucide="palette" class="w-5 h-5"></i>
+          <div>
+            <h3 class="font-bold text-base">الألوان وأنماط التطبيق</h3>
+            <p class="text-[11px] opacity-70">اختر السمة المفضلة لديك — تدعم الوضعين النهاري والليلي</p>
+          </div>
+        </div>
+        <button onclick="closeThemeModal()" class="text-xs opacity-60 hover:opacity-100 p-1 font-bold">✕ إغلاق</button>
+      </div>
+
+      <!-- شبكة بطاقات الأنماط -->
+      <div id="modalThemeGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+        <!-- يتم توليد البطاقات ديناميكياً بواسطة الجافاسكربت -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- نافذة الإنقاذ النفسي: «راني فقدت الحماس» (Lost Motivation Modal) -->
+  <div id="lostMotivationModal"
     class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-3 sm:p-5">
     <div
-      class="bg-[#FCF8F1] dark:bg-[#321323] border-2 border-[#E8C995]/50 text-[#451C2B] dark:text-[#F5EDE0] max-w-2xl w-full p-5 sm:p-7 rounded-3xl shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto relative animate-in fade-in zoom-in-95 duration-200">
-      <!-- زر الإغلاق العلوي -->
-      <button onclick="closeToolModal()"
-        class="absolute top-4 left-4 p-2 rounded-full bg-[#E8C995]/20 hover:bg-[#E8C995]/40 text-[#731E3E] dark:text-[#E8C995] border border-[#E8C995]/40 transition shadow z-10"
-        title="إغلاق">
-        <i data-lucide="x" class="w-4 h-4"></i>
-      </button>
+      class="bg-[#FCF8F1] dark:bg-[#501426] max-w-lg w-full p-6 sm:p-7 rounded-3xl border border-[#E8C995]/50 shadow-2xl space-y-4 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-3">
+        <div class="flex items-center gap-2 text-[#731E3E] dark:text-[#E8C995]">
+          <span class="text-2xl">💖</span>
+          <div>
+            <h3 class="font-bold text-base sm:text-lg">خذ نفس عميق.. رانا معاك 🤍</h3>
+            <p class="text-[11px] opacity-70">مساحة إنقاذ دافئة بدون لوم وبدون تأنيب ضمير</p>
+          </div>
+        </div>
+        <button onclick="closeLostMotivationModal()"
+          class="text-xs opacity-60 hover:opacity-100 p-1.5 font-bold rounded-xl hover:bg-black/5 dark:hover:bg-white/5">✕
+          إغلاق</button>
+      </div>
 
-      <!-- محتوى الأداة الديناميكي -->
-      <div id="masterToolModalContent" class="pt-2">
-        <!-- يتم ملؤه عبر tools_hub.js -->
+      <div class="space-y-3.5 text-xs sm:text-sm leading-relaxed">
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-[#FFC8DD]/20 to-[#E8C995]/20 border border-[#E8C995]/30">
+          <p class="font-bold text-[#731E3E] dark:text-[#E8C995] mb-1">يا بطل(ة)، هذا الشعور طبيعي 100%!</p>
+          <p class="opacity-90">ما كانش طالب جاب 18 ولا 19 في البكالوريا وما جازتش عليه أيام حس فيها بالفشلة وبلي راهو
+            حاب يحبس. التعب هذا مشي دليل بلي ماكش قادر، بل دليل بلي دماغك تعب ومحتاج رعاية ذكية.</p>
+        </div>
+
+        <div class="space-y-2">
+          <span class="font-bold block text-[11px] opacity-70">3 خطوات سريعة للتعافي الآن:</span>
+
+          <div
+            class="flex items-start gap-2.5 p-3 rounded-xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/20">
+            <span class="text-lg">☕</span>
+            <div>
+              <span class="font-bold block">1. ابتعد عن الطاولة الآن لـ 5 دقائق</span>
+              <span class="text-[11px] opacity-75">اشرب كأس ماء بارد، غسل وجهك، أو حضر مشروبك المفضل، بلا ما تفكر في
+                القراية.</span>
+            </div>
+          </div>
+
+          <div
+            class="flex items-start gap-2.5 p-3 rounded-xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/20">
+            <span class="text-lg">🌬️</span>
+            <div>
+              <span class="font-bold block">2. فرغ شحنة التوتر بالتنفس</span>
+              <span class="text-[11px] opacity-75">تنفس شهيق عميق من الأنف 4 ثواني، احبس 7 ثواني، وزفير هادئ من الفم 8
+                ثواني.</span>
+            </div>
+          </div>
+
+          <div
+            class="flex items-start gap-2.5 p-3 rounded-xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/20">
+            <span class="text-lg">🌱</span>
+            <div>
+              <span class="font-bold block">3. لا تبدأ بدرس صعب، ابدأ بـ 5 دقائق فقط</span>
+              <span class="text-[11px] opacity-75">حل كويز واحد خفيف أو راجع ملخص صفحة وحدة. الحركة تولد الدافع، ماشي
+                العكس.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2 flex flex-col sm:flex-row gap-2">
+          <button onclick="activateBadDayModeFromModal()"
+            class="flex-1 py-3 px-4 bg-[#731E3E] text-[#F5EDE0] text-xs font-bold rounded-2xl hover:bg-[#501426] transition shadow flex items-center justify-center gap-2">
+            <span>🌧️ تفعيل وضع اليوم الصعب (3 مهام فقط)</span>
+          </button>
+          <button onclick="startQuick5MinSession()"
+            class="py-3 px-4 bg-[#E8C995] text-[#451C2B] text-xs font-bold rounded-2xl hover:bg-[#F4DFBE] transition shadow flex items-center justify-center gap-2">
+            <span>🌸 جلسة 5 دقائق استرجاع شغف</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -375,58 +722,94 @@
         </div>
       </div>
 
-      <!-- مساحة محطات المراجعة والتفوق الأكاديمي (The BAC Mastery Arsenal) -->
-      <div id="masteryArsenalSection"
-        class="bg-[#FCF8F1] dark:bg-[#501426] p-5 sm:p-7 rounded-3xl border border-[#E8C995]/35 shadow-sm space-y-5">
-        <!-- رأس القسم الأنيق المتناسق مع FOCUS & FORCE -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E8C995]/25 pb-4">
-          <div class="space-y-1">
-            <div class="flex items-center gap-2">
-              <span
-                class="px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 text-[#731E3E] dark:text-[#E8C995] border border-[#E8C995]/40 flex items-center gap-1.5 shadow-sm">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-                <span>ترسانة البكالوريا الذكية</span>
-              </span>
-              <span class="text-[10px] opacity-60 font-mono">18 أداة متخصصة</span>
-            </div>
-            <h2 class="text-xl sm:text-2xl font-bold text-[#731E3E] dark:text-[#E8C995] tracking-tight">
-              محطات المراجعة والتفوق الأكاديمي
-            </h2>
-            <p class="text-xs opacity-75 leading-relaxed">
-              أدوات متطورة ومصممة خصيصاً لمرافقتك نحو معدل الامتياز في شهادة البكالوريا.
-            </p>
-          </div>
 
-          <!-- تصفية الأقسام الذكية (Filter Tabs) -->
-          <div class="flex flex-wrap items-center gap-1.5 text-xs font-semibold">
-            <button onclick="filterArsenalCategory('all')" id="arsenalTab-all"
-              class="arsenal-tab-btn px-3.5 py-1.5 rounded-full bg-[#731E3E] text-[#F5EDE0] shadow transition">
-              الكل (18)
-            </button>
-            <button onclick="filterArsenalCategory('exams')" id="arsenalTab-exams"
-              class="arsenal-tab-btn px-3.5 py-1.5 rounded-full bg-[#F5EDE0]/70 dark:bg-[#25131D]/70 border border-[#E8C995]/30 text-opacity-80 hover:border-[#731E3E] transition">
-              الامتحانات والتركيز ⏱️
-            </button>
-            <button onclick="filterArsenalCategory('memory')" id="arsenalTab-memory"
-              class="arsenal-tab-btn px-3.5 py-1.5 rounded-full bg-[#F5EDE0]/70 dark:bg-[#25131D]/70 border border-[#E8C995]/30 text-opacity-80 hover:border-[#731E3E] transition">
-              الحفظ والذاكرة 🧠
-            </button>
-            <button onclick="filterArsenalCategory('ai')" id="arsenalTab-ai"
-              class="arsenal-tab-btn px-3.5 py-1.5 rounded-full bg-[#F5EDE0]/70 dark:bg-[#25131D]/70 border border-[#E8C995]/30 text-opacity-80 hover:border-[#731E3E] transition">
-              الذكاء والتوجيه 🤖
-            </button>
-            <button onclick="filterArsenalCategory('momentum')" id="arsenalTab-momentum"
-              class="arsenal-tab-btn px-3.5 py-1.5 rounded-full bg-[#F5EDE0]/70 dark:bg-[#25131D]/70 border border-[#E8C995]/30 text-opacity-80 hover:border-[#731E3E] transition">
-              التحفيز والمكافآت 🏆
-            </button>
+
+      <!-- بنر الإنقاذ العاجل والدعم النفسي -->
+      <div
+        class="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-[#FFC8DD]/30 via-[#D8C4FF]/20 to-[#FFF5E6]/40 dark:from-[#371220] dark:to-[#25131D] border border-[#FFC8DD]/60 dark:border-[#FF85B3]/30 shadow-md flex flex-wrap items-center justify-between gap-3 pulse-rescue">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-11 h-11 rounded-2xl bg-[#D63384]/15 dark:bg-[#FF85B3]/20 flex items-center justify-center text-xl shrink-0">
+            🆘
+          </div>
+          <div>
+            <h4 class="font-bold text-xs sm:text-sm text-[#731E3E] dark:text-[#E8C995]">حاس بالتعب أو فقدت الحماس؟</h4>
+            <p class="text-[11px] opacity-75">أنت لست وحدك، خذ نفساً عميقاً واضغط هنا للحصول على دعم فوري واستعادة
+              التوازن.</p>
           </div>
         </div>
-
-        <!-- شبكة Bento Grid المتنوعة للأدوات -->
-        <div id="arsenalCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
-          <!-- يتم إدراج البطاقات الغنية بتصميم Bento الفريد -->
+        <div class="flex items-center gap-2">
+          <button onclick="openLostMotivationModal()"
+            class="px-4 py-2 bg-[#D63384] text-white hover:bg-[#b02268] text-xs font-bold rounded-xl shadow-md transition flex items-center gap-1.5">
+            <span>راني فقدت الحماس 💖</span>
+          </button>
+          <button onclick="toggleBadDayMode()" id="homeBadDayBtn"
+            class="px-3 py-2 bg-[#FCF8F1] dark:bg-[#501426] border border-[#E8C995]/40 text-xs font-bold rounded-xl hover:bg-[#E8C995]/20 transition flex items-center gap-1">
+            <span>وضع اليوم الصعب 🌧️</span>
+          </button>
         </div>
       </div>
+
+      <!-- شبكة بطاقات الأدوات المميزة والفريدة -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+        <div onclick="navigateTo('/journey')"
+          class="p-3.5 bg-[#FCF8F1] dark:bg-[#501426] rounded-2xl border border-[#E8C995]/30 hover:border-[#731E3E] dark:hover:border-[#E8C995] transition cursor-pointer group shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-lg">🗺️</span>
+            <span
+              class="text-[10px] font-bold bg-[#E8C995]/20 px-2 py-0.5 rounded-full text-[#731E3E] dark:text-[#E8C995]">خطوة
+              بخطوة</span>
+          </div>
+          <div>
+            <h5 class="font-bold text-xs group-hover:text-[#731E3E] dark:group-hover:text-[#E8C995] transition">My Bac
+              Journey</h5>
+            <p class="text-[10px] opacity-65">خط زمني وأوسمة الإنجاز</p>
+          </div>
+        </div>
+
+        <div onclick="navigateTo('/decisions')"
+          class="p-3.5 bg-[#FCF8F1] dark:bg-[#501426] rounded-2xl border border-[#E8C995]/30 hover:border-[#731E3E] dark:hover:border-[#E8C995] transition cursor-pointer group shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-lg">🎯</span>
+            <span
+              class="text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full">المعاملات</span>
+          </div>
+          <div>
+            <h5 class="font-bold text-xs group-hover:text-[#731E3E] dark:group-hover:text-[#E8C995] transition">Goal
+              Calculator</h5>
+            <p class="text-[10px] opacity-65">حاسبة الهدف بالمواد</p>
+          </div>
+        </div>
+
+        <div onclick="openStudyWithMeMode()"
+          class="p-3.5 bg-[#FCF8F1] dark:bg-[#501426] rounded-2xl border border-[#E8C995]/30 hover:border-[#731E3E] dark:hover:border-[#E8C995] transition cursor-pointer group shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-lg">🎀</span>
+            <span
+              class="text-[10px] font-bold bg-pink-500/15 text-pink-600 dark:text-pink-300 px-2 py-0.5 rounded-full">كيوت</span>
+          </div>
+          <div>
+            <h5 class="font-bold text-xs group-hover:text-[#731E3E] dark:group-hover:text-[#E8C995] transition">Study
+              With Me</h5>
+            <p class="text-[10px] opacity-65">جلسة تركيز وخلفية هادئة</p>
+          </div>
+        </div>
+
+        <div onclick="navigateTo('/journey')"
+          class="p-3.5 bg-[#FCF8F1] dark:bg-[#501426] rounded-2xl border border-[#E8C995]/30 hover:border-[#731E3E] dark:hover:border-[#E8C995] transition cursor-pointer group shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-lg">🎓</span>
+            <span
+              class="text-[10px] font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full">طموحك</span>
+          </div>
+          <div>
+            <h5 class="font-bold text-xs group-hover:text-[#731E3E] dark:group-hover:text-[#E8C995] transition">جامعة
+              أحلامي</h5>
+            <p class="text-[10px] opacity-65">تخصصك وعتبة القبول</p>
+          </div>
+        </div>
+      </div>
+
 
       <!-- بطاقة نصيحة المتفوق اليومية -->
       <div
@@ -448,28 +831,58 @@
         </div>
       </div>
 
-      <!-- بطاقة العد التنازلي للبكالوريا -->
-      <div class="bg-[#501426] text-[#F5EDE0] p-6 rounded-3xl border border-[#E8C995]/30 shadow-md text-center">
-        <h3 class="font-bold text-lg text-[#E8C995]">العد التنازلي للبكالوريا</h3>
-        <p class="text-xs opacity-70 mb-4">حتى 07 جوان 2027</p>
-        <div class="grid grid-cols-4 gap-2 font-mono">
-          <div class="bg-[#25131D]/60 p-2.5 rounded-2xl border border-[#E8C995]/20">
-            <span id="cdDays" class="text-xl md:text-2xl font-bold text-[#E8C995]">0</span>
-            <span class="block text-[10px] opacity-60">أيام</span>
+      <!-- بطاقة العد التنازلي للبكالوريا المطور (Exam Countdown) -->
+      <div class="bg-[#501426] text-[#F5EDE0] p-5 sm:p-6 rounded-3xl border border-[#E8C995]/30 shadow-md space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#E8C995]/20 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xl">⏳</span>
+            <div class="text-right">
+              <h3 class="font-bold text-base sm:text-lg text-[#E8C995]">العد التنازلي للبكالوريا (Exam Countdown)</h3>
+              <p class="text-[11px] opacity-75">الموعد الرسمي المرتقب: 07 جوان 2027</p>
+            </div>
           </div>
-          <div class="bg-[#25131D]/60 p-2.5 rounded-2xl border border-[#E8C995]/20">
-            <span id="cdHours" class="text-xl md:text-2xl font-bold text-[#E8C995]">0</span>
-            <span class="block text-[10px] opacity-60">ساعات</span>
+          <span id="countdownPhaseBadge"
+            class="text-[10px] font-mono font-bold bg-[#E8C995]/20 text-[#E8C995] px-3 py-1 rounded-full">كل يوم هو فرصة
+            ذهبية ✨</span>
+        </div>
+
+        <!-- شبكة العداد: أسابيع، أيام، ساعات، دقائق، ثواني -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 font-mono text-center">
+          <div class="bg-[#25131D]/70 p-3 rounded-2xl border border-[#E8C995]/30 shadow-inner">
+            <span id="cdWeeks" class="text-2xl sm:text-3xl font-bold text-[#E8C995]">0</span>
+            <span class="block text-[10px] opacity-70 mt-0.5">أسابيع متبقية 📅</span>
           </div>
-          <div class="bg-[#25131D]/60 p-2.5 rounded-2xl border border-[#E8C995]/20">
-            <span id="cdMinutes" class="text-xl md:text-2xl font-bold text-[#E8C995]">0</span>
-            <span class="block text-[10px] opacity-60">دقائق</span>
+          <div class="bg-[#25131D]/70 p-3 rounded-2xl border border-[#E8C995]/30 shadow-inner">
+            <span id="cdDays" class="text-2xl sm:text-3xl font-bold text-[#E8C995]">0</span>
+            <span class="block text-[10px] opacity-70 mt-0.5">إجمالي الأيام ☀️</span>
           </div>
-          <div class="bg-[#25131D]/60 p-2.5 rounded-2xl border border-[#E8C995]/20">
-            <span id="cdSeconds" class="text-xl md:text-2xl font-bold text-[#E8C995]">0</span>
-            <span class="block text-[10px] opacity-60">ثواني</span>
+          <div class="bg-[#25131D]/70 p-3 rounded-2xl border border-[#E8C995]/20">
+            <span id="cdHours" class="text-xl sm:text-2xl font-bold text-[#F5EDE0]">0</span>
+            <span class="block text-[10px] opacity-60 mt-0.5">ساعات ⏳</span>
+          </div>
+          <div class="bg-[#25131D]/70 p-3 rounded-2xl border border-[#E8C995]/20">
+            <span id="cdMinutes" class="text-xl sm:text-2xl font-bold text-[#F5EDE0]">0</span>
+            <span class="block text-[10px] opacity-60 mt-0.5">دقائق ⌛</span>
+          </div>
+          <div class="col-span-2 sm:col-span-1 bg-[#25131D]/70 p-3 rounded-2xl border border-[#E8C995]/20">
+            <span id="cdSeconds" class="text-xl sm:text-2xl font-bold text-[#E8C995]">0</span>
+            <span class="block text-[10px] opacity-60 mt-0.5">ثواني ⚡</span>
           </div>
         </div>
+
+        <!-- شريط تقدم العام الدراسي نحو البكالوريا -->
+        <div class="space-y-1.5 pt-1">
+          <div class="flex justify-between items-center text-[11px] opacity-80">
+            <span>نسبة تقدم الموسم الدراسي نحو الباك:</span>
+            <span id="schoolYearPctText" class="font-mono font-bold text-[#E8C995]">0%</span>
+          </div>
+          <div class="w-full h-2.5 bg-[#25131D] rounded-full overflow-hidden p-0.5 border border-[#E8C995]/20">
+            <div id="schoolYearProgressBar"
+              class="h-full bg-gradient-to-r from-[#E8C995] to-[#6C9D78] rounded-full transition-all duration-500"
+              style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
       </div>
 
       <!-- قائمة مهام المراجعة والروتين اليومي الذكية -->
@@ -532,74 +945,6 @@
       </div>
     </section>
 
-    <!-- 1b. صفحة الترسانة المستقلة /arsenal -->
-    <section id="pageArsenal" class="space-y-5 hidden">
-      <!-- رأس الصفحة -->
-      <div class="bg-gradient-to-br from-[#731E3E] to-[#501426] p-6 rounded-3xl shadow-lg text-[#FCF8F1] space-y-2">
-        <div class="flex items-center gap-3">
-          <div class="w-11 h-11 rounded-2xl bg-[#E8C995]/20 border border-[#E8C995]/40 flex items-center justify-center">
-            <i data-lucide="zap" class="w-6 h-6 text-[#E8C995]"></i>
-          </div>
-          <div>
-            <h1 class="text-xl font-bold tracking-tight">ترسانة التفوق الأكاديمي</h1>
-            <p class="text-xs opacity-75">18 أداة ذكية لجميع المواد وجميع الشعب</p>
-          </div>
-        </div>
-        <!-- شريط الشعب السريع -->
-        <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none pt-2">
-          <span class="text-[10px] opacity-60 whitespace-nowrap font-semibold">شعبتك:</span>
-          <button onclick="setArsenalTrack('علوم تجريبية')" id="trackBtn-sci"
-            class="track-btn whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 border border-[#E8C995]/40 hover:bg-[#E8C995]/40 transition text-[#FCF8F1]">
-            🔬 علوم تجريبية
-          </button>
-          <button onclick="setArsenalTrack('رياضيات')" id="trackBtn-math"
-            class="track-btn whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 border border-[#E8C995]/40 hover:bg-[#E8C995]/40 transition text-[#FCF8F1]">
-            📐 رياضيات
-          </button>
-          <button onclick="setArsenalTrack('آداب وفلسفة')" id="trackBtn-lit"
-            class="track-btn whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 border border-[#E8C995]/40 hover:bg-[#E8C995]/40 transition text-[#FCF8F1]">
-            📜 آداب وفلسفة
-          </button>
-          <button onclick="setArsenalTrack('آداب ولغات')" id="trackBtn-lang"
-            class="track-btn whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 border border-[#E8C995]/40 hover:bg-[#E8C995]/40 transition text-[#FCF8F1]">
-            🌐 آداب ولغات
-          </button>
-          <button onclick="setArsenalTrack('تسيير واقتصاد')" id="trackBtn-eco"
-            class="track-btn whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 border border-[#E8C995]/40 hover:bg-[#E8C995]/40 transition text-[#FCF8F1]">
-            📊 تسيير واقتصاد
-          </button>
-          <button onclick="setArsenalTrack('تقني رياضي')" id="trackBtn-tech"
-            class="track-btn whitespace-nowrap px-3 py-1 rounded-full text-[11px] font-bold bg-[#E8C995]/20 border border-[#E8C995]/40 hover:bg-[#E8C995]/40 transition text-[#FCF8F1]">
-            ⚙️ تقني رياضي
-          </button>
-        </div>
-      </div>
-
-      <!-- بطاقة الشعبة المختارة + المواد -->
-      <div id="arsenalTrackInfo"
-        class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 shadow-sm space-y-4">
-        <!-- يُملأ ديناميكياً بـ renderArsenalTrackPanel() -->
-      </div>
-
-      <!-- تصفية الأدوات حسب الفئة -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none text-xs font-semibold">
-        <button onclick="filterArsenalCategory('all')" id="arsenalTab2-all"
-          class="arsenal-tab2-btn px-3.5 py-1.5 rounded-full bg-[#731E3E] text-[#F5EDE0] shadow whitespace-nowrap transition">الكل</button>
-        <button onclick="filterArsenalCategory('exams')" id="arsenalTab2-exams"
-          class="arsenal-tab2-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#25131D] border border-[#E8C995]/30 whitespace-nowrap hover:border-[#731E3E] transition">⏱️ امتحانات</button>
-        <button onclick="filterArsenalCategory('memory')" id="arsenalTab2-memory"
-          class="arsenal-tab2-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#25131D] border border-[#E8C995]/30 whitespace-nowrap hover:border-[#731E3E] transition">🧠 حفظ وذاكرة</button>
-        <button onclick="filterArsenalCategory('ai')" id="arsenalTab2-ai"
-          class="arsenal-tab2-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#25131D] border border-[#E8C995]/30 whitespace-nowrap hover:border-[#731E3E] transition">🤖 ذكاء وتوجيه</button>
-        <button onclick="filterArsenalCategory('momentum')" id="arsenalTab2-momentum"
-          class="arsenal-tab2-btn px-3.5 py-1.5 rounded-full bg-[#FCF8F1] dark:bg-[#25131D] border border-[#E8C995]/30 whitespace-nowrap hover:border-[#731E3E] transition">🏆 تحفيز ومكافآت</button>
-      </div>
-
-      <!-- شبكة الأدوات -->
-      <div id="arsenalCardsGrid2"
-        class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3">
-      </div>
-    </section>
 
     <!-- 2. كويزات البكالوريا التفاعلية /quizzes -->
     <section id="pageQuizzes" class="space-y-5 hidden">
@@ -654,6 +999,95 @@
         <p class="text-xs opacity-70">محاكي المعدل الرسمي بالمعاملات الجزائرية + توجيه التخصصات الجامعية + ميثاق قراراتك
           المصيرية.</p>
       </div>
+
+
+      <!-- حاسبة الهدف الذكية بالمعاملات (Goal Calculator) -->
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border-2 border-[#E8C995]/50 shadow-xl space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8C995]/20 pb-3">
+          <div class="flex items-center gap-2.5">
+            <div
+              class="w-10 h-10 rounded-2xl bg-[#E8C995]/25 flex items-center justify-center text-xl text-[#731E3E] dark:text-[#E8C995]">
+              🎯
+            </div>
+            <div>
+              <h3 class="font-bold text-base text-[#731E3E] dark:text-[#E8C995]">حاسبة الهدف الذكية (Goal Calculator)
+              </h3>
+              <p class="text-[11px] opacity-70">أدخل معدلك الحالي والمعدل المستهدف، وسيحسب الموقع النقاط وتوزيع المواد
+                اللازمة</p>
+            </div>
+          </div>
+          <span class="text-[11px] font-bold bg-[#731E3E] text-[#F5EDE0] px-3 py-1 rounded-full">حساب دقيق
+            بالمعاملات</span>
+        </div>
+
+        <!-- مدخلات الحاسبة -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-semibold mb-1 opacity-80">الشعبة الرسمية:</label>
+            <select id="goalTrackSelect" onchange="calculateGoalDistribution()"
+              class="w-full p-2.5 rounded-xl bg-[#F5EDE0] dark:bg-[#25131D] border border-[#E8C995]/40 text-xs font-bold outline-none">
+              <option value="علوم تجريبية">علوم تجريبية</option>
+              <option value="رياضيات">رياضيات</option>
+              <option value="تقني رياضي">تقني رياضي</option>
+              <option value="تسيير واقتصاد">تسيير واقتصاد</option>
+              <option value="آداب وفلسفة">آداب وفلسفة</option>
+              <option value="آداب ولغات">آداب ولغات</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold mb-1 opacity-80">معدلك الحالي (أو آخر اختبار):</label>
+            <input type="number" id="currentAvgInput" min="0" max="20" step="0.25" value="12.50"
+              oninput="calculateGoalDistribution()"
+              class="w-full p-2.5 rounded-xl bg-[#F5EDE0] dark:bg-[#25131D] border border-[#E8C995]/40 text-sm font-mono font-bold outline-none text-center">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold mb-1 opacity-80 text-[#731E3E] dark:text-[#E8C995]">المعدل
+              المستهدف في الباك 🏆:</label>
+            <input type="number" id="targetAvgInput" min="10" max="20" step="0.25" value="16.50"
+              oninput="calculateGoalDistribution()"
+              class="w-full p-2.5 rounded-xl bg-[#E8C995]/20 dark:bg-[#25131D] border-2 border-[#E8C995] text-sm font-mono font-bold outline-none text-center text-[#731E3E] dark:text-[#E8C995]">
+          </div>
+        </div>
+
+        <!-- بطاقة النتيجة التحليلية للهدف -->
+        <div id="goalAnalysisResultCard"
+          class="p-4 sm:p-5 rounded-2xl bg-gradient-to-br from-[#731E3E] to-[#501426] text-[#F5EDE0] space-y-3 shadow-md border border-[#E8C995]/40">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8C995]/20 pb-2.5">
+            <div>
+              <span class="text-xs text-[#E8C995] font-semibold">فارق النقاط للوصول إلى الهدف:</span>
+              <div class="flex items-baseline gap-2 mt-0.5">
+                <span id="goalGapDisplay"
+                  class="font-mono text-2xl sm:text-3xl font-extrabold text-[#E8C995]">+4.00</span>
+                <span class="text-xs opacity-75">نقطة في المعدل العام</span>
+              </div>
+            </div>
+            <div class="text-left font-mono text-xs bg-[#25131D]/70 p-2.5 rounded-xl border border-[#E8C995]/20">
+              <div>إجمالي النقاط الموزونة المطلوبة: <span id="goalWeightedGap"
+                  class="font-bold text-[#E8C995]">+120.0</span></div>
+              <div>مجموع معاملات الشعبة: <span id="goalCoeffSum" class="font-bold text-[#E8C995]">30</span></div>
+            </div>
+          </div>
+
+          <p id="goalCustomStrategyText" class="text-xs leading-relaxed opacity-90">
+            للوصول إلى هدفك، تحتاج إلى تركيز ثقيل على المواد ذات المعامل الأكبر، مع تحسين نقاط الحفظ واللغات لضمان أمان
+            المعدل.
+          </p>
+        </div>
+
+        <!-- خطة العلامات المقترحة لكل مادة -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold opacity-80">توزيع العلامات المستهدفة حسب المعاملات:</span>
+            <span class="text-[11px] opacity-60">علامات مقترحة واقعية لتحقيق المعدل المطلوب</span>
+          </div>
+          <div id="goalSubjectsTable" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <!-- يتم التوليد التلقائي بواسطة الجافاسكربت -->
+          </div>
+        </div>
+      </div>
+
 
       <!-- 1. محاكي المعدل الرسمي والقرارات التقديرية -->
       <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 shadow-lg space-y-5">
@@ -770,6 +1204,75 @@
 
     <!-- 4. المؤقت /pomodoro -->
     <section id="pagePomodoro" class="space-y-6 hidden">
+
+      <!-- شريط التحويل إلى وضع Study With Me الكيوت -->
+      <div
+        class="p-4 rounded-3xl bg-gradient-to-r from-[#FFC8DD]/40 via-[#D8C4FF]/30 to-[#FFF5E6]/40 dark:from-[#371220] dark:to-[#25131D] border border-[#FFC8DD]/50 dark:border-[#FF85B3]/30 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 rounded-2xl bg-white/60 dark:bg-black/20 flex items-center justify-center text-xl shrink-0">
+            ☕
+          </div>
+          <div>
+            <h4 class="font-bold text-xs sm:text-sm text-[#731E3E] dark:text-[#E8C995]">وضع Study With Me (جلسة دراسة
+              كيوت) 🎀</h4>
+            <p class="text-[11px] opacity-75">خلفية جمالية هادئة، اقتباسات ملهمة متجددة، وأجواء تساعدك تقرا مع روحك
+              بتركيز تام.</p>
+          </div>
+        </div>
+        <button onclick="toggleStudyWithMeMode()" id="studyWithMeToggleBtn"
+          class="px-4 py-2 bg-[#D63384] text-white hover:bg-[#b02268] text-xs font-bold rounded-xl shadow transition flex items-center gap-1.5">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span id="studyWithMeToggleBtnText">تشغيل وضع Study With Me 🌸</span>
+        </button>
+      </div>
+
+      <!-- واجهة Study With Me الجمالية التفاعلية (تظهر عند التفعيل) -->
+      <div id="studyWithMePanel"
+        class="hidden p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-[#FFF5F8] to-[#FFF0F5] dark:from-[#251420] dark:to-[#180D14] border-2 border-[#FFC8DD] dark:border-[#4D233C] text-center space-y-5 shadow-2xl relative overflow-hidden">
+        <!-- زينة لطيفة متحركة -->
+        <div class="absolute top-3 right-4 text-2xl opacity-60 animate-bounce">🎀</div>
+        <div class="absolute bottom-3 left-4 text-xl opacity-50">✨</div>
+        <div class="absolute top-1/2 left-3 text-lg opacity-40">🌸</div>
+
+        <!-- فنجان القهوة والبخار اللطيف -->
+        <div class="flex flex-col items-center justify-center pt-2">
+          <div class="relative w-16 h-16 flex items-center justify-center">
+            <span class="absolute -top-3 text-sm animate-steam">☁️</span>
+            <span class="text-4xl">☕</span>
+          </div>
+          <span class="text-[11px] font-bold text-[#D63384] dark:text-[#FF85B3] mt-1">مساحة دراستك الدافئة</span>
+        </div>
+
+        <!-- اقتباس ملهم هادئ يتجدد تلقائياً -->
+        <div class="max-w-md mx-auto min-h-[48px] flex items-center justify-center">
+          <p id="studyWithMeQuote"
+            class="text-xs sm:text-sm font-medium text-[#371220] dark:text-[#FFF0F5] leading-relaxed italic">
+            «كل دقيقة تخصصها الآن لفهم فكرة جديدة، هي خطوة أقرب لفرحة والديك بنجاحك في جوان ✨»
+          </p>
+        </div>
+
+        <!-- شريط تحكم سريع بالأصوات البيئية والشاشة الكاملة -->
+        <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+          <button onclick="toggleAmbientSound('rain')"
+            class="px-3 py-1.5 rounded-xl bg-white/70 dark:bg-black/30 border border-[#FFC8DD]/40 text-xs font-semibold flex items-center gap-1 hover:border-[#D63384] transition">
+            🌧️ مطر
+          </button>
+          <button onclick="toggleAmbientSound('waves')"
+            class="px-3 py-1.5 rounded-xl bg-white/70 dark:bg-black/30 border border-[#FFC8DD]/40 text-xs font-semibold flex items-center gap-1 hover:border-[#D63384] transition">
+            🌊 أمواج
+          </button>
+          <button onclick="toggleAmbientSound('noise')"
+            class="px-3 py-1.5 rounded-xl bg-white/70 dark:bg-black/30 border border-[#FFC8DD]/40 text-xs font-semibold flex items-center gap-1 hover:border-[#D63384] transition">
+            📻 ضوضاء بيضاء
+          </button>
+          <button onclick="toggleFullscreen()"
+            class="px-3 py-1.5 rounded-xl bg-[#D63384]/15 text-[#D63384] dark:text-[#FF85B3] border border-[#FFC8DD] text-xs font-bold flex items-center gap-1 hover:bg-[#D63384]/25 transition">
+            <i data-lucide="maximize" class="w-3.5 h-3.5"></i> شاشة كاملة
+          </button>
+        </div>
+      </div>
+
       <div>
         <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">مؤقت التركيز المخصص</h1>
         <p class="text-xs opacity-70">جلسة واحدة في كل مرة. كل دقيقة مكتملة في Pomodoro تمنحك نقطتان.</p>
@@ -911,49 +1414,6 @@
       </div>
     </section>
 
-    <!-- 6. المكتبة /library -->
-    <section id="pageLibrary" class="space-y-6 hidden">
-      <div>
-        <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">المكتبة ومستودع البكالوريا</h1>
-        <p class="text-xs opacity-70">أشياء تستحق وقتك. مرتبة، مختصرة، ومكتوبة من طالب لطالب.</p>
-      </div>
-
-      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 space-y-4">
-        <h3 class="font-bold text-sm text-[#731E3E] dark:text-[#E8C995]">ملفات البكالوريا والسنة الثالثة ثانوي من
-          DzExams</h3>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-          <a href="https://www.dzexams.com/ar/bac/mathematiques" target="_blank" rel="noreferrer"
-            class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
-            <span>الرياضيات (BAC)</span>
-            <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
-          </a>
-          <a href="https://www.dzexams.com/ar/bac/physique" target="_blank" rel="noreferrer"
-            class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
-            <span>الفيزياء (BAC)</span>
-            <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
-          </a>
-          <a href="https://www.dzexams.com/ar/bac/sciences-naturelles" target="_blank" rel="noreferrer"
-            class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
-            <span>العلوم (BAC)</span>
-            <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
-          </a>
-          <a href="https://www.dzexams.com/ar/bac/philosophie" target="_blank" rel="noreferrer"
-            class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
-            <span>الفلسفة (BAC)</span>
-            <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
-          </a>
-          <a href="https://www.dzexams.com/ar/bac/arabe" target="_blank" rel="noreferrer"
-            class="p-3 bg-[#F5EDE0]/50 dark:bg-[#25131D]/50 rounded-xl border border-[#E8C995]/30 hover:border-[#731E3E] transition flex items-center justify-between">
-            <span>اللغة العربية (BAC)</span>
-            <i data-lucide="external-link" class="w-3.5 h-3.5 opacity-60"></i>
-          </a>
-          <a href="https://www.dzexams.com/ar/bac" target="_blank" rel="noreferrer"
-            class="p-3 bg-[#E8C995] text-[#451C2B] font-bold rounded-xl text-center flex items-center justify-center gap-1 hover:bg-[#F4DFBE] transition">
-            <span>كل الملفات ↗</span>
-          </a>
-        </div>
-      </div>
-    </section>
 
     <!-- 7. التصنيف وجدار الأوسمة /ranking -->
     <section id="pageRanking" class="space-y-6 hidden">
@@ -1098,74 +1558,476 @@
           class="px-4 py-2 bg-[#731E3E] text-[#F5EDE0] text-xs font-bold rounded-xl hover:bg-[#501426] transition">
           تعديل الشعبة والاسم
         </button>
+        <!-- بطاقة اختيار السمة والألوان (Baby Pink, Lavender, Cream) -->
+        <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-4">
+          <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-3">
+            <div class="flex items-center gap-2">
+              <i data-lucide="palette" class="w-5 h-5 text-[#731E3E] dark:text-[#E8C995]"></i>
+              <div>
+                <h3 class="font-bold text-sm">أنظمة وألوان التطبيق</h3>
+                <p class="text-[11px] opacity-70">اختر السمة التي تفضلها (Baby Pink 🎀، Lavender 💜، Cream 🤍)</p>
+              </div>
+            </div>
+            <button onclick="openThemeModal()"
+              class="px-3 py-1.5 bg-[#E8C995] text-[#451C2B] text-xs font-bold rounded-xl hover:bg-[#F4DFBE] transition shadow">
+              عرض الأنماط 🎨
+            </button>
+          </div>
+
+          <div id="settingsThemeList" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <!-- يتم ملؤها ديناميكياً -->
+          </div>
+        </div>
+
+        <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
+          <h3 class="font-bold text-sm">قصة Focus & Force</h3>
+          <p class="text-xs opacity-70">استرجع بدايات القناة والرحلة الملهمة لتجديد الشغف.</p>
+          <button onclick="replayStory()"
+            class="px-4 py-2.5 bg-[#E8C995] text-[#451C2B] text-xs font-bold rounded-xl hover:bg-[#F4DFBE] transition">
+            إعادة عرض القصة 📖
+          </button>
+        </div>
+
+        <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
+          <h3 class="font-bold text-sm text-red-600 dark:text-red-400">إعادة ضبط البيانات</h3>
+          <p class="text-xs opacity-70">تصفير النقاط وسجل الجلسات للبدء من جديد.</p>
+          <button onclick="confirmResetData()"
+            class="px-4 py-2 bg-red-800 text-white text-xs font-bold rounded-xl hover:bg-red-900 transition">
+            تصفير السجل والنقاط
+          </button>
+        </div>
+    </section>
+
+    <!-- ==============================================================
+         5. ركن الدعم النفسي /support
+         ============================================================== -->
+    <section id="pageSupport" class="space-y-6 hidden">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">💖</span>
+          <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">ركن الدعم النفسي وطمأنينة البكالوريا</h1>
+        </div>
+        <p class="text-xs opacity-70">مساحتك الخاصة عندما تشعر بالإرهاق، القلق قبل الامتحان، أو فقدان الشغف. أنت لست
+          وحدك في هذه الرحلة.</p>
       </div>
 
-      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
-        <h3 class="font-bold text-sm">قصة Focus & Force</h3>
-        <p class="text-xs opacity-70">استرجع بدايات القناة والرحلة الملهمة لتجديد الشغف.</p>
-        <button onclick="replayStory()"
-          class="px-4 py-2.5 bg-[#E8C995] text-[#451C2B] text-xs font-bold rounded-xl hover:bg-[#F4DFBE] transition">
-          إعادة عرض القصة 📖
+      <!-- زر الإنقاذ الكبير: «راني فقدت الحماس» -->
+      <div
+        class="p-5 sm:p-6 rounded-3xl bg-gradient-to-r from-[#FFC8DD]/40 via-[#D8C4FF]/30 to-[#FFF5E6]/50 dark:from-[#371220] dark:to-[#25131D] border-2 border-[#D63384]/40 dark:border-[#FF85B3]/40 shadow-xl flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-[#D63384]/20 flex items-center justify-center text-2xl shrink-0">
+            🆘
+          </div>
+          <div>
+            <h3 class="font-bold text-sm sm:text-base text-[#731E3E] dark:text-[#E8C995]">شعرت بالفشلة أو فقدت الحماس
+              للدراسة؟</h3>
+            <p class="text-xs opacity-80">اضغط هنا لتحصل على توجيه نفسي فوري وخطوات استرجاع التركيز بلا لوم.</p>
+          </div>
+        </div>
+        <button onclick="openLostMotivationModal()"
+          class="px-6 py-3 bg-[#D63384] text-white hover:bg-[#b02268] text-xs font-bold rounded-2xl shadow-lg hover:scale-105 transition flex items-center gap-2">
+          <i data-lucide="heart" class="w-4 h-4"></i>
+          <span>زر «راني فقدت الحماس»</span>
         </button>
       </div>
 
-      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-5 rounded-3xl border border-[#E8C995]/30 space-y-3">
-        <h3 class="font-bold text-sm text-red-600 dark:text-red-400">إعادة ضبط البيانات</h3>
-        <p class="text-xs opacity-70">تصفير النقاط وسجل الجلسات للبدء من جديد.</p>
-        <button onclick="confirmResetData()"
-          class="px-4 py-2 bg-red-800 text-white text-xs font-bold rounded-xl hover:bg-red-900 transition">
-          تصفير السجل والنقاط
-        </button>
+      <!-- 1. رسائل تشجيع حية كي يحس التلميذ بالتعب -->
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 shadow-md space-y-4">
+        <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-3">
+          <div class="flex items-center gap-2 text-[#731E3E] dark:text-[#E8C995]">
+            <i data-lucide="message-square-heart" class="w-5 h-5"></i>
+            <h3 class="font-bold text-sm sm:text-base">رسائل تشجيع كي تحس بالتعب 💌</h3>
+          </div>
+          <button onclick="generateEncouragementMessage()"
+            class="px-3 py-1.5 bg-[#E8C995]/20 hover:bg-[#E8C995]/40 text-[#731E3E] dark:text-[#E8C995] rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>رسالة تشجيع أخرى</span>
+          </button>
+        </div>
+
+        <!-- بطاقة الرسالة الملهمة -->
+        <div
+          class="p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-[#F5EDE0] to-[#FCF8F1] dark:from-[#25131D] dark:to-[#371220] border border-[#E8C995]/40 shadow-inner relative overflow-hidden">
+          <span class="absolute top-2 right-3 text-3xl opacity-15">“</span>
+          <p id="supportEncouragementText"
+            class="text-sm sm:text-base font-semibold text-[#451C2B] dark:text-[#F5EDE0] leading-relaxed relative z-10">
+            «التعب لي راك تحس بيه درك.. هو نفس التعب لي نهار النتائج راح يبكيك بالفرحة ويخلي والديك يفتخروا بيك. اصبر،
+            فالله لا يضيع أجر من أحسن عملاً ✨»
+          </p>
+          <div class="flex items-center justify-between pt-4 mt-3 border-t border-[#E8C995]/20 text-[11px] opacity-75">
+            <span>من عائلة Focus & Force إلى قلبك 🤍</span>
+            <div class="flex gap-2">
+              <button onclick="bookmarkEncouragementMessage()"
+                class="hover:text-red-500 font-bold flex items-center gap-1">
+                ❤️ حفظ في المفضلة
+              </button>
+              <button onclick="copyEncouragementMessage()"
+                class="hover:text-[#731E3E] dark:hover:text-[#E8C995] font-bold flex items-center gap-1">
+                📋 نسخ
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. تمرين التنفس التفاعلي 4-7-8 للتعامل مع القلق قبل الامتحان -->
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 shadow-md space-y-4">
+        <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-3">
+          <div class="flex items-center gap-2 text-[#731E3E] dark:text-[#E8C995]">
+            <i data-lucide="wind" class="w-5 h-5"></i>
+            <div>
+              <h3 class="font-bold text-sm sm:text-base">تمرين التنفس 4-7-8 التفاعلي للقلق</h3>
+              <p class="text-[11px] opacity-70">أقوى تقنية معتمدة لتهدئة الجهاز العصبي وخفض نبضات القلب قبل أو أثناء
+                الامتحان</p>
+            </div>
+          </div>
+          <button onclick="toggleBreathingExercise()" id="breathingActionBtn"
+            class="px-4 py-2 bg-[#731E3E] text-[#F5EDE0] text-xs font-bold rounded-xl hover:bg-[#501426] transition">
+            ابدأ التمرين 🌬️
+          </button>
+        </div>
+
+        <!-- دائرة التنفس البصرية -->
+        <div class="flex flex-col items-center justify-center py-6">
+          <div id="breathingVisualCircle"
+            class="w-40 h-40 rounded-full border-4 border-[#E8C995] bg-[#E8C995]/20 flex flex-col items-center justify-center transition-all duration-700 shadow-xl">
+            <span id="breathingPhaseText" class="text-sm font-bold text-[#731E3E] dark:text-[#E8C995]">جاهز للبدء</span>
+            <span id="breathingSecondsText" class="font-mono text-3xl font-extrabold mt-1">4</span>
+          </div>
+          <p id="breathingGuideText" class="text-xs opacity-75 mt-4 text-center max-w-sm">
+            شهيق هادئ من الأنف لمدة 4 ثواني، ثم حبس النفس لـ 7 ثواني، ثم زفير بطيء من الفم لـ 8 ثواني.
+          </p>
+        </div>
+      </div>
+
+      <!-- 3. نصائح ذهبية للتعامل مع القلق قبل الامتحان ووهم النسيان -->
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 shadow-md space-y-4">
+        <div class="flex items-center gap-2 text-[#731E3E] dark:text-[#E8C995] border-b border-[#E8C995]/20 pb-3">
+          <i data-lucide="shield-check" class="w-5 h-5"></i>
+          <h3 class="font-bold text-sm sm:text-base">نصائح حاسمة للتعامل مع قلق الامتحان</h3>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs leading-relaxed">
+          <div class="p-4 rounded-2xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/20 space-y-1.5">
+            <span class="font-bold text-sm text-[#731E3E] dark:text-[#E8C995] flex items-center gap-1.5">
+              🧠 وهم "راني ناسي كلش"
+            </span>
+            <p class="opacity-80">عقلك لا ينسى ما راجعته. الدماغ يخزن المعلومات في الذاكرة طويلة المدى، وبمجرد أن تقرأ
+              نص السؤال في ورقة الامتحان، تتفعل الإشارات العصبية ويسترجع كل التفاصيل تلقائياً.</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/20 space-y-1.5">
+            <span class="font-bold text-sm text-[#731E3E] dark:text-[#E8C995] flex items-center gap-1.5">
+              🌙 طقس ليلة الامتحان
+            </span>
+            <p class="opacity-80">أغلق المذكرات عند التاسعة ليلاً، اقطع مواقع التواصل وشائعات التسريبات، وحضر أدواتك
+              واستدعاءك من الليل. النوم الكافي يمنحك +3 نقاط إضافية في التركيز والسرعة.</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/20 space-y-1.5">
+            <span class="font-bold text-sm text-[#731E3E] dark:text-[#E8C995] flex items-center gap-1.5">
+              ⏱️ أول 5 دقائق في قاعة الامتحان
+            </span>
+            <p class="opacity-80">لا تبدأ بالكتابة فوراً. خذ نفساً عميقاً، اقرأ الموضوعين بهدوء، ضع علامة أمام الموضوع
+              الذي تشعر بالارتياح له، وتجاهل تماماً وتيرة كتابة أو حركة زملائك.</p>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/20 space-y-1.5">
+            <span class="font-bold text-sm text-[#731E3E] dark:text-[#E8C995] flex items-center gap-1.5">
+              🚫 قطيعة ما بعد الامتحان
+            </span>
+            <p class="opacity-80">بمجرد تسليم ورقة الإجابة، المادة انتهت ولا يمكن تغييرها. لا تناقش التصحيح مع أحد ولا
+              تفتح مجموعات الفايسبوك. وجّه طاقتك بنسبة 100% للمادة القادمة.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. خطوات صغيرة للعودة للقراية بلا تأنيب الضمير (Micro-Steps Guilt-Free) -->
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 shadow-md space-y-4">
+        <div class="flex items-center gap-2 text-[#731E3E] dark:text-[#E8C995] border-b border-[#E8C995]/20 pb-3">
+          <i data-lucide="footprints" class="w-5 h-5"></i>
+          <div>
+            <h3 class="font-bold text-sm sm:text-base">خطوات صغيرة للعودة للقراية بلا تأنيب الضمير</h3>
+            <p class="text-[11px] opacity-70">طريقة الخطوات الذرية للتعافي من الانقطاع والبدء من جديد فوراً</p>
+          </div>
+        </div>
+
+        <div class="space-y-3 text-xs leading-relaxed">
+          <div
+            class="flex items-start gap-3 p-3.5 rounded-2xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/30">
+            <span
+              class="w-7 h-7 rounded-full bg-[#E8C995] text-[#451C2B] font-bold flex items-center justify-center shrink-0">1</span>
+            <div>
+              <h5 class="font-bold text-sm mb-0.5 text-[#731E3E] dark:text-[#E8C995]">مسامحة النفس وإسكات الصوت الداخلي
+              </h5>
+              <p class="opacity-80">الوقت لي فات فات، وتأنيب الضمير لا يعيد دقيقة واحدة بل يسرق منك طاقة اليوم وغداً. قل
+                في نفسك: «أنا أسامح نفسي، ومسيرتي تبدأ من هذه الدقيقة».</p>
+            </div>
+          </div>
+
+          <div
+            class="flex items-start gap-3 p-3.5 rounded-2xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/30">
+            <span
+              class="w-7 h-7 rounded-full bg-[#E8C995] text-[#451C2B] font-bold flex items-center justify-center shrink-0">2</span>
+            <div>
+              <h5 class="font-bold text-sm mb-0.5 text-[#731E3E] dark:text-[#E8C995]">قاعدة الدقيقتين (لا تفكر في 4
+                ساعات)</h5>
+              <p class="opacity-80">لا تقل سأحل مسألة معقدة. قل فقط: سأفتح كتاب المادة وأقرأ صفحة واحدة لمدة دقيقتين
+                فقط. بمجرد أن تبدأ، يزول حاجز المقاومة النفسي ويستيقظ التركيز.</p>
+            </div>
+          </div>
+
+          <div
+            class="flex items-start gap-3 p-3.5 rounded-2xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/30">
+            <span
+              class="w-7 h-7 rounded-full bg-[#E8C995] text-[#451C2B] font-bold flex items-center justify-center shrink-0">3</span>
+            <div>
+              <h5 class="font-bold text-sm mb-0.5 text-[#731E3E] dark:text-[#E8C995]">تهيئة بيئة دافئة ومشروب مفضل</h5>
+              <p class="opacity-80">نظف طاولتك في 60 ثانية، افتح نافذة للتهوية، وحضر كأساً من الشاي أو الماء البارد.
+                الجو المنعش يرسل إشارات راحة للدماغ تمنع التوتر.</p>
+            </div>
+          </div>
+
+          <div
+            class="flex items-start gap-3 p-3.5 rounded-2xl bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border border-[#E8C995]/30">
+            <span
+              class="w-7 h-7 rounded-full bg-[#E8C995] text-[#451C2B] font-bold flex items-center justify-center shrink-0">4</span>
+            <div>
+              <h5 class="font-bold text-sm mb-0.5 text-[#731E3E] dark:text-[#E8C995]">حصد أول إنجاز سهل وسريع (كويز
+                خفيف)</h5>
+              <p class="opacity-80">ابدأ بحل كويز من 5 أسئلة أو تمرين مباشر. الحصول على إجابة صحيحة يفرز الدوبامين
+                الطبيعي ويعيد لك الثقة فوراً.</p>
+              <button onclick="navigateTo('/quizzes')"
+                class="mt-2 px-3 py-1 bg-[#E8C995] text-[#451C2B] font-bold rounded-lg text-[11px] hover:bg-[#F4DFBE] transition">
+                🧩 حل كويز سريع الآن
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. وضع اليوم الصعب (Bad Day Mode) -->
+      <div
+        class="bg-gradient-to-br from-[#731E3E] to-[#501426] text-[#F5EDE0] p-6 rounded-3xl border border-[#E8C995]/40 shadow-xl space-y-4">
+        <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-3">
+          <div class="flex items-center gap-2 text-[#E8C995]">
+            <span class="text-2xl">🌧️</span>
+            <div>
+              <h3 class="font-bold text-base">وضع اليوم الصعب (Bad Day Mode)</h3>
+              <p class="text-[11px] opacity-80 text-[#F5EDE0]">برنامج خفيف من 3 مهام لطيفة للحفاظ على الاستمرارية بدون
+                أي ضغط</p>
+            </div>
+          </div>
+          <button onclick="toggleBadDayMode()" id="supportBadDayToggleBtn"
+            class="px-4 py-2 bg-[#E8C995] text-[#451C2B] text-xs font-bold rounded-xl hover:bg-[#F4DFBE] transition">
+            تفعيل الوضع الآن
+          </button>
+        </div>
+
+        <p class="text-xs leading-relaxed opacity-90">
+          في الأيام الصعبة، النجاح ليس أن تدرس 8 ساعات، بل أن تدرس 15 دقيقة فقط بدلاً من الصفر! الاستمرارية تكسر العجز.
+        </p>
+
+        <!-- المهام الثلاث لليوم الصعب -->
+        <div class="space-y-2 text-xs">
+          <div class="p-3 bg-[#25131D]/70 rounded-xl border border-[#E8C995]/30 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <input type="checkbox" id="badDayTask1" onchange="checkBadDayTasks()"
+                class="w-4 h-4 accent-[#E8C995] rounded">
+              <label for="badDayTask1" class="font-medium cursor-pointer">1. قراءة ملخص خفيف لـ 15 دقيقة فقط أو حل كويز
+                واحد 🍃</label>
+            </div>
+            <span class="text-[10px] font-mono text-[#E8C995]">+10 نقاط</span>
+          </div>
+
+          <div class="p-3 bg-[#25131D]/70 rounded-xl border border-[#E8C995]/30 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <input type="checkbox" id="badDayTask2" onchange="checkBadDayTasks()"
+                class="w-4 h-4 accent-[#E8C995] rounded">
+              <label for="badDayTask2" class="font-medium cursor-pointer">2. حل تمرين واحد بسيط في مادتك المفضلة بلا
+                مؤقت 📝</label>
+            </div>
+            <span class="text-[10px] font-mono text-[#E8C995]">+10 نقاط</span>
+          </div>
+
+          <div class="p-3 bg-[#25131D]/70 rounded-xl border border-[#E8C995]/30 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <input type="checkbox" id="badDayTask3" onchange="checkBadDayTasks()"
+                class="w-4 h-4 accent-[#E8C995] rounded">
+              <label for="badDayTask3" class="font-medium cursor-pointer">3. شرب كأس ماء، مسامحة النفس، والنوم قبل 11
+                ليلاً 💧</label>
+            </div>
+            <span class="text-[10px] font-mono text-[#E8C995]">+10 نقاط</span>
+          </div>
+        </div>
       </div>
     </section>
+
+    <!-- ==============================================================
+         6. رحلتي نحو البكالوريا وجامعة أحلامي /journey
+         ============================================================== -->
+    <section id="pageJourney" class="space-y-6 hidden">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">🗺️</span>
+          <h1 class="text-xl font-bold text-[#731E3E] dark:text-[#E8C995]">My Bac Journey & جامعة أحلامي</h1>
+        </div>
+        <p class="text-xs opacity-70">خط زمني تفاعلي من بداية الموسم حتى يوم التتويج + لوحة رؤية التخصص والجامعة
+          المستهدفة.</p>
+      </div>
+
+      <!-- بطاقة جامعة أحلامي (My Dream University) -->
+      <div
+        class="bg-gradient-to-br from-[#731E3E] to-[#501426] text-[#F5EDE0] p-6 rounded-3xl border border-[#E8C995]/50 shadow-xl space-y-4">
+        <div class="flex items-center justify-between border-b border-[#E8C995]/20 pb-3">
+          <div class="flex items-center gap-2.5 text-[#E8C995]">
+            <span class="text-2xl">🏛️</span>
+            <div>
+              <h3 class="font-bold text-base">جامعة أحلامي وطموحي بعد الباك (My Dream University)</h3>
+              <p class="text-[11px] opacity-80 text-[#F5EDE0]">اكتب حلمك ليظل أمام عينيك في كل لحظة تعب</p>
+            </div>
+          </div>
+          <button onclick="toggleEditDreamUniversity()" id="dreamEditToggleBtn"
+            class="px-3 py-1.5 bg-[#E8C995] text-[#451C2B] text-xs font-bold rounded-xl hover:bg-[#F4DFBE] transition">
+            تعديل الحلم ✍️
+          </button>
+        </div>
+
+        <!-- عرض بطاقة الحلم المحفوظة -->
+        <div id="dreamDisplayCard" class="p-5 rounded-2xl bg-[#25131D]/70 border border-[#E8C995]/30 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-bold text-[#E8C995] uppercase tracking-wider block">التخصص الجامعي
+                المنشود:</span>
+              <h4 id="dreamSpecialtyDisplay" class="text-lg sm:text-xl font-extrabold text-[#F5EDE0]">دكتوراه في الطب
+                البشري (Médecine)</h4>
+            </div>
+            <div class="text-left font-mono">
+              <span class="text-[10px] opacity-75 block">المعدل المستهدف:</span>
+              <span id="dreamTargetDisplay" class="text-xl sm:text-2xl font-bold text-[#E8C995]">16.80 / 20</span>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-[#E8C995]/20 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div>الجامعة أو المدرسة: <span id="dreamUniDisplay" class="font-bold text-[#E8C995]">جامعة الجزائر 1 (بن
+                يوسف بن خدة)</span></div>
+            <div class="italic opacity-85">«<span id="dreamMantraDisplay">سأرتدي المئزر الأبيض يوماً ما وأفرح
+                والديّ</span>»</div>
+          </div>
+        </div>
+
+        <!-- نموذج تعديل الحلم (مخفي افتراضياً) -->
+        <form id="dreamEditForm" onsubmit="saveDreamUniversity(event)" class="space-y-3 text-xs hidden">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block font-semibold mb-1 text-[#E8C995]">التخصص الذي تحلم به:</label>
+              <input type="text" id="dreamSpecialtyInput" placeholder="مثال: ذكاء اصطناعي ENSIA، طب، إعلام آلي ESI..."
+                required
+                class="w-full p-2.5 rounded-xl bg-[#25131D]/80 border border-[#E8C995]/40 text-xs text-white outline-none">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1 text-[#E8C995]">الجامعة أو المدرسة العليا المستهدفة:</label>
+              <input type="text" id="dreamUniInput" placeholder="مثال: القطب التكنولوجي سيدي عبد الله..." required
+                class="w-full p-2.5 rounded-xl bg-[#25131D]/80 border border-[#E8C995]/40 text-xs text-white outline-none">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1 text-[#E8C995]">المعدل المطلوب المتوقع (من 20):</label>
+              <input type="number" id="dreamTargetInput" min="10" max="20" step="0.1" value="16.50" required
+                class="w-full p-2.5 rounded-xl bg-[#25131D]/80 border border-[#E8C995]/40 text-xs text-white font-mono outline-none">
+            </div>
+            <div>
+              <label class="block font-semibold mb-1 text-[#E8C995]">جملة الدافع والشعار الخاص بك:</label>
+              <input type="text" id="dreamMantraInput" placeholder="مثال: سأجعل والديّ يفتخران بي يوم النتائج ✨"
+                required
+                class="w-full p-2.5 rounded-xl bg-[#25131D]/80 border border-[#E8C995]/40 text-xs text-white outline-none">
+            </div>
+          </div>
+          <div class="flex justify-end gap-2 pt-2">
+            <button type="button" onclick="toggleEditDreamUniversity()"
+              class="px-4 py-2 bg-transparent border border-[#E8C995]/40 text-xs rounded-xl font-bold">إلغاء</button>
+            <button type="submit"
+              class="px-5 py-2 bg-[#E8C995] text-[#451C2B] text-xs font-bold rounded-xl hover:bg-[#F4DFBE] transition">حفظ
+              بطاقة حلمي 🎓</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- الخط الزمني للبكالوريا (My Bac Journey) -->
+      <div class="bg-[#FCF8F1] dark:bg-[#501426] p-6 rounded-3xl border border-[#E8C995]/30 shadow-lg space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#E8C995]/20 pb-3">
+          <div class="flex items-center gap-2 text-[#731E3E] dark:text-[#E8C995]">
+            <i data-lucide="milestone" class="w-5 h-5"></i>
+            <div>
+              <h3 class="font-bold text-base">مسار البكالوريا خطوة بخطوة (My Bac Journey)</h3>
+              <p class="text-[11px] opacity-70">أكمل كل مرحلة لتفتح وسام إنجاز جديد وتربح +50 نقطة</p>
+            </div>
+          </div>
+          <span id="journeyProgressBadge"
+            class="text-xs font-mono font-bold bg-[#E8C995]/20 text-[#731E3E] dark:text-[#E8C995] px-3 py-1 rounded-full">
+            المرحلة 3 من 7 مكتملة
+          </span>
+        </div>
+
+        <!-- شريط الإنجاز الكلي للرحلة -->
+        <div class="space-y-1">
+          <div class="flex justify-between items-center text-xs opacity-75">
+            <span>تقدم رحلة البكالوريا:</span>
+            <span id="journeyProgressPct" class="font-bold font-mono">42%</span>
+          </div>
+          <div class="w-full h-2.5 bg-[#25131D]/15 dark:bg-[#25131D] rounded-full overflow-hidden">
+            <div id="journeyProgressBar"
+              class="h-full bg-gradient-to-r from-[#E8C995] to-[#6C9D78] rounded-full transition-all duration-500"
+              style="width: 42%"></div>
+          </div>
+        </div>
+
+        <!-- قائمة المراحل السبع الزمنية -->
+        <div id="journeyStagesList" class="space-y-3.5 pt-2">
+          <!-- يتم ملء بطاقات المراحل ديناميكياً بواسطة الجافاسكربت -->
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- شريط التنقل السفلي الثابت (Navbar) المطور -->
   <nav
     class="fixed bottom-0 left-0 right-0 z-30 bg-[#FCF8F1]/95 dark:bg-[#501426]/95 backdrop-blur-md border-t border-[#E8C995]/30 px-2 py-2">
-    <div class="max-w-lg mx-auto flex items-center justify-around text-[10px]">
+    <div class="max-w-xl mx-auto flex items-center justify-around text-[9px] sm:text-[10px]">
       <button onclick="navigateTo('/')" id="navItem-home"
         class="nav-btn flex flex-col items-center gap-1 active transition">
-        <i data-lucide="home" class="w-5 h-5"></i>
+        <i data-lucide="home" class="w-4 h-4 sm:w-5 sm:h-5"></i>
         <span>الرئيسية</span>
       </button>
 
       <button onclick="navigateTo('/quizzes')" id="navItem-quizzes"
         class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-        <i data-lucide="help-circle" class="w-5 h-5"></i>
+        <i data-lucide="help-circle" class="w-4 h-4 sm:w-5 sm:h-5"></i>
         <span>الكويزات</span>
       </button>
 
-      <button onclick="navigateTo('/decisions')" id="navItem-decisions"
+      <button onclick="navigateTo('/journey')" id="navItem-journey"
         class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-        <i data-lucide="target" class="w-5 h-5"></i>
-        <span>القرارات</span>
+        <i data-lucide="compass" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+        <span>رحلتي وحلمي</span>
+      </button>
+
+      <button onclick="navigateTo('/support')" id="navItem-support"
+        class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
+        <i data-lucide="heart-handshake" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+        <span>الدعم النفسي</span>
       </button>
 
       <button onclick="navigateTo('/pomodoro')" id="navItem-pomodoro"
         class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-        <i data-lucide="timer" class="w-5 h-5"></i>
+        <i data-lucide="timer" class="w-4 h-4 sm:w-5 sm:h-5"></i>
         <span>المؤقت</span>
       </button>
 
-      <button onclick="navigateTo('/library')" id="navItem-library"
+      <button onclick="navigateTo('/decisions')" id="navItem-decisions"
         class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-        <i data-lucide="book-open" class="w-5 h-5"></i>
-        <span>المكتبة</span>
-      </button>
-
-      <!-- زر الترسانة في شريط التنقل -->
-      <button onclick="navigateTo('/arsenal')" id="navItem-arsenal"
-        class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition relative">
-        <span class="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#E8C995] animate-pulse"></span>
-        <i data-lucide="zap" class="w-5 h-5"></i>
-        <span>الترسانة</span>
-      </button>
-
-      <button onclick="navigateTo('/ranking')" id="navItem-ranking"
-        class="nav-btn flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition">
-        <i data-lucide="trophy" class="w-5 h-5"></i>
-        <span>التصنيف</span>
+        <i data-lucide="target" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+        <span>القرارات</span>
       </button>
     </div>
   </nav>
@@ -2231,42 +3093,45 @@
       });
 
       if (path === '/') {
-        document.getElementById('pageHome').classList.remove('hidden');
+        document.getElementById('pageHome')?.classList.remove('hidden');
         document.getElementById('navItem-home')?.classList.add('active');
         document.getElementById('navItem-home')?.classList.remove('opacity-60');
-        if (typeof renderMasterHubGrid === 'function') renderMasterHubGrid();
       } else if (path === '/quizzes') {
-        document.getElementById('pageQuizzes').classList.remove('hidden');
+        document.getElementById('pageQuizzes')?.classList.remove('hidden');
         document.getElementById('navItem-quizzes')?.classList.add('active');
         document.getElementById('navItem-quizzes')?.classList.remove('opacity-60');
         filterQuizzes(activeQuizFilter);
+      } else if (path === '/journey') {
+        document.getElementById('pageJourney')?.classList.remove('hidden');
+        document.getElementById('navItem-journey')?.classList.add('active');
+        document.getElementById('navItem-journey')?.classList.remove('opacity-60');
+        renderBacJourney();
+        renderDreamUniversity();
+      } else if (path === '/support') {
+        document.getElementById('pageSupport')?.classList.remove('hidden');
+        document.getElementById('navItem-support')?.classList.add('active');
+        document.getElementById('navItem-support')?.classList.remove('opacity-60');
+        initSupportCorner();
       } else if (path === '/decisions') {
-        document.getElementById('pageDecisions').classList.remove('hidden');
+        document.getElementById('pageDecisions')?.classList.remove('hidden');
         document.getElementById('navItem-decisions')?.classList.add('active');
         document.getElementById('navItem-decisions')?.classList.remove('opacity-60');
         renderDecisionCalculator();
-      } else if (path === '/library') {
-        document.getElementById('pageLibrary').classList.remove('hidden');
-        document.getElementById('navItem-library')?.classList.add('active');
-        document.getElementById('navItem-library')?.classList.remove('opacity-60');
+        calculateGoalDistribution();
       } else if (path === '/study') {
-        document.getElementById('pageStudy').classList.remove('hidden');
+        document.getElementById('pageStudy')?.classList.remove('hidden');
       } else if (path === '/pomodoro') {
-        document.getElementById('pagePomodoro').classList.remove('hidden');
+        document.getElementById('pagePomodoro')?.classList.remove('hidden');
         document.getElementById('navItem-pomodoro')?.classList.add('active');
         document.getElementById('navItem-pomodoro')?.classList.remove('opacity-60');
       } else if (path === '/ranking') {
-        document.getElementById('pageRanking').classList.remove('hidden');
+        document.getElementById('pageRanking')?.classList.remove('hidden');
         document.getElementById('navItem-ranking')?.classList.add('active');
         document.getElementById('navItem-ranking')?.classList.remove('opacity-60');
         renderAchievements();
       } else if (path === '/settings') {
-        document.getElementById('pageSettings').classList.remove('hidden');
-      } else if (path === '/arsenal') {
-        document.getElementById('pageArsenal').classList.remove('hidden');
-        document.getElementById('navItem-arsenal')?.classList.add('active');
-        document.getElementById('navItem-arsenal')?.classList.remove('opacity-60');
-        if (typeof renderArsenalPageFull === 'function') renderArsenalPageFull();
+        document.getElementById('pageSettings')?.classList.remove('hidden');
+        renderSettingsThemeList();
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2434,29 +3299,715 @@
     // --------------------------------------------------------------------------
     function updateCountdown() {
       const target = new Date('June 7, 2027 00:00:00').getTime();
+      const seasonStart = new Date('September 21, 2026 00:00:00').getTime();
       const now = new Date().getTime();
       const diff = target - now;
 
       if (diff > 0) {
-        document.getElementById('cdDays').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
-        document.getElementById('cdHours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        document.getElementById('cdMinutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        document.getElementById('cdSeconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const weeks = Math.floor(totalDays / 7);
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        if (document.getElementById('cdWeeks')) document.getElementById('cdWeeks').innerText = weeks;
+        if (document.getElementById('cdDays')) document.getElementById('cdDays').innerText = totalDays;
+        if (document.getElementById('cdHours')) document.getElementById('cdHours').innerText = hours;
+        if (document.getElementById('cdMinutes')) document.getElementById('cdMinutes').innerText = minutes;
+        if (document.getElementById('cdSeconds')) document.getElementById('cdSeconds').innerText = seconds;
+
+        // حساب نسبة تقدم العام الدراسي
+        const totalSeason = target - seasonStart;
+        const elapsed = now - seasonStart;
+        let pct = Math.round((elapsed / totalSeason) * 100);
+        if (pct < 0) pct = 0;
+        if (pct > 100) pct = 100;
+
+        const pctEl = document.getElementById('schoolYearPctText');
+        const barEl = document.getElementById('schoolYearProgressBar');
+        if (pctEl) pctEl.innerText = `${pct}%`;
+        if (barEl) barEl.style.width = `${pct}%`;
       }
     }
     setInterval(updateCountdown, 1000);
 
+
+    // ==========================================================================
+    // 14. ركن الدعم النفسي وحالات الطوارئ (Mental Support Corner & Bad Day Mode)
+    // ==========================================================================
+    const ENCOURAGEMENT_MESSAGES = [
+      "التعب لي راك تحس بيه درك.. هو نفس التعب لي نهار النتائج راح يبكيك بالفرحة ويخلي والديك يفتخروا بيك 🎓",
+      "البكالوريا ماراثون صبر ماشي سباق سرعة.. العبرة باللي يكمل حتى للآخر، ماشي باللي يبدا بقوة ويحبس 🤍",
+      "حتى هاتفك لما تخدم بيه بزاف يحتاج شارج باه يكمل.. ماتلومش روحك كي تتعب، استرح بذكاء وعاود انطلق ☕",
+      "مكانش طالب جاب 18 ولا 19 وما جازت عليه أيام كان باغي يستسلم فيها.. الفرق الوحيد أنهم استمروا رغم الخوف ✨",
+      "كل تمرين حاولت فيه، وكل ورقة لخصتها، راهي مسجلة عند ربي وما يضيعلك حتى مجهود: ﴿وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ﴾ 🤲",
+      "راك تقرا درك باه نهار النتائج تبتسم، وتسمع الزغاريد في داركم، وتعيش أجمل نهار في حياتك 🍓",
+      "لا تقارن بدايتك بمواسم حصاد غيرك.. ركز على ورقتك وخطوتك اليوم، خطوة صغيرة خير من الجلوس 🍃",
+      "الاستمرارية تعني أن تقدم 1% في أسوأ أيامك بدلاً من 0%.. هذا هو سر الامتياز 🏆",
+      "القلق لي في قلبك دليل على أنك تحب تنجح.. حول هذا القلق إلى تركيز على مهمة واحدة بسيطة الآن 💡",
+      "أنت أقوى بكثير مما تظن، وتذكر دائماً كم من صعوبة مرت عليك وتجاوزتها بنجاح 🌸"
+    ];
+
+    let currentEncouragementIndex = 0;
+
+    function initSupportCorner() {
+      generateEncouragementMessage();
+      checkBadDayTasks();
+    }
+
+    function generateEncouragementMessage() {
+      currentEncouragementIndex = Math.floor(Math.random() * ENCOURAGEMENT_MESSAGES.length);
+      const text = ENCOURAGEMENT_MESSAGES[currentEncouragementIndex];
+      const el = document.getElementById('supportEncouragementText');
+      if (el) {
+        el.style.opacity = '0';
+        setTimeout(() => {
+          el.innerText = `«${text}»`;
+          el.style.opacity = '1';
+        }, 150);
+      }
+    }
+
+    function bookmarkEncouragementMessage() {
+      const msg = ENCOURAGEMENT_MESSAGES[currentEncouragementIndex];
+      let bookmarks = JSON.parse(localStorage.getItem('bac-fav-quotes') || '[]');
+      if (!bookmarks.includes(msg)) {
+        bookmarks.push(msg);
+        localStorage.setItem('bac-fav-quotes', JSON.stringify(bookmarks));
+        showToast("تم حفظ الرسالة في مساحتك المفضلة ❤️");
+      } else {
+        showToast("الرسالة محفوظة بالفعل في مفضلتك 🤍");
+      }
+    }
+
+    function copyEncouragementMessage() {
+      const msg = ENCOURAGEMENT_MESSAGES[currentEncouragementIndex];
+      navigator.clipboard?.writeText(msg).then(() => {
+        showToast("تم نسخ رسالة التشجيع بنجاح 📋");
+      }).catch(() => {
+        showToast("تم تحديد النص لنسخه");
+      });
+    }
+
+    // نافذة الإنقاذ النفسي: «راني فقدت الحماس»
+    function openLostMotivationModal() {
+      document.getElementById('lostMotivationModal')?.classList.remove('hidden');
+    }
+
+    function closeLostMotivationModal() {
+      document.getElementById('lostMotivationModal')?.classList.add('hidden');
+    }
+
+    function startQuick5MinSession() {
+      closeLostMotivationModal();
+      navigateTo('/pomodoro');
+      // ضبط مؤقت سريع 5 دقائق لكسر المقاومة
+      pomoMinutes = 5;
+      pomoSeconds = 0;
+      updatePomoDisplay();
+      showToast("جلسة 5 دقائق لكسر الجليد واسترجاع الشغف 🌸");
+    }
+
+    function activateBadDayModeFromModal() {
+      closeLostMotivationModal();
+      toggleBadDayMode(true);
+      navigateTo('/support');
+    }
+
+    // تمرين التنفس 4-7-8
+    let breathingInterval = null;
+    let isBreathingActive = false;
+    let breathingPhase = 'inhale'; // inhale (4s), hold (7s), exhale (8s)
+    let breathingTimer = 4;
+
+    function toggleBreathingExercise() {
+      const circle = document.getElementById('breathingVisualCircle');
+      const actionBtn = document.getElementById('breathingActionBtn');
+      const phaseText = document.getElementById('breathingPhaseText');
+      const secText = document.getElementById('breathingSecondsText');
+      const guideText = document.getElementById('breathingGuideText');
+
+      if (isBreathingActive) {
+        clearInterval(breathingInterval);
+        isBreathingActive = false;
+        circle?.classList.remove('breathing-circle-active');
+        if (actionBtn) actionBtn.innerText = 'ابدأ التمرين 🌬️';
+        if (phaseText) phaseText.innerText = 'جاهز للبدء';
+        if (secText) secText.innerText = '4';
+        return;
+      }
+
+      isBreathingActive = true;
+      if (actionBtn) actionBtn.innerText = 'إيقاف مؤقت ⏸️';
+      breathingPhase = 'inhale';
+      breathingTimer = 4;
+
+      function updateBreathingStep() {
+        if (breathingPhase === 'inhale') {
+          if (phaseText) phaseText.innerText = 'شهيق عميق 🌬️';
+          if (guideText) guideText.innerText = 'املأ رئتيك بهواء نقي عبر الأنف بهدوء...';
+          circle.style.transform = 'scale(1.35)';
+          circle.style.backgroundColor = 'rgba(232, 201, 149, 0.4)';
+        } else if (breathingPhase === 'hold') {
+          if (phaseText) phaseText.innerText = 'احبس النفس ⏳';
+          if (guideText) guideText.innerText = 'حافظ على ثباتك واسترخاء كتفيك...';
+          circle.style.transform = 'scale(1.35)';
+          circle.style.backgroundColor = 'rgba(108, 157, 120, 0.4)';
+        } else if (breathingPhase === 'exhale') {
+          if (phaseText) phaseText.innerText = 'زفير بطيء 🍃';
+          if (guideText) guideText.innerText = 'أخرج كل التوتر والتعب ببطء من فمك...';
+          circle.style.transform = 'scale(1.0)';
+          circle.style.backgroundColor = 'rgba(214, 51, 132, 0.2)';
+        }
+
+        if (secText) secText.innerText = breathingTimer;
+
+        breathingTimer--;
+        if (breathingTimer < 0) {
+          if (breathingPhase === 'inhale') {
+            breathingPhase = 'hold';
+            breathingTimer = 7;
+          } else if (breathingPhase === 'hold') {
+            breathingPhase = 'exhale';
+            breathingTimer = 8;
+          } else {
+            breathingPhase = 'inhale';
+            breathingTimer = 4;
+          }
+        }
+      }
+
+      updateBreathingStep();
+      breathingInterval = setInterval(updateBreathingStep, 1000);
+    }
+
+    // وضع اليوم الصعب (Bad Day Mode)
+    let isBadDayMode = localStorage.getItem('bac-bad-day-mode') === 'true';
+
+    function toggleBadDayMode(forceState = null) {
+      if (forceState !== null) {
+        isBadDayMode = forceState;
+      } else {
+        isBadDayMode = !isBadDayMode;
+      }
+      localStorage.setItem('bac-bad-day-mode', isBadDayMode ? 'true' : 'false');
+
+      const btn1 = document.getElementById('homeBadDayBtn');
+      const btn2 = document.getElementById('supportBadDayToggleBtn');
+
+      if (isBadDayMode) {
+        if (btn1) {
+          btn1.classList.add('bg-amber-600', 'text-white');
+          btn1.innerHTML = '<span>وضع اليوم الصعب مفعّل 🌧️</span>';
+        }
+        if (btn2) {
+          btn2.innerText = 'إلغاء وضع اليوم الصعب 🌱';
+          btn2.classList.replace('bg-[#E8C995]', 'bg-gray-400');
+        }
+        showToast("تم تفعيل وضع اليوم الصعب: ركز فقط على الاستمرارية الخفيفة 🤍");
+      } else {
+        if (btn1) {
+          btn1.classList.remove('bg-amber-600', 'text-white');
+          btn1.innerHTML = '<span>وضع اليوم الصعب 🌧️</span>';
+        }
+        if (btn2) {
+          btn2.innerText = 'تفعيل الوضع الآن';
+          btn2.classList.replace('bg-gray-400', 'bg-[#E8C995]');
+        }
+        showToast("تم العودة إلى الوضع الاعتيادي بنجاح ✨");
+      }
+    }
+
+    function checkBadDayTasks() {
+      const t1 = document.getElementById('badDayTask1')?.checked;
+      const t2 = document.getElementById('badDayTask2')?.checked;
+      const t3 = document.getElementById('badDayTask3')?.checked;
+
+      const completed = [t1, t2, t3].filter(Boolean).length;
+      if (completed === 3) {
+        addPoints(30);
+        showToast("برافو! أكملت مهام اليوم الصعب وحافظت على استمراريتك (+30 نقطة) 🏆");
+      }
+    }
+
+    // ==========================================================================
+    // 15. رحلتي نحو البكالوريا وجامعة أحلامي (My Bac Journey & Dream University)
+    // ==========================================================================
+    const BAC_STAGES = [
+      { id: 1, title: 'محطة الانطلاقة وبناء العادات', period: 'سبتمبر - أكتوبر', badge: 'الانطلاقة 🚀', desc: 'ضبط ساعات النوم، فهم البرنامج الوزاري، وتحديد المصادر الموثوقة.' },
+      { id: 2, title: 'ترسيخ المكتسبات واختبارات الفصل الأول', period: 'نوفمبر - ديسمبر', badge: 'الأساس المتين 🧱', desc: 'فهم عميق للوحدات الأولى في المواد الأساسية وحل أول مواضيع مركبة.' },
+      { id: 3, title: 'استراحة المحارب وتدارك النقائص', period: 'جانفي', badge: 'عطلة الشتاء ☕', desc: 'معالجة الثغرات السابقة بدون ضغط، وإعادة شحن الطاقة للنصف الثاني.' },
+      { id: 4, title: 'وتيرة الحسم ومعركة الفصل الثاني', period: 'فيفري - مارس', badge: 'الحسم ⚡', desc: 'أهم وأثقل مرحلة، التركيز على منهجية الإجابة وحفظ المقالات والمصطلحات.' },
+      { id: 5, title: 'البكالوريا التجريبية وبروفة الحقيقة', period: 'أفريل - ماي', badge: 'الامتحان الأبيض 🎯', desc: 'محاكاة لظروف البكالوريا، ترويض الوقت وإدارة القلق في قاعة الامتحان.' },
+      { id: 6, title: 'اللمسات الذهبية والمواضيع النموذجية', period: 'ماي - جوان', badge: 'المراجعة النهائية ✨', desc: 'حل بكالوريات سابقة (2018-2024)، تثبيت القوانين، وتجهيز النفسية.' },
+      { id: 7, title: 'يوم الحصاد ونيل البكالوريا بمعدل الأحلام', period: '07 جوان 2027', badge: 'التتويج 🎓', desc: 'التوكل على الله، حصد ثمار عام كامل، وتحقيق فرحة العمر.' }
+    ];
+
+    function getCompletedStages() {
+      return JSON.parse(localStorage.getItem('bac-completed-stages') || '[1, 2]');
+    }
+
+    function renderBacJourney() {
+      const container = document.getElementById('journeyStagesList');
+      if (!container) return;
+
+      const completed = getCompletedStages();
+      const pct = Math.round((completed.length / BAC_STAGES.length) * 100);
+
+      const progBadge = document.getElementById('journeyProgressBadge');
+      const progPct = document.getElementById('journeyProgressPct');
+      const progBar = document.getElementById('journeyProgressBar');
+
+      if (progBadge) progBadge.innerText = `المرحلة ${completed.length} من ${BAC_STAGES.length} مكتملة`;
+      if (progPct) progPct.innerText = `${pct}%`;
+      if (progBar) progBar.style.width = `${pct}%`;
+
+      container.innerHTML = BAC_STAGES.map(stage => {
+        const isDone = completed.includes(stage.id);
+        return `
+          <div class="p-4 rounded-2xl border transition-all duration-300 ${isDone ? 'bg-[#6C9D78]/15 border-[#6C9D78]/40 dark:bg-[#6C9D78]/10' : 'bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 border-[#E8C995]/30'} flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-start gap-3 flex-1 min-w-[200px]">
+              <div class="w-8 h-8 rounded-full ${isDone ? 'bg-[#6C9D78] text-white' : 'bg-[#E8C995] text-[#451C2B]'} font-bold flex items-center justify-center shrink-0 text-xs">
+                ${isDone ? '✓' : stage.id}
+              </div>
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <h4 class="font-bold text-xs sm:text-sm ${isDone ? 'text-[#6C9D78] dark:text-[#88C496]' : ''}">${stage.title}</h4>
+                  <span class="text-[10px] bg-[#E8C995]/20 px-2 py-0.5 rounded-full font-bold">${stage.badge}</span>
+                </div>
+                <p class="text-[11px] opacity-75">${stage.desc}</p>
+                <span class="text-[10px] opacity-60 block font-mono">الفترة: ${stage.period}</span>
+              </div>
+            </div>
+
+            <div>
+              <button onclick="toggleStageCompleted(${stage.id})"
+                class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${isDone ? 'bg-[#6C9D78] text-white hover:bg-[#5b8765]' : 'bg-[#E8C995] text-[#451C2B] hover:bg-[#F4DFBE]'}">
+                <span>${isDone ? 'مكتملة بنجاح ✅' : 'تعليم كمكتملة ⏳'}</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function toggleStageCompleted(stageId) {
+      let completed = getCompletedStages();
+      if (completed.includes(stageId)) {
+        completed = completed.filter(id => id !== stageId);
+        showToast("تم إلغاء اكتمال المرحلة");
+      } else {
+        completed.push(stageId);
+        addPoints(50);
+        showToast("مبارك! أكملت مرحلة جديدة وربحت +50 نقطة 🏆");
+      }
+      localStorage.setItem('bac-completed-stages', JSON.stringify(completed));
+      renderBacJourney();
+    }
+
+    // بطاقة جامعة أحلامي (My Dream University)
+    function renderDreamUniversity() {
+      const dreamData = JSON.parse(localStorage.getItem('bac-dream-uni') || JSON.stringify({
+        specialty: 'دكتوراه في الطب البشري (Médecine)',
+        uni: 'جامعة الجزائر 1 (بن يوسف بن خدة)',
+        target: '16.80',
+        mantra: 'سأرتدي المئزر الأبيض يوماً ما وأفرح والديّ ✨'
+      }));
+
+      const specEl = document.getElementById('dreamSpecialtyDisplay');
+      const uniEl = document.getElementById('dreamUniDisplay');
+      const targetEl = document.getElementById('dreamTargetDisplay');
+      const mantraEl = document.getElementById('dreamMantraDisplay');
+
+      if (specEl) specEl.innerText = dreamData.specialty;
+      if (uniEl) uniEl.innerText = dreamData.uni;
+      if (targetEl) targetEl.innerText = `${dreamData.target} / 20`;
+      if (mantraEl) mantraEl.innerText = dreamData.mantra;
+
+      // تحديث حقول النموذج
+      if (document.getElementById('dreamSpecialtyInput')) document.getElementById('dreamSpecialtyInput').value = dreamData.specialty;
+      if (document.getElementById('dreamUniInput')) document.getElementById('dreamUniInput').value = dreamData.uni;
+      if (document.getElementById('dreamTargetInput')) document.getElementById('dreamTargetInput').value = dreamData.target;
+      if (document.getElementById('dreamMantraInput')) document.getElementById('dreamMantraInput').value = dreamData.mantra;
+    }
+
+    function toggleEditDreamUniversity() {
+      const form = document.getElementById('dreamEditForm');
+      const card = document.getElementById('dreamDisplayCard');
+      const btn = document.getElementById('dreamEditToggleBtn');
+
+      if (form?.classList.contains('hidden')) {
+        form.classList.remove('hidden');
+        card?.classList.add('hidden');
+        if (btn) btn.innerText = 'إخفاء التعديل ✕';
+      } else {
+        form?.classList.add('hidden');
+        card?.classList.remove('hidden');
+        if (btn) btn.innerText = 'تعديل الحلم ✍️';
+      }
+    }
+
+    function saveDreamUniversity(e) {
+      e.preventDefault();
+      const specialty = document.getElementById('dreamSpecialtyInput')?.value.trim();
+      const uni = document.getElementById('dreamUniInput')?.value.trim();
+      const target = document.getElementById('dreamTargetInput')?.value.trim();
+      const mantra = document.getElementById('dreamMantraInput')?.value.trim();
+
+      const dreamData = { specialty, uni, target, mantra };
+      localStorage.setItem('bac-dream-uni', JSON.stringify(dreamData));
+      renderDreamUniversity();
+      toggleEditDreamUniversity();
+      addPoints(25);
+      showToast("تم حفظ بطاقة حلمك الجامعي بنجاح (+25 نقطة) 🎓");
+    }
+
+    // ==========================================================================
+    // 16. حاسبة الهدف الذكية (Goal Calculator)
+    // ==========================================================================
+    function calculateGoalDistribution() {
+      const track = document.getElementById('goalTrackSelect')?.value || 'علوم تجريبية';
+      const curAvg = parseFloat(document.getElementById('currentAvgInput')?.value) || 12.0;
+      const targetAvg = parseFloat(document.getElementById('targetAvgInput')?.value) || 16.0;
+
+      const trackData = DECISION_TRACKS[track];
+      if (!trackData) return;
+
+      const gap = Number((targetAvg - curAvg).toFixed(2));
+      const totalCoeff = trackData.totalCoeff;
+      const weightedGap = Number((gap * totalCoeff).toFixed(1));
+
+      const gapEl = document.getElementById('goalGapDisplay');
+      const weightedEl = document.getElementById('goalWeightedGap');
+      const coeffEl = document.getElementById('goalCoeffSum');
+      const stratEl = document.getElementById('goalCustomStrategyText');
+
+      if (gapEl) gapEl.innerText = gap > 0 ? `+${gap.toFixed(2)}` : `${gap.toFixed(2)}`;
+      if (weightedEl) weightedEl.innerText = gap > 0 ? `+${weightedGap.toFixed(1)}` : `${weightedGap.toFixed(1)}`;
+      if (coeffEl) coeffEl.innerText = totalCoeff;
+
+      if (stratEl) {
+        if (gap <= 0) {
+          stratEl.innerText = "أنت بالفعل تحقق أو تتجاوز هذا المعدل! حافظ على هذا الإيقاع وثبت مكتسباتك لضمان الامتياز في جوان 🏆";
+        } else if (gap <= 2) {
+          stratEl.innerText = `تحتاج إلى إضافة ${weightedGap} نقطة موزونة. يمكن تحقيقها بسهولة عبر رفع علامات المواد الأساسية بنقطتين، مع ضمان 15+ في مادتين ثانويتين ✨`;
+        } else {
+          stratEl.innerText = `الفارق المطلوب هو ${weightedGap} نقطة موزونة. تتطلب استراتيجية مزدوجة: التركيز على منهجية المواد ذات المعامل الأكبر (${trackData.subjects[0].name}) مع مراجعة مقالات الفلسفة ومصطلحات الحفظ لتحصيل علامات أمان 🎯`;
+        }
+      }
+
+      // توزيع العلامات التقديرية حسب معاملات كل مادة
+      const tableContainer = document.getElementById('goalSubjectsTable');
+      if (!tableContainer) return;
+
+      tableContainer.innerHTML = trackData.subjects.map(sub => {
+        // حساب علامة مقترحة تتناسب مع معامل المادة والمعدل المستهدف
+        let factor = sub.coeff >= 5 ? 1.05 : 0.95;
+        let suggestedGrade = Number((targetAvg * factor).toFixed(1));
+        if (suggestedGrade > 19.5) suggestedGrade = 19.5;
+        if (suggestedGrade < 10) suggestedGrade = 10;
+
+        const subWeighted = Number((suggestedGrade * sub.coeff).toFixed(1));
+
+        return `
+          <div class="p-2.5 bg-[#F5EDE0]/60 dark:bg-[#25131D]/60 rounded-xl border border-[#E8C995]/20 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2">
+              <span class="w-5 h-5 rounded-full bg-[#E8C995]/20 text-[#731E3E] dark:text-[#E8C995] font-mono font-bold flex items-center justify-center text-[10px]">
+                ×${sub.coeff}
+              </span>
+              <span class="font-semibold">${sub.name}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono font-bold text-emerald-600 dark:text-emerald-400">${suggestedGrade} / 20</span>
+              <span class="text-[10px] opacity-60">(${subWeighted} ن)</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ==========================================================================
+    // 17. وضع Study With Me (جلسة دراسة كيوت)
+    // ==========================================================================
+    const STUDY_WITH_ME_QUOTES = [
+      "«كل دقيقة تخصصها الآن لفهم فكرة جديدة، هي خطوة أقرب لفرحة والديك بنجاحك في جوان ✨»",
+      "«أنت تصنع مستقبلك بيدك الآن.. خذ نفساً عميقاً واستمتع بمسارك الهادئ 🌸»",
+      "«لا يوجد جهد يضيع هباءً. كل سطر تقرأه هو بذرة فخر ستزهر قريباً 🎀»",
+      "«جلسة تركيز لطيفة مع كأس قهوة، بلا هواتف وبلا تشتيت.. أنت في المكان الصحيح ☕»",
+      "«تذكر دائماً: البكالوريا فرصة لتثبت لنفسك أنك قادر على تحقيق المعجزات 🤍»"
+    ];
+
+    let studyWithMeQuoteIdx = 0;
+    let studyWithMeInterval = null;
+
+    function openStudyWithMeMode() {
+      navigateTo('/pomodoro');
+      toggleStudyWithMeMode(true);
+    }
+
+    function toggleStudyWithMeMode(forceOpen = null) {
+      const panel = document.getElementById('studyWithMePanel');
+      const btnText = document.getElementById('studyWithMeToggleBtnText');
+      if (!panel) return;
+
+      const shouldOpen = forceOpen !== null ? forceOpen : panel.classList.contains('hidden');
+
+      if (shouldOpen) {
+        panel.classList.remove('hidden');
+        if (btnText) btnText.innerText = 'إخفاء وضع Study With Me ✕';
+        cycleStudyWithMeQuotes();
+        if (!studyWithMeInterval) {
+          studyWithMeInterval = setInterval(cycleStudyWithMeQuotes, 12000);
+        }
+        showToast("مرحباً بك في جلسة Study With Me الكيوت 🌸");
+      } else {
+        panel.classList.add('hidden');
+        if (btnText) btnText.innerText = 'تشغيل وضع Study With Me 🌸';
+        if (studyWithMeInterval) {
+          clearInterval(studyWithMeInterval);
+          studyWithMeInterval = null;
+        }
+      }
+    }
+
+    function cycleStudyWithMeQuotes() {
+      studyWithMeQuoteIdx = (studyWithMeQuoteIdx + 1) % STUDY_WITH_ME_QUOTES.length;
+      const quoteEl = document.getElementById('studyWithMeQuote');
+      if (quoteEl) {
+        quoteEl.style.opacity = '0';
+        setTimeout(() => {
+          quoteEl.innerText = STUDY_WITH_ME_QUOTES[studyWithMeQuoteIdx];
+          quoteEl.style.opacity = '1';
+        }, 300);
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => { });
+      } else {
+        document.exitFullscreen().catch(() => { });
+      }
+    }
+
+
     // --------------------------------------------------------------------------
-    // 13. خيارات الوضع الليلي وتصفير البيانات
+    // 13. نظام السمات والألوان المخصصة (Baby Pink 🎀, Lavender 💜, Cream 🤍)
     // --------------------------------------------------------------------------
+    const COLOR_THEMES = [
+      {
+        id: 'baby_pink',
+        name: 'Baby Pink 🎀',
+        badge: '#FFC8DD — اللون الرئيسي',
+        desc: 'وردي ناعم ومبهج لجلسات دراسة ممتعة وهادئة.',
+        primary: '#D63384',
+        accent: '#FFC8DD',
+        bg: '#FFF5F8',
+        card: '#FFFFFF',
+        text: '#371220',
+        dark_primary: '#FF85B3',
+        dark_accent: '#FFC8DD',
+        dark_bg: '#180D14',
+        dark_card: '#251420',
+        dark_text: '#FFF0F5'
+      },
+      {
+        id: 'lavender',
+        name: 'Lavender 💜',
+        badge: '#D8C4FF — بنفسجي ناعم',
+        desc: 'بنفسجي ناعم يعزز التركيز الذهني والاسترخاء والتأمل.',
+        primary: '#7C3AED',
+        accent: '#D8C4FF',
+        bg: '#FAF8FF',
+        card: '#FFFFFF',
+        text: '#1F1235',
+        dark_primary: '#C4B5FD',
+        dark_accent: '#D8C4FF',
+        dark_bg: '#150F24',
+        dark_card: '#221838',
+        dark_text: '#F5F3FF'
+      },
+      {
+        id: 'cream',
+        name: 'Cream 🤍',
+        badge: '#FFF5E6 — كريمي أنيق دافئ ترابي',
+        desc: 'كريمي أنيق ودافئ، مريح جداً للبصر أثناء القراءة الطويلة.',
+        primary: '#A36829',
+        accent: '#FFF5E6',
+        bg: '#FFF5E6',
+        card: '#FFFFFF',
+        text: '#2D1D0F',
+        dark_primary: '#E8B97E',
+        dark_accent: '#FFF5E6',
+        dark_bg: '#191410',
+        dark_card: '#272019',
+        dark_text: '#FFFDF9'
+      },
+      {
+        id: 'classic',
+        name: 'Focus & Force Classic',
+        badge: '#731E3E — عنابي كلاسيكي',
+        desc: 'الهوية الأصلية لـ Focus & Force.',
+        primary: '#731E3E',
+        accent: '#E8C995',
+        bg: '#F5EDE0',
+        card: '#FCF8F1',
+        text: '#451C2B',
+        dark_primary: '#E8C995',
+        dark_accent: '#E8C995',
+        dark_bg: '#25131D',
+        dark_card: '#501426',
+        dark_text: '#FCF8F1'
+      }
+    ];
+
+    let currentThemeId = localStorage.getItem('focus-force-theme') || 'baby_pink';
+
+    function applyTheme(themeId, notify = true) {
+      currentThemeId = themeId;
+      localStorage.setItem('focus-force-theme', themeId);
+      document.documentElement.setAttribute('data-theme', themeId);
+
+      const targetTheme = COLOR_THEMES.find(t => t.id === themeId) || COLOR_THEMES[0];
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (metaThemeColor) {
+        metaThemeColor.setAttribute('content', targetTheme.accent || targetTheme.primary);
+      }
+
+      renderThemeModalCards();
+      renderSettingsThemeList();
+
+      if (notify) {
+        showToast(`تم تطبيق نمط: ${targetTheme.name} ✨`);
+        playSuccessChime();
+      }
+    }
+
     function toggleDarkMode() {
       document.documentElement.classList.toggle('dark');
       const isDark = document.documentElement.classList.contains('dark');
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      renderThemeModalCards();
+      renderSettingsThemeList();
     }
 
     if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       document.documentElement.classList.add('dark');
+    }
+
+    function openThemeModal() {
+      renderThemeModalCards();
+      document.getElementById('themeModal')?.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeThemeModal() {
+      document.getElementById('themeModal')?.classList.add('hidden');
+    }
+
+    function renderThemeModalCards() {
+      const container = document.getElementById('modalThemeGrid');
+      if (!container) return;
+
+      const isDark = document.documentElement.classList.contains('dark');
+
+      container.innerHTML = COLOR_THEMES.map(theme => {
+        const isCurrent = theme.id === currentThemeId;
+        const cardBg = isDark ? theme.dark_card : theme.card;
+        const textColor = isDark ? theme.dark_text : theme.text;
+        const swatchBg = isDark ? theme.dark_bg : theme.bg;
+        const swatchCard = isDark ? theme.dark_card : theme.card;
+        const swatchPrimary = isDark ? theme.dark_primary : theme.primary;
+        const swatchAccent = isDark ? theme.dark_accent : theme.accent;
+
+        return `
+          <div class="p-4 rounded-2xl border transition-all ${isCurrent ? 'border-2 border-[#731E3E] dark:border-[#E8C995] shadow-md scale-[1.01]' : 'border-black/10 dark:border-white/10 hover:border-black/20'}"
+               style="background-color: ${cardBg}; color: ${textColor};">
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <div>
+                <h4 class="font-bold text-sm" style="color: ${textColor};">${theme.name}</h4>
+                <span class="text-[10px] font-mono opacity-80" dir="ltr">${theme.badge}</span>
+                <p class="text-[11px] mt-1 opacity-70 leading-relaxed">${theme.desc}</p>
+              </div>
+              ${isCurrent ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold shadow-sm whitespace-nowrap" style="background-color: ${swatchPrimary}; color: #FFFFFF;">مفعل ✓</span>` : ''}
+            </div>
+
+            <!-- عينات الألوان (متوافقة مع الوضع النهاري والليلي) -->
+            <div class="flex items-center justify-between gap-2 py-2 border-y border-black/5 dark:border-white/5 my-2.5">
+              <div class="flex items-center gap-1.5 text-[10px]">
+                <span class="w-4 h-4 rounded-full border border-black/10 shadow-sm" style="background-color: ${swatchBg};" title="Background"></span>
+                <span class="w-4 h-4 rounded-full border border-black/10 shadow-sm" style="background-color: ${swatchCard};" title="Card"></span>
+                <span class="w-4 h-4 rounded-full shadow-sm" style="background-color: ${swatchPrimary};" title="Primary"></span>
+                <span class="w-4 h-4 rounded-full shadow-sm" style="background-color: ${swatchAccent};" title="Accent"></span>
+              </div>
+              <span class="text-[10px] opacity-75 font-mono truncate" dir="ltr">${swatchAccent}</span>
+            </div>
+
+            <div class="flex items-center justify-end mt-2">
+              ${!isCurrent ? `
+                <button onclick="applyTheme('${theme.id}')"
+                  class="w-full py-1.5 rounded-xl text-xs font-bold transition shadow-sm hover:opacity-90"
+                  style="background-color: ${swatchPrimary}; color: #FFFFFF;">
+                  تفعيل النمط ⚡
+                </button>
+              ` : `
+                <span class="text-[11px] font-bold opacity-60">النمط الحالي</span>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderSettingsThemeList() {
+      const container = document.getElementById('settingsThemeList');
+      if (!container) return;
+
+      const isDark = document.documentElement.classList.contains('dark');
+
+      container.innerHTML = COLOR_THEMES.map(theme => {
+        const isCurrent = theme.id === currentThemeId;
+        const cardBg = isDark ? theme.dark_card : theme.card;
+        const textColor = isDark ? theme.dark_text : theme.text;
+        const swatchBg = isDark ? theme.dark_bg : theme.bg;
+        const swatchCard = isDark ? theme.dark_card : theme.card;
+        const swatchPrimary = isDark ? theme.dark_primary : theme.primary;
+        const swatchAccent = isDark ? theme.dark_accent : theme.accent;
+
+        return `
+          <div class="p-3.5 rounded-2xl border transition ${isCurrent ? 'border-2 border-[#731E3E] dark:border-[#E8C995] shadow-md' : 'border-black/10 dark:border-white/10'}"
+               style="background-color: ${cardBg}; color: ${textColor};">
+            <div class="flex items-center justify-between mb-1.5">
+              <div class="flex items-center gap-2">
+                <span class="w-4 h-4 rounded-full shadow-sm" style="background-color: ${swatchAccent};"></span>
+                <span class="font-bold text-xs" style="color: ${textColor};">${theme.name}</span>
+              </div>
+              <span class="text-[9px] px-2 py-0.5 rounded-full font-mono font-bold" style="background-color: ${swatchPrimary}25; color: ${swatchPrimary};">
+                ${theme.badge.split('—')[0].trim()}
+              </span>
+            </div>
+            <p class="text-[10px] opacity-70 mb-2 truncate">${theme.desc}</p>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1">
+                <span class="w-3.5 h-3.5 rounded-full border border-black/10" style="background-color: ${swatchBg};"></span>
+                <span class="w-3.5 h-3.5 rounded-full border border-black/10" style="background-color: ${swatchCard};"></span>
+                <span class="w-3.5 h-3.5 rounded-full" style="background-color: ${swatchPrimary};"></span>
+                <span class="w-3.5 h-3.5 rounded-full" style="background-color: ${swatchAccent};"></span>
+              </div>
+              ${isCurrent ? `
+                <span class="text-[10px] font-bold" style="color: ${swatchPrimary};">مفعل حالياً ✓</span>
+              ` : `
+                <button onclick="applyTheme('${theme.id}')"
+                  class="px-3 py-1 rounded-xl text-[11px] font-bold text-white transition hover:opacity-90 shadow-sm"
+                  style="background-color: ${swatchPrimary};">
+                  تطبيق
+                </button>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     function replayStory() {
@@ -2486,6 +4037,7 @@
     // 14. التهيئة الابتدائية عند الفتح
     // --------------------------------------------------------------------------
     document.addEventListener('DOMContentLoaded', () => {
+      applyTheme(currentThemeId, false);
       renderSlide();
       slideTimer = setInterval(() => {
         if (currentSlideIdx < slides.length - 1) {
