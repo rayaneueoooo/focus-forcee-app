@@ -412,9 +412,6 @@ function openToolModal(toolType) {
     case 'mentor':
       renderMentorView(container);
       break;
-    case 'ai':
-      renderAIView(container);
-      break;
     case 'bac-archive':
       renderBacArchiveView(container);
       break;
@@ -1291,120 +1288,7 @@ function renderMentorView(container) {
   `;
 }
 
-// --------------------------------------------------------------------------
-// 7. مساعد الذكاء الاصطناعي للبكالوريا (BAC AI Assistant)
-// --------------------------------------------------------------------------
-function renderAIView(container) {
-  container.innerHTML = `
-    <div class="space-y-4">
-      <div class="flex items-center justify-between border-b border-[#E8C995]/30 pb-3">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-2xl bg-[#E8C995]/20 border border-[#E8C995]/40 flex items-center justify-center text-[#731E3E] dark:text-[#E8C995]">
-            <i data-lucide="bot" class="w-5 h-5"></i>
-          </div>
-          <div>
-            <h3 class="font-bold text-base text-[#451C2B] dark:text-[#FCF8F1]">مساعد الذكاء الاصطناعي للبكالوريا 🤖</h3>
-            <span class="text-[11px] opacity-70">توليد خطط المقالات، تبسيط القوانين، ومساعدة منهجية فورية</span>
-          </div>
-        </div>
-      </div>
 
-      <!-- أزرار القوالب الجاهزة السريعة -->
-      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
-        <button onclick="askAIPrompt('خطة مقالة فلسفية')" class="px-3.5 py-1.5 rounded-xl bg-[#F5EDE0] dark:bg-[#25131D] border border-[#E8C995]/40 hover:bg-[#E8C995]/20 whitespace-nowrap transition font-bold">
-          خطة مقالة فلسفية ✍️
-        </button>
-        <button onclick="askAIPrompt('تفسير الاستجابة المناعية')" class="px-3.5 py-1.5 rounded-xl bg-[#F5EDE0] dark:bg-[#25131D] border border-[#E8C995]/40 hover:bg-[#E8C995]/20 whitespace-nowrap transition font-bold">
-          شرح المناعة الخلطية والخلوية 🧬
-        </button>
-        <button onclick="askAIPrompt('منهجية حل مسألة دوال')" class="px-3.5 py-1.5 rounded-xl bg-[#F5EDE0] dark:bg-[#25131D] border border-[#E8C995]/40 hover:bg-[#E8C995]/20 whitespace-nowrap transition font-bold">
-          خطوات دراسة دالة BAC 📐
-        </button>
-        <button onclick="askAIPrompt('نصائح إدارة الوقت')" class="px-3.5 py-1.5 rounded-xl bg-[#F5EDE0] dark:bg-[#25131D] border border-[#E8C995]/40 hover:bg-[#E8C995]/20 whitespace-nowrap transition font-bold">
-          تنظيم وقت المراجعة ⏱️
-        </button>
-      </div>
-
-      <!-- سجل المحادثة -->
-      <div id="aiChatBox" class="p-4 sm:p-5 rounded-2xl bg-[#FCF8F1] dark:bg-[#1f0e18] border border-[#E8C995]/40 min-h-[220px] max-h-[300px] overflow-y-auto space-y-3 text-xs leading-relaxed">
-        <div class="p-3 bg-[#F5EDE0] dark:bg-[#25131D] rounded-xl border border-[#E8C995]/30">
-          👋 أهلاً بك! أنا مساعدك الذكي الخاص ببرنامج البكالوريا الجزائري. اختر أحد القوالب الجاهزة أو اكتب سؤالك بالأسفل للحصول على شرح منهجي فوري.
-        </div>
-      </div>
-
-      <!-- صندوق إدخال السؤال -->
-      <form onsubmit="handleAIChatSubmit(event)" class="flex gap-2">
-        <input type="text" id="aiInputPrompt" placeholder="اكتب سؤالك (مثال: اشرح لي قانون نيوتن الثاني بأسلوب مبسط)..." required class="flex-1 p-3 rounded-xl bg-[#FCF8F1] dark:bg-[#1f0e18] border border-[#E8C995]/40 text-xs outline-none focus:border-[#731E3E]">
-        <button type="submit" class="px-5 py-3 bg-[#731E3E] hover:bg-[#501426] text-[#F5EDE0] font-bold rounded-xl text-xs transition shadow flex items-center gap-1.5">
-          <i data-lucide="send" class="w-4 h-4"></i>
-          <span>إرسال</span>
-        </button>
-      </form>
-    </div>
-  `;
-}
-
-function askAIPrompt(type) {
-  const input = document.getElementById('aiInputPrompt');
-  if (input) {
-    input.value = type;
-    handleAIChatSubmit(new Event('submit'));
-  }
-}
-
-function handleAIChatSubmit(e) {
-  if (e && e.preventDefault) e.preventDefault();
-  const input = document.getElementById('aiInputPrompt');
-  const chatBox = document.getElementById('aiChatBox');
-  if (!input || !chatBox || !input.value.trim()) return;
-
-  const userQuery = input.value.trim();
-  input.value = '';
-
-  chatBox.innerHTML += `
-    <div class="p-3 bg-[#731E3E] text-[#F5EDE0] font-medium rounded-xl text-left">
-      ${userQuery}
-    </div>
-  `;
-
-  let response = '';
-  if (userQuery.includes('فلسف') || userQuery.includes('خطة')) {
-    response = `📝 **خطة مقالة فلسفية بالمنهجية الجدلية الرسمية:**
-1. **طرح المشكلة (المقدمة):** مدخل عام حول الموضوع، إبراز العناد الفلسفي بين الموقفين، وصياغة الإشكال بدقة.
-2. **محاولة حل المشكلة:**
-   - **الموقف الأول:** عرض الأطروحة + الحجج والبراهين + أقوال الفلاسفة.
-   - **نقد الموقف الأول:** بيان المبالغة والقصور في موقفهم.
-   - **الموقف الثاني (النقيض):** عرض الأطروحة المعارضة + الحجج + الأقوال.
-   - **نقد الموقف الثاني:** إبراز نقاط الضعف.
-   - **التركيب / التجاوز:** التوفيق بين الموقفين أو تغليب أحدهما مدعماً بحجة قوية.
-3. **حل المشكلة (الخاتمة):** استنتاج نهائي متناسق مع مسار التحليل كإجابة حاسمة على الإشكال.`;
-  } else if (userQuery.includes('مناع') || userQuery.includes('استجاب')) {
-    response = `🧬 **الفرق المنهجي بين المناعة الخلطية والخلوية:**
-- **المناعة ذات الوساطة الخلطية:** تتدخل فيها الخلايا اللمفاوية البائية (LB) التي تتمايز إلى خلايا بلازمية مفرزة للأجسام المضادة (Ac)، وتستهدف المستضدات الحرة في السوائل كالبكتيريا والسموم بتشكيل المعقدات المناعية.
-- **المناعة ذات الوساطة الخلوية:** تتدخل فيها الخلايا اللمفاوية التائية (LT8) التي تتمايز إلى خلايا سامة (LTc) وتتعرف تعرفاً مزدوجاً على الخلايا المصابة (فيروسات، خلايا سرطانية) وتفرز البيرفورين لإحداث صدمة حلولية وتخريبها.`;
-  } else if (userQuery.includes('دوال') || userQuery.includes('رياضيات')) {
-    response = `📐 **الخطوات الذهبية لدراسة دالة عددية في البكالوريا:**
-1. تعيين مجموعة التعريف Df وتحديد أطراف المجالات المفتوحة.
-2. حساب النهايات عند حدود Df واستنتاج المستقيمات المقاربة (الأفقية، العمودية، والمائلة).
-3. حساب المشتقة f'(x) وتحديد إشارتها بدقة، ثم تشكيل جدول التغيرات.
-4. إيجاد نقاط التقاطع مع المحورين وفواصل نقط الانعطاف إن وجدت (f''(x)=0 وتغير إشارتها).
-5. رسم المستقيمات المقاربة والمماسات ثم رسم المنحنى Cf باحترافية وتناسق.`;
-  } else {
-    response = `💡 **توجيه منهجي حول "${userQuery}":**
-وفق المنهاج الرسمي للبكالوريا الجزائرية، احرص على:
-1. فهم المصطلحات المفتاحية في السؤال (فسر، علل، استنتج، قارن).
-2. استحضار القوانين الرياضية أو التعاريف الدقيقة المعتمدة في كتب الوزارة.
-3. إدراج وحدات القياس الفيزيائية دائماً لتفادي ضياع أجزاء العلامة.`;
-  }
-
-  chatBox.innerHTML += `
-    <div class="p-3 bg-[#F5EDE0] dark:bg-[#25131D] rounded-xl border border-[#E8C995]/30 whitespace-pre-line">
-      ${response}
-    </div>
-  `;
-
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
 
 // --------------------------------------------------------------------------
 // 8. أرشيف البكالوريات والملخصات والدروس
@@ -1930,21 +1814,7 @@ const ARSENAL_MODULES = [
     action: "openToolModal('lessons')"
   },
 
-  // --- قسم الذكاء والتوجيه (ai) ---
-  {
-    id: 'ai',
-    category: 'ai',
-    featured: true,
-    title: 'مساعد الذكاء الاصطناعي للبكالوريا',
-    badge: 'مساعد فوري 24/7 🤖',
-    desc: 'توليد خطط المقالات الجدلية والاستقصاء، تبسيط المفاهيم المعقدة، والتدريب على الأفعال الأدائية.',
-    icon: 'bot',
-    iconColor: 'text-[#731E3E] dark:text-[#E8C995]',
-    iconBg: 'bg-[#E8C995]/20',
-    points: 'إجابات منهجية',
-    actionText: 'اسأل المساعد',
-    action: "openToolModal('ai')"
-  },
+  // --- قسم التوجيه والمنهجية والأرشيف (ai/guidance) ---
   {
     id: 'mentor',
     category: 'ai',
